@@ -1,0 +1,100 @@
+{
+ "id": "10_verbale_polizia_locale",
+ "format": "txt",
+ "file": "testi/10_verbale_polizia_locale.txt",
+ "kind": "verbale",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 0,
+   "end": 14,
+   "text": "Polizia Locale",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 17,
+   "end": 34,
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 99,
+   "end": 108,
+   "text": "4471/2026",
+   "type": "DOCID",
+   "action": "ignore"
+  },
+  {
+   "start": 120,
+   "end": 130,
+   "text": "28/10/2026",
+   "type": "DATE",
+   "action": "ignore"
+  },
+  {
+   "start": 140,
+   "end": 144,
+   "text": "8:05",
+   "type": "TIME",
+   "action": "ignore"
+  },
+  {
+   "start": 148,
+   "end": 170,
+   "text": "viale della Repubblica",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 218,
+   "end": 227,
+   "text": "FB 123 XY",
+   "type": "TARGA",
+   "action": "mask"
+  },
+  {
+   "start": 267,
+   "end": 279,
+   "text": "Marina Serra",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 281,
+   "end": 288,
+   "text": "femmina",
+   "type": "GENDER",
+   "action": "mask"
+  },
+  {
+   "start": 293,
+   "end": 300,
+   "text": "39 anni",
+   "type": "AGE",
+   "action": "mask"
+  },
+  {
+   "start": 314,
+   "end": 318,
+   "text": "Pisa",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 331,
+   "end": 341,
+   "text": "PI1234567K",
+   "type": "ID_DOC",
+   "action": "mask"
+  },
+  {
+   "start": 368,
+   "end": 375,
+   "text": "€ 42,00",
+   "type": "AMOUNT",
+   "action": "ignore"
+  }
+ ]
+}

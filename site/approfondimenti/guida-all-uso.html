@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guida all&#x27;uso – Pseudomania</title>
+<meta name="description" content="Guida all&#x27;uso di Pseudomania: prima di iniziare, scrivere, allegati, Progetti, controllare le risposte, invii bloccati, segnalazioni, cambio PC e come creare un regolamento light o strutturato.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0059b3">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://pseudomania.statocritico.it/approfondimenti/guida-all-uso.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/theme-init.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#contenuto">Vai al contenuto principale</a>
+<div class="slim-header">
+  <div class="wrap">
+    <span>Software libero · AGPL-3.0 · riuso per la PA</span>
+    <a href="https://github.com/StatoCritico/pseudomania">Codice sorgente</a>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../index.html" aria-label="Pseudomania, pagina principale">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="12" fill="#0059b3"/><path d="M22 14h-8v36h8M42 14h8v36h-8" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><rect x="25" y="29" width="14" height="6" rx="2" fill="#fff"/></svg>
+      <span>
+        <span class="brand-name">Pseudomania</span>
+        <span class="brand-tag">Pseudonimizzazione per l'IA generativa</span>
+      </span>
+    </a>
+    <div class="header-tools">
+      <button type="button" class="btn-icon" id="theme-toggle" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg><span class="theme-label">Tema scuro</span></button>
+      <button type="button" class="btn-icon menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="main-nav"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg><span>Menu</span></button>
+    </div>
+  </div>
+  <nav class="main-nav" id="main-nav" aria-label="Menu principale">
+    <div class="wrap">
+      <ul>
+        <li><a href="../index.html#problema">Il problema</a></li>
+        <li><a href="../index.html#soluzione">La soluzione</a></li>
+        <li><a href="../index.html#non-solo-software">Non solo software</a></li>
+        <li><a href="../index.html#personal">Personal edition</a></li>
+        <li><a href="../index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="../approfondimenti/index.html" aria-current="page">Approfondimenti</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<div class="wrap docs-layout">
+  <button type="button" class="tree-toggle" id="tree-toggle" aria-expanded="false" aria-controls="docs-nav"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg><span>Indice degli approfondimenti</span></button>
+  <nav class="docs-nav" id="docs-nav" aria-label="Indice degli approfondimenti">
+    <p class="docs-nav-title">Approfondimenti</p>
+    <div class="tree-tools"><button type="button" data-tree="open">Espandi tutto</button><button type="button" data-tree="close">Comprimi tutto</button></div>
+    <ul class="tree">
+<li><details><summary>Il problema</summary><ul>
+<li><a href="il-problema.html">Panoramica</a></li>
+<li><a href="il-problema.html#ia-al-lavoro">L&#x27;IA è già al lavoro</a></li>
+<li><a href="il-problema.html#dati-che-escono">Ogni testo esce dall&#x27;organizzazione</a></li>
+<li><a href="il-problema.html#perche-non-basta-vietare">Vietare non basta</a></li>
+<li><a href="il-problema.html#nessuna-api">Nessuna API, nessun proxy</a></li>
+<li><a href="il-problema.html#obblighi">Obblighi precisi</a></li>
+</ul></details></li>
+<li><details><summary>Come funziona</summary><ul>
+<li><a href="come-funziona.html">Panoramica</a></li>
+<li><a href="come-funziona.html#flusso">Il flusso in cinque passaggi</a></li>
+<li><a href="come-funziona.html#segnaposto">I segnaposto</a></li>
+<li><a href="come-funziona.html#ripristino">Il ripristino nel browser</a></li>
+<li><a href="come-funziona.html#allegati">Allegati e Progetti</a></li>
+<li><a href="come-funziona.html#categorie-particolari">Dati sanitari e giudiziari bloccati</a></li>
+<li><a href="come-funziona.html#fail-closed">Se il servizio non risponde</a></li>
+<li><a href="come-funziona.html#cosa-non-protegge">Cosa non protegge</a></li>
+</ul></details></li>
+<li><details><summary>Scelte di progetto</summary><ul>
+<li><a href="scelte-di-progetto.html">Panoramica</a></li>
+<li><a href="scelte-di-progetto.html#sp-architettura">Architettura</a></li>
+<li><a href="scelte-di-progetto.html#sp-perimetro">Cosa si pseudonimizza</a></li>
+<li><a href="scelte-di-progetto.html#sp-impostazioni">Impostazioni di Claude</a></li>
+<li><a href="scelte-di-progetto.html#sp-cifratura">Cifratura e chiavi</a></li>
+<li><a href="scelte-di-progetto.html#sp-controllo">Controllo e accessi</a></li>
+<li><a href="scelte-di-progetto.html#sp-conservazione">Conservazione</a></li>
+<li><a href="scelte-di-progetto.html#sp-edizioni">Edizioni e licenza</a></li>
+<li><a href="scelte-di-progetto.html#sp-limiti">Limiti e rischi residui</a></li>
+</ul></details></li>
+<li><details><summary>Non solo software</summary><ul>
+<li><a href="non-solo-software.html">Panoramica</a></li>
+<li><a href="non-solo-software.html#impostazioni-claude">Impostazioni di Claude Team</a></li>
+<li><a href="non-solo-software.html#regolamento">Regolamento d&#x27;uso</a></li>
+<li><a href="non-solo-software.html#dpia">Valutazione d&#x27;impatto (DPIA)</a></li>
+<li><a href="non-solo-software.html#accordo-sindacale">Accordo sindacale (art. 4 Statuto dei lavoratori)</a></li>
+<li><a href="non-solo-software.html#custodi">Custodi</a></li>
+<li><a href="non-solo-software.html#esportazione-team">Esportazione di Claude Team governata</a></li>
+<li><a href="non-solo-software.html#checklist">Checklist degli adempimenti</a></li>
+</ul></details></li>
+<li><details><summary>Personal edition</summary><ul>
+<li><a href="personal-edition.html">Panoramica</a></li>
+<li><a href="personal-edition.html#per-chi">Per chi è</a></li>
+<li><a href="personal-edition.html#requisiti">Cosa serve</a></li>
+<li><a href="personal-edition.html#installazione">Installazione</a></li>
+<li><a href="personal-edition.html#attivazione">Attivazione per conversazione</a></li>
+<li><a href="personal-edition.html#uso">Uso quotidiano</a></li>
+<li><a href="personal-edition.html#allegati">Allegati</a></li>
+<li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
+<li><a href="personal-edition.html#limiti-personal">Limiti specifici</a></li>
+</ul></details></li>
+<li><details><summary>Enterprise edition</summary><ul>
+<li><a href="enterprise-edition.html">Panoramica</a></li>
+<li><a href="enterprise-edition.html#architettura">Architettura</a></li>
+<li><a href="enterprise-edition.html#requisiti">Requisiti</a></li>
+<li><a href="enterprise-edition.html#installazione">Installazione</a></li>
+<li><a href="enterprise-edition.html#estensione-policy">Estensione gestita da policy</a></li>
+<li><a href="enterprise-edition.html#sso">SSO e accesso condizionato</a></li>
+<li><a href="enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
+<li><a href="enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></li>
+<li><a href="enterprise-edition.html#conservazione">Conservazione</a></li>
+<li><a href="enterprise-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
+</ul></details></li>
+<li><details open><summary class="tree-current">Guida all&#x27;uso</summary><ul>
+<li><a href="guida-all-uso.html" aria-current="page">Panoramica</a></li>
+<li><a href="guida-all-uso.html#prima-di-iniziare">Prima di iniziare</a></li>
+<li><a href="guida-all-uso.html#attivazione">Attivare la protezione (Personal edition)</a></li>
+<li><a href="guida-all-uso.html#scrivere">Scrivere e inviare</a></li>
+<li><a href="guida-all-uso.html#allegati">Allegati</a></li>
+<li><a href="guida-all-uso.html#progetti">Progetti</a></li>
+<li><a href="guida-all-uso.html#controllare">Controllare le risposte</a></li>
+<li><a href="guida-all-uso.html#invio-bloccato">Se l&#x27;invio è bloccato</a></li>
+<li><a href="guida-all-uso.html#segnalare">Segnalare errori e incidenti</a></li>
+<li><a href="guida-all-uso.html#cambio-pc">Cambio di PC o di browser</a></li>
+<li><a href="guida-all-uso.html#policy">Creare un regolamento d&#x27;uso</a></li>
+<li><a href="guida-all-uso.html#responsabilita">Chi è responsabile</a></li>
+</ul></details></li>
+<li><details><summary>Domande frequenti</summary><ul>
+<li><a href="faq.html">Panoramica</a></li>
+<li><a href="faq.html#faq-generale">In generale</a></li>
+<li><a href="faq.html#faq-dati">Dati e sicurezza</a></li>
+<li><a href="faq.html#faq-uso">Uso</a></li>
+<li><a href="faq.html#faq-enti">Enti e conformità</a></li>
+<li><a href="faq.html#faq-licenza">Licenza e riuso</a></li>
+</ul></details></li>
+<li><details><summary>Licenza e crediti</summary><ul>
+<li><a href="licenza-e-crediti.html">Panoramica</a></li>
+<li><a href="licenza-e-crediti.html#agpl">Licenza AGPL-3.0-or-later</a></li>
+<li><a href="licenza-e-crediti.html#riuso-pa">Riuso per la pubblica amministrazione</a></li>
+<li><a href="licenza-e-crediti.html#componenti">Componenti e licenze</a></li>
+<li><a href="licenza-e-crediti.html#marchi">Marchi</a></li>
+</ul></details></li>
+<li><details><summary>Note legali e disclaimer</summary><ul>
+<li><a href="note-legali.html">Panoramica</a></li>
+<li><a href="note-legali.html#responsabilita">Responsabilità di chi adotta e usa il sistema</a></li>
+<li><a href="note-legali.html#nessuna-garanzia">Nessuna garanzia (AGPL, sezioni 15 e 16)</a></li>
+<li><a href="note-legali.html#non-consulenza">Nessuna consulenza legale</a></li>
+<li><a href="note-legali.html#marchi-note">Marchi</a></li>
+<li><a href="note-legali.html#sito">Privacy di questo sito</a></li>
+<li><a href="note-legali.html#contatti">Contatti</a></li>
+</ul></details></li>
+<li><details><summary>Strumenti e download</summary><ul>
+<li><a href="strumenti-e-download.html">Panoramica</a></li>
+<li><a href="strumenti-e-download.html#estensione">Estensione Chrome</a></li>
+<li><a href="strumenti-e-download.html#rizzo-pii">App desktop Rizzo-PII (Personal edition)</a></li>
+<li><a href="strumenti-e-download.html#server">Server (Enterprise edition)</a></li>
+<li><a href="strumenti-e-download.html#documentazione">Documentazione</a></li>
+<li><a href="strumenti-e-download.html#modelli">Modelli di governance</a></li>
+<li><a href="strumenti-e-download.html#custodi-tool">Strumento dei custodi</a></li>
+<li><a href="strumenti-e-download.html#collaudo">Corpus di collaudo</a></li>
+<li><a href="strumenti-e-download.html#codice">Codice sorgente</a></li>
+</ul></details></li>
+<li class="tree-leaf"><a href="../privacy.html">Informativa privacy</a></li>
+</ul>
+  </nav>
+  <main class="docs-main" id="contenuto" tabindex="-1">
+    <nav aria-label="Percorso" class="breadcrumb"><ol><li><a href="../index.html">Pseudomania</a></li><li><a href="index.html">Approfondimenti</a></li><li aria-current="page">Guida all&#x27;uso</li></ol></nav>
+    <h1>Guida all&#x27;uso</h1>
+    <p class="lead">Una guida pratica per chi usa Pseudomania ogni giorno e per chi deve introdurlo in un ufficio o in uno studio. Il manuale completo, con installazione e configurazione passo per passo, è nella documentazione del repository.</p>
+    <div class="note disclaimer"><p><strong>Responsabilità.</strong> Pseudomania è distribuito senza alcuna garanzia. La responsabilità legale dell'adozione, della configurazione e dell'uso resta <strong>interamente</strong> di chi adotta e usa il sistema. Questa guida non è una consulenza legale. Vedi le <a href="note-legali.html">note legali</a>.</p></div>
+
+<h2 id="prima-di-iniziare">Prima di iniziare</h2>
+<ul class="check-list">
+  <li>Controlla che il badge dell'estensione indichi <strong>ON</strong> su claude.ai (<a href="#attivazione">stati del pulsante</a>).</li>
+  <li>Verifica le impostazioni di Claude: memoria spenta, feedback e connettori disattivati.</li>
+  <li>Leggi il regolamento d'uso della tua organizzazione o, se lavori da solo, scrivi il tuo (<a href="#policy">sotto</a>).</li>
+  <li>Installazione: <a href="personal-edition.html#installazione">Personal edition</a> · <a href="enterprise-edition.html#installazione">Enterprise edition</a>.</li>
+</ul>
+
+<h2 id="attivazione">Attivare la protezione (Personal edition)</h2>
+<ul>
+  <li>Guarda il badge sul pulsante di Pseudomania: <strong>ON</strong> verde = protetta, <strong>OFF</strong> rosso = invii in chiaro, <strong>?</strong> arancione = in attesa della tua scelta, <strong>!</strong> rosso = Rizzo-PII non risponde.</li>
+  <li>Clic sul pulsante o <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd> per cambiare lo stato della conversazione aperta. La scelta vale solo per quella conversazione e viene ricordata.</li>
+  <li>Se compare il banner «Attiva» / «Continua senza protezione» (nuova conversazione dopo averla spenta, o conversazione ripresa che era spenta), scegli: nell'attesa i messaggi sono comunque protetti.</li>
+  <li>Spegnere riguarda solo ciò che invii: i segnaposto già presenti continuano a essere ripristinati. Riattivare non ripulisce ciò che è già partito in chiaro.</li>
+  <li>Nella Enterprise edition non devi fare nulla: la protezione è sempre attiva.</li>
+</ul>
+
+<h2 id="scrivere">Scrivere e inviare</h2>
+<ol>
+  <li>Scrivi come al solito e premi Invio. L'estensione sostituisce il testo con la versione pseudonimizzata e invia.</li>
+  <li>Per testi importanti usa <kbd>Ctrl</kbd>+<kbd>Maiusc</kbd>+<kbd>Invio</kbd>: vedi l'anteprima di ciò che partirà.</li>
+  <li>Togli o generalizza i dettagli che rendono riconoscibile una persona anche senza nome: ruolo unico, data e luogo precisi, fatto noto, numero di pratica.</li>
+  <li>Non chiedere a Claude di spiegare, modificare o «indovinare» i segnaposto.</li>
+</ol>
+
+<h2 id="allegati">Allegati</h2>
+<p>Trascina o seleziona i file come di consueto. PDF, DOCX, XLSX, TXT, MD e CSV vengono pseudonimizzati, nome del file compreso; immagini e altri formati sono bloccati. Nella Personal edition i PDF diventano file di testo. Controlla nel pannello di ispezione il numero di dati protetti: se ti sembra basso per il documento, verifica prima di procedere.</p>
+
+<h2 id="progetti">Progetti</h2>
+<p>Istruzioni e documenti di un progetto vengono pseudonimizzati quando li salvi o li carichi; tutte le chat del progetto usano lo stesso dizionario. Una volta l'anno il pannello ti chiede di <strong>confermare</strong> i progetti ancora in uso: senza conferma, il dizionario scade. Elimina i progetti che non ti servono più.</p>
+
+<h2 id="controllare">Controllare le risposte</h2>
+<ul>
+  <li>I valori ripristinati sono evidenziati in verde; un segnaposto in rosso non è stato riconosciuto (Claude l'ha alterato o inventato): non usarlo.</li>
+  <li>Controlla sempre i nomi: un errore di ripristino è raro ma possibile.</li>
+  <li>Verifica il contenuto prima di usarlo: l'IA può sbagliare su norme, numeri e fatti.</li>
+  <li>Copia con la selezione o con il pulsante «Copia»: i valori reali vengono inclusi. I file generati da Claude sono ripristinati al download.</li>
+</ul>
+
+<h2 id="invio-bloccato">Se l'invio è bloccato</h2>
+<ul>
+  <li><strong>Banner rosso con motivo</strong>: il testo contiene dati sanitari, giudiziari o di altre categorie particolari, oppure un formato non supportato. Riformula senza quei dati; il blocco non si può forzare.</li>
+  <li><strong>Server o servizio non raggiungibile</strong>: nella Enterprise edition attendi o avvisa l'assistenza; nella Personal edition riavvia l'app Rizzo-PII prima di inviare.</li>
+  <li><strong>Pagina non riconosciuta</strong>: claude.ai potrebbe essere cambiato. Non aggirare il blocco con altri browser: segnala il problema.</li>
+</ul>
+
+<h2 id="segnalare">Segnalare errori e incidenti</h2>
+<p>Dal pannello di ispezione puoi segnalare un <strong>dato non riconosciuto</strong> (falso negativo) o un <strong>mascheramento inutile</strong> (falso positivo); la nota viene ripulita dai valori reali noti. Se è partito un dato personale non mascherato: cancella la chat, annota l'accaduto senza ricopiare il dato e avvisa il referente privacy (nella Personal edition valuta tu se si tratta di una violazione da notificare entro 72 ore, art. 33 GDPR).</p>
+
+<h2 id="cambio-pc">Cambio di PC o di browser</h2>
+<p>Su un nuovo PC l'estensione crea una chiave nuova: i segnaposto delle chat precedenti appaiono come «non ripristinabili». Nella Enterprise edition puoi chiedere, con motivazione, il recupero dei dizionari dei <strong>progetti</strong> tramite i custodi. Nella Personal edition non è previsto alcun recupero. Procedura passo per passo: <a href="index.html#recupero-chiavi">recupero delle chiavi</a>.</p>
+
+<h2 id="policy">Creare un regolamento d'uso</h2>
+<div class="grid grid-2">
+  <article class="card">
+    <h3>Versione light (professionisti)</h3>
+    <ol>
+      <li>Parti da <a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-light.md">policy-light.md</a>.</li>
+      <li>Indica titolare, piano di Claude e versione.</li>
+      <li>Adatta l'elenco di cosa fai sempre e cosa non fai mai alla tua attività (segreto professionale, dati dei minori).</li>
+      <li>Fissa le durate del registro locale e la cadenza con cui cancelli chat e progetti.</li>
+      <li>Aggiorna l'informativa ai clienti e conserva le condizioni del fornitore.</li>
+      <li>Rileggi il documento almeno una volta l'anno.</li>
+    </ol>
+  </article>
+  <article class="card">
+    <h3>Versione strutturata (enti)</h3>
+    <ol>
+      <li>Parti da <a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-uso-ia.md">policy-uso-ia.md</a> e dalla <a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/dpia.md">DPIA</a>.</li>
+      <li>Completa i campi <code>[DA DEFINIRE]</code>: ruoli, custodi, durate, regolamento di videosorveglianza di riferimento.</li>
+      <li>Allinea usi consentiti e vietati ai processi dell'ente.</li>
+      <li>Fai validare dal RPD/DPO e porta il testo al confronto sindacale (art. 4).</li>
+      <li>Adotta con atto formale, pubblica internamente, consegna l'informativa (Allegato A).</li>
+      <li>Forma gli utenti e chiudi la <a href="non-solo-software.html#checklist">checklist</a> prima del via.</li>
+    </ol>
+  </article>
+</div>
+
+<h2 id="responsabilita">Chi è responsabile</h2>
+<p>Chi adotta Pseudomania (l'ente come titolare, o il professionista) decide se e come usarlo, configura il servizio di IA, scrive le regole e ne risponde. Chi usa il sistema risponde del rispetto delle regole e del contenuto di ciò che invia. Gli autori del software non forniscono alcuna garanzia né assistenza obbligatoria: <a href="note-legali.html#responsabilita">note legali</a>.</p>
+
+    <nav class="pager" aria-label="Capitoli"><a class="pager-prev" href="enterprise-edition.html"><span>Capitolo precedente</span>Enterprise edition</a><a class="pager-next" href="faq.html"><span>Capitolo successivo</span>Domande frequenti</a></nav>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h2>Pseudomania</h2>
+        <p>Software libero per pseudonimizzare ciò che si invia a Claude. Progettato per il riuso gratuito da parte delle pubbliche amministrazioni italiane e utilizzabile dai professionisti.</p>
+        <p class="small">Copyright © 2026 gli autori di Pseudomania. Questo programma è software libero: puoi ridistribuirlo e/o modificarlo secondo i termini della <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License</a>, versione 3 o (a tua scelta) successiva. È distribuito <strong>senza alcuna garanzia</strong>; la responsabilità dell'adozione e dell'uso resta interamente di chi lo adotta e lo usa (<a href="../approfondimenti/note-legali.html">note legali</a>).</p>
+      </div>
+      <div>
+        <h2>Approfondimenti</h2>
+        <ul>
+          <li><a href="../approfondimenti/index.html">Indice degli approfondimenti</a></li>
+          <li><a href="../approfondimenti/faq.html">Domande frequenti</a></li>
+          <li><a href="../approfondimenti/guida-all-uso.html">Guida all'uso</a></li>
+          <li><a href="../approfondimenti/scelte-di-progetto.html">Scelte di progetto</a></li>
+          <li><a href="../approfondimenti/strumenti-e-download.html">Strumenti e download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Riuso e note legali</h2>
+        <ul>
+          <li><a href="https://github.com/StatoCritico/pseudomania">Repository del codice</a></li>
+          <li><a href="../approfondimenti/licenza-e-crediti.html">Licenza e crediti</a></li>
+          <li><a href="../approfondimenti/note-legali.html">Note legali e disclaimer</a></li>
+          <li><a href="../privacy.html">Informativa privacy dell'estensione</a></li>
+          <li><a href="https://github.com/StatoCritico/pseudomania/issues">Segnalazioni e proposte</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Questo sito non usa cookie né strumenti di tracciamento e non carica risorse da terzi. La sola preferenza di tema, se la scegli, resta nel tuo browser.</p>
+    </div>
+  </div>
+</footer>
+<p id="annuncio" class="visually-hidden" role="status" aria-live="polite"></p>
+<script src="../assets/main.js"></script>
+</body>
+</html>

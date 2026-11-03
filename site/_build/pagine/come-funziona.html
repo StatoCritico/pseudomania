@@ -1,0 +1,107 @@
+<!--meta
+description: Come funziona Pseudomania: flusso dei dati, segnaposto, ripristino nel browser, allegati, Progetti, blocco delle categorie particolari, comportamento fail-closed e limiti.
+lead: Un'estensione per Chrome si mette tra te e claude.ai: prima che un testo parta, fa riconoscere i dati personali, li sostituisce con segnaposto e, quando arriva la risposta, rimette i valori reali solo sul tuo schermo.
+summary: Il flusso dei dati in cinque passaggi, i segnaposto, il ripristino, allegati e Progetti, i blocchi, cosa succede se il server non risponde e cosa non viene protetto.
+-->
+<h2 id="flusso">Il flusso in cinque passaggi</h2>
+<p>Lo schema mostra la Enterprise edition, con il server nella rete dell'ente. Nella <a href="personal-edition.html">Personal edition</a> il server non c'è: l'estensione chiama direttamente l'app desktop Rizzo-PII sul tuo computer e tiene il dizionario nel browser.</p>
+<figure class="diagram">
+        
+
+        <!-- Schema verticale -->
+        <svg class="narrow" viewBox="0 0 360 640" role="img" aria-labelledby="dn-t dn-d">
+          <title id="dn-t">Schema del flusso dei dati in Pseudomania, Enterprise edition</title>
+          <desc id="dn-d">Il browser con l'estensione invia il testo originale al server Pseudomania nella rete interna, riceve il testo con i segnaposto e invia a claude.ai solo i segnaposto. Il dizionario dei valori reali è cifrato nel browser e conservato cifrato sul server. La risposta di Claude torna al browser, che ripristina i valori reali localmente.</desc>
+          <defs>
+            <marker id="ahn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ahns" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="d-head-safe" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <rect class="d-cloud" x="16" y="6" width="328" height="74" rx="10"/>
+          <text class="d-title" x="34" y="36" font-size="18">claude.ai</text>
+          <text class="d-text" x="34" y="62" font-size="15">Claude (piano Team), in cloud</text>
+
+          <line class="d-arrow-safe" x1="56" y1="208" x2="56" y2="86" marker-end="url(#ahns)"/>
+          <circle class="d-num" cx="80" cy="108" r="11"/><text class="d-num-text" x="80" y="113" font-size="13" text-anchor="middle">3</text>
+          <text class="d-ok" x="98" y="113" font-size="15">solo segnaposto</text>
+          <line class="d-arrow" x1="304" y1="86" x2="304" y2="208" marker-end="url(#ahn)"/>
+          <circle class="d-num" cx="280" cy="138" r="11"/><text class="d-num-text" x="280" y="143" font-size="13" text-anchor="middle">4</text>
+          <text class="d-text" x="262" y="143" font-size="15" text-anchor="end">risposta</text>
+
+          <rect class="d-zone" x="6" y="160" width="348" height="474" rx="14"/>
+          <text class="d-muted" x="72" y="184" font-size="13">Rete interna dell'ente</text>
+
+          <rect class="d-box-strong" x="22" y="212" width="316" height="124" rx="10"/>
+          <text class="d-title" x="38" y="240" font-size="17">Browser Chrome</text>
+          <text class="d-title" x="38" y="262" font-size="17">+ estensione Pseudomania</text>
+          <circle class="d-num" cx="49" cy="292" r="11"/><text class="d-num-text" x="49" y="297" font-size="13" text-anchor="middle">5</text>
+          <text class="d-text" x="68" y="297" font-size="15">Rimette i valori reali,</text>
+          <text class="d-text" x="68" y="318" font-size="15">solo sul tuo schermo</text>
+
+          <line class="d-arrow" x1="56" y1="340" x2="56" y2="430" marker-end="url(#ahn)"/>
+          <circle class="d-num" cx="80" cy="366" r="11"/><text class="d-num-text" x="80" y="371" font-size="13" text-anchor="middle">1</text>
+          <text class="d-text" x="98" y="371" font-size="15">testo originale</text>
+          <line class="d-arrow" x1="304" y1="430" x2="304" y2="340" marker-end="url(#ahn)"/>
+          <circle class="d-num" cx="280" cy="404" r="11"/><text class="d-num-text" x="280" y="409" font-size="13" text-anchor="middle">2</text>
+          <text class="d-text" x="262" y="409" font-size="15" text-anchor="end">segnaposto</text>
+
+          <rect class="d-box" x="22" y="434" width="316" height="184" rx="10"/>
+          <text class="d-title" x="38" y="464" font-size="17">Server Pseudomania</text>
+          <text class="d-text" x="38" y="490" font-size="15">Rizzo-PII riconosce i dati</text>
+          <text class="d-text" x="38" y="513" font-size="15">Dizionario solo cifrato</text>
+          <text class="d-text" x="38" y="536" font-size="15">Registro minimo, senza testi</text>
+          <text class="d-text" x="38" y="559" font-size="15">Blocca dati sanitari e giudiziari</text>
+          <text class="d-tag" x="38" y="594" font-size="15">[FULLNAME_1] [CF_1]</text>
+        </svg>
+        <figcaption>Il perimetro tratteggiato è la rete dell'ente. Verso claude.ai escono solo i segnaposto (freccia verde). Il dizionario che collega segnaposto e valori reali è cifrato nel browser e conservato cifrato sul server interno. Nella Personal edition il server non c'è: l'estensione usa direttamente l'app Rizzo-PII sul tuo PC.</figcaption>
+      </figure>
+<ol class="steps">
+  <li><strong>Invio interno.</strong> Quando premi Invio o alleghi un file, l'estensione ferma l'invio e manda testo e allegati al servizio di rilevamento.</li>
+  <li><strong>Pseudonimizzazione.</strong> Rizzo-PII trova i dati personali; ogni dato diventa un segnaposto. La corrispondenza viene cifrata nel browser.</li>
+  <li><strong>Verso Claude.</strong> Il testo con i segnaposto sostituisce quello originale e l'invio riparte. Con dati sanitari o giudiziari l'invio è bloccato.</li>
+  <li><strong>Risposta.</strong> Claude risponde usando gli stessi segnaposto, che è istruito a non modificare.</li>
+  <li><strong>Ripristino locale.</strong> L'estensione decifra il dizionario e mette i valori reali al posto dei segnaposto, solo nella pagina che vedi tu.</li>
+</ol>
+
+<h2 id="segnaposto">I segnaposto</h2>
+<p>Un segnaposto ha la forma <code>[TIPO_N]</code>: <span class="ph">[FULLNAME_1]</span>, <span class="ph">[CF_2]</span>, <span class="ph">[IBAN_1]</span>. Il tipo è l'etichetta assegnata da Rizzo-PII; il numero cresce all'interno della stessa conversazione o dello stesso progetto. Lo stesso valore (a meno di maiuscole e spazi) riceve sempre lo stesso segnaposto, così Claude capisce che «[FULLNAME_1]» nel secondo paragrafo è la stessa persona del primo.</p>
+<div class="table-wrap">
+  <table class="stack-table">
+    <caption class="visually-hidden">Principali tipi di segnaposto</caption>
+    <thead><tr><th scope="col">Tipo</th><th scope="col">Esempi di dati</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">FULLNAME, ORG</th><td data-label="Esempi">nomi e cognomi, organizzazioni</td></tr>
+      <tr><th scope="row">CF, PIVA, DOCID, ID_DOC, TARGA, CATASTO</th><td data-label="Esempi">codice fiscale, partita IVA, documenti, targhe, dati catastali</td></tr>
+      <tr><th scope="row">EMAIL, TELEPHONENUM, URL, IPADDR</th><td data-label="Esempi">recapiti e identificativi in rete</td></tr>
+      <tr><th scope="row">STREET, BUILDINGNUM, ZIPCODE, CITY, PROVINCE</th><td data-label="Esempi">indirizzi</td></tr>
+      <tr><th scope="row">IBAN, CREDITCARDNUMBER, AMOUNT</th><td data-label="Esempi">coordinate bancarie, carte, importi</td></tr>
+      <tr><th scope="row">DATE, TIME, AGE, GENDER</th><td data-label="Esempi">date, orari, età, genere</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>I termini di un elenco di eccezioni (per esempio il nome dell'ente o di un ufficio) non vengono mai mascherati. Il perché dell'istruzione fissa data a Claude è spiegato nelle <a href="scelte-di-progetto.html#istruzione-segnaposto">scelte di progetto</a>.</p>
+
+<h2 id="ripristino">Il ripristino nel browser</h2>
+<p>Mentre la risposta arriva, l'estensione sostituisce i segnaposto con i valori reali nella pagina, anche durante lo streaming. I valori ripristinati sono evidenziati in verde; un segnaposto che l'estensione non conosce resta visibile ed è evidenziato in rosso. Copiando il testo si copiano i valori reali; i file generati da Claude (DOCX, XLSX, PDF, testo) vengono ripristinati al momento del download.</p>
+<p>Sotto ogni messaggio inviato un contrassegno «N dati protetti» apre il pannello di ispezione: testo originale e testo inviato affiancati, entità riconosciute, segnalazione di errori. Con <kbd>Ctrl</kbd>+<kbd>Maiusc</kbd>+<kbd>Invio</kbd> puoi vedere l'anteprima prima dell'invio.</p>
+
+<h2 id="allegati">Allegati e Progetti</h2>
+<p>Sono pseudonimizzati gli allegati PDF, DOCX, XLSX, TXT, Markdown e CSV, compreso il nome del file. Gli altri formati, incluse le immagini, sono bloccati perché il loro contenuto non può essere verificato. Nella Personal edition DOCX e XLSX sono elaborati nell'estensione; i PDF sono inviati a Claude come <strong>file di testo pseudonimizzato</strong>, con un avviso.</p>
+<p id="progetti">Nei <strong>Progetti</strong> di Claude sono pseudonimizzati le istruzioni e i documenti della conoscenza del progetto; tutte le chat del progetto condividono lo stesso dizionario. La condivisione dei progetti tra utenti è disattivata, perché il dizionario è personale.</p>
+
+<h2 id="categorie-particolari">Dati sanitari e giudiziari bloccati</h2>
+<p>Se il servizio riconosce dati relativi alla salute, a condanne e reati o ad altre categorie particolari (artt. 9 e 10 GDPR), l'invio viene bloccato e un banner rosso ne spiega il motivo. Non è possibile forzarlo. Anche questo riconoscimento può sbagliare: il regolamento d'uso vieta comunque di inserire questi dati.</p>
+
+<h2 id="fail-closed">Se il servizio non risponde</h2>
+<p>Nella Enterprise edition, se il server non è raggiungibile o non riconosce la pagina di claude.ai, l'invio è bloccato (comportamento <em>fail-closed</em>): meglio un'attesa che un testo spedito senza protezione. Nella Personal edition, se l'app Rizzo-PII non risponde, ricevi un avviso e devi confermare esplicitamente se procedere.</p>
+
+<h2 id="cosa-non-protegge">Cosa non protegge</h2>
+<ul class="x-list">
+  <li><strong>Quasi-identificatori.</strong> Ruolo, ufficio, evento, luogo e data insieme possono identificare una persona anche senza nome («il dirigente dei tributi di un piccolo comune»).</li>
+  <li><strong>Dati non riconosciuti.</strong> Nomi insoliti, refusi, formati inattesi, testo nelle immagini possono sfuggire al modello.</li>
+  <li><strong>Ciò che passa fuori dall'estensione</strong>: le preferenze del profilo Claude, altri browser, le app desktop e mobili.</li>
+  <li><strong>Ricerca web</strong>: Claude compone le ricerche partendo dal testo pseudonimizzato, ma un dato sfuggito al rilevamento può finire nella richiesta inviata al motore di ricerca.</li>
+  <li><strong>Il testo prima dell'invio</strong>: finché lo scrivi, il testo sta nella casella di claude.ai.</li>
+  <li><strong>Cambi dell'interfaccia di claude.ai</strong>: se il sito cambia, l'estensione può non riconoscerlo; nella Enterprise edition l'invio si blocca.</li>
+  <li><strong>Non anonimizza</strong>: i dati pseudonimizzati restano dati personali (considerando 26 GDPR).</li>
+</ul>
+<p>L'elenco completo dei rischi residui, compresi quelli legati al server, è nelle <a href="scelte-di-progetto.html#rischi-residui">scelte di progetto</a>.</p>

@@ -1,0 +1,127 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 gli autori di Pseudomania
+//
+// Risoluzione della configurazione effettiva (codice puro).
+//
+// Precedenza, dalla più forte (SPEC.md, «Estensione: configurazione»):
+//   1. chrome.storage.managed  (policy dell'ente: prevale sempre)
+//   2. GET /v1/config del server (Enterprise: tagInstruction, allowlist, maxFileMB, chiave di custodia,
+//      rotazione; failClosed/allowDisable valgono SOLO dalla policy)
+//   3. chrome.storage.local    (Personal edition: indirizzo di Rizzo-PII, interruttore on/off)
+//   4. valori predefiniti della modalità
+// Se managed.mode è assente: Personal edition (estensione autonoma con Rizzo-PII desktop).
+
+(function (root) {
+  'use strict';
+  const PG = (root.PG = root.PG || {});
+
+  const DEFAULT_TAG_INSTRUCTION =
+    'I testi contengono segnaposto tra parentesi quadre come [FULLNAME_n] o [CF_n] (n = numero). Riportali esattamente ' +
+    'come sono, senza modificarli, tradurli, declinarli o spiegarli, e non crearne di nuovi.';
+
+  const DEFAULT_RIZZO_URL = 'http://127.0.0.1:5005';
+
+  const MODE_DEFAULTS = {
+    ente: { failClosed: true, allowDisable: false },
+    personale: { failClosed: false, allowDisable: true },
+  };
+
+  const MANAGED_TYPES = {
+    mode: 'string', serverUrl: 'string', oidcIssuer: 'string', oidcClientId: 'string',
+    oidcScopes: 'string', oidcTokenType: 'string', failClosed: 'boolean', allowDisable: 'boolean',
+    sites: 'array',
+  };
+
+  /** Tiene solo le chiavi note e con il tipo atteso (una policy malformata non deve rompere nulla). */
+  function sanitizeManaged(managed) {
+    const out = {};
+    if (!managed || typeof managed !== 'object') return out;
+    for (const [k, t] of Object.entries(MANAGED_TYPES)) {
+      const v = managed[k];
+      if (v === undefined || v === null) continue;
+      if (t === 'array' ? Array.isArray(v) : typeof v === t) out[k] = v;
+    }
+    if (out.mode && out.mode !== 'ente' && out.mode !== 'personale') delete out.mode;
+    return out;
+  }
+
+  function pick(...values) {
+    for (const v of values) if (v !== undefined && v !== null && v !== '') return v;
+    return undefined;
+  }
+
+  function stripSlash(url) {
+    return typeof url === 'string' ? url.replace(/\/+$/, '') : url;
+  }
+
+  /**
+   * @param {{managed?:object, server?:object|null, local?:object}} src
+   * @returns {object} configurazione effettiva
+   */
+  function resolveConfig(src) {
+    const managed = sanitizeManaged(src && src.managed);
+    const server = (src && src.server) || {};
+    const local = (src && src.local) || {};
+    const mode = managed.mode || 'personale';
+    const d = MODE_DEFAULTS[mode];
+    const isEnte = mode === 'ente';
+
+    // Enterprise edition: server dell'ente. Personal edition: nessun server, solo Rizzo-PII locale.
+    const serverUrl = isEnte ? stripSlash(pick(managed.serverUrl)) || '' : '';
+    const rizzoUrl = isEnte ? '' : stripSlash(pick(local.rizzoUrl, DEFAULT_RIZZO_URL));
+    // In modalità ente failClosed e allowDisable vengono SOLO dalla policy (SPEC/DECISIONI): /v1/config
+    // non può indebolirli.
+    const failClosed = Boolean(pick(managed.failClosed, d.failClosed));
+    const allowDisable = Boolean(pick(managed.allowDisable, d.allowDisable));
+    // Personal edition: nessun interruttore globale, lo stato è per conversazione (activation.js).
+    const enabled = isEnte && allowDisable ? local.enabled !== false : true;
+
+    const oidc = {
+      issuer: stripSlash(managed.oidcIssuer || ''),
+      clientId: managed.oidcClientId || '',
+      scopes: managed.oidcScopes || 'openid profile',
+      tokenType: managed.oidcTokenType === 'id_token' ? 'id_token' : 'access_token',
+    };
+    const authMethod = isEnte ? 'oidc' : 'none';
+    const configured = isEnte ? Boolean(serverUrl && oidc.issuer && oidc.clientId) : true;
+
+    return {
+      mode,
+      edition: isEnte ? 'enterprise' : 'personal',
+      managedKeys: Object.keys(managed),
+      isManaged: (key) => Object.prototype.hasOwnProperty.call(managed, key),
+      serverUrl,
+      rizzoUrl,
+      failClosed,
+      allowDisable,
+      enabled,
+      sites: managed.sites && managed.sites.length ? managed.sites : ['claude.ai'],
+      oidc,
+      authMethod,
+      localToken: '',
+      configured,
+      tagInstruction: typeof server.tagInstruction === 'string' && server.tagInstruction ? server.tagInstruction : DEFAULT_TAG_INSTRUCTION,
+      allowlist: Array.isArray(server.allowlist) ? server.allowlist : [],
+      maxFileMB: Number.isFinite(server.maxFileMB) ? server.maxFileMB : 20,
+      policyVersion: server.policyVersion || null,
+      serverMode: server.mode || null,
+      // Cifratura lato client (solo Enterprise edition)
+      escrowPublicKey: typeof server.escrowPublicKey === 'string' ? server.escrowPublicKey : '',
+      escrowKeyId: typeof server.escrowKeyId === 'string' ? server.escrowKeyId : '',
+      rotateKey: server.rotateKey === true,
+      keyRotationDays: Number.isFinite(server.keyRotationDays) ? server.keyRotationDays : 90,
+      pendingEntryMinutes: Number.isFinite(server.pendingEntryMinutes) ? server.pendingEntryMinutes : 10,
+      serverConfigTs: Number.isFinite(src && src.serverTs) ? src.serverTs : null,
+    };
+  }
+
+  /** Versione serializzabile (senza funzioni) da passare a content script e pagine. */
+  function toPlain(cfg) {
+    const { isManaged, ...rest } = cfg;
+    return rest;
+  }
+
+  const api = { resolveConfig, sanitizeManaged, toPlain, DEFAULT_TAG_INSTRUCTION, DEFAULT_RIZZO_URL, MODE_DEFAULTS };
+  PG.config = api;
+  if (typeof module === 'object' && module.exports) module.exports = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);

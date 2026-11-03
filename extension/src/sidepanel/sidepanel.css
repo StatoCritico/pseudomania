@@ -1,0 +1,18 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+header { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+main { padding: 4px 14px 20px; }
+section { margin-top: 12px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 420px) { .cols { grid-template-columns: 1fr; } }
+.txt { white-space: pre-wrap; word-break: break-word; background: var(--panel); border-radius: 8px; padding: 8px;
+       font-size: 13px; max-height: 45vh; overflow: auto; }
+mark.o { background: var(--orig); color: inherit; border-radius: 3px; }
+mark.t { background: var(--tag); color: inherit; border-radius: 3px; font-family: ui-monospace, monospace; font-size: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+td { border-bottom: 1px solid var(--border); padding: 4px; vertical-align: top; word-break: break-word; }
+td:first-child { font-family: ui-monospace, monospace; white-space: nowrap; }
+.toggle { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+#raw .txt { margin-top: 8px; }
+
+.box { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+.box.warn { border-color: var(--warn); }

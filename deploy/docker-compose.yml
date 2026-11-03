@@ -1,0 +1,555 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Pseudomania - Enterprise edition, su una singola VM Linux (Docker Engine + Compose v2).
+# Sito: https://pseudomania.statocritico.it  (gli identificatori tecnici restano "pseudogate")
+#
+# Componenti (vedi deploy/VERSIONS.md per versioni e licenze):
+#   caddy            unico servizio esposto (solo 443), TLS con il certificato dell'ente,
+#                    reverse proxy verso api, langfuse-web e pacchetto dell'estensione
+#   api              API di Pseudomania (build di ../server), porta interna 8787
+#   rizzo-pii        rilevatore di dati personali (build dal repository git), porta 5005,
+#                    su una rete INTERNA senza accesso a Internet
+#   postgres         DB applicativo "pseudogate": dizionario CIFRATO DALL'ESTENSIONE
+#                    (il server non ha i valori in chiaro), registro minimo, registri tecnici
+#   postgres-keys    key store "pseudogate_keys": copie di custodia (escrow) delle chiavi
+#                    utente, cifrate con la chiave pubblica dei custodi. Container, volume,
+#                    rete e backup SEPARATI (scripts/backup-chiavi.sh, 14 giorni)
+#   openbao          chiave HMAC del server (transit "user-hmac") e segreti, porta 8200
+#   openbao-init     operazione una tantum (profilo "init"): inizializza OpenBao,
+#                    crea la chiave HMAC, policy e AppRole per l'api
+#   langfuse-*       (profilo "langfuse") osservabilità delle trace GIÀ pseudonimizzate,
+#                    con langfuse-postgres, clickhouse, valkey (non Redis), seaweedfs (non
+#                    MinIO). Se l'ente ha già un Langfuse condiviso, non avviare il profilo e
+#                    indicare in .env LANGFUSE_HOST e le chiavi del progetto dedicato.
+#
+# Chiave pubblica di custodia: generata OFFLINE dai custodi con tools/custodi/ e copiata
+# in ./custodia/ (escrow_public.pem + escrow_key_id.txt). La privata non è mai sul server.
+#
+# Primo avvio (in breve; la procedura completa è in docs/):
+#   1. cp .env.example .env && ./scripts/genera-segreti.sh   # segreti casuali in .env
+#   2. copiare i certificati dell'ente in ./certs e la chiave pubblica di custodia in ./custodia
+#   3. docker compose up -d openbao postgres postgres-keys
+#   4. docker compose --profile init run --rm openbao-init     # chiave HMAC e AppRole
+#   5. docker compose --profile langfuse up -d --build        # senza "--profile langfuse"
+#                                                             # se si usa un Langfuse esistente
+#
+# Dopo ogni riavvio della VM OpenBao è SIGILLATO (GET /v1/health -> "keys":"sealed",
+# "status":"degraded"): sbloccarlo con ./scripts/openbao-unseal.sh
+
+name: pseudogate
+
+x-restart: &restart
+  restart: unless-stopped
+
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "5"
+
+x-hardening: &hardening
+  security_opt:
+    - no-new-privileges:true
+
+services:
+  # ---------------------------------------------------------------------------
+  # Ingresso
+  # ---------------------------------------------------------------------------
+  caddy:
+    image: docker.io/library/caddy:2.11.7
+    <<: [*restart, *logging, *hardening]
+    # Requisito: in ingresso SOLO la porta 443. La porta 80 non è pubblicata e Caddy non
+    # fa redirect HTTP->HTTPS (auto_https disable_redirects nel Caddyfile): l'estensione e
+    # gli amministratori usano direttamente https://.
+    ports:
+      - "443:443"
+    environment:
+      PSEUDOGATE_DOMAIN: ${PSEUDOGATE_DOMAIN:?imposta PSEUDOGATE_DOMAIN in .env}
+      # sito Langfuse su Caddy: "on" con il profilo "langfuse" (Langfuse su questa VM),
+      # "off" con un Langfuse esterno/condiviso (LANGFUSE_DOMAIN e certificati non servono)
+      CADDY_LANGFUSE_SITE: ${CADDY_LANGFUSE_SITE:-on}
+      LANGFUSE_DOMAIN: ${LANGFUSE_DOMAIN:-langfuse.invalid}
+      TLS_CERT_PSEUDOGATE: ${TLS_CERT_PSEUDOGATE:-/etc/caddy/certs/pseudogate.crt}
+      TLS_KEY_PSEUDOGATE: ${TLS_KEY_PSEUDOGATE:-/etc/caddy/certs/pseudogate.key}
+      TLS_CERT_LANGFUSE: ${TLS_CERT_LANGFUSE:-/etc/caddy/certs/langfuse.crt}
+      TLS_KEY_LANGFUSE: ${TLS_KEY_LANGFUSE:-/etc/caddy/certs/langfuse.key}
+      MAX_REQUEST_MB: ${MAX_REQUEST_MB:-30}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy/langfuse-on.caddy:/etc/caddy/langfuse-on.caddy:ro
+      - ./caddy/langfuse-off.caddy:/etc/caddy/langfuse-off.caddy:ro
+      - ./certs:/etc/caddy/certs:ro        # certificati e chiavi dell'ente (PEM)
+      - caddy-data:/data
+      - caddy-config:/config
+      # pacchetto dell'estensione per l'installazione forzata via policy:
+      # update.xml e pseudogate-x.y.z.crx, serviti su https://<PSEUDOGATE_DOMAIN>/extension/
+      - ./estensione:/srv/extension:ro
+    networks:
+      - edge
+      - proxy_api
+      - proxy_langfuse
+    depends_on:
+      api:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:2019/config/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ---------------------------------------------------------------------------
+  # Pseudomania (API e rilevatore)
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: ../server
+    image: pseudogate-api:0.1.0
+    <<: [*restart, *logging, *hardening]
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    environment:
+      WORKERS: ${PSEUDOGATE_WORKERS:-2}
+      FORWARDED_ALLOW_IPS: "*"           # solo caddy raggiunge l'api (rete interna)
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      SOURCE_URL: ${SOURCE_URL:-}
+      # database (utente applicativo creato da postgres/init/01-pseudogate.sh)
+      DATABASE_URL: postgresql://pseudogate_app:${PSEUDOGATE_DB_PASSWORD:?}@postgres:5432/pseudogate
+      # key store separato (escrow delle chiavi utente)
+      KEYSTORE_DATABASE_URL: postgresql://pseudogate_keys_app:${KEYS_DB_PASSWORD:?}@postgres-keys:5432/pseudogate_keys
+      # chiave PUBBLICA di custodia (RSA-OAEP-4096) generata offline con tools/custodi/
+      ESCROW_PUBLIC_KEY_FILE: /run/secrets/custodia/escrow_public.pem
+      ESCROW_KEY_ID_FILE: /run/secrets/custodia/escrow_key_id.txt
+      KEY_ROTATION_DAYS: ${KEY_ROTATION_DAYS:-90}
+      PENDING_ENTRY_MINUTES: ${PENDING_ENTRY_MINUTES:-10}
+      # token per caricare le chiavi recuperate dai custodi (POST /v1/keys/recovered);
+      # facoltativo: senza file l'endpoint è disattivato e si usa la riga di comando
+      ADMIN_API_TOKEN_FILE: /run/secrets/pseudogate/admin-api-token
+      # registro delle cancellazioni esportato fuori dal DB (da riapplicare dopo un ripristino)
+      DELETION_LOG_DIR: /var/lib/pseudogate/registro
+      # identità: OIDC dell'ente
+      OIDC_ISSUER: ${OIDC_ISSUER:?imposta OIDC_ISSUER in .env}
+      OIDC_AUDIENCE: ${OIDC_AUDIENCE:?imposta OIDC_AUDIENCE in .env}
+      OIDC_JWKS_URL: ${OIDC_JWKS_URL:-}
+      OIDC_USER_CLAIM: ${OIDC_USER_CLAIM:-sub}
+      OIDC_OFFICE_CLAIM: ${OIDC_OFFICE_CLAIM:-}
+      OIDC_ALGORITHMS: ${OIDC_ALGORITHMS:-RS256,PS256,ES256}
+      # CA interne dell'ente (PEM in deploy/ca/), AGGIUNTE alle CA pubbliche per TUTTE le
+      # chiamate HTTPS in uscita (IdP, Langfuse condiviso). Es. /etc/pseudogate/ca/ca-ente.pem
+      EXTRA_CA_FILE: ${EXTRA_CA_FILE:-${OIDC_CA_FILE:-}}
+      # Proxy per le chiamate HTTPS verso l'esterno (es. IdP cloud come Entra ID).
+      # I servizi interni e gli host in OUTBOUND_NO_PROXY (es. un Langfuse condiviso
+      # raggiungibile direttamente) non passano dal proxy.
+      HTTPS_PROXY: ${OUTBOUND_HTTPS_PROXY:-${OIDC_HTTPS_PROXY:-}}
+      https_proxy: ${OUTBOUND_HTTPS_PROXY:-${OIDC_HTTPS_PROXY:-}}
+      NO_PROXY: openbao,rizzo-pii,langfuse-web,postgres,postgres-keys,localhost,127.0.0.1,${OUTBOUND_NO_PROXY:-}
+      no_proxy: openbao,rizzo-pii,langfuse-web,postgres,postgres-keys,localhost,127.0.0.1,${OUTBOUND_NO_PROXY:-}
+      # OpenBao: credenziali AppRole scritte da openbao-init
+      OPENBAO_ADDR: http://openbao:8200
+      OPENBAO_ROLE_ID_FILE: /run/secrets/openbao/role_id
+      OPENBAO_SECRET_ID_FILE: /run/secrets/openbao/secret_id
+      OPENBAO_HMAC_KEY: user-hmac
+      # rilevatore
+      RIZZO_URL: http://rizzo-pii:5005
+      RIZZO_TIMEOUT_S: ${RIZZO_TIMEOUT_S:-600}
+      DETECTOR_EXCLUDE_TAGS: ${DETECTOR_EXCLUDE_TAGS:-}
+      # policy
+      FAIL_CLOSED: ${FAIL_CLOSED:-true}
+      ALLOW_DISABLE: ${ALLOW_DISABLE:-false}
+      MAX_FILE_MB: ${MAX_FILE_MB:-20}
+      POLICY_VERSION: ${POLICY_VERSION:-}
+      # allowlist e categorie particolari dell'ente: copiare i file di server/config/ in
+      # deploy/config/, modificarli e impostare in .env
+      #   ALLOWLIST_FILE=/app/config-ente/allowlist.yml
+      #   SPECIAL_CATEGORIES_FILE=/app/config-ente/special_categories.yml
+      ALLOWLIST_FILE: ${ALLOWLIST_FILE:-/app/config/allowlist.yml}
+      SPECIAL_CATEGORIES_FILE: ${SPECIAL_CATEGORIES_FILE:-/app/config/special_categories.yml}
+      SPECIAL_CATEGORIES_ENABLED: ${SPECIAL_CATEGORIES_ENABLED:-true}
+      SITES: ${SITES:-claude.ai}
+      CORS_ALLOW_ORIGIN_REGEX: ${CORS_ALLOW_ORIGIN_REGEX:-^chrome-extension://[a-p]{32}}
+      # conservazione
+      DICT_TTL_CONVERSATION_DAYS: ${DICT_TTL_CONVERSATION_DAYS:-30}
+      DICT_TTL_PROJECT_INACTIVITY_DAYS: ${DICT_TTL_PROJECT_INACTIVITY_DAYS:-30}
+      PROJECT_CONFIRM_INTERVAL_DAYS: ${PROJECT_CONFIRM_INTERVAL_DAYS:-365}
+      PENDING_SCOPE_TTL_HOURS: ${PENDING_SCOPE_TTL_HOURS:-24}
+      AUDIT_RETENTION_DAYS: ${AUDIT_RETENTION_DAYS:-90}
+      RETENTION_JOB: internal
+      RETENTION_INTERVAL_MINUTES: ${RETENTION_INTERVAL_MINUTES:-60}
+      # Langfuse (trace con soli testi pseudonimizzati)
+      LANGFUSE_ENABLED: ${LANGFUSE_ENABLED:-true}
+      # interno (profilo "langfuse") oppure il Langfuse condiviso dell'ente
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-http://langfuse-web:3000}
+      # le trace del progetto più vecchie di N giorni vengono cancellate dal nostro job
+      # (30 nel pilota, poi 7; 0 = disattivato)
+      LANGFUSE_RETENTION_DAYS: ${LANGFUSE_RETENTION_DAYS:-30}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_ENVIRONMENT: ${LANGFUSE_ENVIRONMENT:-production}
+    volumes:
+      - ./secrets/openbao-approle:/run/secrets/openbao:ro
+      - ./secrets/api:/run/secrets/pseudogate:ro
+      - ./custodia:/run/secrets/custodia:ro    # solo materiale PUBBLICO di custodia
+      - ./registro:/var/lib/pseudogate/registro
+      # esportazioni per i custodi (custodia esporta-*): scrivibile, ESCLUSA dai backup;
+      # svuotarla dopo ogni cerimonia (i file contengono escrow e voci cifrate)
+      - ./esportazioni:/var/lib/pseudogate/esportazioni
+      - ./config:/app/config-ente:ro      # allowlist/categorie dell'ente (vedi sopra)
+      - ./ca:/etc/pseudogate/ca:ro        # CA interne (vedi OIDC_CA_FILE)
+    networks:
+      - proxy_api
+      - data
+      - keys
+      - detector
+      - langfuse_ingest
+      - egress           # solo per raggiungere l'identity provider (JWKS): filtrare a firewall
+    depends_on:
+      postgres:
+        condition: service_healthy
+      postgres-keys:
+        condition: service_healthy
+      openbao:
+        condition: service_healthy
+      rizzo-pii:
+        condition: service_started
+
+  rizzo-pii:
+    build:
+      # Build dal repository ufficiale, a un commit verificato. Per una build offline
+      # clonare il repository e impostare RIZZO_BUILD_CONTEXT=/percorso/rizzo-pii
+      context: ${RIZZO_BUILD_CONTEXT:-https://github.com/Rizzo-AI-Academy/rizzo-pii.git#9057eeff88bdf0444e5d3361cf0766b60c5b8a95}
+      dockerfile: Dockerfile
+      args:
+        MODEL_REPO: rizzoaiacademy/rizzo-pii-0.3B
+        MODEL_REVISION: ${RIZZO_MODEL_REVISION:-v1.5.0}
+    image: rizzo-pii:9057eef-v1.5.0
+    <<: [*restart, *logging, *hardening]
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /home/app        # preferenze UI di Rizzo: non servono, non persistono
+    cap_drop: [ALL]
+    environment:
+      PII_HOST: 0.0.0.0
+      PII_PORT: 5005
+      HF_HUB_OFFLINE: 1
+      TRANSFORMERS_OFFLINE: 1
+      OMP_NUM_THREADS: ${RIZZO_THREADS:-4}
+    networks:
+      - detector          # rete interna: nessun accesso a Internet né alla LAN
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:5005/health', timeout=4).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 180s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "${RIZZO_CPUS:-4.0}"
+          memory: ${RIZZO_MEMORY:-6G}
+
+  # ---------------------------------------------------------------------------
+  # Dati e chiavi
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: docker.io/library/postgres:16.15
+    <<: [*restart, *logging, *hardening]
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:?}
+      POSTGRES_DB: pseudogate
+      PSEUDOGATE_DB_PASSWORD: ${PSEUDOGATE_DB_PASSWORD:?}
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - pseudogate-postgres:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pseudogate"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  postgres-keys:
+    image: docker.io/library/postgres:16.15
+    <<: [*restart, *logging, *hardening]
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${KEYS_DB_SUPERUSER_PASSWORD:?}
+      POSTGRES_DB: pseudogate_keys
+      KEYS_DB_PASSWORD: ${KEYS_DB_PASSWORD:?}
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - pseudogate-keys-postgres:/var/lib/postgresql/data
+      - ./postgres-keys/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - keys
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pseudogate_keys"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  openbao:
+    image: docker.io/openbao/openbao:2.7.2
+    <<: [*restart, *logging, *hardening]
+    command: server
+    environment:
+      BAO_ADDR: http://127.0.0.1:8200
+      SKIP_CHOWN: "true"     # la configurazione è montata in sola lettura
+    volumes:
+      - ./openbao/config:/openbao/config:ro
+      - openbao-data:/openbao/file      # storage raft (produzione, non "dev mode")
+    networks:
+      - data
+    # "bao status": 0 = sbloccato, 2 = sigillato, 1 = errore. Il servizio è "healthy"
+    # quando risponde; se è sigillato l'api risponde 503 finché non viene sbloccato.
+    healthcheck:
+      test: ["CMD-SHELL", "bao status >/dev/null 2>&1; test $$? -ne 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  openbao-init:
+    image: docker.io/openbao/openbao:2.7.2
+    profiles: ["init"]
+    entrypoint: ["/bin/sh", "/init/init.sh"]
+    environment:
+      BAO_ADDR: http://openbao:8200
+      OPENBAO_KEY_SHARES: ${OPENBAO_KEY_SHARES:-5}
+      OPENBAO_KEY_THRESHOLD: ${OPENBAO_KEY_THRESHOLD:-3}
+      # quote cifrate PGP, una chiave pubblica per custode (file in secrets/pgp/)
+      OPENBAO_PGP_KEYS: ${OPENBAO_PGP_KEYS:-}
+      OPENBAO_ROOT_TOKEN_PGP_KEY: ${OPENBAO_ROOT_TOKEN_PGP_KEY:-}
+      OPENBAO_REVOKE_ROOT: ${OPENBAO_REVOKE_ROOT:-true}
+      API_UID: "10001"
+    volumes:
+      - ./openbao/init.sh:/init/init.sh:ro
+      - ./secrets:/out                   # chiavi di sblocco, token, credenziali AppRole
+    networks:
+      - data
+    depends_on:
+      openbao:
+        condition: service_healthy
+
+  # ---------------------------------------------------------------------------
+  # Langfuse (adattato dal docker-compose.yml ufficiale di Langfuse v4)
+  # ---------------------------------------------------------------------------
+  langfuse-worker:
+    profiles: ["langfuse"]
+    image: docker.langfuse.com/langfuse/langfuse-worker:4.72.0
+    <<: [*restart, *logging, *hardening]
+    networks:
+      - langfuse_backend
+    depends_on: &langfuse-depends-on
+      langfuse-postgres:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    environment: &langfuse-env
+      NEXTAUTH_URL: https://${LANGFUSE_DOMAIN:-langfuse.invalid}
+      DATABASE_URL: postgresql://langfuse:${LANGFUSE_DB_PASSWORD:?}@langfuse-postgres:5432/langfuse
+      SALT: ${LANGFUSE_SALT:?}
+      ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:?}     # 64 caratteri esadecimali
+      TELEMETRY_ENABLED: "false"                       # nessuna telemetria verso Langfuse
+      LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "false"
+      CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_USER: langfuse
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:?}
+      CLICKHOUSE_CLUSTER_ENABLED: "false"
+      # object storage S3 = SeaweedFS (bucket creato al primo caricamento)
+      LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_EVENT_UPLOAD_REGION: us-east-1
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: ${SEAWEEDFS_ACCESS_KEY:?}
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${SEAWEEDFS_SECRET_KEY:?}
+      LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://seaweedfs:8333
+      LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+      LANGFUSE_S3_EVENT_UPLOAD_PREFIX: events/
+      LANGFUSE_S3_MEDIA_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_MEDIA_UPLOAD_REGION: us-east-1
+      LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: ${SEAWEEDFS_ACCESS_KEY:?}
+      LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${SEAWEEDFS_SECRET_KEY:?}
+      LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://seaweedfs:8333
+      LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
+      LANGFUSE_S3_MEDIA_UPLOAD_PREFIX: media/
+      LANGFUSE_S3_BATCH_EXPORT_ENABLED: "false"
+      # coda = Valkey (compatibile con il protocollo Redis)
+      REDIS_HOST: valkey
+      REDIS_PORT: "6379"
+      REDIS_AUTH: ${VALKEY_PASSWORD:?}
+      REDIS_TLS_ENABLED: "false"
+
+  langfuse-web:
+    profiles: ["langfuse"]
+    image: docker.langfuse.com/langfuse/langfuse:4.72.0
+    <<: [*restart, *logging, *hardening]
+    depends_on: *langfuse-depends-on
+    environment:
+      <<: *langfuse-env
+      HOSTNAME: 0.0.0.0
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:?}
+      AUTH_DISABLE_SIGNUP: "true"             # account creati solo dall'amministratore
+      LANGFUSE_TRUSTED_PROXY_COUNT: "1"       # caddy
+      # organizzazione, progetto, chiavi API e primo amministratore creati all'avvio
+      LANGFUSE_INIT_ORG_ID: ${LANGFUSE_INIT_ORG_ID:-ente}
+      LANGFUSE_INIT_ORG_NAME: ${LANGFUSE_INIT_ORG_NAME:-Ente}
+      LANGFUSE_INIT_PROJECT_ID: ${LANGFUSE_INIT_PROJECT_ID:-pseudogate}
+      LANGFUSE_INIT_PROJECT_NAME: ${LANGFUSE_INIT_PROJECT_NAME:-Pseudomania}
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:?}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_SECRET_KEY:?}
+      # primo amministratore: servono email e password SOLO al primo avvio. Dopo il primo
+      # accesso cambiare la password dall'interfaccia e togliere il valore da .env.
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_USER_EMAIL:-}
+      LANGFUSE_INIT_USER_NAME: ${LANGFUSE_INIT_USER_NAME:-Amministratore}
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_USER_PASSWORD:-}
+    networks:
+      - proxy_langfuse
+      - langfuse_ingest
+      - langfuse_backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/api/public/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 120s
+      retries: 5
+
+  langfuse-postgres:
+    profiles: ["langfuse"]
+    image: docker.io/library/postgres:17.11
+    <<: [*restart, *logging, *hardening]
+    environment:
+      POSTGRES_USER: langfuse
+      POSTGRES_PASSWORD: ${LANGFUSE_DB_PASSWORD:?}
+      POSTGRES_DB: langfuse
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - langfuse-postgres:/var/lib/postgresql/data
+    networks:
+      - langfuse_backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse -d langfuse"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  clickhouse:
+    profiles: ["langfuse"]
+    image: docker.io/clickhouse/clickhouse-server:26.3.62.3
+    <<: [*restart, *logging, *hardening]
+    user: "101:101"
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: langfuse
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:?}
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - langfuse-clickhouse-data:/var/lib/clickhouse
+      - langfuse-clickhouse-logs:/var/log/clickhouse-server
+    networks:
+      - langfuse_backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:8123/ping || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  valkey:
+    profiles: ["langfuse"]
+    image: docker.io/valkey/valkey:8.1.11
+    <<: [*restart, *logging, *hardening]
+    command:
+      - valkey-server
+      - --requirepass
+      - ${VALKEY_PASSWORD:?}
+      - --maxmemory-policy
+      - noeviction            # richiesto da Langfuse (code BullMQ)
+      - --appendonly
+      - "yes"
+    environment:
+      REDISCLI_AUTH: ${VALKEY_PASSWORD:?}
+      VALKEYCLI_AUTH: ${VALKEY_PASSWORD:?}
+    volumes:
+      - langfuse-valkey:/data
+    networks:
+      - langfuse_backend
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  seaweedfs:
+    profiles: ["langfuse"]
+    image: docker.io/chrislusf/seaweedfs:4.51
+    <<: [*restart, *logging, *hardening]
+    # master + volume + filer + gateway S3 in un solo processo (l'entrypoint aggiunge
+    # -dir=/data -volume.max=0 -master.volumeSizeLimitMB=1024)
+    command: ["server", "-ip=seaweedfs", "-ip.bind=0.0.0.0", "-s3", "-s3.port=8333"]
+    environment:
+      # identità amministrativa S3 letta dalle variabili d'ambiente
+      AWS_ACCESS_KEY_ID: ${SEAWEEDFS_ACCESS_KEY:?}
+      AWS_SECRET_ACCESS_KEY: ${SEAWEEDFS_SECRET_KEY:?}
+    volumes:
+      - langfuse-seaweedfs:/data
+    networks:
+      - langfuse_backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:9333/cluster/status || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+# -----------------------------------------------------------------------------
+# Reti: "edge" (porta 443 pubblicata da caddy, senza uscita verso Internet) ed
+# "egress" (api -> identity provider, da filtrare a firewall); tutte le altre sono
+# interne (internal: true).
+# -----------------------------------------------------------------------------
+networks:
+  # porte pubblicate da caddy: niente NAT in uscita, quindi caddy non raggiunge Internet
+  edge:
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+  egress: {}
+  proxy_api:
+    internal: true
+  proxy_langfuse:
+    internal: true
+  data:
+    internal: true
+  keys:
+    internal: true
+  detector:
+    internal: true
+  langfuse_ingest:
+    internal: true
+  langfuse_backend:
+    internal: true
+
+volumes:
+  caddy-data:
+  caddy-config:
+  pseudogate-postgres:
+  pseudogate-keys-postgres:
+  openbao-data:
+  langfuse-postgres:
+  langfuse-clickhouse-data:
+  langfuse-clickhouse-logs:
+  langfuse-valkey:
+  langfuse-seaweedfs:

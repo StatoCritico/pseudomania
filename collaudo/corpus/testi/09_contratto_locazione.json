@@ -1,0 +1,121 @@
+{
+ "id": "09_contratto_locazione",
+ "format": "txt",
+ "file": "testi/09_contratto_locazione.txt",
+ "kind": "contratto",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 60,
+   "end": 73,
+   "text": "Roberto Villa",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 90,
+   "end": 106,
+   "text": "VLLRRT55C08F205E",
+   "type": "CF",
+   "action": "mask"
+  },
+  {
+   "start": 121,
+   "end": 127,
+   "text": "Milano",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 129,
+   "end": 141,
+   "text": "piazza Duomo",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 142,
+   "end": 143,
+   "text": "2",
+   "type": "BUILDINGNUM",
+   "action": "mask"
+  },
+  {
+   "start": 202,
+   "end": 217,
+   "text": "Francesca Testa",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 227,
+   "end": 237,
+   "text": "19/07/1993",
+   "type": "DATE",
+   "action": "mask"
+  },
+  {
+   "start": 254,
+   "end": 270,
+   "text": "TSTFNC93L59A662X",
+   "type": "CF",
+   "action": "mask"
+  },
+  {
+   "start": 292,
+   "end": 301,
+   "text": "CA98765ZX",
+   "type": "ID_DOC",
+   "action": "mask"
+  },
+  {
+   "start": 331,
+   "end": 342,
+   "text": "via Mazzini",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 343,
+   "end": 345,
+   "text": "21",
+   "type": "BUILDINGNUM",
+   "action": "mask"
+  },
+  {
+   "start": 347,
+   "end": 352,
+   "text": "60121",
+   "type": "ZIPCODE",
+   "action": "mask"
+  },
+  {
+   "start": 353,
+   "end": 359,
+   "text": "Ancona",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 385,
+   "end": 417,
+   "text": "foglio 7, particella 112, sub. 3",
+   "type": "CATASTO",
+   "action": "mask"
+  },
+  {
+   "start": 440,
+   "end": 448,
+   "text": "€ 650,00",
+   "type": "AMOUNT",
+   "action": "mask"
+  },
+  {
+   "start": 472,
+   "end": 499,
+   "text": "IT14F0474983827199608874581",
+   "type": "IBAN",
+   "action": "mask"
+  }
+ ]
+}

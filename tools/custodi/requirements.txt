@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Strumento offline dei custodi. Per un computer senza rete: scaricare prima la wheel
+#   pip download cryptography==50.0.1 -d wheels/   (su un PC collegato, stessa piattaforma)
+#   pip install --no-index --find-links wheels/ cryptography==50.0.1   (sul PC offline)
+cryptography==50.0.1

@@ -1,0 +1,121 @@
+{
+ "id": "03_lettera_tari",
+ "format": "txt",
+ "file": "testi/03_lettera_tari.txt",
+ "kind": "lettera",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 0,
+   "end": 17,
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 18,
+   "end": 33,
+   "text": "Ufficio Tributi",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 48,
+   "end": 64,
+   "text": "Antonio Esposito",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 65,
+   "end": 78,
+   "text": "Via dei Mille",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 79,
+   "end": 81,
+   "text": "12",
+   "type": "BUILDINGNUM",
+   "action": "mask"
+  },
+  {
+   "start": 82,
+   "end": 87,
+   "text": "80121",
+   "type": "ZIPCODE",
+   "action": "mask"
+  },
+  {
+   "start": 88,
+   "end": 94,
+   "text": "Napoli",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 96,
+   "end": 98,
+   "text": "NA",
+   "type": "PROVINCE",
+   "action": "mask"
+  },
+  {
+   "start": 116,
+   "end": 132,
+   "text": "SPSNTN84C17F839R",
+   "type": "CF",
+   "action": "mask"
+  },
+  {
+   "start": 241,
+   "end": 249,
+   "text": "€ 312,40",
+   "type": "AMOUNT",
+   "action": "mask"
+  },
+  {
+   "start": 314,
+   "end": 327,
+   "text": "via dei Mille",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 344,
+   "end": 356,
+   "text": "3 marzo 2019",
+   "type": "DATE",
+   "action": "mask"
+  },
+  {
+   "start": 393,
+   "end": 399,
+   "text": "PagoPA",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 519,
+   "end": 546,
+   "text": "IT10Y0715419541045150923688",
+   "type": "IBAN",
+   "action": "mask"
+  },
+  {
+   "start": 600,
+   "end": 633,
+   "text": "Ufficio Relazioni con il Pubblico",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 681,
+   "end": 697,
+   "text": "Chiara Benedetti",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ]
+}

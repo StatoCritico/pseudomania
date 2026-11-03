@@ -1,0 +1,114 @@
+{
+ "id": "05_verbale_commissione",
+ "format": "txt",
+ "file": "testi/05_verbale_commissione.txt",
+ "kind": "verbale",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 52,
+   "end": 67,
+   "text": "21 ottobre 2026",
+   "type": "DATE",
+   "action": "ignore"
+  },
+  {
+   "start": 78,
+   "end": 82,
+   "text": "9:30",
+   "type": "TIME",
+   "action": "ignore"
+  },
+  {
+   "start": 126,
+   "end": 143,
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 225,
+   "end": 242,
+   "text": "Stefano Orlandini",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 257,
+   "end": 270,
+   "text": "Elena Rinaldi",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 273,
+   "end": 288,
+   "text": "Marco De Santis",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 303,
+   "end": 315,
+   "text": "Davide Galli",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 386,
+   "end": 401,
+   "text": "Alessio Ruggeri",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 410,
+   "end": 414,
+   "text": "Roma",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 418,
+   "end": 428,
+   "text": "02/11/1983",
+   "type": "DATE",
+   "action": "mask"
+  },
+  {
+   "start": 433,
+   "end": 440,
+   "text": "42 anni",
+   "type": "AGE",
+   "action": "mask"
+  },
+  {
+   "start": 460,
+   "end": 471,
+   "text": "Rosa Bianco",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 486,
+   "end": 493,
+   "text": "Ruggeri",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 546,
+   "end": 552,
+   "text": "Bianco",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 599,
+   "end": 604,
+   "text": "12:45",
+   "type": "TIME",
+   "action": "ignore"
+  }
+ ]
+}

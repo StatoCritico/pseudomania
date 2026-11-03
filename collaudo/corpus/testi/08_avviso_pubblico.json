@@ -1,0 +1,79 @@
+{
+ "id": "08_avviso_pubblico",
+ "format": "txt",
+ "file": "testi/08_avviso_pubblico.txt",
+ "kind": "avviso",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 0,
+   "end": 17,
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 86,
+   "end": 104,
+   "text": "Ufficio Protocollo",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 109,
+   "end": 142,
+   "text": "Ufficio Relazioni con il Pubblico",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 211,
+   "end": 214,
+   "text": "PEC",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 225,
+   "end": 229,
+   "text": "SPID",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 257,
+   "end": 270,
+   "text": "Albo pretorio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 287,
+   "end": 314,
+   "text": "Amministrazione trasparente",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 329,
+   "end": 343,
+   "text": "d.lgs. 33/2013",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 350,
+   "end": 375,
+   "text": "Regolamento (UE) 2016/679",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 510,
+   "end": 524,
+   "text": "Unione Europea",
+   "type": "ORG",
+   "action": "allow"
+  }
+ ]
+}

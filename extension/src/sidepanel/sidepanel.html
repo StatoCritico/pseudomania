@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ispezione Pseudomania</title>
+  <link rel="stylesheet" href="../ui/common.css">
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header>
+    <h1 id="title"></h1>
+    <div id="scope" class="muted"></div>
+  </header>
+  <main>
+    <p id="empty" class="muted" hidden></p>
+    <section id="recordSel" hidden>
+      <label for="records" class="muted small">Messaggio</label>
+      <select id="records"></select>
+    </section>
+    <section id="detail" hidden>
+      <div class="cols">
+        <div>
+          <h2 id="hOrig"></h2>
+          <div id="orig" class="txt"></div>
+        </div>
+        <div>
+          <h2 id="hSent"></h2>
+          <div id="sent" class="txt"></div>
+        </div>
+      </div>
+      <h2 id="hEnt"></h2>
+      <table id="entities"></table>
+      <p class="muted small" id="trace"></p>
+    </section>
+
+    <section>
+      <label class="toggle"><input type="checkbox" id="showRaw"> <span id="lblRaw"></span></label>
+      <div id="raw" hidden></div>
+    </section>
+
+    <section id="blockBox" class="box warn" hidden>
+      <p id="blockText" class="small"></p>
+      <button id="btnBlockFP" class="btn"></button>
+      <p id="blockMsg" class="small" role="status"></p>
+    </section>
+
+    <section id="reports">
+      <div class="row">
+        <button id="btnFN" class="btn"></button>
+        <button id="btnFP" class="btn"></button>
+      </div>
+      <div id="reportForm" hidden>
+        <label for="note" id="lblNote" class="small"></label>
+        <textarea id="note" rows="3"></textarea>
+        <div class="row"><button id="btnSend" class="btn primary"></button><button id="btnCancel" class="btn"></button></div>
+      </div>
+      <p id="msg" role="status" class="small"></p>
+    </section>
+
+    <section id="confirmBox" class="box" hidden>
+      <h2 id="hConfirm"></h2>
+      <p id="confirmText" class="small"></p>
+      <button id="btnConfirm" class="btn primary"></button>
+    </section>
+
+    <section>
+      <button id="btnDelete" class="btn danger"></button>
+    </section>
+
+    <section id="recoveryBox" class="box" hidden>
+      <h2 id="hRecovery"></h2>
+      <p id="keyInfo" class="small muted"></p>
+      <p id="unrecInfo" class="small"></p>
+      <p id="recoveryText" class="small"></p>
+      <div class="row">
+        <button id="btnPrepare" class="btn"></button>
+        <button id="btnImport" class="btn"></button>
+      </div>
+      <p id="recoveryCode" class="small"></p>
+      <p class="small"><a id="recoveryLink" target="_blank" rel="noopener noreferrer"></a></p>
+    </section>
+  </main>
+  <script src="../shared/strings.js"></script>
+  <script src="../shared/tags.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

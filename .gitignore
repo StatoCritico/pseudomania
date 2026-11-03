@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+# basi dati e chiavi locali di sviluppo
+*.sqlite3
+*.sqlite3-*
+*.key
+# segreti e dati locali di deploy (vedi anche deploy/.gitignore)
+deploy/.env
+deploy/secrets/
+# documenti interni e materiale di controllo non pubblicati
+Gateway_LLM_PA_Piano_d_azione.docx
+site/_screens/
+# Node
+node_modules/

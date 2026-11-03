@@ -1,0 +1,93 @@
+{
+ "id": "04_risposta_accesso_atti",
+ "format": "txt",
+ "file": "testi/04_risposta_accesso_atti.txt",
+ "kind": "lettera",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 0,
+   "end": 17,
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 20,
+   "end": 39,
+   "text": "Segreteria Generale",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 49,
+   "end": 59,
+   "text": "15873/2026",
+   "type": "DOCID",
+   "action": "ignore"
+  },
+  {
+   "start": 73,
+   "end": 85,
+   "text": "Marina Serra",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 91,
+   "end": 118,
+   "text": "marina.serra@pec.example.it",
+   "type": "EMAIL",
+   "action": "mask"
+  },
+  {
+   "start": 164,
+   "end": 174,
+   "text": "10/10/2026",
+   "type": "DATE",
+   "action": "ignore"
+  },
+  {
+   "start": 221,
+   "end": 235,
+   "text": "legge 241/1990",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 340,
+   "end": 373,
+   "text": "foglio 12, particella 345, sub. 6",
+   "type": "CATASTO",
+   "action": "mask"
+  },
+  {
+   "start": 403,
+   "end": 406,
+   "text": "URP",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 411,
+   "end": 426,
+   "text": "5 novembre 2026",
+   "type": "DATE",
+   "action": "ignore"
+  },
+  {
+   "start": 455,
+   "end": 470,
+   "text": "Leone Fortunato",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 533,
+   "end": 548,
+   "text": "Paolo Cavallini",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ]
+}

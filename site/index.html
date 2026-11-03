@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pseudomania – usare Claude senza consegnargli i dati personali</title>
+<meta name="description" content="Pseudomania è un software libero (AGPL) per pubbliche amministrazioni e professionisti: sostituisce i dati personali con segnaposto prima che il testo arrivi a Claude e li ripristina nella risposta, nel browser.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0059b3">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://pseudomania.statocritico.it/">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/theme-init.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#contenuto">Vai al contenuto principale</a>
+<div class="slim-header">
+  <div class="wrap">
+    <span>Software libero · AGPL-3.0 · riuso per la PA</span>
+    <a href="https://github.com/StatoCritico/pseudomania">Codice sorgente</a>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="#contenuto" aria-label="Pseudomania, pagina principale">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="12" fill="#0059b3"/><path d="M22 14h-8v36h8M42 14h8v36h-8" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><rect x="25" y="29" width="14" height="6" rx="2" fill="#fff"/></svg>
+      <span>
+        <span class="brand-name">Pseudomania</span>
+        <span class="brand-tag">Pseudonimizzazione per l'IA generativa</span>
+      </span>
+    </a>
+    <div class="header-tools">
+      <button type="button" class="btn-icon" id="theme-toggle" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg><span class="theme-label">Tema scuro</span></button>
+      <button type="button" class="btn-icon menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="main-nav"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg><span>Menu</span></button>
+    </div>
+  </div>
+  <nav class="main-nav" id="main-nav" aria-label="Menu principale">
+    <div class="wrap">
+      <ul>
+        <li><a href="#problema">Il problema</a></li>
+        <li><a href="#soluzione">La soluzione</a></li>
+        <li><a href="#non-solo-software">Non solo software</a></li>
+        <li><a href="#personal">Personal edition</a></li>
+        <li><a href="#enterprise">Enterprise edition</a></li>
+        <li><a href="approfondimenti/index.html">Approfondimenti</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<main id="contenuto" tabindex="-1">
+  <div class="status" role="note" aria-label="Stato del progetto">
+    <div class="wrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2 1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z"/></svg>
+      <p><strong>Fase pilota.</strong> Pseudomania è in sperimentazione con 6 utenti e non è ancora pronto per la produzione. Interfacce e configurazione possono cambiare.</p>
+    </div>
+  </div>
+
+  <section class="hero" aria-labelledby="titolo">
+    <div class="wrap">
+      <h1 id="titolo">A Claude arrivano segnaposto, non i dati personali.</h1>
+      <p class="lead">Pseudomania sostituisce nomi, codici fiscali, IBAN, indirizzi e altri dati personali con segnaposto come <span class="ph">[FULLNAME_1]</span> prima che il testo arrivi a Claude, e rimette i valori reali nella risposta, solo nel tuo browser.</p>
+      <p class="honest"><strong>Detto con onestà:</strong> è una misura che riduce il rischio, non una garanzia di anonimizzazione. I dati pseudonimizzati restano dati personali, il riconoscimento automatico può sbagliare e lo strumento funziona solo dentro un insieme di regole e impostazioni.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#personal">Personal edition</a>
+        <a class="btn btn-primary" href="#enterprise">Enterprise edition</a>
+        <a class="btn btn-outline" href="approfondimenti/come-funziona.html">Come funziona</a>
+      </div>
+
+      <div class="tag-demo" aria-label="Esempio di pseudonimizzazione">
+        <div class="row">
+          <span class="lbl">Scrivi</span>
+          <span class="txt">Prepara una risposta a Mario Rossi (CF RSSMRA80A01H501U) sul rimborso di 1.250 € su IBAN IT60X0542811101000000123456.</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Claude riceve</span>
+          <span class="txt">Prepara una risposta a <span class="ph">[FULLNAME_1]</span> (CF <span class="ph">[CF_1]</span>) sul rimborso di <span class="ph">[AMOUNT_1]</span> su IBAN <span class="ph">[IBAN_1]</span>.</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Tu leggi</span>
+          <span class="txt">Gentile Mario Rossi, in merito al rimborso di 1.250 €…</span>
+        </div>
+      </div>
+      <p class="demo-note">Dati di esempio, inventati.</p>
+    </div>
+  </section>
+  <section id="problema" class="home-sec alt" aria-labelledby="h-problema">
+    <div class="wrap">
+      <span class="eyebrow">Perché</span>
+      <h2 id="h-problema">Il problema</h2>
+      <p class="section-intro">L'IA generativa è già entrata negli uffici e negli studi. Con lei, nomi, codici fiscali e IBAN finiscono sui server di un fornitore esterno.</p>
+      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="Il problema: punti principali">
+        <div class="car-controls">
+          <button type="button" class="car-btn car-prev" aria-controls="car-problema" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+          <span class="car-status" aria-hidden="true"></span>
+          <button type="button" class="car-btn car-next" aria-controls="car-problema" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+        </div>
+        <ul class="car-track" id="car-problema">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 5">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">01</span>
+            <h3><a href="approfondimenti/il-problema.html#ia-al-lavoro">L&#x27;IA è già al lavoro</a></h3>
+            <p>Lettere, sintesi, verbali, tabelle: Claude si usa ogni giorno, spesso incollando documenti pieni di dati di cittadini e clienti.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 5">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">02</span>
+            <h3><a href="approfondimenti/il-problema.html#dati-che-escono">Ogni testo esce dall&#x27;organizzazione</a></h3>
+            <p>Ciò che scrivi su claude.ai viene elaborato e conservato dal fornitore, con trasferimenti anche fuori dall'Unione europea.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 5">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">03</span>
+            <h3><a href="approfondimenti/il-problema.html#perche-non-basta-vietare">Vietare non basta</a></h3>
+            <p>Il divieto spinge verso account personali e dispositivi non controllati: il rischio aumenta invece di sparire.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 5">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">04</span>
+            <h3><a href="approfondimenti/il-problema.html#nessuna-api">Nessuna API, nessun proxy</a></h3>
+            <p>Il piano Claude Team si usa dal browser: non c'è un'API da filtrare e il traffico cifrato non si può aprire in rete.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 5">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">05</span>
+            <h3><a href="approfondimenti/il-problema.html#obblighi">Obblighi precisi</a></h3>
+            <p>Minimizzazione e sicurezza (GDPR), divieto di controllo a distanza dei lavoratori, formazione sull'IA: servono misure tecniche e organizzative.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        </ul>
+        <p class="car-hint">Usa i pulsanti, le frecce della tastiera o scorri lateralmente.</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <section id="soluzione" class="home-sec" aria-labelledby="h-soluzione">
+    <div class="wrap">
+      <span class="eyebrow">Cosa fa</span>
+      <h2 id="h-soluzione">La soluzione</h2>
+      <p class="section-intro">Un'estensione per Chrome intercetta ciò che invii a claude.ai, fa riconoscere i dati personali dal modello italiano Rizzo-PII e manda a Claude solo segnaposto.</p>
+      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="La soluzione: punti principali">
+        <div class="car-controls">
+          <button type="button" class="car-btn car-prev" aria-controls="car-soluzione" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+          <span class="car-status" aria-hidden="true"></span>
+          <button type="button" class="car-btn car-next" aria-controls="car-soluzione" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+        </div>
+        <ul class="car-track" id="car-soluzione">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">01</span>
+            <h3><a href="approfondimenti/come-funziona.html#segnaposto">Segnaposto al posto dei dati</a></h3>
+            <p>Ogni dato riconosciuto diventa un segnaposto coerente, come [FULLNAME_1] o [CF_2]: lo stesso valore riceve sempre lo stesso segnaposto.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">02</span>
+            <h3><a href="approfondimenti/come-funziona.html#ripristino">Ripristino solo nel browser</a></h3>
+            <p>Nella risposta di Claude i segnaposto tornano valori reali solo sul tuo schermo. Claude non li vede mai.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">03</span>
+            <h3><a href="approfondimenti/come-funziona.html#allegati">Allegati e Progetti</a></h3>
+            <p>Pseudonimizza anche PDF, DOCX, XLSX e i file e le istruzioni dei Progetti di Claude.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">04</span>
+            <h3><a href="approfondimenti/come-funziona.html#categorie-particolari">Dati sanitari e giudiziari bloccati</a></h3>
+            <p>Se riconosce categorie particolari di dati (artt. 9-10 GDPR) l'invio viene fermato, senza possibilità di forzarlo.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">05</span>
+            <h3><a href="approfondimenti/scelte-di-progetto.html#cifratura-lato-client">Dizionario cifrato nel browser</a></h3>
+            <p>La corrispondenza tra segnaposto e valori reali è cifrata con una chiave che resta nel browser: il server conserva solo dati cifrati.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">06</span>
+            <h3><a href="approfondimenti/come-funziona.html#cosa-non-protegge">Onesto sui limiti</a></h3>
+            <p>Quasi-identificatori, dati non riconosciuti e cambi dell'interfaccia di claude.ai restano rischi da gestire.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        </ul>
+        <p class="car-hint">Usa i pulsanti, le frecce della tastiera o scorri lateralmente.</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <section id="non-solo-software" class="home-sec alt" aria-labelledby="h-non-solo-software">
+    <div class="wrap">
+      <span class="eyebrow">Governance</span>
+      <h2 id="h-non-solo-software">Non solo software</h2>
+      <p class="section-intro">Pseudomania funziona solo dentro un insieme di impostazioni, regole e garanzie. Il repository offre modelli per ciascuna.</p>
+      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="Non solo software: punti principali">
+        <div class="car-controls">
+          <button type="button" class="car-btn car-prev" aria-controls="car-non-solo-software" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+          <span class="car-status" aria-hidden="true"></span>
+          <button type="button" class="car-btn car-next" aria-controls="car-non-solo-software" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+        </div>
+        <ul class="car-track" id="car-non-solo-software">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">01</span>
+            <h3><a href="approfondimenti/non-solo-software.html#impostazioni-claude">Impostazioni di Claude Team</a></h3>
+            <p>Memoria spenta, feedback e connettori disattivati, condivisione dei progetti chiusa, ricerca web attiva con cautele.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">02</span>
+            <h3><a href="approfondimenti/non-solo-software.html#regolamento">Regolamento d&#x27;uso</a></h3>
+            <p>Due modelli: una versione light per professionisti e piccole realtà, una strutturata per gli enti.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">03</span>
+            <h3><a href="approfondimenti/non-solo-software.html#dpia">DPIA</a></h3>
+            <p>Una valutazione d'impatto già impostata, con rischi, misure, durate di conservazione e fonti.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">04</span>
+            <h3><a href="approfondimenti/non-solo-software.html#accordo-sindacale">Accordo sindacale (art. 4)</a></h3>
+            <p>Registro e tracce possono consentire un controllo indiretto: servono accordo con le rappresentanze o autorizzazione dell'Ispettorato.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">05</span>
+            <h3><a href="approfondimenti/non-solo-software.html#custodi">Custodi</a></h3>
+            <p>Almeno tre custodi, quote di una chiave offline: nessuno da solo può aprire i dati, e solo su richiesta dell'autorità giudiziaria.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">06</span>
+            <h3><a href="approfondimenti/non-solo-software.html#esportazione-team">Esportazione Team governata</a></h3>
+            <p>L'esportazione dei dati di Claude Team passa da un account di custodia con credenziali divise e verbale.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        </ul>
+        <p class="car-hint">Usa i pulsanti, le frecce della tastiera o scorri lateralmente.</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <section id="personal" class="home-sec" aria-labelledby="h-personal">
+    <div class="wrap">
+      <span class="eyebrow">Per i professionisti</span>
+      <h2 id="h-personal">Personal edition</h2>
+      <p class="section-intro">Per avvocati, commercialisti, consulenti e chiunque usi Claude con dati di clienti. Due componenti sul tuo PC, nessun server.</p>
+      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="Personal edition: punti principali">
+        <div class="car-controls">
+          <button type="button" class="car-btn car-prev" aria-controls="car-personal" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+          <span class="car-status" aria-hidden="true"></span>
+          <button type="button" class="car-btn car-next" aria-controls="car-personal" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+        </div>
+        <ul class="car-track" id="car-personal">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">01</span>
+            <h3><a href="approfondimenti/personal-edition.html#per-chi">Per chi è</a></h3>
+            <p>Professionisti e piccole organizzazioni che usano Claude (Pro, Max o Team) e vogliono una protezione in più, su base volontaria.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">02</span>
+            <h3><a href="approfondimenti/personal-edition.html#requisiti">Estensione + app Rizzo-PII</a></h3>
+            <p>Installi l'estensione Chrome e l'app desktop di Rizzo-PII. Niente Docker, niente server da gestire.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">03</span>
+            <h3><a href="approfondimenti/personal-edition.html#dati-locali">Tutto resta sul tuo PC</a></h3>
+            <p>Rilevamento, dizionario e registro restano sul computer, cifrati con una chiave locale. Nessun dato agli sviluppatori.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">04</span>
+            <h3><a href="approfondimenti/personal-edition.html#attivazione">Attiva per conversazione</a></h3>
+            <p>Un clic sul pulsante (o Alt+Maiusc+P) accende o spegne la protezione della chat aperta; lo stato si ricorda per ogni conversazione.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">05</span>
+            <h3><a href="approfondimenti/personal-edition.html#allegati">Allegati gestiti nel browser</a></h3>
+            <p>DOCX e XLSX elaborati nell'estensione; i PDF vengono inviati come testo pseudonimizzato, con avviso.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">06</span>
+            <h3><a href="approfondimenti/guida-all-uso.html#policy">Regole essenziali</a></h3>
+            <p>Un modello di regolamento light in otto punti, da adattare al tuo studio.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        </ul>
+        <p class="car-hint">Usa i pulsanti, le frecce della tastiera o scorri lateralmente.</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <section id="enterprise" class="home-sec alt" aria-labelledby="h-enterprise">
+    <div class="wrap">
+      <span class="eyebrow">Per gli enti</span>
+      <h2 id="h-enterprise">Enterprise edition</h2>
+      <p class="section-intro">Per le amministrazioni con Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità.</p>
+      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="Enterprise edition: punti principali">
+        <div class="car-controls">
+          <button type="button" class="car-btn car-prev" aria-controls="car-enterprise" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+          <span class="car-status" aria-hidden="true"></span>
+          <button type="button" class="car-btn car-next" aria-controls="car-enterprise" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+        </div>
+        <ul class="car-track" id="car-enterprise">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">01</span>
+            <h3><a href="approfondimenti/enterprise-edition.html#architettura">Server nella rete dell&#x27;ente</a></h3>
+            <p>Una VM interna con API, Rizzo-PII senza accesso a Internet, PostgreSQL, OpenBao e un key store separato.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">02</span>
+            <h3><a href="approfondimenti/enterprise-edition.html#estensione-policy">Estensione gestita</a></h3>
+            <p>Installata dalle policy di Chrome e sempre attiva in ogni conversazione: il pulsante è bloccato su acceso; se il server non risponde l'invio si blocca.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">03</span>
+            <h3><a href="approfondimenti/enterprise-edition.html#sso">SSO e accesso condizionato</a></h3>
+            <p>Accesso con l'identity provider dell'ente; claude.ai raggiungibile solo dal Chrome gestito.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">04</span>
+            <h3><a href="approfondimenti/enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></h3>
+            <p>Chiave per utente generata nel browser, copia di custodia apribile solo da due custodi, rotazione ogni 90 giorni.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">05</span>
+            <h3><a href="approfondimenti/enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></h3>
+            <p>Tracce dei testi pseudonimizzati per misurare il rilevamento, conservate 30 giorni nel pilota, poi 7.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 6">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">06</span>
+            <h3><a href="approfondimenti/enterprise-edition.html#conservazione">Conservazione documentata</a></h3>
+            <p>Ogni durata è motivata con fonti; i backup si rendono illeggibili distruggendo le chiavi.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        </ul>
+        <p class="car-hint">Usa i pulsanti, le frecce della tastiera o scorri lateralmente.</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <section id="approfondimenti" class="home-sec" aria-labelledby="h-approfondimenti">
+    <div class="wrap">
+      <span class="eyebrow">Per saperne di più</span>
+      <h2 id="h-approfondimenti">Approfondimenti</h2>
+      <p class="section-intro">Le ragioni di ogni scelta, la guida all'uso, le risposte alle domande più comuni, la licenza e gli strumenti da scaricare.</p>
+      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="Approfondimenti: punti principali">
+        <div class="car-controls">
+          <button type="button" class="car-btn car-prev" aria-controls="car-approfondimenti" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+          <span class="car-status" aria-hidden="true"></span>
+          <button type="button" class="car-btn car-next" aria-controls="car-approfondimenti" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+        </div>
+        <ul class="car-track" id="car-approfondimenti">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">01</span>
+            <h3><a href="approfondimenti/faq.html">Domande frequenti</a></h3>
+            <p>Claude vede i dati reali? Funziona con altri chatbot? Serve un abbonamento? Le risposte brevi.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">02</span>
+            <h3><a href="approfondimenti/faq.html#faq-altri-siti">Altri chatbot e browser</a></h3>
+            <p>Oggi Chrome e claude.ai. Il codice isola tutto ciò che è specifico del sito in un modulo: chiunque può aggiungere ChatGPT o altri browser.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">03</span>
+            <h3><a href="approfondimenti/guida-all-uso.html">Guida all&#x27;uso</a></h3>
+            <p>Installazione, uso quotidiano, allegati, invii bloccati e come scrivere un regolamento light o strutturato.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">04</span>
+            <h3><a href="approfondimenti/scelte-di-progetto.html">Scelte di progetto</a></h3>
+            <p>Perché un'estensione e non un proxy, perché la memoria spenta, come funzionano chiavi e custodi.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">05</span>
+            <h3><a href="approfondimenti/licenza-e-crediti.html">Licenza e crediti</a></h3>
+            <p>AGPL-3.0-or-later, riuso per la PA e tutti i progetti su cui Pseudomania è costruito.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">06</span>
+            <h3><a href="approfondimenti/note-legali.html">Note legali</a></h3>
+            <p>Nessuna garanzia: la responsabilità dell'adozione e dell'uso resta interamente di chi adotta e usa il sistema.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="7 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">07</span>
+            <h3><a href="approfondimenti/strumenti-e-download.html">Strumenti e download</a></h3>
+            <p>Estensione, server, app Rizzo-PII, strumento dei custodi, modelli di governance e corpus di collaudo.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="8 di 8">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">08</span>
+            <h3><a href="privacy.html">Informativa privacy</a></h3>
+            <p>Quali dati tratta l'estensione, dove li invia e cosa riceve claude.ai.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        </ul>
+        <p class="car-hint">Usa i pulsanti, le frecce della tastiera o scorri lateralmente.</p>
+      </div>
+      
+    </div>
+  </section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h2>Pseudomania</h2>
+        <p>Software libero per pseudonimizzare ciò che si invia a Claude. Progettato per il riuso gratuito da parte delle pubbliche amministrazioni italiane e utilizzabile dai professionisti.</p>
+        <p class="small">Copyright © 2026 gli autori di Pseudomania. Questo programma è software libero: puoi ridistribuirlo e/o modificarlo secondo i termini della <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License</a>, versione 3 o (a tua scelta) successiva. È distribuito <strong>senza alcuna garanzia</strong>; la responsabilità dell'adozione e dell'uso resta interamente di chi lo adotta e lo usa (<a href="approfondimenti/note-legali.html">note legali</a>).</p>
+      </div>
+      <div>
+        <h2>Approfondimenti</h2>
+        <ul>
+          <li><a href="approfondimenti/index.html">Indice degli approfondimenti</a></li>
+          <li><a href="approfondimenti/faq.html">Domande frequenti</a></li>
+          <li><a href="approfondimenti/guida-all-uso.html">Guida all'uso</a></li>
+          <li><a href="approfondimenti/scelte-di-progetto.html">Scelte di progetto</a></li>
+          <li><a href="approfondimenti/strumenti-e-download.html">Strumenti e download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Riuso e note legali</h2>
+        <ul>
+          <li><a href="https://github.com/StatoCritico/pseudomania">Repository del codice</a></li>
+          <li><a href="approfondimenti/licenza-e-crediti.html">Licenza e crediti</a></li>
+          <li><a href="approfondimenti/note-legali.html">Note legali e disclaimer</a></li>
+          <li><a href="privacy.html">Informativa privacy dell'estensione</a></li>
+          <li><a href="https://github.com/StatoCritico/pseudomania/issues">Segnalazioni e proposte</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Questo sito non usa cookie né strumenti di tracciamento e non carica risorse da terzi. La sola preferenza di tema, se la scegli, resta nel tuo browser.</p>
+    </div>
+  </div>
+</footer>
+<p id="annuncio" class="visually-hidden" role="status" aria-live="polite"></p>
+<script src="assets/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+ "id": "11_blocco_salute",
+ "format": "txt",
+ "file": "testi/11_blocco_salute.txt",
+ "kind": "email",
+ "expected": "block",
+ "entities": [
+  {
+   "start": 48,
+   "end": 60,
+   "text": "Sara Colombo",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ],
+ "block_category": "salute",
+ "article": "9"
+}

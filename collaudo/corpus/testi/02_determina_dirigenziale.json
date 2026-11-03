@@ -1,0 +1,142 @@
+{
+ "id": "02_determina_dirigenziale",
+ "format": "txt",
+ "file": "testi/02_determina_dirigenziale.txt",
+ "kind": "determina",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 0,
+   "end": 17,
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 75,
+   "end": 78,
+   "text": "312",
+   "type": "DOCID",
+   "action": "ignore"
+  },
+  {
+   "start": 83,
+   "end": 93,
+   "text": "20/10/2026",
+   "type": "DATE",
+   "action": "ignore"
+  },
+  {
+   "start": 184,
+   "end": 200,
+   "text": "Edilverde S.r.l.",
+   "type": "ORG",
+   "action": "mask"
+  },
+  {
+   "start": 208,
+   "end": 219,
+   "text": "26785750501",
+   "type": "PIVA",
+   "action": "mask"
+  },
+  {
+   "start": 226,
+   "end": 236,
+   "text": "B1A2C3D4E5",
+   "type": "DOCID",
+   "action": "ignore"
+  },
+  {
+   "start": 266,
+   "end": 295,
+   "text": "Codice dei contratti pubblici",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 297,
+   "end": 311,
+   "text": "d.lgs. 36/2023",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 373,
+   "end": 391,
+   "text": "Giovanna Marchetti",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 398,
+   "end": 412,
+   "text": "+39 06 5551234",
+   "type": "TELEPHONENUM",
+   "action": "mask"
+  },
+  {
+   "start": 420,
+   "end": 449,
+   "text": "g.marchetti@comune.esempio.it",
+   "type": "EMAIL",
+   "action": "mask"
+  },
+  {
+   "start": 529,
+   "end": 546,
+   "text": "Giuseppe Lombardo",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 558,
+   "end": 569,
+   "text": "€ 38.400,00",
+   "type": "AMOUNT",
+   "action": "ignore"
+  },
+  {
+   "start": 652,
+   "end": 671,
+   "text": "via delle Industrie",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 672,
+   "end": 673,
+   "text": "7",
+   "type": "BUILDINGNUM",
+   "action": "mask"
+  },
+  {
+   "start": 675,
+   "end": 680,
+   "text": "20121",
+   "type": "ZIPCODE",
+   "action": "mask"
+  },
+  {
+   "start": 681,
+   "end": 687,
+   "text": "Milano",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 689,
+   "end": 691,
+   "text": "MI",
+   "type": "PROVINCE",
+   "action": "mask"
+  },
+  {
+   "start": 720,
+   "end": 737,
+   "text": "Stefano Orlandini",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "id": "docx2_relazione_istruttoria",
+ "format": "docx",
+ "file": "docx/docx2_relazione_istruttoria.docx",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "Giovanna Marchetti",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "intestazione e corpo"
+  },
+  {
+   "text": "Rosa Bianco",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "BNCRSO91M45L219A",
+   "type": "CF",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "IT73U0441942389242561903901",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "Leone Fortunato",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "FRTLNE58T01F839G",
+   "type": "CF",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "IT23K0359724142858614490378",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "Francesca Testa",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "TSTFNC93L59A662X",
+   "type": "CF",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "IT69B0153445459086880997046",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "via Po",
+   "type": "STREET",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "vico Lungo",
+   "type": "STREET",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "via Mazzini",
+   "type": "STREET",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "Servizi Demografici",
+   "type": "ORG",
+   "action": "allow",
+   "where": "corpo"
+  }
+ ]
+}

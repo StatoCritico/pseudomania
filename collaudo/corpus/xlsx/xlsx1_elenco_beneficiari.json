@@ -1,0 +1,92 @@
+{
+ "id": "xlsx1_elenco_beneficiari",
+ "format": "xlsx",
+ "file": "xlsx/xlsx1_elenco_beneficiari.xlsx",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "Rosa Bianco",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna A"
+  },
+  {
+   "text": "Leone Fortunato",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna A"
+  },
+  {
+   "text": "Francesca Testa",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna A"
+  },
+  {
+   "text": "BNCRSO91M45L219A",
+   "type": "CF",
+   "action": "mask",
+   "where": "colonna B"
+  },
+  {
+   "text": "FRTLNE58T01F839G",
+   "type": "CF",
+   "action": "mask",
+   "where": "colonna B"
+  },
+  {
+   "text": "TSTFNC93L59A662X",
+   "type": "CF",
+   "action": "mask",
+   "where": "colonna B"
+  },
+  {
+   "text": "IT73U0441942389242561903901",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "colonna F"
+  },
+  {
+   "text": "IT23K0359724142858614490378",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "colonna F"
+  },
+  {
+   "text": "IT69B0153445459086880997046",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "colonna F"
+  },
+  {
+   "text": "via Po",
+   "type": "STREET",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "vico Lungo",
+   "type": "STREET",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "via Mazzini",
+   "type": "STREET",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "Giovanna Marchetti",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "proprietà autore"
+  }
+ ],
+ "formulas": {
+  "H2": "=\"Contributo a \"&A2",
+  "H3": "=\"Contributo a \"&A3",
+  "H4": "=\"Contributo a \"&A4",
+  "G6": "=SUM(G2:G4)"
+ }
+}

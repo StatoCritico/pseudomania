@@ -1,0 +1,43 @@
+<!--meta
+description: Licenza AGPL-3.0-or-later di Pseudomania, riuso da parte delle pubbliche amministrazioni, componenti e relative licenze, marchi.
+lead: Pseudomania è software libero: puoi usarlo, studiarlo, modificarlo e ridistribuirlo. È costruito su progetti aperti, ciascuno con la propria licenza.
+summary: La licenza AGPL, il riuso per la PA, l'elenco dei componenti con le licenze e la nota sui marchi.
+-->
+<h2 id="agpl">Licenza AGPL-3.0-or-later</h2>
+<p>Il codice di Pseudomania è distribuito con la <strong>GNU Affero General Public License</strong>, versione 3 o (a tua scelta) successiva. In sintesi:</p>
+<ul class="check-list">
+  <li>puoi usarlo per qualsiasi scopo, anche in produzione, gratuitamente;</li>
+  <li>puoi studiarlo e modificarlo;</li>
+  <li>se distribuisci il programma, modificato o no, devi farlo con la stessa licenza e fornire il codice sorgente;</li>
+  <li>se offri una versione modificata come servizio in rete, devi offrire il sorgente agli utenti di quel servizio (sezione 13). L'estensione mostra nelle impostazioni il link al sorgente in uso.</li>
+</ul>
+<p>Testo completo: <a href="https://github.com/StatoCritico/pseudomania/blob/main/LICENSE">LICENSE</a> · <a href="https://www.gnu.org/licenses/agpl-3.0.html">gnu.org</a>. La licenza esclude ogni garanzia: vedi le <a href="note-legali.html#nessuna-garanzia">note legali</a>.</p>
+
+<h2 id="riuso-pa">Riuso per la pubblica amministrazione</h2>
+<p>Pseudomania è progettato da un ente pubblico per il riuso gratuito da parte di tutte le amministrazioni italiane (artt. 68 e 69 del Codice dell'amministrazione digitale). Il repository contiene un file <code>publiccode.yml</code> per l'inserimento nel catalogo del software a riuso di Developers Italia. Le amministrazioni che lo adottano possono contribuire con segnalazioni, correzioni e traduzioni; i miglioramenti tornano a tutti grazie alla licenza.</p>
+
+<h2 id="componenti">Componenti e licenze</h2>
+<div class="table-wrap">
+  <table class="stack-table">
+    <caption class="visually-hidden">Componenti di Pseudomania e relative licenze</caption>
+    <thead><tr><th scope="col">Componente</th><th scope="col">Ruolo</th><th scope="col">Licenza</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Pseudomania</th><td data-label="Ruolo">Estensione, API, strumento dei custodi, configurazioni</td><td data-label="Licenza">AGPL-3.0-or-later</td></tr>
+      <tr><th scope="row"><a href="https://github.com/dfki-dsa/pii-guardrail-browser-extension">Privacy Guardrail</a> (DFKI)</th><td data-label="Ruolo">Base di partenza dell'estensione</td><td data-label="Licenza">Apache-2.0</td></tr>
+      <tr><th scope="row"><a href="https://github.com/Rizzo-AI-Academy/rizzo-pii">Rizzo-PII</a></th><td data-label="Ruolo">Modello italiano di riconoscimento dei dati personali; app desktop per la Personal edition</td><td data-label="Licenza">Codice e pesi MIT; immagine e binari desktop AGPL-3.0 (includono PyMuPDF)</td></tr>
+      <tr><th scope="row"><a href="https://pymupdf.readthedocs.io/">PyMuPDF</a></th><td data-label="Ruolo">Elaborazione dei PDF</td><td data-label="Licenza">AGPL-3.0 (o commerciale)</td></tr>
+      <tr><th scope="row"><a href="https://fastapi.tiangolo.com/">FastAPI</a></th><td data-label="Ruolo">Framework dell'API</td><td data-label="Licenza">MIT</td></tr>
+      <tr><th scope="row"><a href="https://www.postgresql.org/">PostgreSQL</a></th><td data-label="Ruolo">Database applicativo e key store</td><td data-label="Licenza">PostgreSQL License</td></tr>
+      <tr><th scope="row"><a href="https://openbao.org/">OpenBao</a></th><td data-label="Ruolo">Chiave HMAC e segreti</td><td data-label="Licenza">MPL-2.0</td></tr>
+      <tr><th scope="row"><a href="https://langfuse.com/">Langfuse</a></th><td data-label="Ruolo">Osservabilità (Enterprise edition, facoltativo)</td><td data-label="Licenza">MIT per il nucleo (le parti commerciali non sono attivate)</td></tr>
+      <tr><th scope="row"><a href="https://caddyserver.com/">Caddy</a></th><td data-label="Ruolo">Reverse proxy e TLS</td><td data-label="Licenza">Apache-2.0</td></tr>
+      <tr><th scope="row"><a href="https://valkey.io/">Valkey</a></th><td data-label="Ruolo">Coda e cache per Langfuse</td><td data-label="Licenza">BSD-3-Clause</td></tr>
+      <tr><th scope="row"><a href="https://clickhouse.com/">ClickHouse</a></th><td data-label="Ruolo">Archivio analitico per Langfuse</td><td data-label="Licenza">Apache-2.0</td></tr>
+      <tr><th scope="row"><a href="https://github.com/seaweedfs/seaweedfs">SeaweedFS</a></th><td data-label="Ruolo">Object storage compatibile S3</td><td data-label="Licenza">Apache-2.0</td></tr>
+    </tbody>
+  </table>
+</div>
+<p class="small-note">Il modello Rizzo-PII è stato addestrato anche su dataset con licenza CC-BY-4.0 (Ai4Privacy), che richiedono attribuzione. Elenco completo, versioni e obblighi: <a href="https://github.com/StatoCritico/pseudomania/blob/main/THIRD_PARTY_NOTICES.md">THIRD_PARTY_NOTICES.md</a> e <a href="https://github.com/StatoCritico/pseudomania/blob/main/deploy/VERSIONS.md">deploy/VERSIONS.md</a>.</p>
+
+<h2 id="marchi">Marchi</h2>
+<p>Claude è un marchio di Anthropic; Chrome è un marchio di Google; Privacy Guardrail e DFKI sono marchi dei rispettivi titolari e non sono usati nell'interfaccia di Pseudomania. Pseudomania è un progetto indipendente, non affiliato né approvato da questi soggetti.</p>

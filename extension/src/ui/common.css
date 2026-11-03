@@ -1,0 +1,27 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+   Copyright (C) 2026 gli autori di Pseudomania */
+:root {
+  --bg: #ffffff; --fg: #1f1f1f; --muted: #666; --border: #ddd; --panel: #f6f6f6;
+  --ok: #2e7d32; --ko: #c62828; --warn: #ef6c00; --orig: #ffe0b2; --tag: #c8e6c9;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1e1e1e; --fg: #eee; --muted: #aaa; --border: #444; --panel: #2a2a2a;
+          --orig: #6d4c1f; --tag: #2e5631; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+       font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+h1 { font-size: 16px; margin: 0; }
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 6px; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.btn { border-radius: 8px; padding: 7px 12px; font-size: 13px; cursor: pointer; border: 1px solid var(--border);
+       background: var(--bg); color: var(--fg); }
+.btn.primary { background: var(--ok); border-color: var(--ok); color: #fff; }
+.btn.danger { background: var(--ko); border-color: var(--ko); color: #fff; }
+.btn:disabled { opacity: .5; cursor: default; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
+input[type=text], input[type=url], input[type=password], textarea, select {
+  width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--fg); font: inherit; }
+.ok { color: var(--ok); } .ko { color: var(--ko); } .warn { color: var(--warn); }
+[hidden] { display: none !important; }

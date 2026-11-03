@@ -1,0 +1,270 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later
+     Pagina di prova che IMITA la struttura di claude.ai usata dall'adattatore (casella ProseMirror,
+     pulsante di invio, messaggi, streaming, copia, download, modifica, allegati, dettatura).
+     Non è il codice di claude.ai: serve solo ai test end-to-end (servita su https://claude.ai/* da
+     Playwright tramite context.route). -->
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Claude (finto)</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; }
+    main { max-width: 760px; margin: 0 auto; padding: 16px; }
+    [data-testid="user-message"] { background: #eef; padding: 8px; margin: 8px 0; border-radius: 8px; }
+    .font-claude-response { background: #f7f7f7; padding: 8px; margin: 8px 0; border-radius: 8px; }
+    fieldset { border: 1px solid #ccc; border-radius: 12px; padding: 8px; }
+    .ProseMirror { min-height: 40px; outline: none; }
+    .chip { font-size: 12px; background: #ddd; padding: 2px 6px; border-radius: 6px; margin-right: 4px; }
+  </style>
+</head>
+<body>
+  <header data-testid="chat-header"><span id="crumb"></span></header>
+  <main>
+    <div id="transcript"></div>
+    <fieldset id="fs">
+      <div id="chips"></div>
+      <div class="ProseMirror" contenteditable="true" role="textbox" aria-label="Write your prompt to Claude"><p><br></p></div>
+      <input type="file" id="file" multiple>
+      <button type="button" aria-label="Dictation" id="mic">Mic</button>
+      <button type="button" aria-label="Send message" id="send" disabled>Send</button>
+    </fieldset>
+    <button type="button" id="rawsend">Invio solo rete (test)</button>
+  </main>
+<script>
+(function () {
+  'use strict';
+  const ORG = 'org-1';
+  const CONV = '0f8fad5b-d9cb-469f-a165-70867728950e';
+  const ed = document.querySelector('.ProseMirror');
+  const send = document.getElementById('send');
+  const transcript = document.getElementById('transcript');
+  let attachments = [];
+  window.__fixture = { micCalls: 0, completions: 0 };
+
+  function text() { return ed.innerText.replace(/ /g, ' ').trim(); }
+  function update() { send.disabled = !text() && !attachments.length; }
+  ed.addEventListener('input', update);
+
+  // Incolla «alla ProseMirror»: sostituisce la selezione con paragrafi.
+  ed.addEventListener('paste', (e) => {
+    const t = e.clipboardData && e.clipboardData.getData('text/plain');
+    if (t == null || (e.clipboardData.files && e.clipboardData.files.length)) return;
+    e.preventDefault();
+    const sel = getSelection();
+    const all = sel.rangeCount && sel.getRangeAt(0).toString().length >= ed.innerText.trim().length;
+    if (all) ed.innerHTML = '';
+    for (const line of t.split('\n')) {
+      const p = document.createElement('p');
+      if (line) p.textContent = line; else p.appendChild(document.createElement('br'));
+      ed.appendChild(p);
+    }
+    update();
+  });
+
+  ed.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
+  });
+  send.addEventListener('click', () => doSend());
+
+  function convId() {
+    const m = location.pathname.match(/\/chat\/([0-9a-f-]{36})/);
+    if (m) return m[1];
+    // I test possono scegliere l'id della prossima chat (window.__nextConv).
+    const id = window.__nextConv || CONV;
+    history.pushState({}, '', '/chat/' + id);
+    return id;
+  }
+
+  function addUser(t) {
+    const wrap = document.createElement('div');
+    wrap.setAttribute('data-test-render-count', '1');
+    const um = document.createElement('div');
+    um.setAttribute('data-testid', 'user-message');
+    const p = document.createElement('p');
+    p.className = 'whitespace-pre-wrap';
+    p.textContent = t;
+    um.appendChild(p);
+    const edit = document.createElement('button');
+    edit.textContent = 'Edit';
+    edit.className = 'edit-btn';
+    edit.addEventListener('click', () => startEdit(wrap, um, t));
+    wrap.append(um, edit);
+    transcript.appendChild(wrap);
+  }
+
+  function startEdit(wrap, um, t) {
+    const form = document.createElement('form');
+    const ta = document.createElement('textarea');
+    ta.value = t;
+    const save = document.createElement('button');
+    save.type = 'submit';
+    save.textContent = 'Save';
+    form.append(ta, save);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nt = ta.value;
+      form.remove();
+      um.querySelector('p').textContent = nt;
+      complete(nt, []);
+    });
+    wrap.appendChild(form);
+  }
+
+  async function complete(prompt, atts) {
+    window.__fixture.completions++;
+    const id = convId();
+    let r;
+    try {
+      r = await fetch(`/api/organizations/${ORG}/chat_conversations/${id}/completion`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, attachments: atts, files: [] }),
+      });
+    } catch (e) {
+      const err = document.createElement('div');
+      err.className = 'send-error';
+      err.textContent = 'Errore di invio';
+      transcript.appendChild(err);
+      return;
+    }
+    const sent = await r.json();
+    stream(sent.prompt || prompt);
+  }
+
+  function doSend() {
+    const t = text();
+    if (!t && !attachments.length) return;
+    const atts = attachments;
+    attachments = [];
+    document.getElementById('chips').textContent = '';
+    addUser(t);
+    ed.innerHTML = '<p><br></p>';
+    update();
+    complete(t, atts);
+  }
+
+  function stream(prompt) {
+    const body = prompt.split('non crearne di nuovi.').pop();
+    const tags = [...new Set(body.match(/\[[A-Z]+(?:_[A-Z]+)*_\d+\]/g) || [])];
+    const full = 'Risposta per ' + (tags.join(' e ') || 'nessuno') + '. Contatto ignoto: [EMAIL_99].';
+    const turn = document.createElement('div');
+    turn.setAttribute('data-is-streaming', 'true');
+    const resp = document.createElement('div');
+    resp.className = 'font-claude-response';
+    const p = document.createElement('p');
+    resp.appendChild(p);
+    const copy = document.createElement('button');
+    copy.className = 'copy-btn';
+    copy.textContent = 'Copy';
+    copy.addEventListener('click', () => navigator.clipboard.writeText(full));
+    const dl = document.createElement('button');
+    dl.className = 'dl-btn';
+    dl.textContent = 'Download';
+    dl.addEventListener('click', () => {
+      const url = URL.createObjectURL(new Blob(['Report: ' + full], { type: 'text/plain' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'report.md';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+    turn.append(resp, copy, dl);
+    transcript.appendChild(turn);
+    let i = 0;
+    const timer = setInterval(() => {
+      if (i >= full.length) {
+        clearInterval(timer);
+        // Rendering finale «alla React»: un unico nodo con il testo grezzo completo.
+        p.textContent = full;
+        turn.setAttribute('data-is-streaming', 'false');
+        return;
+      }
+      p.appendChild(document.createTextNode(full.slice(i, i + 4)));
+      i += 4;
+    }, 10);
+  }
+
+  // Allegati: lettura del testo e caricamento multipart.
+  document.getElementById('file').addEventListener('change', async (e) => {
+    for (const f of e.target.files) {
+      const content = await f.text();
+      attachments.push({ file_name: f.name, extracted_content: content });
+      const fd = new FormData();
+      fd.append('file', f, f.name);
+      await fetch(`/api/${ORG}/upload`, { method: 'POST', body: fd });
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = f.name;
+      chip.dataset.content = content;
+      document.getElementById('chips').appendChild(chip);
+    }
+    update();
+  });
+
+  document.getElementById('mic').addEventListener('click', () => {
+    window.__fixture.micCalls++;
+    navigator.mediaDevices.getUserMedia({ audio: true }).catch(() => {});
+  });
+
+  // Trascinamento di file sulla casella.
+  const fs = document.getElementById('fs');
+  fs.addEventListener('dragover', (e) => e.preventDefault());
+  fs.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    for (const f of e.dataTransfer.files) {
+      const content = await f.text();
+      attachments.push({ file_name: f.name, extracted_content: content });
+      const chip = document.createElement('span');
+      chip.className = 'chip dropped';
+      chip.textContent = f.name;
+      chip.dataset.content = content;
+      document.getElementById('chips').appendChild(chip);
+    }
+    update();
+  });
+
+  // Pagina di progetto: istruzioni (finestra di dialogo) e conoscenze (caricamento file).
+  const pm = location.pathname.match(/^\/project\/([0-9a-f-]{36})/);
+  if (pm) {
+    const pid = pm[1];
+    const bar = document.createElement('div');
+    bar.innerHTML = '<button type="button" id="editInstr">Edit instructions</button>' +
+      '<label>Knowledge <input type="file" id="kfile"></label><ul id="docs"></ul>';
+    document.querySelector('main').prepend(bar);
+    document.getElementById('editInstr').addEventListener('click', () => {
+      const d = document.createElement('div');
+      d.setAttribute('role', 'dialog');
+      d.innerHTML = '<h2>Set project instructions</h2><textarea id="instr"></textarea><button type="button" id="saveInstr">Save instructions</button>';
+      document.body.appendChild(d);
+      d.querySelector('#saveInstr').addEventListener('click', async () => {
+        await fetch(`/api/organizations/${ORG}/projects/${pid}`, {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt_template: d.querySelector('#instr').value }),
+        });
+        d.remove();
+      });
+    });
+    document.getElementById('kfile').addEventListener('change', async (e) => {
+      for (const f of e.target.files) {
+        const fd = new FormData();
+        fd.append('file', f, f.name);
+        await fetch(`/api/organizations/${ORG}/projects/${pid}/upload`, { method: 'POST', body: fd });
+        const li = document.createElement('li');
+        li.textContent = f.name;
+        li.dataset.content = await f.text();
+        document.getElementById('docs').appendChild(li);
+      }
+    });
+  }
+
+  // Simula un invio che salta lo strato DOM (selettori rotti): solo la rete di sicurezza lo vede.
+  document.getElementById('rawsend').addEventListener('click', () => {
+    fetch(`/api/organizations/${ORG}/chat_conversations/${CONV}/completion`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: 'Diretto: Paola Neri, paola.neri@ente.it', attachments: [] }),
+    }).catch(() => {});
+  });
+})();
+</script>
+</body>
+</html>

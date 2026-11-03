@@ -1,0 +1,62 @@
+{
+ "id": "docx3_verbale_riunione",
+ "format": "docx",
+ "file": "docx/docx3_verbale_riunione.docx",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "Carlo Ferretti",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "corpo (run grassetto)"
+  },
+  {
+   "text": "Lucia Montanari",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "Paolo Cavallini",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "Giuseppe Lombardo",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "Davide Galli",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "proprietà autore"
+  },
+  {
+   "text": "+39 333 9876543",
+   "type": "TELEPHONENUM",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "g.lombardo49@example.com",
+   "type": "EMAIL",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow",
+   "where": "intestazione"
+  },
+  {
+   "text": "Segreteria Generale",
+   "type": "ORG",
+   "action": "allow",
+   "where": "intestazione"
+  }
+ ]
+}

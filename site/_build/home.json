@@ -1,0 +1,242 @@
+{
+  "titolo": "Pseudomania – usare Claude senza consegnargli i dati personali",
+  "descrizione": "Pseudomania è un software libero (AGPL) per pubbliche amministrazioni e professionisti: sostituisce i dati personali con segnaposto prima che il testo arrivi a Claude e li ripristina nella risposta, nel browser.",
+  "sezioni": [
+    {
+      "id": "problema",
+      "eyebrow": "Perché",
+      "titolo": "Il problema",
+      "intro": "L'IA generativa è già entrata negli uffici e negli studi. Con lei, nomi, codici fiscali e IBAN finiscono sui server di un fornitore esterno.",
+      "alt": true,
+      "schede": [
+        {
+          "titolo": "L'IA è già al lavoro",
+          "testo": "Lettere, sintesi, verbali, tabelle: Claude si usa ogni giorno, spesso incollando documenti pieni di dati di cittadini e clienti.",
+          "href": "approfondimenti/il-problema.html#ia-al-lavoro"
+        },
+        {
+          "titolo": "Ogni testo esce dall'organizzazione",
+          "testo": "Ciò che scrivi su claude.ai viene elaborato e conservato dal fornitore, con trasferimenti anche fuori dall'Unione europea.",
+          "href": "approfondimenti/il-problema.html#dati-che-escono"
+        },
+        {
+          "titolo": "Vietare non basta",
+          "testo": "Il divieto spinge verso account personali e dispositivi non controllati: il rischio aumenta invece di sparire.",
+          "href": "approfondimenti/il-problema.html#perche-non-basta-vietare"
+        },
+        {
+          "titolo": "Nessuna API, nessun proxy",
+          "testo": "Il piano Claude Team si usa dal browser: non c'è un'API da filtrare e il traffico cifrato non si può aprire in rete.",
+          "href": "approfondimenti/il-problema.html#nessuna-api"
+        },
+        {
+          "titolo": "Obblighi precisi",
+          "testo": "Minimizzazione e sicurezza (GDPR), divieto di controllo a distanza dei lavoratori, formazione sull'IA: servono misure tecniche e organizzative.",
+          "href": "approfondimenti/il-problema.html#obblighi"
+        }
+      ]
+    },
+    {
+      "id": "soluzione",
+      "eyebrow": "Cosa fa",
+      "titolo": "La soluzione",
+      "intro": "Un'estensione per Chrome intercetta ciò che invii a claude.ai, fa riconoscere i dati personali dal modello italiano Rizzo-PII e manda a Claude solo segnaposto.",
+      "schede": [
+        {
+          "titolo": "Segnaposto al posto dei dati",
+          "testo": "Ogni dato riconosciuto diventa un segnaposto coerente, come [FULLNAME_1] o [CF_2]: lo stesso valore riceve sempre lo stesso segnaposto.",
+          "href": "approfondimenti/come-funziona.html#segnaposto"
+        },
+        {
+          "titolo": "Ripristino solo nel browser",
+          "testo": "Nella risposta di Claude i segnaposto tornano valori reali solo sul tuo schermo. Claude non li vede mai.",
+          "href": "approfondimenti/come-funziona.html#ripristino"
+        },
+        {
+          "titolo": "Allegati e Progetti",
+          "testo": "Pseudonimizza anche PDF, DOCX, XLSX e i file e le istruzioni dei Progetti di Claude.",
+          "href": "approfondimenti/come-funziona.html#allegati"
+        },
+        {
+          "titolo": "Dati sanitari e giudiziari bloccati",
+          "testo": "Se riconosce categorie particolari di dati (artt. 9-10 GDPR) l'invio viene fermato, senza possibilità di forzarlo.",
+          "href": "approfondimenti/come-funziona.html#categorie-particolari"
+        },
+        {
+          "titolo": "Dizionario cifrato nel browser",
+          "testo": "La corrispondenza tra segnaposto e valori reali è cifrata con una chiave che resta nel browser: il server conserva solo dati cifrati.",
+          "href": "approfondimenti/scelte-di-progetto.html#cifratura-lato-client"
+        },
+        {
+          "titolo": "Onesto sui limiti",
+          "testo": "Quasi-identificatori, dati non riconosciuti e cambi dell'interfaccia di claude.ai restano rischi da gestire.",
+          "href": "approfondimenti/come-funziona.html#cosa-non-protegge"
+        }
+      ]
+    },
+    {
+      "id": "non-solo-software",
+      "eyebrow": "Governance",
+      "titolo": "Non solo software",
+      "intro": "Pseudomania funziona solo dentro un insieme di impostazioni, regole e garanzie. Il repository offre modelli per ciascuna.",
+      "alt": true,
+      "schede": [
+        {
+          "titolo": "Impostazioni di Claude Team",
+          "testo": "Memoria spenta, feedback e connettori disattivati, condivisione dei progetti chiusa, ricerca web attiva con cautele.",
+          "href": "approfondimenti/non-solo-software.html#impostazioni-claude"
+        },
+        {
+          "titolo": "Regolamento d'uso",
+          "testo": "Due modelli: una versione light per professionisti e piccole realtà, una strutturata per gli enti.",
+          "href": "approfondimenti/non-solo-software.html#regolamento"
+        },
+        {
+          "titolo": "DPIA",
+          "testo": "Una valutazione d'impatto già impostata, con rischi, misure, durate di conservazione e fonti.",
+          "href": "approfondimenti/non-solo-software.html#dpia"
+        },
+        {
+          "titolo": "Accordo sindacale (art. 4)",
+          "testo": "Registro e tracce possono consentire un controllo indiretto: servono accordo con le rappresentanze o autorizzazione dell'Ispettorato.",
+          "href": "approfondimenti/non-solo-software.html#accordo-sindacale"
+        },
+        {
+          "titolo": "Custodi",
+          "testo": "Almeno tre custodi, quote di una chiave offline: nessuno da solo può aprire i dati, e solo su richiesta dell'autorità giudiziaria.",
+          "href": "approfondimenti/non-solo-software.html#custodi"
+        },
+        {
+          "titolo": "Esportazione Team governata",
+          "testo": "L'esportazione dei dati di Claude Team passa da un account di custodia con credenziali divise e verbale.",
+          "href": "approfondimenti/non-solo-software.html#esportazione-team"
+        }
+      ]
+    },
+    {
+      "id": "personal",
+      "eyebrow": "Per i professionisti",
+      "titolo": "Personal edition",
+      "intro": "Per avvocati, commercialisti, consulenti e chiunque usi Claude con dati di clienti. Due componenti sul tuo PC, nessun server.",
+      "schede": [
+        {
+          "titolo": "Per chi è",
+          "testo": "Professionisti e piccole organizzazioni che usano Claude (Pro, Max o Team) e vogliono una protezione in più, su base volontaria.",
+          "href": "approfondimenti/personal-edition.html#per-chi"
+        },
+        {
+          "titolo": "Estensione + app Rizzo-PII",
+          "testo": "Installi l'estensione Chrome e l'app desktop di Rizzo-PII. Niente Docker, niente server da gestire.",
+          "href": "approfondimenti/personal-edition.html#requisiti"
+        },
+        {
+          "titolo": "Tutto resta sul tuo PC",
+          "testo": "Rilevamento, dizionario e registro restano sul computer, cifrati con una chiave locale. Nessun dato agli sviluppatori.",
+          "href": "approfondimenti/personal-edition.html#dati-locali"
+        },
+        {
+          "titolo": "Attiva per conversazione",
+          "testo": "Un clic sul pulsante (o Alt+Maiusc+P) accende o spegne la protezione della chat aperta; lo stato si ricorda per ogni conversazione.",
+          "href": "approfondimenti/personal-edition.html#attivazione"
+        },
+        {
+          "titolo": "Allegati gestiti nel browser",
+          "testo": "DOCX e XLSX elaborati nell'estensione; i PDF vengono inviati come testo pseudonimizzato, con avviso.",
+          "href": "approfondimenti/personal-edition.html#allegati"
+        },
+        {
+          "titolo": "Regole essenziali",
+          "testo": "Un modello di regolamento light in otto punti, da adattare al tuo studio.",
+          "href": "approfondimenti/guida-all-uso.html#policy"
+        }
+      ]
+    },
+    {
+      "id": "enterprise",
+      "eyebrow": "Per gli enti",
+      "titolo": "Enterprise edition",
+      "intro": "Per le amministrazioni con Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità.",
+      "alt": true,
+      "schede": [
+        {
+          "titolo": "Server nella rete dell'ente",
+          "testo": "Una VM interna con API, Rizzo-PII senza accesso a Internet, PostgreSQL, OpenBao e un key store separato.",
+          "href": "approfondimenti/enterprise-edition.html#architettura"
+        },
+        {
+          "titolo": "Estensione gestita",
+          "testo": "Installata dalle policy di Chrome e sempre attiva in ogni conversazione: il pulsante è bloccato su acceso; se il server non risponde l'invio si blocca.",
+          "href": "approfondimenti/enterprise-edition.html#estensione-policy"
+        },
+        {
+          "titolo": "SSO e accesso condizionato",
+          "testo": "Accesso con l'identity provider dell'ente; claude.ai raggiungibile solo dal Chrome gestito.",
+          "href": "approfondimenti/enterprise-edition.html#sso"
+        },
+        {
+          "titolo": "Chiavi e custodi",
+          "testo": "Chiave per utente generata nel browser, copia di custodia apribile solo da due custodi, rotazione ogni 90 giorni.",
+          "href": "approfondimenti/enterprise-edition.html#chiavi-custodi"
+        },
+        {
+          "titolo": "Osservabilità con Langfuse",
+          "testo": "Tracce dei testi pseudonimizzati per misurare il rilevamento, conservate 30 giorni nel pilota, poi 7.",
+          "href": "approfondimenti/enterprise-edition.html#langfuse"
+        },
+        {
+          "titolo": "Conservazione documentata",
+          "testo": "Ogni durata è motivata con fonti; i backup si rendono illeggibili distruggendo le chiavi.",
+          "href": "approfondimenti/enterprise-edition.html#conservazione"
+        }
+      ]
+    },
+    {
+      "id": "approfondimenti",
+      "eyebrow": "Per saperne di più",
+      "titolo": "Approfondimenti",
+      "intro": "Le ragioni di ogni scelta, la guida all'uso, le risposte alle domande più comuni, la licenza e gli strumenti da scaricare.",
+      "schede": [
+        {
+          "titolo": "Domande frequenti",
+          "testo": "Claude vede i dati reali? Funziona con altri chatbot? Serve un abbonamento? Le risposte brevi.",
+          "href": "approfondimenti/faq.html"
+        },
+        {
+          "titolo": "Altri chatbot e browser",
+          "testo": "Oggi Chrome e claude.ai. Il codice isola tutto ciò che è specifico del sito in un modulo: chiunque può aggiungere ChatGPT o altri browser.",
+          "href": "approfondimenti/faq.html#faq-altri-siti"
+        },
+        {
+          "titolo": "Guida all'uso",
+          "testo": "Installazione, uso quotidiano, allegati, invii bloccati e come scrivere un regolamento light o strutturato.",
+          "href": "approfondimenti/guida-all-uso.html"
+        },
+        {
+          "titolo": "Scelte di progetto",
+          "testo": "Perché un'estensione e non un proxy, perché la memoria spenta, come funzionano chiavi e custodi.",
+          "href": "approfondimenti/scelte-di-progetto.html"
+        },
+        {
+          "titolo": "Licenza e crediti",
+          "testo": "AGPL-3.0-or-later, riuso per la PA e tutti i progetti su cui Pseudomania è costruito.",
+          "href": "approfondimenti/licenza-e-crediti.html"
+        },
+        {
+          "titolo": "Note legali",
+          "testo": "Nessuna garanzia: la responsabilità dell'adozione e dell'uso resta interamente di chi adotta e usa il sistema.",
+          "href": "approfondimenti/note-legali.html"
+        },
+        {
+          "titolo": "Strumenti e download",
+          "testo": "Estensione, server, app Rizzo-PII, strumento dei custodi, modelli di governance e corpus di collaudo.",
+          "href": "approfondimenti/strumenti-e-download.html"
+        },
+        {
+          "titolo": "Informativa privacy",
+          "testo": "Quali dati tratta l'estensione, dove li invia e cosa riceve claude.ai.",
+          "href": "privacy.html"
+        }
+      ]
+    }
+  ]
+}

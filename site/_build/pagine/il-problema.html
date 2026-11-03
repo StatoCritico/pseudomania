@@ -1,0 +1,28 @@
+<!--meta
+description: Perché serve Pseudomania: l'IA generativa negli uffici, i dati personali che escono, i limiti dei divieti e del piano Claude Team, gli obblighi di legge.
+lead: Chi lavora con testi e documenti usa già l'IA generativa. Il problema non è se usarla, ma come evitare che ogni richiesta porti con sé dati personali di cittadini, clienti e colleghi.
+summary: L'IA negli uffici, i dati che escono, perché vietare non basta, perché non si può filtrare il piano Team con un proxy, gli obblighi di legge.
+-->
+<h2 id="ia-al-lavoro">L'IA è già al lavoro</h2>
+<p>Riassumere una pratica, impostare una lettera, controllare un capitolato, estrarre dati da un foglio di calcolo: sono compiti in cui un assistente come Claude fa risparmiare ore. Negli uffici pubblici e negli studi professionali questi testi contengono quasi sempre dati personali: nomi, codici fiscali, indirizzi, recapiti, importi, coordinate bancarie, numeri di pratica.</p>
+<p>Chiedere alle persone di «ripulire» a mano ogni testo prima di incollarlo non regge alla prova dei fatti: richiede tempo, attenzione costante e una competenza che non tutti hanno. Prima o poi un nome passa.</p>
+
+<h2 id="dati-che-escono">Ogni testo esce dall'organizzazione</h2>
+<p>Quando invii un messaggio a claude.ai, il testo e gli allegati vengono elaborati e conservati dal fornitore del servizio. Per i clienti europei il contraente è Anthropic Ireland; i dati possono essere trattati da sub-responsabili e trasferiti fuori dall'Unione europea sulla base delle clausole contrattuali tipo. Sul piano Team le conversazioni restano conservate finché non vengono cancellate.</p>
+<p>Il contratto e le garanzie del fornitore sono necessari, ma non riducono la quantità di dati personali che escono. È quello che chiede il principio di <strong>minimizzazione</strong>: trattare solo i dati necessari alla finalità. Per scrivere una buona lettera, a Claude non serve sapere come si chiama davvero il destinatario.</p>
+
+<h2 id="perche-non-basta-vietare">Vietare non basta</h2>
+<p>Un divieto generalizzato non elimina l'uso dell'IA: lo sposta su account personali, telefoni e servizi gratuiti, dove l'organizzazione non ha contratto, controllo né visibilità. È il fenomeno dello «shadow AI». Pseudomania parte dall'idea opposta: offrire uno strumento ufficiale, comodo e protetto, insieme a regole chiare.</p>
+
+<h2 id="nessuna-api">Nessuna API, nessun proxy</h2>
+<p>Con un'API si potrebbe interporre un servizio che pseudonimizza ogni richiesta prima che arrivi al modello. Ma gli enti e gli studi usano soprattutto l'abbonamento <strong>Claude Team</strong> (o Pro e Max), che si usa dall'interfaccia web di claude.ai: non c'è un'API da filtrare.</p>
+<p>Un proxy di rete non è una strada percorribile: il traffico verso claude.ai è cifrato (HTTPS) e per leggerlo bisognerebbe intercettare e decifrare la connessione con un certificato dell'ente installato sui PC. Oltre a essere fragile, è un'operazione invasiva che i termini del fornitore non prevedono. L'unico punto in cui il testo è disponibile in chiaro, prima che parta, è il <strong>browser</strong>. Per questo Pseudomania è un'estensione: lo spieghiamo in dettaglio nelle <a href="scelte-di-progetto.html#estensione-non-proxy">scelte di progetto</a>.</p>
+
+<h2 id="obblighi">Obblighi precisi</h2>
+<ul>
+  <li><strong>GDPR</strong>: minimizzazione (art. 5), protezione dei dati fin dalla progettazione (art. 25), sicurezza (art. 32), valutazione d'impatto quando il rischio è elevato (art. 35).</li>
+  <li><strong>Statuto dei lavoratori, art. 4</strong>: gli strumenti da cui può derivare un controllo a distanza dei dipendenti richiedono un accordo sindacale o l'autorizzazione dell'Ispettorato del lavoro, oltre a un'informativa adeguata.</li>
+  <li><strong>Regolamento europeo sull'IA</strong> (AI Act, art. 4): chi usa sistemi di IA deve garantire un livello sufficiente di alfabetizzazione del personale.</li>
+  <li><strong>Codice dell'amministrazione digitale</strong> (artt. 68-69): le amministrazioni valutano soluzioni riusabili e rendono disponibile il software che commissionano.</li>
+</ul>
+<p>Pseudomania è la parte tecnica di una risposta che comprende anche regole, impostazioni e garanzie: vedi <a href="non-solo-software.html">Non solo software</a>.</p>

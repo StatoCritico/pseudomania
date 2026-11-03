@@ -1,0 +1,57 @@
+<!--meta
+description: Strumenti e download di Pseudomania: estensione Chrome, app desktop Rizzo-PII, stack del server, Chrome Web Store, documentazione, modelli di governance, strumento dei custodi, corpus di collaudo, codice sorgente.
+lead: Tutto ciò che serve per provare, installare e adattare Pseudomania. Le versioni sono pubblicate nella pagina delle release del repository, con note di rilascio e somme di controllo.
+summary: Estensione, app Rizzo-PII, server, Chrome Web Store, documentazione, modelli di governance, strumento dei custodi, corpus di collaudo e codice.
+-->
+<h2 id="estensione">Estensione Chrome</h2>
+<div class="grid grid-2">
+  <article class="card dl-card">
+    <h3>Pacchetto ZIP</h3>
+    <p>Estensione Manifest V3 per entrambe le edizioni: senza policy funziona come Personal edition, con la policy dell'ente come Enterprise edition. Nella Enterprise edition il pacchetto è servito anche dal server interno.</p>
+    <a class="btn btn-primary" href="https://github.com/StatoCritico/pseudomania/releases/latest">Scarica l'estensione<span class="visually-hidden"> (pagina dell'ultima release)</span></a>
+  </article>
+  <article class="card dl-card" id="chrome-web-store">
+    <h3>Chrome Web Store <span class="badge badge-soon">In arrivo</span></h3>
+    <p>La pubblicazione è prevista dopo la fase pilota. Fino ad allora usa il pacchetto ZIP.</p>
+    <span class="btn btn-disabled" role="link" aria-disabled="true">Chrome Web Store – in arrivo</span>
+  </article>
+</div>
+
+<h2 id="rizzo-pii">App desktop Rizzo-PII (Personal edition)</h2>
+<p>Il servizio di riconoscimento dei dati personali che la Personal edition usa sul tuo PC (<code>127.0.0.1:5005</code>). È distribuito dal progetto Rizzo-PII, non da Pseudomania.</p>
+<p><a class="btn btn-outline" href="https://github.com/Rizzo-AI-Academy/rizzo-pii/releases">Release di Rizzo-PII</a></p>
+
+<h2 id="server">Server (Enterprise edition)</h2>
+<p>Codice dell'API, file Docker Compose, configurazione di Caddy, OpenBao e PostgreSQL, script di backup, estensione da distribuire. Si scarica con il codice sorgente o dalla release.</p>
+<p><a class="btn btn-outline" href="https://github.com/StatoCritico/pseudomania/releases/latest">Scarica il server<span class="visually-hidden"> (pagina dell'ultima release)</span></a></p>
+
+<h2 id="documentazione">Documentazione</h2>
+<ul>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/README.md">Indice della documentazione</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md">Installazione della Enterprise edition</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/configurazione.md">Configurazione di Claude Team, identity provider e Chrome</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-personale.md">Installazione della Personal edition</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/verifica-pilota.md">Verifica prima del go-live</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/SPEC.md">Specifica tecnica e API</a></li>
+</ul>
+
+<h2 id="modelli">Modelli di governance</h2>
+<ul>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-light.md">Regolamento light</a> (professionisti)</li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-uso-ia.md">Regolamento strutturato</a> (enti), con informativa, procedura dei backup e dei custodi</li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/dpia.md">Bozza di DPIA</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/checklist-adempimenti.md">Checklist degli adempimenti</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/verifiche-fase0.md">Verifiche preliminari sul fornitore e sulle licenze</a></li>
+</ul>
+<p>I modelli sono disponibili anche in formato Word (.docx) nella stessa cartella.</p>
+
+<h2 id="custodi-tool">Strumento dei custodi</h2>
+<p><code>tools/custodi/</code> è uno strumento a riga di comando da usare su una postazione <strong>offline</strong>: genera la coppia di custodia e la divide in quote (Shamir), verifica e ridistribuisce le quote, ricifra una chiave per un nuovo dispositivo, decifra le sole voci richieste dall'autorità giudiziaria e produce la traccia del verbale.</p>
+<p><a href="https://github.com/StatoCritico/pseudomania/tree/main/tools/custodi">tools/custodi nel repository</a></p>
+
+<h2 id="collaudo">Corpus di collaudo</h2>
+<p><code>collaudo/</code> contiene documenti sintetici tipici della PA (delibere, determine, lettere, verbali, PDF, DOCX, XLSX e casi da bloccare) con le entità attese, e uno script che misura il rilevamento. Serve come punto di partenza per il test su documenti dell'ente.</p>
+<p><a href="https://github.com/StatoCritico/pseudomania/tree/main/collaudo">collaudo nel repository</a></p>
+
+<h2 id="codice">Codice sorgente</h2>
+<p>Tutto il codice, con licenza AGPL-3.0-or-later: <a href="https://github.com/StatoCritico/pseudomania">github.com/StatoCritico/pseudomania</a>.</p>

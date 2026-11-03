@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "properties": {
+    "mode": {
+      "title": "Modalità",
+      "description": "\"ente\" = Enterprise edition (gestita, non disattivabile). Se assente: Personal edition (estensione autonoma con Rizzo-PII desktop, senza server).",
+      "type": "string",
+      "enum": [
+        "ente",
+        "personale"
+      ]
+    },
+    "serverUrl": {
+      "title": "URL del server Pseudomania",
+      "description": "Base delle API, senza /v1 finale. Esempio: https://pseudogate.ente.local",
+      "type": "string"
+    },
+    "oidcIssuer": {
+      "title": "Issuer OIDC",
+      "description": "URL dell'issuer OpenID Connect dell'ente (deve esporre /.well-known/openid-configuration).",
+      "type": "string"
+    },
+    "oidcClientId": {
+      "title": "Client ID OIDC",
+      "description": "Client pubblico (senza secret) con PKCE. Redirect URI: https://<id-estensione>.chromiumapp.org/oidc",
+      "type": "string"
+    },
+    "oidcScopes": {
+      "title": "Scope OIDC",
+      "description": "Separati da spazio. Predefinito: \"openid profile\".",
+      "type": "string"
+    },
+    "oidcTokenType": {
+      "title": "Token da inviare al server",
+      "description": "\"access_token\" (predefinito) oppure \"id_token\". Il server accetta qualunque JWT firmato dall'issuer con aud = OIDC_AUDIENCE: con id_token impostare OIDC_AUDIENCE uguale a oidcClientId; con access_token l'IdP deve emettere aud = OIDC_AUDIENCE (Keycloak: mapper di audience; Entra ID: scope dell'API esposta).",
+      "type": "string",
+      "enum": [
+        "access_token",
+        "id_token"
+      ]
+    },
+    "failClosed": {
+      "title": "Blocca l'invio se il server non risponde",
+      "description": "Predefinito: true in modalità ente, false in modalità personale.",
+      "type": "boolean"
+    },
+    "allowDisable": {
+      "title": "Consenti all'utente di disattivare l'estensione",
+      "description": "Predefinito: false in modalità ente.",
+      "type": "boolean"
+    },
+    "sites": {
+      "title": "Siti protetti",
+      "description": "Predefinito: [\"claude.ai\"].",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

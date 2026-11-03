@@ -1,0 +1,38 @@
+{
+ "id": "pdf2_liquidazione",
+ "format": "pdf",
+ "file": "pdf/pdf2_liquidazione.pdf",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "26785750501",
+   "type": "PIVA",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "IT06M0719397993882012985032",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "Giuseppe Lombardo",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "Stefano Orlandini",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow",
+   "where": "pagina 1"
+  }
+ ]
+}

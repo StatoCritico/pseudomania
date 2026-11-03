@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# FACOLTATIVO - sblocco automatico con chiave statica (OpenBao "static seal").
+#
+# Per usarlo PRIMA dell'inizializzazione:
+#   1. openssl rand -out secrets/openbao-unseal.key 32 && chmod 600 secrets/openbao-unseal.key
+#   2. copiare questo file in openbao/config/seal-static.hcl (senza .example)
+#   3. aggiungere al servizio openbao nel docker-compose.yml il volume
+#        - ./secrets/openbao-unseal.key:/openbao/secrets/unseal.key:ro
+#   4. eseguire openbao-init: verranno create "recovery keys" invece delle chiavi di sblocco
+#
+# ATTENZIONE: la chiave di sblocco sta sulla stessa VM dei dati cifrati. Chi ottiene
+# una copia del disco (o del backup NON cifrato) ottiene anche la chiave. Valutare con
+# il DPO; preferibile un KMS/HSM dell'ente (seal "pkcs11", "transit" su un altro OpenBao).
+
+seal "static" {
+  current_key_id = "pseudogate-1"
+  current_key    = "file:///openbao/secrets/unseal.key"
+}

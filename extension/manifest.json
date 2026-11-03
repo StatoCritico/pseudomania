@@ -1,0 +1,98 @@
+{
+  "manifest_version": 3,
+  "name": "Pseudomania",
+  "version": "0.1.0",
+  "description": "Pseudomania: pseudonimizza automaticamente i dati personali inviati a Claude e ripristina i valori reali nelle risposte. Enterprise edition (server dell'ente) e Personal edition (Rizzo-PII sul PC).",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "alarms",
+    "contextMenus",
+    "identity",
+    "sidePanel",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://claude.ai/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "src/background/sw.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://claude.ai/*"
+      ],
+      "js": [
+        "src/content/page-hook.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://claude.ai/*"
+      ],
+      "js": [
+        "src/shared/strings.js",
+        "src/shared/config.js",
+        "src/shared/scope.js",
+        "src/shared/tags.js",
+        "src/shared/activation.js",
+        "src/shared/detector-lite.js",
+        "src/sites/claude.js",
+        "src/sites/registry.js",
+        "src/content/dom-input.js",
+        "src/content/ui.js",
+        "src/content/restore.js",
+        "src/content/content.js"
+      ],
+      "css": [
+        "src/content/page.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "side_panel": {
+    "default_path": "src/sidepanel/sidepanel.html"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Pseudomania",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_ui": {
+    "page": "src/options/options.html",
+    "open_in_tab": true
+  },
+  "storage": {
+    "managed_schema": "schema.json"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4PYZJ2Kudm0cEszAATczIa/+q3Ofed6Iw6Tepu0th2nME7QGZkUv6sKafAwzWg/0MeOYa4wi/qP2+sm1BqC4FUPIewaN73Odgj3sOl+FDcWVtA2Xe6/ULFQMqUMMdOfOOzUgy3D9lqfXGZXNhaICzX2lgPE5m42BMZeak9TQ1q65yrESMKC0Ai62sa0vLC2VSAhaGfKIoFieQFAmHOvOlOfDT4KW86X2ZYjzWrU7KCulomL3B8UTxyf2BAzkEsmt/q7v4QRV+DNd+LclnN89Wa9PMRuBy8YwfZRNeK0PYuRHIHm7ERIEH4QgH/JCxLZ4O2esu017GzZpZkh6k4g89QIDAQAB",
+  "homepage_url": "https://pseudomania.statocritico.it",
+  "commands": {
+    "toggle-protection": {
+      "suggested_key": {
+        "default": "Alt+Shift+P",
+        "mac": "Alt+Shift+P"
+      },
+      "description": "Attiva o disattiva la protezione nella conversazione corrente (Personal edition)"
+    }
+  }
+}

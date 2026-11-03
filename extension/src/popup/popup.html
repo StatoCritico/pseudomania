@@ -1,0 +1,35 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Pseudomania</title>
+  <link rel="stylesheet" href="../ui/common.css">
+  <style>
+    body { width: 300px; padding: 14px; }
+    .state { display: flex; align-items: center; gap: 8px; font-weight: 600; margin: 10px 0 4px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.on { background: var(--ok); } .dot.off { background: var(--ko); } .dot.warn { background: var(--warn); }
+    .switch { display: flex; align-items: center; gap: 8px; margin: 10px 0; cursor: pointer; }
+    .line { margin: 4px 0; font-size: 13px; }
+    .row { margin-top: 12px; }
+    .locked { margin: 10px 0; padding: 8px; border-radius: 8px; background: var(--panel); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>Pseudomania</h1>
+  <div id="mode" class="muted small"></div>
+  <div id="locked" class="small locked" hidden></div>
+  <div class="state"><span id="dot" class="dot"></span><span id="stateText"></span></div>
+  <label class="switch" id="switchRow" hidden><input type="checkbox" id="toggle"> <span id="toggleLbl"></span></label>
+  <div class="line" id="server"></div>
+  <div class="line" id="auth"></div>
+  <div class="row">
+    <button class="btn" id="btnLogin" hidden></button>
+    <button class="btn" id="btnPanel"></button>
+    <button class="btn" id="btnOptions" hidden></button>
+  </div>
+  <script src="../shared/strings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

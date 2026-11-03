@@ -1,0 +1,18 @@
+{
+ "id": "14_blocco_disabilita",
+ "format": "txt",
+ "file": "testi/14_blocco_disabilita.txt",
+ "kind": "email",
+ "expected": "block",
+ "entities": [
+  {
+   "start": 14,
+   "end": 26,
+   "text": "Davide Galli",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ],
+ "block_category": "disabilita",
+ "article": "9"
+}

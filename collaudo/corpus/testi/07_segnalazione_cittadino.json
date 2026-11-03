@@ -1,0 +1,72 @@
+{
+ "id": "07_segnalazione_cittadino",
+ "format": "txt",
+ "file": "testi/07_segnalazione_cittadino.txt",
+ "kind": "email",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 17,
+   "end": 34,
+   "text": "Giuseppe Lombardo",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 45,
+   "end": 58,
+   "text": "via Garibaldi",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 59,
+   "end": 60,
+   "text": "3",
+   "type": "BUILDINGNUM",
+   "action": "mask"
+  },
+  {
+   "start": 63,
+   "end": 69,
+   "text": "Torino",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 153,
+   "end": 158,
+   "text": "21:15",
+   "type": "TIME",
+   "action": "ignore"
+  },
+  {
+   "start": 187,
+   "end": 196,
+   "text": "GH 482 KL",
+   "type": "TARGA",
+   "action": "mask"
+  },
+  {
+   "start": 237,
+   "end": 252,
+   "text": "+39 333 9876543",
+   "type": "TELEPHONENUM",
+   "action": "mask"
+  },
+  {
+   "start": 269,
+   "end": 293,
+   "text": "g.lombardo49@example.com",
+   "type": "EMAIL",
+   "action": "mask"
+  },
+  {
+   "start": 298,
+   "end": 305,
+   "text": "77 anni",
+   "type": "AGE",
+   "action": "mask"
+  }
+ ]
+}

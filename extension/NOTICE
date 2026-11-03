@@ -1,0 +1,51 @@
+Pseudomania – estensione Chrome
+Copyright (C) 2026 gli autori di Pseudomania.
+Il codice nuovo è distribuito sotto GNU Affero General Public License v3.0 o successiva
+(AGPL-3.0-or-later), vedi il file LICENSE nella radice del repository.
+
+------------------------------------------------------------------------------
+Opera derivata da "Privacy Guardrail" (pii-guardrail-browser-extension)
+https://github.com/dfki-dsa/pii-guardrail-browser-extension
+commit a2fed5528b2b618c402c9f7cf366fa29930c3fc3 (27 ottobre 2026)
+
+NOTICE originale:
+
+  Privacy Guardrail
+  Copyright 2026 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI),
+  Forschungsbereich Data Science and its Applications.
+
+  Privacy Guardrail is licensed under the Apache License, Version 2.0. See LICENSE.
+  The supplementary Nutzungsbedingungen / Terms of Use are provided in TERMS.md.
+
+  This distribution includes third-party software, runtime assets, model assets,
+  fonts, and browser platform components that remain under their own licenses.
+  See THIRD_PARTY_NOTICES.md for attribution and license notices.
+
+  The DFKI name, DFKI logo, Privacy Guardrail name, and project logos are not
+  licensed under the Apache License, Version 2.0, except as required for
+  reasonable and customary use in describing the origin of the work and
+  reproducing this NOTICE file.
+
+Il testo della licenza Apache 2.0 è in LICENSE-APACHE-2.0.
+
+Modifiche apportate da Pseudomania (ai sensi della sezione 4(b) della licenza Apache 2.0):
+
+- Riscritto in JavaScript senza build (nessun TypeScript, Svelte, webpack).
+- Rimosso il rilevamento locale (modello ONNX, WASM, vault di identità, valori sintetici):
+  la pseudonimizzazione è svolta dal server Pseudomania interno all'ente; il dizionario
+  dei segnaposto è gestito dal server.
+- Portati e modificati, con intestazione che ne indica l'origine:
+  * src/content/dom-input.js  ← src/content/site-adapters/adapter-interface.ts
+    (inserimento di testo compatibile con React/ProseMirror)
+  * src/sites/claude.js       ← src/content/site-adapters/claude-adapter.ts
+    (selettori di claude.ai, ampliati con alternative e autoverifica)
+  * src/content/page-hook.js  ← src/content/clipboard-interceptor-page.ts
+    (patch di navigator.clipboard nel mondo MAIN, estesa a fetch/XHR e download)
+  * src/content/restore.js    ← idea di src/content/response-observer.ts e
+    src/shared/de-anonymizer.ts (osservazione delle risposte e ripristino dei
+    segnaposto), riscritto per il ripristino in linea anche su nodi di testo spezzati.
+- Il loghi e il nome "Privacy Guardrail" e DFKI non sono usati nell'interfaccia.
+- Aggiunte (file nuovi): cifratura lato client del dizionario (Enterprise edition), Personal edition
+  autonoma con Rizzo-PII desktop, elaborazione DOCX/XLSX in JavaScript (porting del motore OOXML del
+  server Pseudomania).
+- Tutti gli altri file sono nuovi e coperti da AGPL-3.0-or-later.

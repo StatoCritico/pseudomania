@@ -1,0 +1,161 @@
+{
+ "descrizione": "Corpus sintetico di collaudo di Pseudomania: dati interamente inventati.",
+ "generatore": "collaudo/genera_corpus.py",
+ "seed": 20261031,
+ "documenti": [
+  {
+   "id": "01_delibera_giunta",
+   "format": "txt",
+   "file": "testi/01_delibera_giunta.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/01_delibera_giunta.json"
+  },
+  {
+   "id": "02_determina_dirigenziale",
+   "format": "txt",
+   "file": "testi/02_determina_dirigenziale.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/02_determina_dirigenziale.json"
+  },
+  {
+   "id": "03_lettera_tari",
+   "format": "txt",
+   "file": "testi/03_lettera_tari.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/03_lettera_tari.json"
+  },
+  {
+   "id": "04_risposta_accesso_atti",
+   "format": "txt",
+   "file": "testi/04_risposta_accesso_atti.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/04_risposta_accesso_atti.json"
+  },
+  {
+   "id": "05_verbale_commissione",
+   "format": "txt",
+   "file": "testi/05_verbale_commissione.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/05_verbale_commissione.json"
+  },
+  {
+   "id": "06_email_ufficio",
+   "format": "txt",
+   "file": "testi/06_email_ufficio.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/06_email_ufficio.json"
+  },
+  {
+   "id": "07_segnalazione_cittadino",
+   "format": "txt",
+   "file": "testi/07_segnalazione_cittadino.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/07_segnalazione_cittadino.json"
+  },
+  {
+   "id": "08_avviso_pubblico",
+   "format": "txt",
+   "file": "testi/08_avviso_pubblico.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/08_avviso_pubblico.json"
+  },
+  {
+   "id": "09_contratto_locazione",
+   "format": "txt",
+   "file": "testi/09_contratto_locazione.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/09_contratto_locazione.json"
+  },
+  {
+   "id": "10_verbale_polizia_locale",
+   "format": "txt",
+   "file": "testi/10_verbale_polizia_locale.txt",
+   "expected": "pseudonymize",
+   "truth": "testi/10_verbale_polizia_locale.json"
+  },
+  {
+   "id": "11_blocco_salute",
+   "format": "txt",
+   "file": "testi/11_blocco_salute.txt",
+   "expected": "block",
+   "truth": "testi/11_blocco_salute.json"
+  },
+  {
+   "id": "12_blocco_giudiziario",
+   "format": "txt",
+   "file": "testi/12_blocco_giudiziario.txt",
+   "expected": "block",
+   "truth": "testi/12_blocco_giudiziario.json"
+  },
+  {
+   "id": "13_blocco_sindacale",
+   "format": "txt",
+   "file": "testi/13_blocco_sindacale.txt",
+   "expected": "block",
+   "truth": "testi/13_blocco_sindacale.json"
+  },
+  {
+   "id": "14_blocco_disabilita",
+   "format": "txt",
+   "file": "testi/14_blocco_disabilita.txt",
+   "expected": "block",
+   "truth": "testi/14_blocco_disabilita.json"
+  },
+  {
+   "id": "docx1_lettera_tributi",
+   "format": "docx",
+   "file": "docx/docx1_lettera_tributi.docx",
+   "expected": "pseudonymize",
+   "truth": "docx/docx1_lettera_tributi.json"
+  },
+  {
+   "id": "docx2_relazione_istruttoria",
+   "format": "docx",
+   "file": "docx/docx2_relazione_istruttoria.docx",
+   "expected": "pseudonymize",
+   "truth": "docx/docx2_relazione_istruttoria.json"
+  },
+  {
+   "id": "docx3_verbale_riunione",
+   "format": "docx",
+   "file": "docx/docx3_verbale_riunione.docx",
+   "expected": "pseudonymize",
+   "truth": "docx/docx3_verbale_riunione.json"
+  },
+  {
+   "id": "xlsx1_elenco_beneficiari",
+   "format": "xlsx",
+   "file": "xlsx/xlsx1_elenco_beneficiari.xlsx",
+   "expected": "pseudonymize",
+   "truth": "xlsx/xlsx1_elenco_beneficiari.json"
+  },
+  {
+   "id": "xlsx2_registro_protocollo",
+   "format": "xlsx",
+   "file": "xlsx/xlsx2_registro_protocollo.xlsx",
+   "expected": "pseudonymize",
+   "truth": "xlsx/xlsx2_registro_protocollo.json"
+  },
+  {
+   "id": "xlsx3_anagrafe_fornitori",
+   "format": "xlsx",
+   "file": "xlsx/xlsx3_anagrafe_fornitori.xlsx",
+   "expected": "pseudonymize",
+   "truth": "xlsx/xlsx3_anagrafe_fornitori.json"
+  },
+  {
+   "id": "pdf1_comunicazione",
+   "format": "pdf",
+   "file": "pdf/pdf1_comunicazione.pdf",
+   "expected": "pseudonymize",
+   "truth": "pdf/pdf1_comunicazione.json"
+  },
+  {
+   "id": "pdf2_liquidazione",
+   "format": "pdf",
+   "file": "pdf/pdf2_liquidazione.pdf",
+   "expected": "pseudonymize",
+   "truth": "pdf/pdf2_liquidazione.json"
+  }
+ ]
+}

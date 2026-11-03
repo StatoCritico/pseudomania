@@ -1,0 +1,103 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# ALLOWLIST di PseudoGate - BOZZA da validare con il DPO (Responsabile della
+# protezione dei dati) prima dell'uso in produzione.
+#
+# Termini che NON vengono MAI sostituiti con un segnaposto, anche se il rilevatore
+# li riconosce come entità (es. il nome dell'ente riconosciuto come ORG, "Roma"
+# dentro "Comune di Roma"). Servono a non degradare inutilmente i testi
+# amministrativi con riferimenti pubblici e non personali.
+#
+# Regole:
+#  - il confronto ignora maiuscole/minuscole e spazi multipli;
+#  - un'entità viene lasciata in chiaro se il suo valore coincide con un termine
+#    OPPURE se cade interamente dentro un'occorrenza di un termine nel testo;
+#  - NON inserire mai nomi di persone fisiche (nemmeno di amministratori o
+#    dirigenti): il loro nome è comunque un dato personale;
+#  - la lista viene restituita all'estensione da GET /v1/config (campo "allowlist").
+#
+# Dopo ogni modifica aggiornare "version" (finisce in policyVersion) e riavviare l'api.
+
+version: "2026-10-30-bozza-1"
+
+terms:
+  # --- Ente: SOSTITUIRE con i dati reali dell'ente --------------------------
+  - "Ente Esempio"
+  - "Comune di Esempio"
+  - "Ufficio Protocollo"
+  - "Ufficio Relazioni con il Pubblico"
+  - "URP"
+  - "Segreteria Generale"
+  - "Servizi Demografici"
+  - "Polizia Locale"
+  - "Ufficio Tributi"
+  - "Settore Lavori Pubblici"
+
+  # --- Istituzioni pubbliche --------------------------------------------------
+  - "Repubblica Italiana"
+  - "Presidenza del Consiglio dei Ministri"
+  - "Ministero dell'Interno"
+  - "Ministero dell'Economia e delle Finanze"
+  - "Agenzia delle Entrate"
+  - "Agenzia per l'Italia Digitale"
+  - "AgID"
+  - "Garante per la protezione dei dati personali"
+  - "Autorità Nazionale Anticorruzione"
+  - "ANAC"
+  - "Corte dei conti"
+  - "Consiglio di Stato"
+  - "Tribunale Amministrativo Regionale"
+  - "TAR"
+  - "INPS"
+  - "INAIL"
+  - "ISTAT"
+  - "Unione Europea"
+  - "Commissione europea"
+  - "Gazzetta Ufficiale"
+  - "Gazzetta Ufficiale della Repubblica Italiana"
+  - "Bollettino Ufficiale della Regione"
+  - "Albo pretorio"
+  - "Amministrazione trasparente"
+  - "PagoPA"
+  - "SPID"
+  - "CIE"
+  - "PEC"
+  - "ANPR"
+
+  # --- Fonti normative e atti tipici ----------------------------------------
+  - "Codice civile"
+  - "Codice penale"
+  - "Codice di procedura civile"
+  - "Codice di procedura penale"
+  - "Codice dell'amministrazione digitale"
+  - "Codice dei contratti pubblici"
+  - "Testo unico degli enti locali"
+  - "TUEL"
+  - "Regolamento (UE) 2016/679"
+  - "GDPR"
+  - "Regolamento generale sulla protezione dei dati"
+  - "d.lgs. 196/2003"
+  - "Codice in materia di protezione dei dati personali"
+  - "legge 241/1990"
+  - "d.lgs. 33/2013"
+  - "d.lgs. 82/2005"
+  - "d.lgs. 36/2023"
+  - "d.lgs. 267/2000"
+  - "AI Act"
+  - "Regolamento (UE) 2024/1689"
+
+  # --- Prodotti e servizi citati spesso ---------------------------------------
+  - "Claude"
+  - "Anthropic"
+  - "PseudoGate"
+  - "Microsoft Word"
+  - "Microsoft Excel"
+
+# Espressioni regolari aggiuntive (sintassi Python, senza delimitatori).
+# Esempio: numeri di delibera dell'ente che non sono dati personali.
+patterns: []
+#  - "Delibera(?:zione)? (?:di )?(?:Giunta|Consiglio) n\\. ?\\d+/\\d{4}"
+
+# Tipi di entità da non mascherare MAI (valutare con il DPO: riduce la protezione).
+# Alternativa a livello di rilevatore: DETECTOR_EXCLUDE_TAGS nel file .env.
+never_mask_types: []

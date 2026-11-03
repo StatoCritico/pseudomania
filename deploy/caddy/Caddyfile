@@ -1,0 +1,89 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Caddy: unico punto di ingresso. TLS con i certificati dell'ente (file PEM montati
+# in /etc/caddy/certs), nessuna richiesta ACME/Let's Encrypt.
+# Domini e percorsi dei certificati arrivano dalle variabili d'ambiente (vedi .env).
+#
+# Se il certificato è firmato da una CA interna, la CA deve essere fra quelle
+# attendibili dei PC (di norma è già distribuita tramite GPO/policy di Chrome).
+
+{
+	# Solo HTTPS sulla 443 (la porta 80 non è pubblicata): nessun redirect HTTP->HTTPS.
+	# I certificati sono quelli dell'ente (direttiva tls): Caddy non chiede certificati
+	# ACME per i siti con certificato esplicito.
+	auto_https disable_redirects
+	# l'API di amministrazione resta su localhost dentro il container
+	admin 127.0.0.1:2019
+	servers {
+		protocols h1 h2
+	}
+}
+
+(sicurezza) {
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+}
+
+# ---------------------------------------------------------------------------
+# API di Pseudomania: solo /v1/*
+# ---------------------------------------------------------------------------
+https://{$PSEUDOGATE_DOMAIN} {
+	tls {$TLS_CERT_PSEUDOGATE} {$TLS_KEY_PSEUDOGATE}
+	import sicurezza
+
+	request_body {
+		max_size {$MAX_REQUEST_MB}MB
+	}
+
+	handle /v1/* {
+		reverse_proxy api:8787 {
+			# file grandi e PDF lunghi: il rilevatore può impiegare minuti
+			transport http {
+				read_timeout 15m
+				write_timeout 15m
+			}
+		}
+	}
+
+	# Pacchetto dell'estensione per l'installazione forzata via policy Chrome
+	# (ExtensionInstallForcelist "<id>;https://<dominio>/extension/update.xml").
+	# File in deploy/estensione/: update.xml e pseudogate-x.y.z.crx
+	handle_path /extension/* {
+		root * /srv/extension
+		@crx path *.crx
+		header @crx Content-Type application/x-chrome-extension
+		@xml path *.xml
+		header @xml Content-Type "application/xml; charset=utf-8"
+		header Cache-Control "no-cache"
+		file_server
+	}
+
+	handle {
+		respond "Not found" 404
+	}
+
+	# nessun log degli accessi con query string (contiene id di conversazione)
+	log {
+		output stdout
+		format filter {
+			wrap json
+			fields {
+				request>uri query {
+					delete scope_id
+				}
+				request>headers>Authorization delete
+				request>headers>Cookie delete
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Langfuse: sito facoltativo. CADDY_LANGFUSE_SITE=on (predefinito, profilo "langfuse")
+# importa langfuse-on.caddy; =off (Langfuse esterno/condiviso) importa il file vuoto.
+# ---------------------------------------------------------------------------
+import /etc/caddy/langfuse-{$CADDY_LANGFUSE_SITE:on}.caddy

@@ -1,0 +1,50 @@
+{
+ "id": "pdf1_comunicazione",
+ "format": "pdf",
+ "file": "pdf/pdf1_comunicazione.pdf",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "Rosa Bianco",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "BNCRSO91M45L219A",
+   "type": "CF",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "corso Vittorio Emanuele II",
+   "type": "STREET",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "10128",
+   "type": "ZIPCODE",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "Davide Galli",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "pagina 1"
+  },
+  {
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow",
+   "where": "pagina 1"
+  },
+  {
+   "text": "Servizi Demografici",
+   "type": "ORG",
+   "action": "allow",
+   "where": "pagina 1"
+  }
+ ]
+}

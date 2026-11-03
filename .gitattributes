@@ -1,0 +1,11 @@
+# Fine riga LF nel repository e nella copia di lavoro (script bash, Docker, Python)
+* text=auto eol=lf
+# File binari: mai conversioni
+*.pdf binary
+*.png binary
+*.jpg binary
+*.docx binary
+*.xlsx binary
+*.ttf binary
+*.woff2 binary
+*.parquet binary

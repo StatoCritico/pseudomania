@@ -1,0 +1,163 @@
+# BOZZA di publiccode.yml per Pseudomania (standard publiccode.yml v0.4).
+# Prima della pubblicazione:
+#   1. sostituire tutti i valori tra parentesi quadre e i segnaposto ORG / ENTE;
+#   2. copiare il file nella radice del repository con il nome "publiccode.yml";
+#   3. validarlo con l'editor ufficiale https://publiccode-editor.developers.italia.it/
+#      (o con publiccode-parser), che indica anche se conviene passare a una versione più recente dello standard.
+# Verificata con publiccode-parser v5.2.0 (offline): nessun errore con un codice iPA reale; solo avvisi di
+# deprecazione (codici paese minuscoli, legal.repoOwner, it.riuso.codiceIPA -> organisation.*), vedi PUBBLICAZIONE.md.
+# I commenti che iniziano con "#" possono essere rimossi nella versione finale.
+
+publiccodeYmlVersion: "0.4"
+
+name: Pseudomania
+url: "https://github.com/StatoCritico/pseudomania"
+landingURL: "https://pseudomania.statocritico.it"
+softwareVersion: "0.1.0"
+releaseDate: "2026-10-30"          # data della release indicata in softwareVersion (AAAA-MM-GG)
+logo: site/assets/favicon.svg
+
+isBasedOn:
+  - "https://github.com/dfki-dsa/pii-guardrail-browser-extension"
+
+platforms:
+  - web
+
+categories:
+  - it-security
+  - compliance-management
+  - knowledge-management
+
+developmentStatus: beta
+
+softwareType: "standalone/web"
+
+intendedAudience:
+  countries:
+    - it
+  scope:
+    - government
+    - local-authorities
+
+description:
+  it:
+    localisedName: Pseudomania
+    shortDescription: >-
+      Estensione Chrome che pseudonimizza i dati personali inviati a Claude e
+      li ripristina nelle risposte, per PA e professionisti.
+    longDescription: >
+      Pseudomania è uno strumento per le pubbliche amministrazioni e i
+      professionisti che usano l'intelligenza artificiale generativa (Claude)
+      e vogliono ridurre i dati personali che escono verso il fornitore cloud.
+
+
+      Un'estensione per Google Chrome intercetta i messaggi e gli allegati
+      (PDF, DOCX, XLSX, TXT, Markdown, CSV) inviati su claude.ai, fa
+      riconoscere i dati personali dal modello italiano Rizzo-PII e li
+      sostituisce con segnaposto coerenti come [FULLNAME_1] o [CF_1]. Solo il
+      testo pseudonimizzato raggiunge Claude; i valori reali vengono
+      ripristinati nella risposta direttamente nel browser dell'utente. Se
+      sono riconosciuti dati relativi alla salute o dati giudiziari (articoli
+      9 e 10 del GDPR) l'invio viene bloccato. Sono supportati anche i
+      Progetti di Claude.
+
+
+      Enterprise edition: server su una VM della rete interna dell'ente,
+      estensione installata e configurata dalle policy di Chrome e non
+      disattivabile, accesso unico OIDC. Il dizionario dei segnaposto è
+      cifrato nel browser con una chiave per utente non estraibile; il server
+      conserva solo dati cifrati e una copia di custodia della chiave apribile
+      offline da due custodi (Shamir 2 di 3), solo su richiesta dell'autorità
+      giudiziaria o per il recupero dei progetti. Registro minimo senza testi,
+      con impronte SHA-256; osservabilità facoltativa con Langfuse; durate di
+      conservazione motivate e cancellazione crittografica dei backup.
+
+
+      Personal edition: solo l'estensione e l'app desktop di Rizzo-PII sul PC
+      dell'utente, senza server, senza Docker e senza Langfuse; dizionario e
+      registro restano nel browser, cifrati.
+
+
+      Pseudomania è una misura di mitigazione del rischio e non garantisce
+      l'anonimizzazione: i dati pseudonimizzati restano dati personali, i
+      quasi-identificatori e i dati non riconosciuti non sono protetti, e lo
+      strumento non sostituisce la valutazione d'impatto, le regole interne e
+      gli accordi previsti dall'art. 4 dello Statuto dei lavoratori. Il
+      repository include modelli di regolamento (light e strutturato), DPIA e
+      checklist degli adempimenti.
+    documentation: "https://pseudomania.statocritico.it/approfondimenti/guida-all-uso.html"
+    apiDocumentation: "https://github.com/StatoCritico/pseudomania/blob/main/SPEC.md"
+    features:
+      - Pseudonimizzazione automatica dei messaggi inviati a claude.ai
+      - Pseudonimizzazione di allegati PDF, DOCX, XLSX, TXT, Markdown e CSV
+      - Pseudonimizzazione delle istruzioni e dei documenti di progetto
+      - Ripristino dei valori reali nelle risposte, solo nel browser
+      - Riconoscimento dei dati personali in italiano con Rizzo-PII
+      - Blocco dei dati sanitari e giudiziari (artt. 9-10 GDPR)
+      - Dizionario cifrato nel browser con chiave per utente non estraibile
+      - Copia di custodia delle chiavi apribile solo da due custodi offline
+      - Rotazione automatica delle chiavi e cancellazione crittografica
+      - Registro minimo senza testi, con impronte SHA-256
+      - Osservabilità facoltativa con Langfuse
+      - Enterprise edition gestita da policy di Chrome, con SSO OIDC
+      - Personal edition con la sola app desktop di Rizzo-PII, senza server
+      - Comportamento fail-closed se il server non è raggiungibile
+    # screenshots:
+    #   - docs/img/[schermata-pannello].png
+
+legal:
+  license: AGPL-3.0-or-later
+  mainCopyrightOwner: "[NOME ENTE]"
+  repoOwner: "[NOME ENTE]"
+
+maintenance:
+  type: "internal"
+  contacts:
+    - name: "[Nome Cognome del referente tecnico]"
+      email: "referente@ENTE.it"       # [da sostituire]
+      affiliation: "[NOME ENTE]"
+  # In alternativa, se la manutenzione è affidata a un fornitore:
+  # type: "contract"
+  # contractors:
+  #   - name: "[Ragione sociale del fornitore]"
+  #     until: "[AAAA-MM-GG]"
+  #     website: "https://[fornitore].it"
+  # contacts:
+  #   - name: "[Nome Cognome del referente dell'ente]"
+  #     email: "referente@ENTE.it"       # [da sostituire]
+
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - it
+
+dependsOn:
+  open:
+    - name: PostgreSQL
+      versionMin: "16"
+    - name: OpenBao
+    - name: Langfuse
+      version: "4"
+      optional: true
+    - name: ClickHouse
+      optional: true
+    - name: Valkey
+      optional: true
+    - name: SeaweedFS
+      optional: true
+    - name: Caddy
+      version: "2"
+    - name: Rizzo-PII (immagine per la Enterprise edition, app desktop per la Personal edition)
+    - name: Docker Engine o Podman con Compose (solo Enterprise edition)
+  proprietary:
+    - name: Google Chrome
+    - name: Claude (claude.ai; piano Team per la Enterprise edition)
+
+it:
+  countryExtensionVersion: "1.0"
+  riuso:
+    codiceIPA: "[codice iPA dell'ente]"
+  # Da dichiarare solo dopo verifica (assenza di chiave = conformità non dichiarata):
+  # conforme:
+  #   gdpr: true
+  #   lineeGuidaDesign: true

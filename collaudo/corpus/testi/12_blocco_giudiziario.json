@@ -1,0 +1,18 @@
+{
+ "id": "12_blocco_giudiziario",
+ "format": "txt",
+ "file": "testi/12_blocco_giudiziario.txt",
+ "kind": "lettera",
+ "expected": "block",
+ "entities": [
+  {
+   "start": 102,
+   "end": 117,
+   "text": "Alessio Ruggeri",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ],
+ "block_category": "giudiziari",
+ "article": "10"
+}

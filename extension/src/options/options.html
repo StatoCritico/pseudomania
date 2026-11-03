@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Impostazioni di Pseudomania</title>
+  <link rel="stylesheet" href="../ui/common.css">
+  <style>
+    body { max-width: 640px; margin: 0 auto; padding: 24px 16px; }
+    label { display: block; margin: 14px 0 4px; font-weight: 600; }
+    .help { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .row { margin-top: 18px; }
+    #msg { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1 id="title"></h1>
+  <p id="edition" class="muted"></p>
+  <p id="managed" class="warn" hidden></p>
+  <form id="form" hidden>
+    <label for="rizzoUrl" id="lblRizzo"></label>
+    <input type="url" id="rizzoUrl" placeholder="http://127.0.0.1:5005" required>
+    <div class="help" id="helpRizzo"></div>
+    <div class="row">
+      <button class="btn primary" type="submit" id="btnSave"></button>
+      <button class="btn" type="button" id="btnTest"></button>
+    </div>
+  </form>
+  <p id="serverInfo" class="small" hidden></p>
+  <p id="msg" role="status"></p>
+  <section id="about">
+    <h2 id="aboutTitle"></h2>
+    <p id="aboutExt" class="small"></p>
+    <p class="small"><span id="aboutSiteLbl"></span> <a id="aboutSite" target="_blank" rel="noopener noreferrer"></a></p>
+    <p class="small" id="aboutSrcRow"><span id="aboutSrcLbl"></span> <a id="aboutSrc" target="_blank" rel="noopener noreferrer"></a></p>
+    <p id="aboutLic" class="small muted"></p>
+  </section>
+  <script src="../shared/strings.js"></script>
+  <script src="../shared/config.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

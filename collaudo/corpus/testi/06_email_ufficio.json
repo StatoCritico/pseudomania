@@ -1,0 +1,114 @@
+{
+ "id": "06_email_ufficio",
+ "format": "txt",
+ "file": "testi/06_email_ufficio.txt",
+ "kind": "email",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 4,
+   "end": 20,
+   "text": "Chiara Benedetti",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 22,
+   "end": 51,
+   "text": "c.benedetti@comune.esempio.it",
+   "type": "EMAIL",
+   "action": "mask"
+  },
+  {
+   "start": 56,
+   "end": 68,
+   "text": "Davide Galli",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 70,
+   "end": 95,
+   "text": "d.galli@comune.esempio.it",
+   "type": "EMAIL",
+   "action": "mask"
+  },
+  {
+   "start": 129,
+   "end": 135,
+   "text": "Bianco",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 142,
+   "end": 148,
+   "text": "Davide",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 162,
+   "end": 173,
+   "text": "Rosa Bianco",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 175,
+   "end": 186,
+   "text": "347 1234567",
+   "type": "TELEPHONENUM",
+   "action": "mask"
+  },
+  {
+   "start": 234,
+   "end": 260,
+   "text": "corso Vittorio Emanuele II",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 261,
+   "end": 263,
+   "text": "45",
+   "type": "BUILDINGNUM",
+   "action": "mask"
+  },
+  {
+   "start": 302,
+   "end": 321,
+   "text": "Servizi Demografici",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 351,
+   "end": 366,
+   "text": "Leone Fortunato",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 400,
+   "end": 403,
+   "text": "CIE",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 437,
+   "end": 446,
+   "text": "CA12345AB",
+   "type": "ID_DOC",
+   "action": "mask"
+  },
+  {
+   "start": 532,
+   "end": 538,
+   "text": "Chiara",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ]
+}

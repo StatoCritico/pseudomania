@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scelte di progetto – Pseudomania</title>
+<meta name="description" content="Le ragioni di ogni scelta di Pseudomania: estensione invece di proxy, abbonamento Team, Chrome, Rizzo-PII, memoria spenta, ricerca web, cifratura lato client, custodi, conservazione, edizioni, licenza e rischi residui.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0059b3">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://pseudomania.statocritico.it/approfondimenti/scelte-di-progetto.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/theme-init.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#contenuto">Vai al contenuto principale</a>
+<div class="slim-header">
+  <div class="wrap">
+    <span>Software libero · AGPL-3.0 · riuso per la PA</span>
+    <a href="https://github.com/StatoCritico/pseudomania">Codice sorgente</a>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../index.html" aria-label="Pseudomania, pagina principale">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="12" fill="#0059b3"/><path d="M22 14h-8v36h8M42 14h8v36h-8" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><rect x="25" y="29" width="14" height="6" rx="2" fill="#fff"/></svg>
+      <span>
+        <span class="brand-name">Pseudomania</span>
+        <span class="brand-tag">Pseudonimizzazione per l'IA generativa</span>
+      </span>
+    </a>
+    <div class="header-tools">
+      <button type="button" class="btn-icon" id="theme-toggle" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg><span class="theme-label">Tema scuro</span></button>
+      <button type="button" class="btn-icon menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="main-nav"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg><span>Menu</span></button>
+    </div>
+  </div>
+  <nav class="main-nav" id="main-nav" aria-label="Menu principale">
+    <div class="wrap">
+      <ul>
+        <li><a href="../index.html#problema">Il problema</a></li>
+        <li><a href="../index.html#soluzione">La soluzione</a></li>
+        <li><a href="../index.html#non-solo-software">Non solo software</a></li>
+        <li><a href="../index.html#personal">Personal edition</a></li>
+        <li><a href="../index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="../approfondimenti/index.html" aria-current="page">Approfondimenti</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<div class="wrap docs-layout">
+  <button type="button" class="tree-toggle" id="tree-toggle" aria-expanded="false" aria-controls="docs-nav"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg><span>Indice degli approfondimenti</span></button>
+  <nav class="docs-nav" id="docs-nav" aria-label="Indice degli approfondimenti">
+    <p class="docs-nav-title">Approfondimenti</p>
+    <div class="tree-tools"><button type="button" data-tree="open">Espandi tutto</button><button type="button" data-tree="close">Comprimi tutto</button></div>
+    <ul class="tree">
+<li><details><summary>Il problema</summary><ul>
+<li><a href="il-problema.html">Panoramica</a></li>
+<li><a href="il-problema.html#ia-al-lavoro">L&#x27;IA è già al lavoro</a></li>
+<li><a href="il-problema.html#dati-che-escono">Ogni testo esce dall&#x27;organizzazione</a></li>
+<li><a href="il-problema.html#perche-non-basta-vietare">Vietare non basta</a></li>
+<li><a href="il-problema.html#nessuna-api">Nessuna API, nessun proxy</a></li>
+<li><a href="il-problema.html#obblighi">Obblighi precisi</a></li>
+</ul></details></li>
+<li><details><summary>Come funziona</summary><ul>
+<li><a href="come-funziona.html">Panoramica</a></li>
+<li><a href="come-funziona.html#flusso">Il flusso in cinque passaggi</a></li>
+<li><a href="come-funziona.html#segnaposto">I segnaposto</a></li>
+<li><a href="come-funziona.html#ripristino">Il ripristino nel browser</a></li>
+<li><a href="come-funziona.html#allegati">Allegati e Progetti</a></li>
+<li><a href="come-funziona.html#categorie-particolari">Dati sanitari e giudiziari bloccati</a></li>
+<li><a href="come-funziona.html#fail-closed">Se il servizio non risponde</a></li>
+<li><a href="come-funziona.html#cosa-non-protegge">Cosa non protegge</a></li>
+</ul></details></li>
+<li><details open><summary class="tree-current">Scelte di progetto</summary><ul>
+<li><a href="scelte-di-progetto.html" aria-current="page">Panoramica</a></li>
+<li><a href="scelte-di-progetto.html#sp-architettura">Architettura</a></li>
+<li><a href="scelte-di-progetto.html#sp-perimetro">Cosa si pseudonimizza</a></li>
+<li><a href="scelte-di-progetto.html#sp-impostazioni">Impostazioni di Claude</a></li>
+<li><a href="scelte-di-progetto.html#sp-cifratura">Cifratura e chiavi</a></li>
+<li><a href="scelte-di-progetto.html#sp-controllo">Controllo e accessi</a></li>
+<li><a href="scelte-di-progetto.html#sp-conservazione">Conservazione</a></li>
+<li><a href="scelte-di-progetto.html#sp-edizioni">Edizioni e licenza</a></li>
+<li><a href="scelte-di-progetto.html#sp-limiti">Limiti e rischi residui</a></li>
+</ul></details></li>
+<li><details><summary>Non solo software</summary><ul>
+<li><a href="non-solo-software.html">Panoramica</a></li>
+<li><a href="non-solo-software.html#impostazioni-claude">Impostazioni di Claude Team</a></li>
+<li><a href="non-solo-software.html#regolamento">Regolamento d&#x27;uso</a></li>
+<li><a href="non-solo-software.html#dpia">Valutazione d&#x27;impatto (DPIA)</a></li>
+<li><a href="non-solo-software.html#accordo-sindacale">Accordo sindacale (art. 4 Statuto dei lavoratori)</a></li>
+<li><a href="non-solo-software.html#custodi">Custodi</a></li>
+<li><a href="non-solo-software.html#esportazione-team">Esportazione di Claude Team governata</a></li>
+<li><a href="non-solo-software.html#checklist">Checklist degli adempimenti</a></li>
+</ul></details></li>
+<li><details><summary>Personal edition</summary><ul>
+<li><a href="personal-edition.html">Panoramica</a></li>
+<li><a href="personal-edition.html#per-chi">Per chi è</a></li>
+<li><a href="personal-edition.html#requisiti">Cosa serve</a></li>
+<li><a href="personal-edition.html#installazione">Installazione</a></li>
+<li><a href="personal-edition.html#attivazione">Attivazione per conversazione</a></li>
+<li><a href="personal-edition.html#uso">Uso quotidiano</a></li>
+<li><a href="personal-edition.html#allegati">Allegati</a></li>
+<li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
+<li><a href="personal-edition.html#limiti-personal">Limiti specifici</a></li>
+</ul></details></li>
+<li><details><summary>Enterprise edition</summary><ul>
+<li><a href="enterprise-edition.html">Panoramica</a></li>
+<li><a href="enterprise-edition.html#architettura">Architettura</a></li>
+<li><a href="enterprise-edition.html#requisiti">Requisiti</a></li>
+<li><a href="enterprise-edition.html#installazione">Installazione</a></li>
+<li><a href="enterprise-edition.html#estensione-policy">Estensione gestita da policy</a></li>
+<li><a href="enterprise-edition.html#sso">SSO e accesso condizionato</a></li>
+<li><a href="enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
+<li><a href="enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></li>
+<li><a href="enterprise-edition.html#conservazione">Conservazione</a></li>
+<li><a href="enterprise-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
+</ul></details></li>
+<li><details><summary>Guida all&#x27;uso</summary><ul>
+<li><a href="guida-all-uso.html">Panoramica</a></li>
+<li><a href="guida-all-uso.html#prima-di-iniziare">Prima di iniziare</a></li>
+<li><a href="guida-all-uso.html#attivazione">Attivare la protezione (Personal edition)</a></li>
+<li><a href="guida-all-uso.html#scrivere">Scrivere e inviare</a></li>
+<li><a href="guida-all-uso.html#allegati">Allegati</a></li>
+<li><a href="guida-all-uso.html#progetti">Progetti</a></li>
+<li><a href="guida-all-uso.html#controllare">Controllare le risposte</a></li>
+<li><a href="guida-all-uso.html#invio-bloccato">Se l&#x27;invio è bloccato</a></li>
+<li><a href="guida-all-uso.html#segnalare">Segnalare errori e incidenti</a></li>
+<li><a href="guida-all-uso.html#cambio-pc">Cambio di PC o di browser</a></li>
+<li><a href="guida-all-uso.html#policy">Creare un regolamento d&#x27;uso</a></li>
+<li><a href="guida-all-uso.html#responsabilita">Chi è responsabile</a></li>
+</ul></details></li>
+<li><details><summary>Domande frequenti</summary><ul>
+<li><a href="faq.html">Panoramica</a></li>
+<li><a href="faq.html#faq-generale">In generale</a></li>
+<li><a href="faq.html#faq-dati">Dati e sicurezza</a></li>
+<li><a href="faq.html#faq-uso">Uso</a></li>
+<li><a href="faq.html#faq-enti">Enti e conformità</a></li>
+<li><a href="faq.html#faq-licenza">Licenza e riuso</a></li>
+</ul></details></li>
+<li><details><summary>Licenza e crediti</summary><ul>
+<li><a href="licenza-e-crediti.html">Panoramica</a></li>
+<li><a href="licenza-e-crediti.html#agpl">Licenza AGPL-3.0-or-later</a></li>
+<li><a href="licenza-e-crediti.html#riuso-pa">Riuso per la pubblica amministrazione</a></li>
+<li><a href="licenza-e-crediti.html#componenti">Componenti e licenze</a></li>
+<li><a href="licenza-e-crediti.html#marchi">Marchi</a></li>
+</ul></details></li>
+<li><details><summary>Note legali e disclaimer</summary><ul>
+<li><a href="note-legali.html">Panoramica</a></li>
+<li><a href="note-legali.html#responsabilita">Responsabilità di chi adotta e usa il sistema</a></li>
+<li><a href="note-legali.html#nessuna-garanzia">Nessuna garanzia (AGPL, sezioni 15 e 16)</a></li>
+<li><a href="note-legali.html#non-consulenza">Nessuna consulenza legale</a></li>
+<li><a href="note-legali.html#marchi-note">Marchi</a></li>
+<li><a href="note-legali.html#sito">Privacy di questo sito</a></li>
+<li><a href="note-legali.html#contatti">Contatti</a></li>
+</ul></details></li>
+<li><details><summary>Strumenti e download</summary><ul>
+<li><a href="strumenti-e-download.html">Panoramica</a></li>
+<li><a href="strumenti-e-download.html#estensione">Estensione Chrome</a></li>
+<li><a href="strumenti-e-download.html#rizzo-pii">App desktop Rizzo-PII (Personal edition)</a></li>
+<li><a href="strumenti-e-download.html#server">Server (Enterprise edition)</a></li>
+<li><a href="strumenti-e-download.html#documentazione">Documentazione</a></li>
+<li><a href="strumenti-e-download.html#modelli">Modelli di governance</a></li>
+<li><a href="strumenti-e-download.html#custodi-tool">Strumento dei custodi</a></li>
+<li><a href="strumenti-e-download.html#collaudo">Corpus di collaudo</a></li>
+<li><a href="strumenti-e-download.html#codice">Codice sorgente</a></li>
+</ul></details></li>
+<li class="tree-leaf"><a href="../privacy.html">Informativa privacy</a></li>
+</ul>
+  </nav>
+  <main class="docs-main" id="contenuto" tabindex="-1">
+    <nav aria-label="Percorso" class="breadcrumb"><ol><li><a href="../index.html">Pseudomania</a></li><li><a href="index.html">Approfondimenti</a></li><li aria-current="page">Scelte di progetto</li></ol></nav>
+    <h1>Scelte di progetto</h1>
+    <p class="lead">Ogni scelta di Pseudomania nasce da un vincolo concreto: il servizio da proteggere, le regole sul lavoro, la necessità di non affidare a una sola persona le chiavi dei dati. Qui trovi le ragioni, una per una.</p>
+    <div class="acc-tools"><button type="button" class="btn-small" data-acc="open">Apri tutte le risposte</button><button type="button" class="btn-small" data-acc="close">Chiudi tutte</button></div>
+
+<h2 id="sp-architettura">Architettura</h2>
+
+<details class="acc" id="estensione-non-proxy">
+  <summary>Perché un'estensione del browser e non un proxy di rete?</summary>
+  <div class="acc-body">
+    <p>Il servizio da proteggere è claude.ai con l'abbonamento <strong>Claude Team</strong>: si usa dall'interfaccia web e non offre un'API su cui interporre un filtro. Un proxy di rete vedrebbe solo traffico cifrato (TLS). Per leggerlo dovrebbe intercettare la connessione con un certificato dell'ente installato su ogni PC (<em>TLS inspection</em>): una tecnica invasiva, fragile ai cambi del sito e dei protocolli, e non prevista dai termini del fornitore, che vietano l'uso di proxy non autorizzati.</p>
+    <p>Il browser è l'unico punto in cui il testo esiste in chiaro prima di partire e in cui la risposta può essere ripristinata davanti all'utente. Un'estensione può intercettare l'invio, sostituire il testo e rilanciarlo, senza toccare la cifratura della connessione. Come rete di sicurezza, l'estensione esamina anche le richieste che la pagina invia a claude.ai: ciò che non è già stato pseudonimizzato viene trattato o bloccato.</p>
+  </div>
+</details>
+
+<details class="acc" id="abbonamento-team">
+  <summary>Perché l'abbonamento Claude Team e non l'API?</summary>
+  <div class="acc-body">
+    <p>Gli utenti dell'ente usano già Claude Team: costo prevedibile per postazione, interfaccia completa (Progetti, allegati, artifact), nessuno sviluppo di un'applicazione di chat da mantenere. Con l'API si pagherebbe a consumo e servirebbe un'interfaccia propria. Pseudomania si adatta allo strumento che le persone usano davvero, invece di chiedere loro di cambiarlo.</p>
+    <p>Il piano Team offre inoltre console di amministrazione, SSO, disattivazione centralizzata di funzioni (memoria, connettori, feedback) e l'esclusione dei dati dall'addestramento dei modelli secondo le condizioni commerciali del fornitore.</p>
+  </div>
+</details>
+
+<details class="acc" id="chrome-policy">
+  <summary>Perché Chrome e le policy gestite?</summary>
+  <div class="acc-body">
+    <p>Chrome è il browser standard dell'ente pilota e supporta la gestione centralizzata: le policy di Chrome Enterprise (Google Admin, criteri di gruppo di Windows, Intune) permettono di installare l'estensione in modo forzato, impedirne la disattivazione e passarle la configurazione (indirizzo del server, identity provider, comportamento <em>fail-closed</em>). In questo modo la protezione non dipende dalla buona volontà del singolo.</p>
+    <p>Chrome e claude.ai sono anche gli strumenti che usa chi ha scritto Pseudomania. Tutto ciò che dipende dal sito è isolato nel modulo <code>extension/src/sites/claude.js</code> (registrato in <code>registry.js</code>): altri chatbot o altri browser Chromium si possono aggiungere scrivendo un adattatore, secondo la licenza AGPL e con contributi benvenuti; Firefox richiederebbe adattamenti (<a href="faq.html#faq-altri-siti">dettagli</a>).</p>
+    <p>Perché la misura sia efficace, l'ente consente claude.ai solo dal Chrome gestito (proxy aziendale e accesso condizionato dell'SSO) e blocca l'app desktop e l'app mobile di Claude.</p>
+  </div>
+</details>
+
+<details class="acc" id="basi-open-source">
+  <summary>Perché Rizzo-PII e Privacy Guardrail come basi?</summary>
+  <div class="acc-body">
+    <p><strong>Rizzo-PII</strong> è un modello di riconoscimento dei dati personali addestrato sull'<strong>italiano</strong>, con etichette pensate per i documenti italiani (codice fiscale, partita IVA, dati catastali, targhe). Il codice e i pesi sono rilasciati con licenza MIT e gira su CPU, senza GPU e senza inviare dati all'esterno. Esiste anche come app desktop, che rende possibile la Personal edition senza server.</p>
+    <p><strong>Privacy Guardrail</strong> del DFKI (Apache-2.0) è un'estensione già pensata per intercettare i chatbot nel browser: da lì vengono le tecniche di inserimento del testo nella casella di claude.ai, di intercettazione degli appunti e di osservazione delle risposte. Partire da progetti aperti e documentati riduce il codice nuovo da scrivere e verificare.</p>
+  </div>
+</details>
+
+<h2 id="sp-perimetro">Cosa si pseudonimizza</h2>
+
+<details class="acc" id="attivazione-conversazione">
+  <summary>Perché nella Personal edition la protezione si attiva per conversazione?</summary>
+  <div class="acc-body">
+    <p>Un professionista non usa Claude solo con dati di clienti: per una ricerca generica la pseudonimizzazione è superflua. Un interruttore globale verrebbe spento e dimenticato; uno per conversazione limita l'effetto alla chat in cui serve. Per ridurre gli errori: lo stato è sempre visibile, una nuova conversazione eredita l'ultima scelta solo se era «attiva» (altrimenti chiede), finché il banner aspetta i messaggi sono protetti, e lo spegnimento riguarda solo l'uscita, mai il ripristino. Nella Enterprise edition non c'è scelta: la protezione è sempre attiva.</p>
+  </div>
+</details>
+
+<details class="acc" id="perimetro">
+  <summary>Che cosa viene pseudonimizzato e che cosa no?</summary>
+  <div class="acc-body">
+    <p><strong>Sì</strong>: messaggi, modifiche e rigenerazioni; istruzioni e documenti dei Progetti; allegati PDF, DOCX, XLSX, TXT, Markdown, CSV e i loro nomi; testo lungo incollato che claude.ai trasforma in allegato.</p>
+    <p><strong>No</strong>: immagini e altri formati (bloccati); preferenze personali del profilo Claude (il regolamento vieta di inserirvi dati personali); dati che il modello non riconosce; quasi-identificatori; tutto ciò che passa da altri browser o app. La dettatura vocale è disattivata perché il suo testo non passerebbe dall'estensione.</p>
+  </div>
+</details>
+
+<details class="acc" id="istruzione-segnaposto">
+  <summary>Perché Claude riceve un'istruzione fissa sui segnaposto?</summary>
+  <div class="acc-body">
+    <p>Il ripristino funziona solo se nella risposta i segnaposto compaiono esattamente come sono stati inviati. Un modello linguistico tende a «migliorare» il testo: potrebbe tradurre <span class="ph">[FULLNAME_1]</span>, declinarlo, spiegarlo o inventare <span class="ph">[FULLNAME_7]</span>. Per questo l'estensione antepone al primo messaggio di ogni conversazione, e alle istruzioni di progetto, questa istruzione:</p>
+    <blockquote><p>I testi contengono segnaposto tra parentesi quadre come [FULLNAME_n] o [CF_n] (n = numero). Riportali esattamente come sono, senza modificarli, tradurli, declinarli o spiegarli, e non crearne di nuovi.</p></blockquote>
+    <p>I segnaposto che l'estensione non riconosce restano evidenziati in rosso e vengono contati, per misurare il fenomeno nel pilota.</p>
+  </div>
+</details>
+
+<details class="acc" id="categorie-particolari">
+  <summary>Perché i dati sanitari e giudiziari sono bloccati e non pseudonimizzati?</summary>
+  <div class="acc-body">
+    <p>Per le categorie particolari (art. 9 GDPR: salute, opinioni politiche, appartenenza sindacale, convinzioni religiose…) e per i dati giudiziari (art. 10) il contesto stesso è il dato sensibile: «[FULLNAME_1] è in cura per una malattia oncologica» rivela comunque un'informazione sanitaria su una persona che altri elementi del testo possono identificare. Il rischio residuo sarebbe troppo alto per l'uso previsto, quindi l'invio si ferma. Il regolamento d'uso vieta comunque questi contenuti, perché anche il blocco automatico può fallire.</p>
+  </div>
+</details>
+
+<h2 id="sp-impostazioni">Impostazioni di Claude</h2>
+
+<details class="acc" id="memoria-spenta">
+  <summary>Perché la memoria di Claude è spenta?</summary>
+  <div class="acc-body">
+    <p>I segnaposto sono numerati per conversazione o progetto: <span class="ph">[FULLNAME_1]</span> in una chat è Mario Rossi, in un'altra è Anna Bianchi. Se la memoria riportasse un segnaposto da una chat all'altra, l'estensione lo ripristinerebbe con il nome della chat corrente, cioè con la <strong>persona sbagliata</strong>. Un segnaposto globale per utente avrebbe evitato la collisione, ma avrebbe creato un profilo di lunga durata di tutte le persone citate.</p>
+    <p>L'ente ha scelto di <strong>spegnere la memoria</strong> dalla console Team: il rischio di ripristino errato tra conversazioni è così mitigato alla radice. Le preferenze personali del profilo non passano dall'estensione: il regolamento vieta di inserirvi dati personali.</p>
+  </div>
+</details>
+
+<details class="acc" id="ricerca-web">
+  <summary>Perché la ricerca web resta attiva, e con quali cautele?</summary>
+  <div class="acc-body">
+    <p>La ricerca web è utile per norme, scadenze e notizie aggiornate, e gli utenti la userebbero comunque altrove. Claude compone le ricerche dal testo pseudonimizzato, quindi di norma contengono solo segnaposto; un dato sfuggito al rilevamento, però, potrebbe finire nella richiesta inviata al motore di ricerca, che è un sub-fornitore di Anthropic.</p>
+    <p>Cautele adottate: verifica del sub-fornitore di ricerca e del suo inquadramento; menzione nell'informativa; regola d'uso (niente dati personali nelle richieste che comportano una ricerca); misura, nel pilota, di quante ricerche contengono dati sfuggiti, per decidere se mantenerla.</p>
+  </div>
+</details>
+
+<details class="acc" id="progetti">
+  <summary>Come sono gestiti i Progetti di Claude?</summary>
+  <div class="acc-body">
+    <p>I Progetti restano disponibili (sul piano Team non si possono disattivare) e sono supportati: istruzioni e documenti della conoscenza sono pseudonimizzati e le chat del progetto condividono un unico dizionario, così lo stesso nome ha lo stesso segnaposto in tutto il progetto. La <strong>condivisione dei progetti</strong> è disattivata: il dizionario è cifrato con la chiave del singolo utente e un collega non potrebbe ripristinare i valori.</p>
+    <p>Il dizionario di un progetto dura quanto il progetto, più 30 giorni dall'ultimo uso, e scade se l'utente non lo conferma una volta l'anno dal pannello.</p>
+  </div>
+</details>
+
+<h2 id="sp-cifratura">Cifratura e chiavi</h2>
+
+<details class="acc" id="cifratura-lato-client">
+  <summary>Perché il dizionario è cifrato nel browser e non sul server?</summary>
+  <div class="acc-body">
+    <p>Il dizionario è la tabella che collega ogni segnaposto al valore reale: è il dato più delicato del sistema. Se fosse cifrato con una chiave del server, chi amministra il server (o chi ne ottiene i privilegi) potrebbe decifrarlo in blocco. Per questo ogni valore è cifrato <strong>dall'estensione</strong> con una chiave AES-GCM a 256 bit dell'utente; il server conserva solo il testo cifrato e un'impronta (HMAC) che gli serve a dare lo stesso segnaposto allo stesso valore.</p>
+    <p>Risultato: un amministratore con pieni poteri sulla VM <strong>non può decifrare i dizionari passati</strong>. Restano i rischi descritti nei <a href="#rischi-residui">rischi residui</a>.</p>
+  </div>
+</details>
+
+<details class="acc" id="chiave-automatica">
+  <summary>Perché la chiave è automatica e non protetta da una password?</summary>
+  <div class="acc-body">
+    <p>Una frase segreta scelta dall'utente avrebbe aumentato la protezione teorica, ma avrebbe scaricato sull'IT il lavoro di gestire password dimenticate, reset e dizionari persi. L'ente ha scelto il minimo lavoro per l'IT e nessuna azione per l'utente: al primo avvio l'estensione genera la chiave e la importa nel browser come chiave <strong>non estraibile</strong> (nemmeno l'estensione può più leggerla in chiaro). Prima di scartare la copia grezza, ne invia al server una <strong>copia di custodia</strong> cifrata con la chiave pubblica dei custodi, che il server non può aprire.</p>
+  </div>
+</details>
+
+<details class="acc" id="cambio-pc">
+  <summary>Che cosa succede se cambio PC o reinstallo il browser?</summary>
+  <div class="acc-body">
+    <p>La chiave è legata al profilo del browser: su un nuovo PC l'estensione genera una chiave nuova. I segnaposto delle chat precedenti diventano «non ripristinabili» e sono mostrati come tali: le chat hanno vita breve e il recupero non è previsto. Per i <strong>progetti</strong>, su richiesta motivata, due custodi possono recuperare la vecchia chiave dalla copia di custodia e ricifrarla per il nuovo dispositivo, senza che la chiave compaia mai in chiaro fuori da una postazione offline. Ogni recupero è verbalizzato.</p>
+  </div>
+</details>
+
+<details class="acc" id="esposizione-chiave">
+  <summary>E se una chiave viene esposta?</summary>
+  <div class="acc-body">
+    <p>La chiave non è estraibile dal browser con le normali API, ma un PC compromesso resta un PC compromesso. In caso di sospetto l'amministratore attiva la <strong>rotazione forzata</strong> per quell'utente: l'estensione genera una nuova chiave, ricifra le voci e la vecchia copia di custodia viene distrutta. L'operazione è registrata e non richiede i custodi. Se a essere compromessa è una quota della chiave dei custodi, si ridistribuiscono le quote o si genera una nuova coppia di custodia con rotazione di tutte le chiavi utente.</p>
+  </div>
+</details>
+
+<details class="acc" id="rotazione">
+  <summary>Come funziona la rotazione delle chiavi?</summary>
+  <div class="acc-body">
+    <p>Ogni 90 giorni, senza alcuna azione dell'utente, l'estensione genera una nuova chiave e la relativa copia di custodia, scarica le proprie voci cifrate, le ricifra e le ricarica. Quando la vecchia chiave non ha più voci, il server ne distrugge la copia di custodia (salvo blocco dell'autorità giudiziaria). La rotazione limita il danno di un'eventuale esposizione e rende effettiva la cancellazione crittografica dei vecchi backup.</p>
+  </div>
+</details>
+
+<h2 id="sp-controllo">Controllo e accessi</h2>
+
+<details class="acc" id="custodi">
+  <summary>Chi sono i custodi e quando intervengono?</summary>
+  <div class="acc-body">
+    <p>I custodi sono almeno tre persone designate dal titolare, distinte dagli amministratori di sistema. La chiave privata di custodia viene generata <strong>offline</strong> con lo strumento del repository e divisa con lo schema di Shamir: servono 2 quote su 3 per ricomporla, e non è mai presente sul server. Lo stesso modello è già usato dall'ente per le immagini della videosorveglianza.</p>
+    <p>I custodi intervengono solo in due casi: <strong>richiesta scritta dell'autorità giudiziaria</strong> (aprono la copia di custodia dell'utente indicato e decifrano le sole voci richieste) e <strong>recupero dei progetti</strong> dopo un cambio di PC, su richiesta motivata. Ogni operazione richiede due custodi presenti e si chiude con un verbale. È esclusa ogni altra richiesta, comprese quelle del dirigente o dell'ufficio disciplinare.</p>
+  </div>
+</details>
+
+<details class="acc" id="esportazione-team">
+  <summary>Perché i contenuti si recuperano dall'esportazione di Claude Team e il server tiene solo un registro minimo?</summary>
+  <div class="acc-body">
+    <p>Le conversazioni (pseudonimizzate) sono già conservate da Claude Team, e il <em>Primary Owner</em> dell'organizzazione può esportarle tutte. Duplicarle sul server dell'ente avrebbe creato un secondo archivio di testi, con più rischi e più obblighi. Si è scelto invece di <strong>governare l'esportazione</strong>: il ruolo di Primary Owner è affidato a un account di servizio con password custodita da un custode e secondo fattore da un altro; l'esportazione si fa solo su richiesta dell'autorità giudiziaria, si estrae solo la parte richiesta, il resto viene distrutto e tutto è verbalizzato.</p>
+    <p>Sul server resta un <strong>registro minimo</strong>, senza testi: per ogni messaggio inviato registra pseudonimo dell'utente, tipo di azione, conteggi delle entità e l'impronta SHA-256 del testo pseudonimizzato. L'impronta permette di verificare che un'esportazione sia autentica e che una cancellazione sia avvenuta, senza conservare il contenuto.</p>
+  </div>
+</details>
+
+<h2 id="sp-conservazione">Conservazione</h2>
+
+<div class="acc-open-block" id="tabella-conservazione">
+<p>Durate dell'Enterprise edition, con le motivazioni. Dettagli e rinvii nella DPIA (§ 2.5) e nel regolamento d'uso (art. 11).</p>
+<div class="table-wrap">
+  <table class="stack-table retention">
+    <caption>Durate di conservazione e fonti</caption>
+    <thead><tr><th scope="col">Dato</th><th scope="col">Durata</th><th scope="col">Motivazione e fonti</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Dizionario delle chat</th><td data-label="Durata">30 giorni dall'ultimo uso; nessun recupero dopo cambio PC</td><td data-label="Fonti">Minimizzazione e limitazione della conservazione (art. 5, par. 1, lett. c ed e, GDPR)</td></tr>
+      <tr><th scope="row">Dizionario dei progetti</th><td data-label="Durata">Durata del progetto + 30 giorni dall'ultimo uso; scade senza conferma annuale; recupero via custodi su richiesta motivata</td><td data-label="Fonti">Come sopra; la conferma evita dizionari dimenticati</td></tr>
+      <tr><th scope="row">Voci in attesa (<code>pending:</code>)</th><td data-label="Durata">24 ore</td><td data-label="Fonti">Tecnica</td></tr>
+      <tr><th scope="row">Registro minimo</th><td data-label="Durata">90 giorni in forma pseudonima, poi solo aggregati anonimi (giorno, ufficio, azione, conteggi)</td><td data-label="Fonti">Garante, documento di indirizzo del 6/6/2024 (doc. web 10026277): metadati conservati oltre 21 giorni solo con le garanzie dell'art. 4, c. 1, L. 300/1970. Garante, provv. Regione Lombardia del 29/4/2025 (doc. web 10134221): log limitati a 90 giorni e poi anonimizzati. I 90 giorni sono subordinati all'accordo sindacale o all'autorizzazione dell'Ispettorato</td></tr>
+      <tr><th scope="row">Tracce Langfuse</th><td data-label="Durata">30 giorni nel pilota, poi 7</td><td data-label="Fonti">Minimizzazione; servono solo a misurare il rilevamento. Per analogia, EDPB, Linee guida 3/2019 sui dispositivi video (tempi brevi e cancellazione automatica)</td></tr>
+      <tr><th scope="row">Backup del database applicativo</th><td data-label="Durata">≤ 35 giorni (7 giornalieri + 4 settimanali), una copia offline</td><td data-label="Fonti">Continuità; EDPB, azione coordinata (CEF) 2025 sul diritto alla cancellazione: difficoltà di cancellare dai backup, quindi durata breve e riapplicazione delle cancellazioni</td></tr>
+      <tr><th scope="row">Key store e suoi backup</th><td data-label="Durata">Backup separati, rotazione 14 giorni</td><td data-label="Fonti">Separazione tra chiavi e dati</td></tr>
+      <tr><th scope="row">Copie di custodia delle chiavi</th><td data-label="Durata">Stessa vita della chiave (rotazione ogni 90 giorni), distrutte con la chiave</td><td data-label="Fonti">Cancellazione crittografica: NIST SP 800-88 Rev. 2 (<em>cryptographic erase</em> come tecnica di <em>purge</em>)</td></tr>
+      <tr><th scope="row">Registri di accesso di amministratori e custodi, registro delle cancellazioni</th><td data-label="Durata">24 mesi, sola aggiunta, catena di hash</td><td data-label="Fonti">Garante, provv. 27/11/2008 sugli amministratori di sistema (log inalterabili, almeno 6 mesi); ACN, linee guida sulle banche dati (almeno 24 mesi)</td></tr>
+      <tr><th scope="row">Verbali dei custodi e richieste dell'autorità</th><td data-label="Durata">Protocollati, secondo il massimario dell'ente</td><td data-label="Fonti">Regole sulla gestione documentale</td></tr>
+      <tr><th scope="row">Blocco per l'autorità giudiziaria</th><td data-label="Durata">Sospende la cancellazione dei soli dati indicati, fino a revoca, registrato</td><td data-label="Fonti">Obblighi di legge</td></tr>
+    </tbody>
+  </table>
+</div>
+<p class="small-note">Riferimento di principio: Garante, Linee guida per posta elettronica e Internet del 1/3/2007 (doc. web 1387522), sull'aspettativa di riservatezza dei lavoratori. Alcune fonti sono indicate nella DPIA come da verificare sul testo ufficiale.</p>
+</div>
+
+<details class="acc" id="crypto-shredding">
+  <summary>Come si cancellano i dati anche dai backup?</summary>
+  <div class="acc-body">
+    <p>Cancellare un dato da ogni backup è difficile: l'EDPB lo ha segnalato nell'azione coordinata 2025 sul diritto alla cancellazione. Pseudomania usa la <strong>cancellazione crittografica</strong> (<em>crypto-shredding</em>): i valori del dizionario sono cifrati con chiavi che il server non possiede in chiaro; quando una chiave non ha più voci vive, si distrugge la sua copia di custodia. Le voci rimaste nei backup del database diventano indecifrabili, perché la chiave non esiste più nel browser e la sua copia di custodia è stata distrutta (il key store ha backup propri, separati e brevi, a 14 giorni).</p>
+    <p>Ogni cancellazione è scritta in un registro in sola aggiunta, esportato fuori dal database e <strong>riapplicato dopo ogni ripristino</strong> da backup, prima di rimettere in servizio il sistema.</p>
+  </div>
+</details>
+
+<details class="acc" id="art-4">
+  <summary>Che cosa c'entra l'art. 4 dello Statuto dei lavoratori?</summary>
+  <div class="acc-body">
+    <p>Il registro minimo e le tracce non servono a controllare i dipendenti, ma consentono in astratto di ricostruirne l'attività. L'art. 4, comma 1, della L. 300/1970 richiede per questi strumenti un <strong>accordo con le rappresentanze sindacali</strong> o, in mancanza, l'<strong>autorizzazione dell'Ispettorato nazionale del lavoro</strong>; il comma 3 richiede un'informativa adeguata. Le misure di progetto (pseudonimo invece dell'identità, nessun testo nel registro, 90 giorni e poi aggregati anonimi, accesso solo tramite custodi su richiesta dell'autorità giudiziaria) servono a rendere l'accordo possibile e il controllo indiretto il più limitato possibile. L'esportazione di Claude Team va inclusa nell'accordo.</p>
+  </div>
+</details>
+
+<h2 id="sp-edizioni">Edizioni e licenza</h2>
+
+<details class="acc" id="due-edizioni">
+  <summary>Perché due edizioni, e perché la Personal non ha server né Langfuse?</summary>
+  <div class="acc-body">
+    <p>Un ente ha bisogno di garanzie che un singolo professionista non ha (installazione forzata, SSO, custodi, registro per gli obblighi verso i lavoratori e l'autorità). Un professionista ha bisogno del contrario: niente da amministrare. La <strong>Personal edition</strong> è quindi solo l'estensione più l'app desktop di Rizzo-PII: rilevamento, dizionario e registro restano sul PC, cifrati con una chiave locale, senza Docker, server o Langfuse. Non servono custodi né registri centrali perché non ci sono altri utenti da tutelare né un'organizzazione che possa accedere ai dati.</p>
+  </div>
+</details>
+
+<details class="acc" id="agpl-riuso">
+  <summary>Perché la licenza AGPL?</summary>
+  <div class="acc-body">
+    <p>Il Codice dell'amministrazione digitale chiede alle PA di rendere riusabile il software che commissionano. La <strong>AGPL-3.0-or-later</strong> garantisce che chiunque lo usi, anche offrendolo come servizio in rete, debba rendere disponibili le proprie modifiche: i miglioramenti fatti da un ente tornano a tutti gli altri. È compatibile con le licenze dei componenti (Apache-2.0, MIT) e con l'AGPL di PyMuPDF usato per i PDF. Vedi <a href="licenza-e-crediti.html">Licenza e crediti</a>.</p>
+  </div>
+</details>
+
+<h2 id="sp-limiti">Limiti e rischi residui</h2>
+
+<details class="acc" id="rischi-residui">
+  <summary>Quali rischi restano, dichiarati senza giri di parole?</summary>
+  <div class="acc-body">
+    <ul class="x-list">
+      <li><strong>Il server vede il testo in chiaro durante la singola richiesta</strong>, per riconoscere i dati. Chi ha i privilegi di root sulla VM può modificare il servizio e <strong>intercettare le richieste future</strong>; non può decifrare i dizionari passati. Può però verificare se un valore che già conosce è presente (tramite l'impronta HMAC). Contromisure: amministratori designati, registri inalterabili, verifica annuale.</li>
+      <li><strong>Quasi-identificatori</strong>: il contesto può identificare una persona anche senza nome.</li>
+      <li><strong>Falsi negativi</strong> del riconoscimento: un dato non riconosciuto arriva a Claude e, con la ricerca web attiva, può arrivare al motore di ricerca.</li>
+      <li><strong>Cambi dell'interfaccia di claude.ai</strong>: selettori e richieste interne del sito possono cambiare senza preavviso; l'estensione se ne accorge e, nella Enterprise edition, blocca l'invio, con un disservizio fino all'aggiornamento.</li>
+      <li><strong>Elusione</strong>: altri browser, dispositivi personali, app non gestite. Si contrasta con SSO, accesso condizionato, proxy e regolamento, non con l'estensione.</li>
+      <li><strong>Voci non caricate in tempo</strong>: se l'estensione non riesce a salvare una nuova voce entro 10 minuti, quel valore non sarà ripristinabile (verrà riproposto alla prossima occorrenza).</li>
+      <li><strong>Termini del fornitore</strong>: in attesa di conferma scritta da Anthropic sull'uso dell'estensione.</li>
+    </ul>
+  </div>
+</details>
+
+    <nav class="pager" aria-label="Capitoli"><a class="pager-prev" href="come-funziona.html"><span>Capitolo precedente</span>Come funziona</a><a class="pager-next" href="non-solo-software.html"><span>Capitolo successivo</span>Non solo software</a></nav>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h2>Pseudomania</h2>
+        <p>Software libero per pseudonimizzare ciò che si invia a Claude. Progettato per il riuso gratuito da parte delle pubbliche amministrazioni italiane e utilizzabile dai professionisti.</p>
+        <p class="small">Copyright © 2026 gli autori di Pseudomania. Questo programma è software libero: puoi ridistribuirlo e/o modificarlo secondo i termini della <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License</a>, versione 3 o (a tua scelta) successiva. È distribuito <strong>senza alcuna garanzia</strong>; la responsabilità dell'adozione e dell'uso resta interamente di chi lo adotta e lo usa (<a href="../approfondimenti/note-legali.html">note legali</a>).</p>
+      </div>
+      <div>
+        <h2>Approfondimenti</h2>
+        <ul>
+          <li><a href="../approfondimenti/index.html">Indice degli approfondimenti</a></li>
+          <li><a href="../approfondimenti/faq.html">Domande frequenti</a></li>
+          <li><a href="../approfondimenti/guida-all-uso.html">Guida all'uso</a></li>
+          <li><a href="../approfondimenti/scelte-di-progetto.html">Scelte di progetto</a></li>
+          <li><a href="../approfondimenti/strumenti-e-download.html">Strumenti e download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Riuso e note legali</h2>
+        <ul>
+          <li><a href="https://github.com/StatoCritico/pseudomania">Repository del codice</a></li>
+          <li><a href="../approfondimenti/licenza-e-crediti.html">Licenza e crediti</a></li>
+          <li><a href="../approfondimenti/note-legali.html">Note legali e disclaimer</a></li>
+          <li><a href="../privacy.html">Informativa privacy dell'estensione</a></li>
+          <li><a href="https://github.com/StatoCritico/pseudomania/issues">Segnalazioni e proposte</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Questo sito non usa cookie né strumenti di tracciamento e non carica risorse da terzi. La sola preferenza di tema, se la scegli, resta nel tuo browser.</p>
+    </div>
+  </div>
+</footer>
+<p id="annuncio" class="visually-hidden" role="status" aria-live="polite"></p>
+<script src="../assets/main.js"></script>
+</body>
+</html>

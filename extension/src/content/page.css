@@ -1,0 +1,15 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+   Copyright (C) 2026 gli autori di Pseudomania
+   Evidenziazione dei valori ripristinati (CSS Custom Highlight API: nessun elemento aggiunto). */
+::highlight(pg-restored) {
+  background-color: rgba(46, 125, 50, 0.13);
+  text-decoration: underline dotted rgba(46, 125, 50, 0.7);
+}
+::highlight(pg-unknown) {
+  background-color: rgba(198, 40, 40, 0.18);
+  text-decoration: underline wavy rgba(198, 40, 40, 0.9);
+}
+::highlight(pg-unrecoverable) {
+  background-color: rgba(120, 120, 120, 0.22);
+  text-decoration: underline dashed rgba(90, 90, 90, 0.9);
+}

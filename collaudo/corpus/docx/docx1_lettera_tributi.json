@@ -1,0 +1,68 @@
+{
+ "id": "docx1_lettera_tributi",
+ "format": "docx",
+ "file": "docx/docx1_lettera_tributi.docx",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "Antonio Esposito",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "corpo (spezzato su 3 run)"
+  },
+  {
+   "text": "Napoli",
+   "type": "CITY",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "80121",
+   "type": "ZIPCODE",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "via dei Mille",
+   "type": "STREET",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "SPSNTN84C17F839R",
+   "type": "CF",
+   "action": "mask",
+   "where": "corpo"
+  },
+  {
+   "text": "IT10Y0715419541045150923688",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "tabella"
+  },
+  {
+   "text": "Chiara Benedetti",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "corpo e proprietà autore"
+  },
+  {
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow",
+   "where": "intestazione e corpo"
+  },
+  {
+   "text": "Ufficio Tributi",
+   "type": "ORG",
+   "action": "allow",
+   "where": "intestazione"
+  },
+  {
+   "text": "Ufficio Relazioni con il Pubblico",
+   "type": "ORG",
+   "action": "allow",
+   "where": "piè di pagina"
+  }
+ ]
+}

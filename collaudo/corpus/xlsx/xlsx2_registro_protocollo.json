@@ -1,0 +1,77 @@
+{
+ "id": "xlsx2_registro_protocollo",
+ "format": "xlsx",
+ "file": "xlsx/xlsx2_registro_protocollo.xlsx",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "Marina Serra",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "Giuseppe Lombardo",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "Antonio Esposito",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "Leone Fortunato",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "commento"
+  },
+  {
+   "text": "Chiara Benedetti",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "autore del commento"
+  },
+  {
+   "text": "26785750501",
+   "type": "PIVA",
+   "action": "mask",
+   "where": "colonna D"
+  },
+  {
+   "text": "SPSNTN84C17F839R",
+   "type": "CF",
+   "action": "mask",
+   "where": "colonna D"
+  },
+  {
+   "text": "Edilverde S.r.l.",
+   "type": "ORG",
+   "action": "ignore",
+   "where": "colonna C (ditta)"
+  },
+  {
+   "text": "Segreteria Generale",
+   "type": "ORG",
+   "action": "allow",
+   "where": "colonna E"
+  },
+  {
+   "text": "Ufficio Protocollo",
+   "type": "ORG",
+   "action": "allow",
+   "where": "colonna E"
+  },
+  {
+   "text": "Polizia Locale",
+   "type": "ORG",
+   "action": "allow",
+   "where": "colonna E"
+  }
+ ],
+ "formulas": {
+  "B7": "=COUNTA(A2:A5)"
+ }
+}

@@ -1,0 +1,170 @@
+{
+ "id": "01_delibera_giunta",
+ "format": "txt",
+ "file": "testi/01_delibera_giunta.txt",
+ "kind": "delibera",
+ "expected": "pseudonymize",
+ "entities": [
+  {
+   "start": 0,
+   "end": 17,
+   "text": "COMUNE DI ESEMPIO",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 57,
+   "end": 64,
+   "text": "87/2026",
+   "type": "DOCID",
+   "action": "ignore"
+  },
+  {
+   "start": 69,
+   "end": 84,
+   "text": "14 ottobre 2026",
+   "type": "DATE",
+   "action": "ignore"
+  },
+  {
+   "start": 155,
+   "end": 174,
+   "text": "Amici del Borgo APS",
+   "type": "ORG",
+   "action": "mask"
+  },
+  {
+   "start": 253,
+   "end": 258,
+   "text": "17:30",
+   "type": "TIME",
+   "action": "ignore"
+  },
+  {
+   "start": 275,
+   "end": 292,
+   "text": "Comune di Esempio",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 348,
+   "end": 362,
+   "text": "Carlo Ferretti",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 404,
+   "end": 419,
+   "text": "Paolo Cavallini",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 501,
+   "end": 517,
+   "text": "2 settembre 2026",
+   "type": "DATE",
+   "action": "ignore"
+  },
+  {
+   "start": 528,
+   "end": 533,
+   "text": "11452",
+   "type": "DOCID",
+   "action": "ignore"
+  },
+  {
+   "start": 587,
+   "end": 600,
+   "text": "Elena Rinaldi",
+   "type": "FULLNAME",
+   "action": "mask"
+  },
+  {
+   "start": 615,
+   "end": 623,
+   "text": "via Roma",
+   "type": "STREET",
+   "action": "mask"
+  },
+  {
+   "start": 624,
+   "end": 626,
+   "text": "18",
+   "type": "BUILDINGNUM",
+   "action": "mask"
+  },
+  {
+   "start": 628,
+   "end": 633,
+   "text": "00185",
+   "type": "ZIPCODE",
+   "action": "mask"
+  },
+  {
+   "start": 634,
+   "end": 638,
+   "text": "Roma",
+   "type": "CITY",
+   "action": "mask"
+  },
+  {
+   "start": 672,
+   "end": 690,
+   "text": "Ufficio Protocollo",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 697,
+   "end": 716,
+   "text": "Servizi Demografici",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 727,
+   "end": 756,
+   "text": "Testo unico degli enti locali",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 762,
+   "end": 776,
+   "text": "legge 241/1990",
+   "type": "ORG",
+   "action": "allow"
+  },
+  {
+   "start": 818,
+   "end": 828,
+   "text": "€ 2.500,00",
+   "type": "AMOUNT",
+   "action": "ignore"
+  },
+  {
+   "start": 859,
+   "end": 886,
+   "text": "IT97A0600941711806439407995",
+   "type": "IBAN",
+   "action": "mask"
+  },
+  {
+   "start": 956,
+   "end": 972,
+   "text": "RNLLNE81A68H501W",
+   "type": "CF",
+   "action": "mask"
+  },
+  {
+   "start": 996,
+   "end": 1011,
+   "text": "Lucia Montanari",
+   "type": "FULLNAME",
+   "action": "mask"
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+<!--meta
+title: home
+-->
+  <div class="status" role="note" aria-label="Stato del progetto">
+    <div class="wrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2 1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z"/></svg>
+      <p><strong>Fase pilota.</strong> Pseudomania è in sperimentazione con 6 utenti e non è ancora pronto per la produzione. Interfacce e configurazione possono cambiare.</p>
+    </div>
+  </div>
+
+  <section class="hero" aria-labelledby="titolo">
+    <div class="wrap">
+      <h1 id="titolo">A Claude arrivano segnaposto, non i dati personali.</h1>
+      <p class="lead">Pseudomania sostituisce nomi, codici fiscali, IBAN, indirizzi e altri dati personali con segnaposto come <span class="ph">[FULLNAME_1]</span> prima che il testo arrivi a Claude, e rimette i valori reali nella risposta, solo nel tuo browser.</p>
+      <p class="honest"><strong>Detto con onestà:</strong> è una misura che riduce il rischio, non una garanzia di anonimizzazione. I dati pseudonimizzati restano dati personali, il riconoscimento automatico può sbagliare e lo strumento funziona solo dentro un insieme di regole e impostazioni.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#personal">Personal edition</a>
+        <a class="btn btn-primary" href="#enterprise">Enterprise edition</a>
+        <a class="btn btn-outline" href="approfondimenti/come-funziona.html">Come funziona</a>
+      </div>
+
+      <div class="tag-demo" aria-label="Esempio di pseudonimizzazione">
+        <div class="row">
+          <span class="lbl">Scrivi</span>
+          <span class="txt">Prepara una risposta a Mario Rossi (CF RSSMRA80A01H501U) sul rimborso di 1.250 € su IBAN IT60X0542811101000000123456.</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Claude riceve</span>
+          <span class="txt">Prepara una risposta a <span class="ph">[FULLNAME_1]</span> (CF <span class="ph">[CF_1]</span>) sul rimborso di <span class="ph">[AMOUNT_1]</span> su IBAN <span class="ph">[IBAN_1]</span>.</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Tu leggi</span>
+          <span class="txt">Gentile Mario Rossi, in merito al rimborso di 1.250 €…</span>
+        </div>
+      </div>
+      <p class="demo-note">Dati di esempio, inventati.</p>
+    </div>
+  </section>

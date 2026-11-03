@@ -1,0 +1,87 @@
+<!--meta
+description: Guida all'uso di Pseudomania: prima di iniziare, scrivere, allegati, Progetti, controllare le risposte, invii bloccati, segnalazioni, cambio PC e come creare un regolamento light o strutturato.
+lead: Una guida pratica per chi usa Pseudomania ogni giorno e per chi deve introdurlo in un ufficio o in uno studio. Il manuale completo, con installazione e configurazione passo per passo, è nella documentazione del repository.
+summary: Uso quotidiano passo per passo, allegati e Progetti, cosa fare con un invio bloccato o un dato sfuggito, cambio di PC, come scrivere un regolamento light o strutturato.
+-->
+<div class="note disclaimer"><p><strong>Responsabilità.</strong> Pseudomania è distribuito senza alcuna garanzia. La responsabilità legale dell'adozione, della configurazione e dell'uso resta <strong>interamente</strong> di chi adotta e usa il sistema. Questa guida non è una consulenza legale. Vedi le <a href="note-legali.html">note legali</a>.</p></div>
+
+<h2 id="prima-di-iniziare">Prima di iniziare</h2>
+<ul class="check-list">
+  <li>Controlla che il badge dell'estensione indichi <strong>ON</strong> su claude.ai (<a href="#attivazione">stati del pulsante</a>).</li>
+  <li>Verifica le impostazioni di Claude: memoria spenta, feedback e connettori disattivati.</li>
+  <li>Leggi il regolamento d'uso della tua organizzazione o, se lavori da solo, scrivi il tuo (<a href="#policy">sotto</a>).</li>
+  <li>Installazione: <a href="personal-edition.html#installazione">Personal edition</a> · <a href="enterprise-edition.html#installazione">Enterprise edition</a>.</li>
+</ul>
+
+<h2 id="attivazione">Attivare la protezione (Personal edition)</h2>
+<ul>
+  <li>Guarda il badge sul pulsante di Pseudomania: <strong>ON</strong> verde = protetta, <strong>OFF</strong> rosso = invii in chiaro, <strong>?</strong> arancione = in attesa della tua scelta, <strong>!</strong> rosso = Rizzo-PII non risponde.</li>
+  <li>Clic sul pulsante o <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd> per cambiare lo stato della conversazione aperta. La scelta vale solo per quella conversazione e viene ricordata.</li>
+  <li>Se compare il banner «Attiva» / «Continua senza protezione» (nuova conversazione dopo averla spenta, o conversazione ripresa che era spenta), scegli: nell'attesa i messaggi sono comunque protetti.</li>
+  <li>Spegnere riguarda solo ciò che invii: i segnaposto già presenti continuano a essere ripristinati. Riattivare non ripulisce ciò che è già partito in chiaro.</li>
+  <li>Nella Enterprise edition non devi fare nulla: la protezione è sempre attiva.</li>
+</ul>
+
+<h2 id="scrivere">Scrivere e inviare</h2>
+<ol>
+  <li>Scrivi come al solito e premi Invio. L'estensione sostituisce il testo con la versione pseudonimizzata e invia.</li>
+  <li>Per testi importanti usa <kbd>Ctrl</kbd>+<kbd>Maiusc</kbd>+<kbd>Invio</kbd>: vedi l'anteprima di ciò che partirà.</li>
+  <li>Togli o generalizza i dettagli che rendono riconoscibile una persona anche senza nome: ruolo unico, data e luogo precisi, fatto noto, numero di pratica.</li>
+  <li>Non chiedere a Claude di spiegare, modificare o «indovinare» i segnaposto.</li>
+</ol>
+
+<h2 id="allegati">Allegati</h2>
+<p>Trascina o seleziona i file come di consueto. PDF, DOCX, XLSX, TXT, MD e CSV vengono pseudonimizzati, nome del file compreso; immagini e altri formati sono bloccati. Nella Personal edition i PDF diventano file di testo. Controlla nel pannello di ispezione il numero di dati protetti: se ti sembra basso per il documento, verifica prima di procedere.</p>
+
+<h2 id="progetti">Progetti</h2>
+<p>Istruzioni e documenti di un progetto vengono pseudonimizzati quando li salvi o li carichi; tutte le chat del progetto usano lo stesso dizionario. Una volta l'anno il pannello ti chiede di <strong>confermare</strong> i progetti ancora in uso: senza conferma, il dizionario scade. Elimina i progetti che non ti servono più.</p>
+
+<h2 id="controllare">Controllare le risposte</h2>
+<ul>
+  <li>I valori ripristinati sono evidenziati in verde; un segnaposto in rosso non è stato riconosciuto (Claude l'ha alterato o inventato): non usarlo.</li>
+  <li>Controlla sempre i nomi: un errore di ripristino è raro ma possibile.</li>
+  <li>Verifica il contenuto prima di usarlo: l'IA può sbagliare su norme, numeri e fatti.</li>
+  <li>Copia con la selezione o con il pulsante «Copia»: i valori reali vengono inclusi. I file generati da Claude sono ripristinati al download.</li>
+</ul>
+
+<h2 id="invio-bloccato">Se l'invio è bloccato</h2>
+<ul>
+  <li><strong>Banner rosso con motivo</strong>: il testo contiene dati sanitari, giudiziari o di altre categorie particolari, oppure un formato non supportato. Riformula senza quei dati; il blocco non si può forzare.</li>
+  <li><strong>Server o servizio non raggiungibile</strong>: nella Enterprise edition attendi o avvisa l'assistenza; nella Personal edition riavvia l'app Rizzo-PII prima di inviare.</li>
+  <li><strong>Pagina non riconosciuta</strong>: claude.ai potrebbe essere cambiato. Non aggirare il blocco con altri browser: segnala il problema.</li>
+</ul>
+
+<h2 id="segnalare">Segnalare errori e incidenti</h2>
+<p>Dal pannello di ispezione puoi segnalare un <strong>dato non riconosciuto</strong> (falso negativo) o un <strong>mascheramento inutile</strong> (falso positivo); la nota viene ripulita dai valori reali noti. Se è partito un dato personale non mascherato: cancella la chat, annota l'accaduto senza ricopiare il dato e avvisa il referente privacy (nella Personal edition valuta tu se si tratta di una violazione da notificare entro 72 ore, art. 33 GDPR).</p>
+
+<h2 id="cambio-pc">Cambio di PC o di browser</h2>
+<p>Su un nuovo PC l'estensione crea una chiave nuova: i segnaposto delle chat precedenti appaiono come «non ripristinabili». Nella Enterprise edition puoi chiedere, con motivazione, il recupero dei dizionari dei <strong>progetti</strong> tramite i custodi. Nella Personal edition non è previsto alcun recupero. Procedura passo per passo: <a href="index.html#recupero-chiavi">recupero delle chiavi</a>.</p>
+
+<h2 id="policy">Creare un regolamento d'uso</h2>
+<div class="grid grid-2">
+  <article class="card">
+    <h3>Versione light (professionisti)</h3>
+    <ol>
+      <li>Parti da <a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-light.md">policy-light.md</a>.</li>
+      <li>Indica titolare, piano di Claude e versione.</li>
+      <li>Adatta l'elenco di cosa fai sempre e cosa non fai mai alla tua attività (segreto professionale, dati dei minori).</li>
+      <li>Fissa le durate del registro locale e la cadenza con cui cancelli chat e progetti.</li>
+      <li>Aggiorna l'informativa ai clienti e conserva le condizioni del fornitore.</li>
+      <li>Rileggi il documento almeno una volta l'anno.</li>
+    </ol>
+  </article>
+  <article class="card">
+    <h3>Versione strutturata (enti)</h3>
+    <ol>
+      <li>Parti da <a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-uso-ia.md">policy-uso-ia.md</a> e dalla <a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/dpia.md">DPIA</a>.</li>
+      <li>Completa i campi <code>[DA DEFINIRE]</code>: ruoli, custodi, durate, regolamento di videosorveglianza di riferimento.</li>
+      <li>Allinea usi consentiti e vietati ai processi dell'ente.</li>
+      <li>Fai validare dal RPD/DPO e porta il testo al confronto sindacale (art. 4).</li>
+      <li>Adotta con atto formale, pubblica internamente, consegna l'informativa (Allegato A).</li>
+      <li>Forma gli utenti e chiudi la <a href="non-solo-software.html#checklist">checklist</a> prima del via.</li>
+    </ol>
+  </article>
+</div>
+
+<h2 id="responsabilita">Chi è responsabile</h2>
+<p>Chi adotta Pseudomania (l'ente come titolare, o il professionista) decide se e come usarlo, configura il servizio di IA, scrive le regole e ne risponde. Chi usa il sistema risponde del rispetto delle regole e del contenuto di ciò che invia. Gli autori del software non forniscono alcuna garanzia né assistenza obbligatoria: <a href="note-legali.html#responsabilita">note legali</a>.</p>

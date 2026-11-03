@@ -1,0 +1,70 @@
+<!--meta
+description: Le misure organizzative che accompagnano Pseudomania: impostazioni di Claude Team, regolamento d'uso light e strutturato, DPIA, accordo sindacale, custodi, esportazione governata, checklist.
+lead: L'estensione riduce i dati che escono, ma la protezione nasce dall'insieme: impostazioni del servizio, regole scritte, valutazione dei rischi, accordi con chi lavora e persone di fiducia per le chiavi. Il repository offre modelli per ciascun pezzo, da adattare.
+summary: Impostazioni consigliate di Claude Team, regolamento d'uso (light e strutturato), DPIA, accordo sindacale, custodi, esportazione governata, checklist degli adempimenti.
+-->
+<p class="note"><strong>Modelli, non consulenza.</strong> I documenti in <code>governance/</code> sono bozze da adattare con il proprio RPD/DPO e i propri consulenti. La responsabilità delle scelte resta interamente di chi adotta il sistema (<a href="note-legali.html">note legali</a>).</p>
+
+<h2 id="impostazioni-claude">Impostazioni di Claude Team</h2>
+<p>Dalla console di amministrazione di Claude Team (o dalle impostazioni personali, per i piani Pro e Max):</p>
+<div class="table-wrap">
+  <table class="stack-table">
+    <caption class="visually-hidden">Impostazioni consigliate di Claude</caption>
+    <thead><tr><th scope="col">Impostazione</th><th scope="col">Scelta</th><th scope="col">Perché</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Memoria</th><td data-label="Scelta">Spenta</td><td data-label="Perché">Evita che un segnaposto passi da una chat all'altra e venga ripristinato con la persona sbagliata (<a href="scelte-di-progetto.html#memoria-spenta">dettagli</a>)</td></tr>
+      <tr><th scope="row">Ricerca web</th><td data-label="Scelta">Attiva, con cautele</td><td data-label="Perché">Utile; regola d'uso e misura nel pilota (<a href="scelte-di-progetto.html#ricerca-web">dettagli</a>)</td></tr>
+      <tr><th scope="row">Feedback («Rate chats»)</th><td data-label="Scelta">Disattivato</td><td data-label="Perché">I feedback sono conservati fino a 5 anni e possono essere usati per l'addestramento</td></tr>
+      <tr><th scope="row">Connettori e richieste di connettori</th><td data-label="Scelta">Disattivati</td><td data-label="Perché">Porterebbero a Claude dati che non passano dall'estensione</td></tr>
+      <tr><th scope="row">Claude in Chrome, modalità vocale</th><td data-label="Scelta">Disattivati</td><td data-label="Perché">Canali non coperti dall'estensione</td></tr>
+      <tr><th scope="row">Condivisione dei progetti</th><td data-label="Scelta">Disattivata</td><td data-label="Perché">Il dizionario è cifrato con la chiave del singolo utente</td></tr>
+      <tr><th scope="row">Primary Owner</th><td data-label="Scelta">Account di custodia</td><td data-label="Perché">Governa l'esportazione dei dati di tutti i membri (<a href="#esportazione-team">sotto</a>)</td></tr>
+      <tr><th scope="row">App desktop e mobile di Claude</th><td data-label="Scelta">Bloccate (MDM, criteri)</td><td data-label="Perché">L'estensione funziona solo in Chrome</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Istruzioni operative: <a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/configurazione.md">docs/configurazione.md</a>.</p>
+
+<h2 id="regolamento">Regolamento d'uso</h2>
+<div class="grid grid-2">
+  <article class="card">
+    <h3>Versione light</h3>
+    <p>Per professionisti e piccole organizzazioni con la Personal edition: otto punti su cosa fare sempre, cosa non fare mai, impostazioni di Claude, conservazione, clienti, incidenti, formazione.</p>
+    <p><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-light.md">governance/policy-light.md</a></p>
+  </article>
+  <article class="card">
+    <h3>Versione strutturata</h3>
+    <p>Per gli enti con la Enterprise edition: usi consentiti e vietati, quasi-identificatori, ruoli, misure tecniche, accesso ai contenuti, conservazione, formazione, incidenti, sanzioni; con informativa ai dipendenti, procedura di cancellazione dei backup e procedura dei custodi.</p>
+    <p><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/policy-uso-ia.md">governance/policy-uso-ia.md</a></p>
+  </article>
+</div>
+<p>Come adattarli: <a href="guida-all-uso.html#policy">Guida all'uso, creare un regolamento</a>.</p>
+
+<h2 id="dpia">Valutazione d'impatto (DPIA)</h2>
+<p>La bozza di DPIA (art. 35 GDPR) descrive il trattamento, i flussi, le durate di conservazione con le fonti, i rischi (falsi negativi, quasi-identificatori, elusione, accesso amministrativo, esportazione, cambi del sito) con probabilità e gravità prima e dopo le misure, e le verifiche preliminari sul fornitore (entità contraente, trasferimenti, sub-responsabili, conservazione delle chat).</p>
+<p><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/dpia.md">governance/dpia.md</a> · verifiche preliminari: <a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/verifiche-fase0.md">governance/verifiche-fase0.md</a></p>
+
+<h2 id="accordo-sindacale">Accordo sindacale (art. 4 Statuto dei lavoratori)</h2>
+<p>Il registro minimo, le tracce di osservabilità e la possibilità di esportare le conversazioni di Claude Team possono consentire un controllo indiretto dell'attività dei dipendenti. Prima di abilitare gli utenti serve l'<strong>accordo con le rappresentanze sindacali</strong> o, in mancanza, l'<strong>autorizzazione dell'Ispettorato nazionale del lavoro</strong> (art. 4, c. 1, L. 300/1970), che copra registro (90 giorni), tracce, esportazione tramite l'account di custodia e procedura dei custodi; e un'informativa adeguata (c. 3 e art. 13 GDPR). Le ragioni sono in <a href="scelte-di-progetto.html#art-4">Scelte di progetto</a>.</p>
+
+<h2 id="custodi">Custodi</h2>
+<ul>
+  <li>Almeno <strong>tre custodi</strong> designati dal titolare, distinti dagli amministratori di sistema.</li>
+  <li>Ciascuno conserva una quota della chiave privata di custodia (Shamir 2 di 3), generata offline con <code>tools/custodi/</code>; la chiave non è mai sul server.</li>
+  <li>Intervengono solo su <strong>richiesta scritta dell'autorità giudiziaria</strong> o per il recupero dei progetti dopo un cambio di PC; sempre in due, sempre con verbale.</li>
+  <li>Verifica annuale delle quote; ridistribuzione se un custode cambia.</li>
+</ul>
+<p>Procedura completa: regolamento strutturato, Allegato C.</p>
+
+<h2 id="esportazione-team">Esportazione di Claude Team governata</h2>
+<p>Sul piano Team il <em>Primary Owner</em> può esportare le conversazioni di tutti i membri. Per evitare che diventi un canale di controllo:</p>
+<ol>
+  <li>il ruolo di Primary Owner è affidato a un <strong>account di servizio</strong> di custodia, non usato per l'amministrazione ordinaria;</li>
+  <li>la password è conservata da un custode, il secondo fattore (MFA) da un altro;</li>
+  <li>l'esportazione si fa solo su richiesta dell'autorità giudiziaria; si estrae <strong>solo la parte richiesta</strong> e il resto viene distrutto con verbale;</li>
+  <li>l'autenticità dei messaggi estratti si verifica con le impronte SHA-256 del registro minimo.</li>
+</ol>
+
+<h2 id="checklist">Checklist degli adempimenti</h2>
+<p>L'elenco delle voci da chiudere prima di abilitare gli utenti, con riferimenti e responsabili: DPIA e registro dei trattamenti, accordo con il fornitore e trasferimenti, accordo sindacale, informativa, designazioni, formazione, configurazione tecnica verificata, test di rilevamento sul corpus dell'ente, procedure di accesso e di violazione dei dati.</p>
+<p><a href="https://github.com/StatoCritico/pseudomania/blob/main/governance/checklist-adempimenti.md">governance/checklist-adempimenti.md</a> · prove tecniche prima del go-live: <a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/verifica-pilota.md">docs/verifica-pilota.md</a></p>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informativa privacy dell&#x27;estensione – Pseudomania</title>
+<meta name="description" content="Informativa sul trattamento dei dati dell&#x27;estensione Chrome Pseudomania (Personal ed Enterprise edition): quali dati tratta, dove li invia, cosa riceve claude.ai.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0059b3">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://pseudomania.statocritico.it/privacy.html">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/theme-init.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#contenuto">Vai al contenuto principale</a>
+<div class="slim-header">
+  <div class="wrap">
+    <span>Software libero · AGPL-3.0 · riuso per la PA</span>
+    <a href="https://github.com/StatoCritico/pseudomania">Codice sorgente</a>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html" aria-label="Pseudomania, pagina principale">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="12" fill="#0059b3"/><path d="M22 14h-8v36h8M42 14h8v36h-8" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><rect x="25" y="29" width="14" height="6" rx="2" fill="#fff"/></svg>
+      <span>
+        <span class="brand-name">Pseudomania</span>
+        <span class="brand-tag">Pseudonimizzazione per l'IA generativa</span>
+      </span>
+    </a>
+    <div class="header-tools">
+      <button type="button" class="btn-icon" id="theme-toggle" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg><span class="theme-label">Tema scuro</span></button>
+      <button type="button" class="btn-icon menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="main-nav"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg><span>Menu</span></button>
+    </div>
+  </div>
+  <nav class="main-nav" id="main-nav" aria-label="Menu principale">
+    <div class="wrap">
+      <ul>
+        <li><a href="index.html#problema">Il problema</a></li>
+        <li><a href="index.html#soluzione">La soluzione</a></li>
+        <li><a href="index.html#non-solo-software">Non solo software</a></li>
+        <li><a href="index.html#personal">Personal edition</a></li>
+        <li><a href="index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="approfondimenti/index.html">Approfondimenti</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<main id="contenuto" tabindex="-1">
+  <section class="hero" aria-labelledby="titolo">
+    <div class="wrap prose">
+      <span class="eyebrow">Informativa privacy</span>
+      <h1 id="titolo">Come l'estensione Pseudomania tratta i dati</h1>
+      <p class="lead">L'estensione invia ciò che scrivi su claude.ai <strong>solo</strong> al servizio di rilevamento configurato: l'app Rizzo-PII sul tuo PC (Personal edition) o il server interno del tuo ente (Enterprise edition). Gli sviluppatori di Pseudomania non ricevono nulla: nessuna statistica, nessuna telemetria, nessun tracciamento.</p>
+      <p class="meta-note">Versione [1.0] del [GG/MM/AAAA]. Nella Enterprise edition questa pagina integra, e non sostituisce, l'informativa che l'ente fornisce ai dipendenti ai sensi dell'art. 13 GDPR.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-titolare">
+    <div class="wrap prose">
+      <h2 id="h-titolare">1. Chi tratta i dati</h2>
+      <div class="grid grid-2">
+        <article class="card accent">
+          <h3>Personal edition</h3>
+          <p>Il rilevamento avviene sul tuo computer, con l'app Rizzo-PII all'indirizzo <code>127.0.0.1:5005</code>; dizionario e registro restano nel browser. Nessun altro, sviluppatori compresi, ha accesso ai dati. Se usi Pseudomania per il tuo lavoro, sei tu il titolare dei dati dei tuoi clienti.</p>
+        </article>
+        <article class="card accent">
+          <h3>Enterprise edition</h3>
+          <p>Titolare del trattamento è l'ente che ha installato l'estensione:</p>
+          <p>I dati di contatto del titolare e del responsabile della protezione dei dati (RPD/DPO) sono nell'informativa che l'ente consegna agli utenti.</p>
+          <p>Il server è gestito dall'ente nella propria rete interna.</p>
+        </article>
+      </div>
+      <p class="note"><strong>Gli sviluppatori di Pseudomania</strong> pubblicano il software e non gestiscono alcun server. Non ricevono, non vedono e non conservano alcun dato degli utenti dell'estensione.</p>
+    </div>
+  </section>
+
+  <section class="alt" aria-labelledby="h-dati">
+    <div class="wrap prose">
+      <h2 id="h-dati">2. Quali dati tratta l'estensione e perché</h2>
+      <p>L'estensione funziona solo sulle pagine di <code>claude.ai</code>. Su tutti gli altri siti non legge nulla.</p>
+      <div class="table-wrap">
+        <table class="stack-table">
+          <caption class="visually-hidden">Dati trattati dall'estensione, finalità e destinazione</caption>
+          <thead><tr><th scope="col">Dato</th><th scope="col">Perché</th><th scope="col">Dove va</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Testo che invii: messaggi, modifiche, istruzioni di progetto</th><td data-label="Perché">Riconoscere i dati personali e sostituirli con segnaposto prima dell'invio</td><td data-label="Dove va">App Rizzo-PII sul PC (Personal) o server dell'ente (Enterprise)</td></tr>
+            <tr><th scope="row">Allegati e documenti di progetto (PDF, DOCX, XLSX, TXT, MD, CSV)</th><td data-label="Perché">Pseudonimizzare anche il contenuto dei file</td><td data-label="Dove va">Come sopra; nella Personal edition DOCX e XLSX sono elaborati nel browser</td></tr>
+            <tr><th scope="row">Dizionario dei segnaposto (es. <span class="ph">[FULLNAME_1]</span> → nome reale)</th><td data-label="Perché">Ripristinare i valori reali nelle risposte</td><td data-label="Dove va">Cifrato nel browser con una chiave non estraibile. Personal: resta nel browser. Enterprise: conservato cifrato sul server, con una copia di custodia della chiave apribile solo da due custodi</td></tr>
+            <tr><th scope="row">Identificativo della conversazione o del progetto</th><td data-label="Perché">Usare lo stesso segnaposto per lo stesso dato nella stessa chat o progetto</td><td data-label="Dove va">Browser; server dell'ente (Enterprise)</td></tr>
+            <tr><th scope="row">Risposte di Claude</th><td data-label="Perché">Ripristino locale; nella Enterprise edition la versione con segnaposto è tracciata per misurare il rilevamento</td><td data-label="Dove va">Elaborate nel browser; versione con segnaposto al server dell'ente (Enterprise)</td></tr>
+            <tr><th scope="row">Registro delle azioni</th><td data-label="Perché">Sicurezza e verifica del funzionamento; senza testi, con pseudonimo dell'utente, conteggi e impronta SHA-256 del testo inviato</td><td data-label="Dove va">Browser (Personal) o server dell'ente (Enterprise)</td></tr>
+            <tr><th scope="row">Credenziali (solo Enterprise)</th><td data-label="Perché">Autenticarsi al server con l'accesso unico (SSO) dell'ente</td><td data-label="Dove va">Server dell'ente; conservate nel browser</td></tr>
+            <tr><th scope="row">Impostazioni dell'estensione</th><td data-label="Perché">Funzionamento</td><td data-label="Dove va">Solo nel browser</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="after-table">L'estensione non usa il microfono (la dettatura è disattivata), non legge la cronologia di navigazione, non inserisce pubblicità e non esegue codice scaricato da Internet.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-destinatari">
+    <div class="wrap prose">
+      <h2 id="h-destinatari">3. A chi vengono inviati i dati</h2>
+      <ul class="check-list">
+        <li><strong>Personal edition</strong>: solo all'app Rizzo-PII sul tuo computer (<code>http://127.0.0.1:5005</code>). Nessun server esterno.</li>
+        <li><strong>Enterprise edition</strong>: solo al server dell'ente indicato dalle policy di Chrome (es. <code>https://pseudogate.ente.local</code>), che l'utente non può cambiare. Il server vede il testo durante la singola richiesta per riconoscere i dati, non conserva testi né valori in chiaro e non può decifrare i dizionari.</li>
+        <li><strong>Nessun invio agli sviluppatori</strong>, a servizi di statistica, a reti pubblicitarie o ad altri terzi. I dati non sono venduti né usati per altre finalità.</li>
+      </ul>
+      <p>Nella Enterprise edition i contenuti delle conversazioni possono essere recuperati, tramite l'esportazione di Claude Team e la procedura dei custodi, solo su richiesta scritta dell'autorità giudiziaria.</p>
+    </div>
+  </section>
+
+  <section class="alt" aria-labelledby="h-claude">
+    <div class="wrap prose">
+      <h2 id="h-claude">4. Che cosa riceve claude.ai</h2>
+      <p>claude.ai (Anthropic) riceve il <strong>testo e i file pseudonimizzati</strong>, con i dati personali riconosciuti sostituiti da segnaposto. Questo invio avviene perché sei tu a usare Claude ed è regolato dal contratto con Anthropic (dell'ente o del tuo piano personale), non da Pseudomania.</p>
+      <ul class="x-list">
+        <li>I dati che il riconoscimento non individua arrivano a Claude così come sono; anche il contesto può rendere identificabile una persona.</li>
+        <li>Il testo che digiti sta nella casella di claude.ai fino all'invio, quando l'estensione lo sostituisce; le funzioni della pagina (es. salvataggio delle bozze) sono fuori dal controllo dell'estensione.</li>
+        <li>Con la ricerca web attiva, Claude invia richieste a un motore di ricerca partendo dal testo pseudonimizzato.</li>
+        <li>I dati pseudonimizzati restano dati personali ai sensi del GDPR.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-conservazione">
+    <div class="wrap prose">
+      <h2 id="h-conservazione">5. Per quanto tempo</h2>
+      <ul>
+        <li><strong>Dizionari delle chat</strong>: 30 giorni dall'ultimo uso.</li>
+        <li><strong>Dizionari dei progetti</strong>: Personal, finché non li elimini; Enterprise, durata del progetto più 30 giorni dall'ultimo uso, con conferma annuale.</li>
+        <li><strong>Registro (Enterprise)</strong>: 90 giorni in forma pseudonima, poi solo conteggi anonimi. Tracce di osservabilità: 30 giorni nel pilota, poi 7. Durate complete: <a href="approfondimenti/scelte-di-progetto.html#tabella-conservazione">tabella di conservazione</a>.</li>
+        <li>Puoi cancellare in anticipo i dati di una conversazione o di un progetto dal pannello dell'estensione.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="alt" aria-labelledby="h-diritti">
+    <div class="wrap prose">
+      <h2 id="h-diritti">6. I tuoi diritti</h2>
+      <p>Nella Enterprise edition puoi esercitare i diritti previsti dagli artt. 15-22 GDPR scrivendo al titolare o al DPO (sezione 1) e proporre reclamo al Garante per la protezione dei dati personali (<a href="https://www.garanteprivacy.it/">garanteprivacy.it</a>). Base giuridica, destinatari e trasferimenti sono indicati nell'informativa ai dipendenti dell'ente: [link all'informativa dell'ente].</p>
+      <p>Nella Personal edition i dati restano sul tuo PC: puoi cancellarli in qualsiasi momento dal pannello o disinstallando l'estensione.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-modifiche">
+    <div class="wrap prose">
+      <h2 id="h-modifiche">7. Codice sorgente e modifiche</h2>
+      <p>Il funzionamento descritto è verificabile nel codice sorgente, pubblicato con licenza AGPL-3.0-or-later: <a href="https://github.com/StatoCritico/pseudomania">github.com/StatoCritico/pseudomania</a>. Le modifiche a questa informativa sono pubblicate su questa pagina, con data e versione aggiornate.</p>
+      <p><a class="btn btn-outline" href="index.html">Torna alla pagina principale</a></p>
+    </div>
+  </section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h2>Pseudomania</h2>
+        <p>Software libero per pseudonimizzare ciò che si invia a Claude. Progettato per il riuso gratuito da parte delle pubbliche amministrazioni italiane e utilizzabile dai professionisti.</p>
+        <p class="small">Copyright © 2026 gli autori di Pseudomania. Questo programma è software libero: puoi ridistribuirlo e/o modificarlo secondo i termini della <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License</a>, versione 3 o (a tua scelta) successiva. È distribuito <strong>senza alcuna garanzia</strong>; la responsabilità dell'adozione e dell'uso resta interamente di chi lo adotta e lo usa (<a href="approfondimenti/note-legali.html">note legali</a>).</p>
+      </div>
+      <div>
+        <h2>Approfondimenti</h2>
+        <ul>
+          <li><a href="approfondimenti/index.html">Indice degli approfondimenti</a></li>
+          <li><a href="approfondimenti/faq.html">Domande frequenti</a></li>
+          <li><a href="approfondimenti/guida-all-uso.html">Guida all'uso</a></li>
+          <li><a href="approfondimenti/scelte-di-progetto.html">Scelte di progetto</a></li>
+          <li><a href="approfondimenti/strumenti-e-download.html">Strumenti e download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Riuso e note legali</h2>
+        <ul>
+          <li><a href="https://github.com/StatoCritico/pseudomania">Repository del codice</a></li>
+          <li><a href="approfondimenti/licenza-e-crediti.html">Licenza e crediti</a></li>
+          <li><a href="approfondimenti/note-legali.html">Note legali e disclaimer</a></li>
+          <li><a href="privacy.html">Informativa privacy dell'estensione</a></li>
+          <li><a href="https://github.com/StatoCritico/pseudomania/issues">Segnalazioni e proposte</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Questo sito non usa cookie né strumenti di tracciamento e non carica risorse da terzi. La sola preferenza di tema, se la scegli, resta nel tuo browser.</p>
+    </div>
+  </div>
+</footer>
+<p id="annuncio" class="visually-hidden" role="status" aria-live="polite"></p>
+<script src="assets/main.js"></script>
+</body>
+</html>

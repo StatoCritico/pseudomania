@@ -1,0 +1,17 @@
+# segreti e dati locali: mai nel repository
+.env
+secrets/
+certs/*
+!certs/.gitkeep
+ca/*
+!ca/.gitkeep
+config/*
+!config/.gitkeep
+estensione/*
+!estensione/.gitkeep
+custodia/*
+!custodia/.gitkeep
+registro/*
+!registro/.gitkeep
+esportazioni/*
+!esportazioni/.gitkeep

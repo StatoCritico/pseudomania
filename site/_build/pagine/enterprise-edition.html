@@ -1,0 +1,67 @@
+<!--meta
+description: Pseudomania Enterprise edition per gli enti: server su VM interna, estensione gestita da policy di Chrome, SSO, cifratura lato client con custodi, Langfuse, conservazione documentata.
+lead: La Enterprise edition è pensata per le amministrazioni che hanno adottato Claude Team: un server nella rete interna, l'estensione installata e configurata dalle policy di Chrome, chiavi con custodi e un'osservabilità minima, documentata.
+summary: Architettura e servizi, requisiti, installazione, estensione gestita, SSO, chiavi e custodi, Langfuse, conservazione e verifica prima del go-live.
+-->
+<h2 id="architettura">Architettura</h2>
+<p>Lo stack gira con Docker Compose su una VM della rete interna. Solo il reverse proxy è esposto; Rizzo-PII non ha accesso a Internet.</p>
+<div class="table-wrap">
+  <table class="stack-table">
+    <caption class="visually-hidden">Servizi della Enterprise edition</caption>
+    <thead><tr><th scope="col">Servizio</th><th scope="col">Ruolo</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Caddy</th><td data-label="Ruolo">TLS con il certificato dell'ente, unico punto esposto; distribuisce anche il pacchetto dell'estensione</td></tr>
+      <tr><th scope="row">API Pseudomania (FastAPI)</th><td data-label="Ruolo">Pseudonimizzazione di testi e file, dizionario cifrato, registro minimo</td></tr>
+      <tr><th scope="row">Rizzo-PII</th><td data-label="Ruolo">Riconoscimento dei dati personali, senza rete esterna</td></tr>
+      <tr><th scope="row">PostgreSQL</th><td data-label="Ruolo">Database applicativo: voci cifrate, registro minimo, registri tecnici</td></tr>
+      <tr><th scope="row">PostgreSQL (key store)</th><td data-label="Ruolo">Database separato delle copie di custodia, con volume, rete e backup propri</td></tr>
+      <tr><th scope="row">OpenBao</th><td data-label="Ruolo">Solo la chiave HMAC che assegna lo stesso segnaposto allo stesso valore, e i segreti</td></tr>
+      <tr><th scope="row">Langfuse (facoltativo)</th><td data-label="Ruolo">Osservabilità; con ClickHouse, Valkey e SeaweedFS, oppure un Langfuse già presente nell'ente</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 id="requisiti">Requisiti</h2>
+<ul>
+  <li>Abbonamento <strong>Claude Team</strong> per gli utenti.</li>
+  <li>VM Ubuntu Server 24.04 o Debian 12 con Docker Engine (o Podman) e Compose. Stima per il pilota (6 utenti): 8 vCPU, 16 GB di RAM (24 consigliati), 100 GB SSD, nessuna GPU.</li>
+  <li>Nome DNS interno e certificato TLS dell'ente (es. <code>pseudogate.ente.local</code>).</li>
+  <li>Identity provider OIDC (es. Microsoft Entra ID, Keycloak) e accesso condizionato.</li>
+  <li>Chrome gestito centralmente (Google Admin, criteri di gruppo, Intune).</li>
+  <li>Almeno tre custodi designati e una postazione offline per le loro operazioni.</li>
+</ul>
+
+<h2 id="installazione">Installazione</h2>
+<ol>
+  <li>Prepara la VM, DNS e certificati; scarica il codice e costruisci le immagini (anche offline).</li>
+  <li>Genera la coppia di custodia offline con <code>tools/custodi/</code> e distribuisci le quote ai custodi; pubblica la chiave pubblica nella configurazione.</li>
+  <li>Configura i segreti in <code>.env</code>, avvia i servizi nell'ordine indicato e inizializza OpenBao.</li>
+  <li>Configura Claude Team, l'identity provider e le policy di Chrome.</li>
+  <li>Supera le prove della verifica del pilota prima di abilitare gli utenti.</li>
+</ol>
+<p>Guide: <a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md">installazione</a> · <a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/configurazione.md">configurazione</a> · <a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/README.md">indice della documentazione</a>.</p>
+
+<h2 id="estensione-policy">Estensione gestita da policy</h2>
+<p>L'estensione è installata in modo forzato (<code>ExtensionInstallForcelist</code> o <code>ExtensionSettings</code>) e riceve la configurazione dalla policy: <code>serverUrl</code>, <code>oidcIssuer</code>, <code>oidcClientId</code>, <code>failClosed</code> (predefinito: sì), <code>allowDisable</code> (predefinito: no). Questi due valori si leggono <strong>solo</strong> dalla policy: il server non può indebolirli. L'utente non può rimuovere né disattivare l'estensione: la protezione è attiva in ogni conversazione e il pulsante nella barra degli strumenti è bloccato su acceso; se il server non risponde o la pagina di claude.ai non è riconosciuta, l'invio si blocca.</p>
+
+<h2 id="sso">SSO e accesso condizionato</h2>
+<p>L'estensione ottiene un token dall'identity provider dell'ente (flusso <em>authorization code</em> con PKCE); il server lo verifica e ricava uno <strong>pseudonimo</strong> dell'utente con una chiave HMAC, senza salvare l'identità. Per claude.ai si usa l'SSO di Claude Team con accesso condizionato, e il proxy aziendale consente claude.ai solo dal Chrome gestito.</p>
+
+<h2 id="chiavi-custodi">Chiavi e custodi</h2>
+<ul>
+  <li>Ogni utente ha una chiave AES-GCM-256 generata nel browser, <strong>non estraibile</strong>; i valori del dizionario sono cifrati lì.</li>
+  <li>Una copia di custodia della chiave è cifrata con la chiave pubblica RSA-4096 dei custodi e conservata nel key store separato.</li>
+  <li>La chiave privata dei custodi è divisa in quote (Shamir 2 di 3) e non è mai sul server.</li>
+  <li>Rotazione automatica ogni 90 giorni; rotazione forzata in caso di sospetta esposizione.</li>
+  <li>Cambio PC: chat non recuperabili; progetti recuperabili su richiesta motivata tramite due custodi.</li>
+</ul>
+<p>Le ragioni di ogni scelta: <a href="scelte-di-progetto.html#cifratura-lato-client">Cifratura e chiavi</a>.</p>
+
+<h2 id="langfuse">Osservabilità con Langfuse</h2>
+<p>Per ogni invio una traccia con il testo pseudonimizzato, i conteggi delle entità e la latenza, associata allo pseudonimo dell'utente: serve a misurare il rilevamento (falsi negativi e positivi segnalati, segnaposto alterati). Può essere un progetto dedicato su un Langfuse già usato dall'ente. Le tracce sono cancellate dopo 30 giorni durante il pilota e 7 giorni dopo, con un job di Pseudomania (la conservazione automatica di Langfuse self-hosted è a pagamento). Langfuse è facoltativo.</p>
+
+<h2 id="conservazione">Conservazione</h2>
+<p>Ogni dato ha una durata motivata con fonti (Garante, EDPB, NIST, ACN): dizionari delle chat 30 giorni dall'ultimo uso, registro minimo 90 giorni e poi solo aggregati anonimi, backup al massimo 35 giorni, key store 14 giorni, registri degli amministratori 24 mesi. La tabella completa è nelle <a href="scelte-di-progetto.html#tabella-conservazione">scelte di progetto</a>; la cancellazione dai backup avviene distruggendo le chiavi (<a href="scelte-di-progetto.html#crypto-shredding">crypto-shredding</a>).</p>
+
+<h2 id="verifica-pilota">Verifica prima del go-live</h2>
+<p>Prima di abilitare gli utenti: prove tecniche (<a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/verifica-pilota.md">docs/verifica-pilota.md</a>), test di rilevamento su un corpus di documenti dell'ente (il repository include un corpus sintetico in <code>collaudo/</code>) e chiusura della <a href="non-solo-software.html#checklist">checklist degli adempimenti</a>.</p>

@@ -1,0 +1,84 @@
+{
+ "id": "xlsx3_anagrafe_fornitori",
+ "format": "xlsx",
+ "file": "xlsx/xlsx3_anagrafe_fornitori.xlsx",
+ "expected": "pseudonymize",
+ "values": [
+  {
+   "text": "26785750501",
+   "type": "PIVA",
+   "action": "mask",
+   "where": "colonna B"
+  },
+  {
+   "text": "Giuseppe Lombardo",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "edilverde@pec.example.it",
+   "type": "EMAIL",
+   "action": "mask",
+   "where": "colonna D"
+  },
+  {
+   "text": "+39 02 5550101",
+   "type": "TELEPHONENUM",
+   "action": "mask",
+   "where": "colonna E"
+  },
+  {
+   "text": "IT06M0719397993882012985032",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "colonna F"
+  },
+  {
+   "text": "Edilverde S.r.l.",
+   "type": "ORG",
+   "action": "ignore",
+   "where": "colonna A"
+  },
+  {
+   "text": "56518420064",
+   "type": "PIVA",
+   "action": "mask",
+   "where": "colonna B"
+  },
+  {
+   "text": "Marco De Santis",
+   "type": "FULLNAME",
+   "action": "mask",
+   "where": "colonna C"
+  },
+  {
+   "text": "studioalfa@pec.example.it",
+   "type": "EMAIL",
+   "action": "mask",
+   "where": "colonna D"
+  },
+  {
+   "text": "+39 06 5550202",
+   "type": "TELEPHONENUM",
+   "action": "mask",
+   "where": "colonna E"
+  },
+  {
+   "text": "IT56J0492623900464036650353",
+   "type": "IBAN",
+   "action": "mask",
+   "where": "colonna F"
+  },
+  {
+   "text": "Studio Tecnico Alfa",
+   "type": "ORG",
+   "action": "ignore",
+   "where": "colonna A"
+  }
+ ],
+ "formulas": {
+  "H2": "=G2*0.22",
+  "H3": "=G3*0.22"
+ }
+}

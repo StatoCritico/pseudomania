@@ -1,0 +1,99 @@
+<!--meta
+description: Domande frequenti su Pseudomania: dati visti da Claude, chatbot supportati, abbonamento, memoria, ricerca web, allegati, registro, custodi, edizioni, GDPR, riuso.
+lead: Le risposte brevi alle domande più comuni. Per le ragioni dietro ogni scelta vedi le scelte di progetto.
+summary: Risposte brevi su dati, uso, edizioni, conformità e riuso.
+-->
+<div class="acc-tools"><button type="button" class="btn-small" data-acc="open">Apri tutte le risposte</button><button type="button" class="btn-small" data-acc="close">Chiudi tutte</button></div>
+
+<h2 id="faq-generale">In generale</h2>
+<details class="acc" id="faq-claude-vede">
+  <summary>Claude vede i dati reali?</summary>
+  <div class="acc-body"><p>Per i dati che Pseudomania riconosce, no: Claude riceve segnaposto come <span class="ph">[FULLNAME_1]</span> e il dizionario che li collega ai valori reali è cifrato con una chiave che resta nel tuo browser. I dati non riconosciuti passano così come sono, e il contesto può comunque rendere identificabile una persona.</p></div>
+</details>
+<details class="acc" id="faq-chatbot">
+  <summary>Funziona con altri chatbot?</summary>
+  <div class="acc-body"><p>Oggi solo con <strong>Claude</strong> su claude.ai, in Chrome. Il supporto a <strong>ChatGPT</strong> è pianificato per una fase successiva e chiunque può aggiungere altri siti (<a href="#faq-altri-siti">come</a>). App desktop e mobili non sono coperte.</p></div>
+</details>
+<details class="acc" id="faq-altri-siti">
+  <summary>Perché solo Chrome e claude.ai? Posso usarlo con ChatGPT o un altro browser?</summary>
+  <div class="acc-body">
+    <p>Pseudomania supporta Chrome e claude.ai perché sono gli strumenti che usa chi l'ha scritto. Il codice però isola tutto ciò che è specifico del sito in un solo modulo adattatore (<code>extension/src/sites/claude.js</code>, registrato in <code>registry.js</code>): per aggiungere un altro chatbot, per esempio ChatGPT, basta scrivere un adattatore con la stessa interfaccia. Anche il porting ad altri browser basati su Chromium (Edge, Brave…) è in gran parte diretto.</p>
+    <p>Chiunque può farlo, secondo la licenza AGPL; i contributi al progetto sono benvenuti. Firefox richiederebbe adattamenti (pannello laterale, configurazione gestita dalle policy).</p>
+  </div>
+</details>
+<details class="acc" id="faq-abbonamento">
+  <summary>Serve un abbonamento?</summary>
+  <div class="acc-body"><p>Pseudomania è gratuito. Serve un account claude.ai: la Enterprise edition è pensata per <strong>Claude Team</strong>; la Personal edition funziona anche con Pro e Max. Verifica le condizioni del tuo piano, in particolare sull'uso dei dati per l'addestramento.</p></div>
+</details>
+<details class="acc" id="faq-anonimizza">
+  <summary>Pseudomania anonimizza i dati?</summary>
+  <div class="acc-body"><p>No. Li pseudonimizza: i dati pseudonimizzati restano dati personali (considerando 26 GDPR). È una misura di riduzione del rischio, non una garanzia.</p></div>
+</details>
+
+<h2 id="faq-dati">Dati e sicurezza</h2>
+<details class="acc" id="faq-memoria">
+  <summary>Perché devo spegnere la memoria di Claude?</summary>
+  <div class="acc-body"><p>Perché i segnaposto sono numerati per chat: un <span class="ph">[FULLNAME_1]</span> ricordato da un'altra conversazione verrebbe ripristinato con il nome sbagliato. <a href="scelte-di-progetto.html#memoria-spenta">Dettagli</a>.</p></div>
+</details>
+<details class="acc" id="faq-ricerca">
+  <summary>La ricerca web è sicura?</summary>
+  <div class="acc-body"><p>Claude compone le ricerche dal testo pseudonimizzato, quindi di norma senza dati reali. Un dato sfuggito al rilevamento può però finire nella richiesta al motore di ricerca: per questo il regolamento chiede di non usare la ricerca con testi che contengono dati personali. <a href="scelte-di-progetto.html#ricerca-web">Dettagli</a>.</p></div>
+</details>
+<details class="acc" id="faq-sanitari">
+  <summary>Che cosa succede se scrivo dati sanitari o giudiziari?</summary>
+  <div class="acc-body"><p>Se vengono riconosciuti, l'invio è bloccato con un messaggio che spiega il motivo, e non si può forzare. Il riconoscimento può sbagliare: il regolamento vieta comunque di inserirli.</p></div>
+</details>
+<details class="acc" id="faq-server">
+  <summary>Che cosa succede se il server o l'app Rizzo-PII non risponde?</summary>
+  <div class="acc-body"><p>Nella Enterprise edition l'invio si blocca finché il server non torna disponibile. Nella Personal edition ricevi un avviso e devi confermare esplicitamente se inviare senza protezione.</p></div>
+</details>
+<details class="acc" id="faq-admin">
+  <summary>L'amministratore del server può leggere i miei dati?</summary>
+  <div class="acc-body"><p>Non può decifrare i dizionari, che sono cifrati nel browser con la tua chiave. Durante la singola richiesta il server vede il testo per riconoscere i dati: un amministratore che manomettesse il servizio potrebbe intercettare le richieste future. È un rischio dichiarato, contrastato con designazioni, registri inalterabili e verifiche. <a href="scelte-di-progetto.html#rischi-residui">Rischi residui</a>.</p></div>
+</details>
+<details class="acc" id="faq-registro">
+  <summary>Chi può leggere le mie conversazioni o il registro?</summary>
+  <div class="acc-body"><p>Il registro non contiene testi, solo pseudonimo, conteggi e impronte. I contenuti delle conversazioni possono essere recuperati, tramite l'esportazione di Claude Team e due custodi, <strong>solo su richiesta scritta dell'autorità giudiziaria</strong>, con verbale. Nessun dirigente può chiederli.</p></div>
+</details>
+<details class="acc" id="faq-durata">
+  <summary>Quanto dura il dizionario?</summary>
+  <div class="acc-body"><p>Chat: 30 giorni dall'ultimo uso. Progetti: per tutta la durata del progetto più 30 giorni dall'ultimo uso, con conferma annuale nella Enterprise edition; nella Personal edition finché non li elimini. Puoi cancellare prima dal pannello.</p></div>
+</details>
+
+<h2 id="faq-uso">Uso</h2>
+<details class="acc" id="faq-allegati">
+  <summary>Quali allegati sono supportati?</summary>
+  <div class="acc-body"><p>PDF, DOCX, XLSX, TXT, Markdown e CSV, come allegati o documenti di progetto. Le immagini e gli altri formati sono bloccati. Nella Personal edition i PDF vengono inviati come testo.</p></div>
+</details>
+<details class="acc" id="faq-progetti">
+  <summary>Funziona con i Progetti di Claude?</summary>
+  <div class="acc-body"><p>Sì: istruzioni e documenti sono pseudonimizzati e le chat del progetto condividono il dizionario. La condivisione dei progetti tra utenti è disattivata.</p></div>
+</details>
+<details class="acc" id="faq-disattivare">
+  <summary>Posso disattivarlo?</summary>
+  <div class="acc-body"><p>Nella Enterprise edition no: la protezione è sempre attiva e il pulsante è bloccato dalla policy. Nella Personal edition sì, per singola conversazione, con un clic sul pulsante o <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd>; lo spegnimento riguarda solo ciò che invii, il ripristino dei segnaposto resta attivo. <a href="personal-edition.html#attivazione">Dettagli</a>.</p></div>
+</details>
+<details class="acc" id="faq-cambio-pc">
+  <summary>Ho cambiato PC: perché vedo segnaposto non ripristinabili?</summary>
+  <div class="acc-body"><p>Perché la chiave che cifra il dizionario resta nel browser del vecchio PC. Le chat non si recuperano; nella Enterprise edition i progetti sì, su richiesta motivata, tramite i custodi.</p></div>
+</details>
+
+<h2 id="faq-enti">Enti e conformità</h2>
+<details class="acc" id="faq-gdpr">
+  <summary>Basta Pseudomania per essere in regola con il GDPR?</summary>
+  <div class="acc-body"><p>No. Servono anche DPIA, accordo con il fornitore, regolamento, informativa, formazione e, per i dipendenti, l'accordo sindacale o l'autorizzazione previsti dall'art. 4 dello Statuto dei lavoratori. Vedi <a href="non-solo-software.html">Non solo software</a>.</p></div>
+</details>
+<details class="acc" id="faq-edizioni">
+  <summary>Che differenza c'è tra Personal ed Enterprise edition?</summary>
+  <div class="acc-body"><p>La Personal è solo l'estensione con l'app Rizzo-PII sul PC, volontaria e senza server. La Enterprise aggiunge un server nella rete dell'ente, installazione forzata, SSO, custodi, registro minimo e Langfuse. <a href="scelte-di-progetto.html#due-edizioni">Perché due edizioni</a>.</p></div>
+</details>
+
+<h2 id="faq-licenza">Licenza e riuso</h2>
+<details class="acc" id="faq-riuso">
+  <summary>Il mio ente può riusarlo?</summary>
+  <div class="acc-body"><p>Sì, gratuitamente: il codice è pubblicato con licenza AGPL-3.0-or-later per il riuso da parte delle pubbliche amministrazioni (artt. 68-69 CAD). Le modifiche vanno rese disponibili alle stesse condizioni. <a href="licenza-e-crediti.html">Licenza e crediti</a>.</p></div>
+</details>
+<details class="acc" id="faq-garanzia">
+  <summary>Chi risponde se qualcosa va storto?</summary>
+  <div class="acc-body"><p>Chi adotta e usa il sistema. Il software è fornito senza alcuna garanzia (AGPL, sezioni 15 e 16). <a href="note-legali.html">Note legali</a>.</p></div>
+</details>

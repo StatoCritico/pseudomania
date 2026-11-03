@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Sito Langfuse su questa VM (importato dal Caddyfile con CADDY_LANGFUSE_SITE=on).
+https://{$LANGFUSE_DOMAIN} {
+	tls {$TLS_CERT_LANGFUSE} {$TLS_KEY_LANGFUSE}
+	import sicurezza
+
+	request_body {
+		max_size 50MB
+	}
+
+	reverse_proxy langfuse-web:3000
+
+	# Facoltativo: limitare l'accesso alla rete degli amministratori
+	# @esterni not remote_ip 10.0.0.0/8
+	# respond @esterni 403
+}
