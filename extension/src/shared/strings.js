@@ -56,6 +56,7 @@
 
     // Banner di blocco
     bloccatoTitolo: 'Invio bloccato',
+    allegatoNonConsegnato: 'Il file è stato pseudonimizzato ma claude.ai non lo ha ricevuto: allegalo di nuovo trascinandolo nella casella di scrittura.',
     pdfRipristinatoTesto: 'PDF scaricato con i dati reali, ma come testo semplice: l\'impaginazione originale non si conserva. Per un documento impaginato chiedi a Claude un file Word.',
     bloccatoRete: (r) => `Pseudomania ha fermato un invio a claude.ai: ${r}. Se un allegato non compare, rimuovilo e allegalo di nuovo; se il problema resta, scarica il registro dalle impostazioni.`,
     registroTitolo: 'Registro delle attività',

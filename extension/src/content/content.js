@@ -693,15 +693,34 @@
     const files = Array.from(input.files || []);
     const kind = adapter.uploadKind(input, tracker.current.info);
     const out = await processFiles(files, kind);
-    input.files = filesToDataTransfer(out).files;
-    if (!out.length) return;
-    input.__pgBypass = true;
     try {
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    } finally {
-      input.__pgBypass = false;
+      input.files = filesToDataTransfer(out).files;
+    } catch (_) { /* input già rimosso */ }
+    if (!out.length) return;
+    // Durante l'elaborazione la finestra di caricamento di claude.ai può essersi chiusa: un
+    // evento su un input staccato dal documento non arriva a nessuno. In quel caso i file vanno
+    // al campo file permanente della casella di scrittura.
+    let target = input;
+    if (!input.isConnected || !input.closest('body')) {
+      const alt = adapter.findComposerFileInput ? adapter.findComposerFileInput(document) : null;
+      if (alt) {
+        alt.files = filesToDataTransfer(out).files;
+        target = alt;
+      }
     }
+    if (!target.isConnected) {
+      status.banner('error', S.bloccatoTitolo, S.allegatoNonConsegnato, { replace: false });
+      event('blocked', { kind, reason: 'upload_target_gone' });
+      return;
+    }
+    target.__pgBypass = true;
+    try {
+      target.dispatchEvent(new Event('input', { bubbles: true }));
+      target.dispatchEvent(new Event('change', { bubbles: true }));
+    } finally {
+      target.__pgBypass = false;
+    }
+    event('file_delivered', { kind, n: out.length, via: target === input ? 'same_input' : 'composer_input' });
   }
 
   function hasFiles(dt) {

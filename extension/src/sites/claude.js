@@ -78,6 +78,9 @@
       'main a[href^="/project/"]',
     ],
     // Aree in cui NON ripristinare (campi modificabili e UI dell'estensione)
+    // Campo file permanente della casella di scrittura: riceve i file già pseudonimizzati quando
+    // l'input usato dall'utente (es. finestra «Carica o aggiungi file») non c'è più.
+    composerFileInput: ['input#chat-input-file-upload-onpage', 'input[type="file"][data-testid="file-upload"]'],
     noRestore: '[contenteditable="true"], textarea, input, script, style, noscript, pg-ui, [data-pg-ui]',
   };
 
@@ -198,6 +201,11 @@
         }
       }
       return info;
+    },
+
+    /** Campo file permanente della casella di scrittura (o null). */
+    findComposerFileInput(doc) {
+      return q(doc, SELECTORS.composerFileInput);
     },
 
     findComposer(doc) {
