@@ -169,6 +169,20 @@
     }
 
     /** Estrazione del testo + rilevamento fatti da Rizzo (PDF). */
+    /**
+     * Ripristino di un PDF con l'impaginazione originale (POST /restore/pdf, versioni di
+     * Rizzo-PII che lo offrono). Restituisce null se il servizio non ha questa funzione.
+     */
+    async restorePdf(filename, bytes, mapping) {
+      const fd = new FormData();
+      fd.append('file', new Blob([bytes], { type: 'application/pdf' }), filename);
+      fd.append('mapping', JSON.stringify(mapping));
+      const r = await this._post('/restore/pdf', { body: fd });
+      if (r.status === 404 || r.status === 405) return null;
+      if (r.status !== 200) await this._handle(r);
+      return new Uint8Array(await r.arrayBuffer());
+    }
+
     async analyzeFile(filename, bytes, mime) {
       const fd = new FormData();
       fd.append('file', new Blob([bytes], { type: mime || 'application/octet-stream' }), filename);

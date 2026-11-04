@@ -125,7 +125,7 @@ def intestazione(p, home, attivo):
       {LOGO}
       <span>
         <span class="brand-name">Pseudomania</span>
-        <span class="brand-tag">Pseudonimizzazione per l'IA generativa</span>
+        <span class="brand-tag">Pseudonimizzazione on-the-fly per l'IA generativa</span>
       </span>
     </a>
     <div class="header-tools">

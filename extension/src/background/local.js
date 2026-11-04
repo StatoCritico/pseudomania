@@ -334,8 +334,16 @@
           return r.edits;
         }));
     } else if (fk.kind === 'pdf') {
-      // PDF: Rizzo-PII ne estrae il testo, i segnaposto vengono ripristinati e si genera un PDF di
-      // solo testo (l'impaginazione originale non si conserva).
+      // PDF: se Rizzo-PII offre /restore/pdf il ripristino conserva l'impaginazione; altrimenti
+      // Rizzo-PII ne estrae il testo e si genera un PDF di solo testo.
+      try {
+        const same = await rizzo(cfg).restorePdf(msg.name, bytes, entries);
+        if (same) {
+          return { ok: true, data: { filename: msg.name, mime: 'application/pdf', contentB64: b64(same), entities: [], unknownTags: [], traceId: null } };
+        }
+      } catch (e) {
+        return failure(e);
+      }
       let text;
       try {
         text = (await rizzo(cfg).analyzeFile(msg.name, bytes, 'application/pdf')).text || '';
