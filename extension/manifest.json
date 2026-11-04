@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Pseudomania",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Pseudomania: pseudonimizza automaticamente i dati personali inviati a Claude e ripristina i valori reali nelle risposte. Server edition (server dell'ente) e Personal edition (Rizzo-PII sul PC).",
   "minimum_chrome_version": "116",
   "permissions": [

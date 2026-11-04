@@ -249,7 +249,7 @@
   }
 
   // Indicatore di attesa: orologio con la lancetta che gira e secondi trascorsi, in basso al
-  // centro. Compare solo se l'attesa supera 300 ms (niente lampeggi sulle operazioni rapide).
+  // centro. Compare solo se l'attesa supera 1 secondo (niente lampeggi sulle operazioni rapide).
   const BUSY_CSS = `
     .busy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2147483647;
             display: flex; align-items: center; gap: 10px; background: #1f5f8b; color: #fff;
@@ -292,7 +292,7 @@
       const upd = () => { sec.textContent = Math.round((Date.now() - t0) / 1000) + ' s'; };
       upd();
       tick = setInterval(upd, 1000);
-    }, 300);
+    }, 1000);
     return {
       update(t) {
         msg = t;
