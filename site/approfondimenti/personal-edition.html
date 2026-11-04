@@ -191,25 +191,27 @@
 <h2 id="installazione">Installazione</h2>
 <ol>
   <li>Scarica e installa l'<strong>app desktop di Rizzo-PII</strong> dalla pagina delle release del progetto (<a href="strumenti-e-download.html#rizzo-pii">Strumenti e download</a>) e avviala. Attendi che il modello sia scaricato.</li>
-  <li>Installa l'<strong>estensione</strong>: dal Chrome Web Store (in arrivo) oppure dal pacchetto ZIP della release (<code>chrome://extensions</code> → «Modalità sviluppatore» → «Carica estensione non pacchettizzata»).</li>
-  <li>Apri claude.ai: l'icona dell'estensione mostra lo stato. Se è verde, Rizzo-PII risponde e la protezione è attiva.</li>
+  <li>Installa l'<strong>estensione</strong>: dal Chrome Web Store (in arrivo) oppure dal pacchetto ZIP della release: scompattalo in una cartella che non sposterai, apri <code>chrome://extensions</code>, attiva «Modalità sviluppatore», scegli «Carica estensione non pacchettizzata» e seleziona la cartella <code>extension</code>.</li>
+  <li>Fissa l'icona di Pseudomania nella barra di Chrome (icona del puzzle → puntina).</li>
+  <li>Apri claude.ai: l'icona dell'estensione mostra lo stato. Se è verde (<strong>ON</strong>), Rizzo-PII risponde e la protezione è attiva.</li>
   <li>Imposta Claude: memoria disattivata, opzione di uso dei dati per l'addestramento disattivata (secondo il tuo piano), connettori non necessari spenti.</li>
 </ol>
 <p>Guida dettagliata: <a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-personale.md">docs/installazione-personale.md</a>.</p>
-<p class="note"><strong>Da verificare nel pilota.</strong> L'app Rizzo-PII non invia intestazioni CORS. Le chiamate dal service worker dell'estensione, autorizzate per <code>127.0.0.1:5005</code>, non dovrebbero esserne soggette; se sul browser reale non funzionassero, sarà necessario un fork di Rizzo-PII, che verrà documentato.</p>
+<p class="note"><strong>Verificato il 4/11/2026.</strong> L'app desktop di Rizzo-PII 2.0 accetta le chiamate dell'estensione: non serve una versione modificata di Rizzo-PII.</p>
+<p class="note"><strong>Dopo ogni aggiornamento dell'estensione</strong> ricarica le schede di claude.ai già aperte (<kbd>F5</kbd>): finché non lo fai, la pagina mostra un avviso e gli invii restano bloccati.</p>
 
 <h2 id="attivazione">Attivazione per conversazione</h2>
 <p>Nella Personal edition decidi tu, conversazione per conversazione, se proteggere ciò che invii.</p>
 <ul>
   <li><strong>Pulsante nella barra degli strumenti</strong> di Chrome: un clic attiva o disattiva la protezione della conversazione aperta. Stessa funzione con <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd> (modificabile da <code>chrome://extensions/shortcuts</code>). Clic destro: pannello di ispezione e impostazioni.</li>
-  <li><strong>Stato sempre visibile</strong>: sul pulsante il badge <strong>ON</strong> (verde), <strong>OFF</strong> (rosso), <strong>?</strong> (arancione, in attesa della tua scelta) o <strong>!</strong> (rosso, Rizzo-PII spento, in avvio o non raggiungibile); sopra la casella di scrittura una barra colorata con didascalia.</li>
+  <li><strong>Stato sempre visibile</strong>: sul pulsante il badge <strong>ON</strong> (verde), <strong>OFF</strong> (arancione), <strong>?</strong> (arancione, in attesa della tua scelta) o <strong>!</strong> (rosso, Rizzo-PII spento, in avvio o non raggiungibile); sopra la casella di scrittura una barra colorata con didascalia.</li>
   <li><strong>Lo stato si ricorda per ogni conversazione</strong> (nei progetti, per ogni chat).</li>
   <li><strong>Nuova conversazione</strong>: se l'ultima scelta era «attiva» la protezione si attiva da sola; se era «disattivata» compare un banner con «Attiva» / «Continua senza protezione».</li>
   <li><strong>Conversazione ripresa</strong>: se era attiva si riattiva da sola; se era disattivata compare lo stesso banner.</li>
   <li><strong>Finché il banner aspetta</strong> la tua scelta, per prudenza i messaggi vengono comunque pseudonimizzati.</li>
   <li><strong>Spegnere riguarda solo l'uscita</strong>: messaggi e allegati partono in chiaro, ma il ripristino dei segnaposto già presenti (nella pagina, negli appunti, nei download) resta sempre attivo.</li>
   <li>Al primo spegnimento in una conversazione che contiene già dati protetti, un avviso ricorda che ciò che invierai andrà in chiaro e che riattivare non ripulisce quanto già inviato.</li>
-  <li>Ogni cambio di stato è annotato nel registro locale cifrato, senza testi.</li>
+  <li>Ogni cambio di stato è annotato nel registro locale cifrato, senza testi. Il registro si consulta e si scarica dalle impostazioni dell'estensione (clic sull'icona da una scheda che non sia claude.ai → «Registro delle attività»).</li>
 </ul>
 <p>Nella <a href="server-edition.html#estensione-policy">Server edition</a> la protezione è sempre attiva: il pulsante è bloccato su acceso dalla policy.</p>
 
@@ -218,13 +220,21 @@
   <li>Controlla il badge prima di scrivere: <strong>ON</strong> significa protezione attiva per questa conversazione.</li>
   <li>Se Rizzo-PII non risponde, l'estensione ti avvisa e ti chiede di <strong>confermare</strong> prima di inviare il testo non protetto. La regola consigliata: non inviare finché non l'hai riavviata.</li>
   <li>Il pannello di ispezione mostra cosa è partito davvero; con <kbd>Ctrl</kbd>+<kbd>Maiusc</kbd>+<kbd>Invio</kbd> vedi l'anteprima prima dell'invio.</li>
+  <li>Se l'elaborazione supera un secondo compare in basso un <strong>orologio con i secondi trascorsi</strong>: attendi che sparisca prima di inviare.</li>
+  <li>Se l'estensione ferma un invio, un banner rosso ne spiega il motivo.</li>
 </ul>
 
 <h2 id="allegati">Allegati</h2>
+<p>Puoi allegare i file in tutti i modi di claude.ai: con il pulsante <strong>+</strong> (finestra «Carica o aggiungi file» → «Carica dal computer»), <strong>trascinandoli</strong> sulla pagina o <strong>incollandoli</strong> con <kbd>Ctrl</kbd>+<kbd>V</kbd>. L'estensione li pseudonimizza prima che partano; quando ha finito compare l'anteprima del file nella casella di scrittura.</p>
 <ul>
-  <li><strong>DOCX e XLSX</strong>: elaborati direttamente nell'estensione, che restituisce il file con i segnaposto.</li>
+  <li><strong>DOCX e XLSX</strong>: elaborati direttamente nell'estensione, che restituisce il file con i segnaposto, formattazione compresa.</li>
   <li><strong>PDF</strong>: il testo viene estratto e analizzato da Rizzo-PII; a Claude arriva un <strong>file di testo pseudonimizzato</strong> (.txt) al posto del PDF, con un avviso. Impaginazione e immagini si perdono.</li>
-  <li><strong>TXT, Markdown, CSV</strong>: pseudonimizzati come testo. Gli altri formati sono bloccati.</li>
+  <li><strong>TXT, Markdown, CSV</strong>: pseudonimizzati come testo. Gli archivi (.zip), le immagini e gli altri formati sono bloccati.</li>
+</ul>
+<h3 id="download">File scaricati da Claude</h3>
+<ul>
+  <li><strong>DOCX, XLSX, TXT, MD, CSV</strong>: al download i segnaposto tornano valori reali, formattazione compresa.</li>
+  <li><strong>PDF</strong>: i valori reali vengono ripristinati. Con l'app Rizzo-PII attuale il PDF scaricato è di <strong>solo testo</strong> (l'impaginazione non si conserva, compare un avviso); quando Rizzo-PII offrirà il ripristino dei PDF (proposta inviata al progetto), l'impaginazione verrà conservata senza aggiornare l'estensione. Per un documento impaginato chiedi a Claude un file Word.</li>
 </ul>
 
 <h2 id="dati-locali">Dove restano i dati</h2>
