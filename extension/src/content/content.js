@@ -859,12 +859,33 @@
     );
   }
 
+  // Il rilascio vero è stato fermato: si consegna subito alla zona di rilascio di claude.ai un
+  // rilascio vuoto (nessun file) e un'uscita dal trascinamento, così la finestra «trascina qui»
+  // si chiude e la pagina torna alla chat. I file arrivano poi, già pseudonimizzati.
+  function closeDropZone(e) {
+    const opts = { dataTransfer: new DataTransfer(), bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY };
+    const target = e.target && e.target.isConnected ? e.target : document.body;
+    for (const type of ['dragleave', 'drop']) {
+      const ev = new DragEvent(type, type === 'dragleave' ? Object.assign({ relatedTarget: null }, opts) : opts);
+      bypassEvents.add(ev);
+      try {
+        target.dispatchEvent(ev);
+      } catch (_) { /* nessuna zona di rilascio */ }
+    }
+    try {
+      const end = new DragEvent('dragend', { bubbles: true });
+      bypassEvents.add(end);
+      document.dispatchEvent(end);
+    } catch (_) { /* ignora */ }
+  }
+
   window.addEventListener(
     'drop',
     (e) => {
       if (bypassEvents.has(e) || !protectionActive() || !hasFiles(e.dataTransfer)) return;
       e.preventDefault();
       e.stopImmediatePropagation();
+      closeDropZone(e);
       onDropOrPaste(e, 'drop');
     },
     true
