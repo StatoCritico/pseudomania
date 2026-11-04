@@ -14,10 +14,10 @@
     :host { all: initial; }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
     .bar { height: 4px; border-radius: 2px; margin: 0 8px 4px; }
-    .bar.on { background: #2e7d32; } .bar.off { background: #c62828; } .bar.warn { background: #ef6c00; }
+    .bar.on { background: #2e7d32; } .bar.off { background: #ef6c00; } .bar.warn { background: #ef6c00; }
     .label { font-size: 11px; margin: 0 10px 2px; color: #555; display: flex; align-items: center; gap: 6px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-    .dot.on { background: #2e7d32; } .dot.off { background: #c62828; } .dot.warn { background: #ef6c00; }
+    .dot.on { background: #2e7d32; } .dot.off { background: #ef6c00; } .dot.warn { background: #ef6c00; }
     .banner { margin: 4px 8px 6px; padding: 10px 12px; border-radius: 8px; font-size: 13px; line-height: 1.4;
               display: flex; gap: 10px; align-items: flex-start; }
     .banner.error { background: #fdecea; color: #611a15; border: 1px solid #f5c2bd; }

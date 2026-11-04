@@ -25,11 +25,6 @@
           "href": "approfondimenti/il-problema.html#perche-non-basta-vietare"
         },
         {
-          "titolo": "Nessuna API, nessun proxy",
-          "testo": "Il piano Claude Team si usa dal browser: non c'è un'API da filtrare e il traffico cifrato non si può aprire in rete.",
-          "href": "approfondimenti/il-problema.html#nessuna-api"
-        },
-        {
           "titolo": "Obblighi precisi",
           "testo": "Minimizzazione e sicurezza (GDPR), divieto di controllo a distanza dei lavoratori, formazione sull'IA: servono misure tecniche e organizzative.",
           "href": "approfondimenti/il-problema.html#obblighi"
@@ -42,6 +37,11 @@
       "titolo": "La soluzione",
       "intro": "Un'estensione per Chrome intercetta ciò che invii a claude.ai, fa riconoscere i dati personali dal modello italiano Rizzo-PII e manda a Claude solo segnaposto. Il processo è trasparente, niente più copia-incolla, e l'estensione si attiva e disattiva con un click (Personal edition), in ciascuna pagina di Chrome.",
       "schede": [
+        {
+          "titolo": "Nessuna API, nessun proxy",
+          "testo": "Il piano Claude Team si usa dal browser: non c'è un'API da filtrare e il traffico cifrato non si può aprire in rete.",
+          "href": "approfondimenti/il-problema.html#nessuna-api"
+        },
         {
           "titolo": "Segnaposto al posto dei dati",
           "testo": "Ogni dato riconosciuto diventa un segnaposto coerente, come [FULLNAME_1] o [CF_2]: lo stesso valore riceve sempre lo stesso segnaposto.",

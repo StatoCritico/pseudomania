@@ -58,8 +58,8 @@
 
   <section class="hero" aria-labelledby="titolo">
     <div class="wrap">
-      <h1 id="titolo">A Claude arrivano segnaposto, non i dati personali.</h1>
-      <p class="lead">Pseudomania sostituisce nomi, codici fiscali, IBAN, indirizzi e altri dati personali con segnaposto come <span class="ph">[FULLNAME_1]</span> prima che il testo arrivi a Claude, e rimette i valori reali nella risposta, solo nel tuo browser.</p>
+      <h1 id="titolo">Pseudonimizzazione trasparente con Claude e Chrome</h1>
+      <p class="lead">Pseudomania è la soluzione per la mitigazione del rischio: usa un modello open source (<a href="https://github.com/Rizzo-AI-Academy/rizzo-pii">Rizzo-PII</a>) per sostituire nomi, codici fiscali, IBAN, indirizzi e altri dati personali con segnaposto come <span class="ph">[FULLNAME_1]</span> prima che il testo arrivi a Claude, e rimette i valori reali nella risposta, direttamente in Chrome, senza bisogno di operazioni manuali, anche per allegati PDF, XLSX, DOCX e file di testo. Freeware, open source, disponibile sia per utente singolo che in versione enterprise. <a href="approfondimenti/personal-edition.html#installazione">Vai alle istruzioni</a>, oppure approfondisci qui sotto.</p>
       <p class="honest"><strong>Detto con onestà:</strong> è una misura che riduce il rischio, non una garanzia di anonimizzazione. I dati pseudonimizzati restano dati personali, il riconoscimento automatico può sbagliare e lo strumento funziona solo dentro un insieme di regole e impostazioni.</p>
       <div class="cta">
         <a class="btn btn-primary" href="#personal">Personal edition</a>
@@ -96,7 +96,7 @@
           <button type="button" class="car-btn car-next" aria-controls="car-problema" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
         </div>
         <ul class="car-track" id="car-problema">
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 5">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 4">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">01</span>
             <h3><a href="approfondimenti/il-problema.html#ia-al-lavoro">L&#x27;IA è già al lavoro</a></h3>
@@ -104,7 +104,7 @@
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 5">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 4">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">02</span>
             <h3><a href="approfondimenti/il-problema.html#dati-che-escono">Ogni testo esce dall&#x27;organizzazione</a></h3>
@@ -112,7 +112,7 @@
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 5">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 4">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">03</span>
             <h3><a href="approfondimenti/il-problema.html#perche-non-basta-vietare">Vietare non basta</a></h3>
@@ -120,17 +120,9 @@
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 5">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 4">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">04</span>
-            <h3><a href="approfondimenti/il-problema.html#nessuna-api">Nessuna API, nessun proxy</a></h3>
-            <p>Il piano Claude Team si usa dal browser: non c'è un'API da filtrare e il traffico cifrato non si può aprire in rete.</p>
-            <span class="car-more" aria-hidden="true">Approfondisci</span>
-          </div>
-        </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 5">
-          <div class="car-card">
-            <span class="car-num" aria-hidden="true">05</span>
             <h3><a href="approfondimenti/il-problema.html#obblighi">Obblighi precisi</a></h3>
             <p>Minimizzazione e sicurezza (GDPR), divieto di controllo a distanza dei lavoratori, formazione sull'IA: servono misure tecniche e organizzative.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
@@ -155,49 +147,57 @@
           <button type="button" class="car-btn car-next" aria-controls="car-soluzione" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
         </div>
         <ul class="car-track" id="car-soluzione">
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 6">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 7">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">01</span>
+            <h3><a href="approfondimenti/il-problema.html#nessuna-api">Nessuna API, nessun proxy</a></h3>
+            <p>Il piano Claude Team si usa dal browser: non c'è un'API da filtrare e il traffico cifrato non si può aprire in rete.</p>
+            <span class="car-more" aria-hidden="true">Approfondisci</span>
+          </div>
+        </li>
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 7">
+          <div class="car-card">
+            <span class="car-num" aria-hidden="true">02</span>
             <h3><a href="approfondimenti/come-funziona.html#segnaposto">Segnaposto al posto dei dati</a></h3>
             <p>Ogni dato riconosciuto diventa un segnaposto coerente, come [FULLNAME_1] o [CF_2]: lo stesso valore riceve sempre lo stesso segnaposto.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 6">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 7">
           <div class="car-card">
-            <span class="car-num" aria-hidden="true">02</span>
+            <span class="car-num" aria-hidden="true">03</span>
             <h3><a href="approfondimenti/come-funziona.html#ripristino">Ripristino solo nel browser</a></h3>
             <p>Nella risposta di Claude i segnaposto tornano valori reali solo sul tuo schermo. Claude non li vede mai.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 6">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 7">
           <div class="car-card">
-            <span class="car-num" aria-hidden="true">03</span>
+            <span class="car-num" aria-hidden="true">04</span>
             <h3><a href="approfondimenti/come-funziona.html#allegati">Allegati e Progetti</a></h3>
             <p>Pseudonimizza anche PDF, DOCX, XLSX e i file e le istruzioni dei Progetti di Claude.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 6">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 7">
           <div class="car-card">
-            <span class="car-num" aria-hidden="true">04</span>
+            <span class="car-num" aria-hidden="true">05</span>
             <h3><a href="approfondimenti/come-funziona.html#categorie-particolari">Dati sanitari e giudiziari bloccati</a></h3>
             <p>Se riconosce categorie particolari di dati (artt. 9-10 GDPR) l'invio viene fermato, senza possibilità di forzarlo.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 6">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 7">
           <div class="car-card">
-            <span class="car-num" aria-hidden="true">05</span>
+            <span class="car-num" aria-hidden="true">06</span>
             <h3><a href="approfondimenti/scelte-di-progetto.html#cifratura-lato-client">Dizionario cifrato nel browser</a></h3>
             <p>La corrispondenza tra segnaposto e valori reali è cifrata con una chiave che resta nel browser: il server conserva solo dati cifrati.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
         </li>
-        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 6">
+        <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="7 di 7">
           <div class="car-card">
-            <span class="car-num" aria-hidden="true">06</span>
+            <span class="car-num" aria-hidden="true">07</span>
             <h3><a href="approfondimenti/come-funziona.html#cosa-non-protegge">Onesto sui limiti</a></h3>
             <p>Quasi-identificatori, dati non riconosciuti e cambi dell'interfaccia di claude.ai restano rischi da gestire.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>

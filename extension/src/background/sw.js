@@ -166,7 +166,7 @@ async function applyTabBadge(tabId, state) {
   let color = '#2e7d32';
   if (state === 'off') {
     text = 'OFF';
-    color = '#c62828';
+    color = '#ef6c00';
   } else if (state === 'ask') {
     text = '?';
     color = '#ef6c00';
@@ -226,7 +226,7 @@ async function updateIcon(cfg, auth) {
   let title = PG.strings.attiva;
   if (!cfg.enabled) {
     text = 'OFF';
-    color = '#c62828';
+    color = '#ef6c00';
     title = PG.strings.disattiva;
   } else if (!lastHealth.ok) {
     text = '!';
