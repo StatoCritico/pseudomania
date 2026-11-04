@@ -161,6 +161,9 @@ img, svg { max-width: 100%; }
   border-bottom: 3px solid transparent;
 }
 .main-nav a:hover { color: var(--primary); border-bottom-color: var(--primary); }
+.main-nav li:has(.nav-cta) { margin-left: auto; }
+.main-nav a.nav-cta { color: var(--primary); }
+.main-nav a.nav-cta::before { content: "\2193\00a0"; }
 
 @media (max-width: 899px) {
   .js .menu-toggle { display: inline-flex; }

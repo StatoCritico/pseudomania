@@ -3,6 +3,30 @@ description: Strumenti e download di Pseudomania: estensione Chrome, app desktop
 lead: Tutto ciò che serve per provare, installare e adattare Pseudomania. Le versioni sono pubblicate nella pagina delle release del repository, con note di rilascio e somme di controllo.
 summary: Estensione, app Rizzo-PII, server, Chrome Web Store, documentazione, modelli di governance, strumento dei custodi, corpus di collaudo e codice.
 -->
+<h2 id="installazione">Installazione in breve</h2>
+<div class="grid grid-2">
+  <article class="card">
+    <h3>Personal edition</h3>
+    <ol>
+      <li>Installa e avvia l'<a href="#rizzo-pii">app desktop di Rizzo-PII</a>.</li>
+      <li>Scarica lo <a href="#estensione">ZIP dell'estensione</a> e scompattalo in una cartella che non sposterai.</li>
+      <li>In Chrome apri <code>chrome://extensions</code>, attiva «Modalità sviluppatore», scegli «Carica estensione non pacchettizzata» e seleziona la cartella <code>extension</code>.</li>
+      <li>Fissa l'icona di Pseudomania nella barra e apri claude.ai: il badge <strong>ON</strong> verde indica che la protezione è attiva.</li>
+    </ol>
+    <p><a href="personal-edition.html#installazione">Guida completa della Personal edition</a></p>
+  </article>
+  <article class="card">
+    <h3>Server edition</h3>
+    <ol>
+      <li>Prepara una VM Linux nella rete interna e scarica il <a href="#server">codice del server</a>.</li>
+      <li>Avvia lo stack Docker Compose e genera la chiave di custodia con lo strumento dei custodi.</li>
+      <li>Distribuisci l'estensione con le policy di Chrome e configura SSO, proxy e Claude Team.</li>
+      <li>Esegui la verifica del pilota prima di aprire agli utenti.</li>
+    </ol>
+    <p><a href="server-edition.html#installazione">Guida completa della Server edition</a></p>
+  </article>
+</div>
+
 <h2 id="estensione">Estensione Chrome</h2>
 <div class="grid grid-2">
   <article class="card dl-card">

@@ -110,6 +110,8 @@ def intestazione(p, home, attivo):
         voci.append(f'<li><a href="{href}">{esc(nome)}</a></li>')
     cur = ' aria-current="page"' if attivo == "approfondimenti" else ""
     voci.append(f'<li><a href="{p}approfondimenti/index.html"{cur}>Approfondimenti</a></li>')
+    cur = ' aria-current="page"' if attivo == "strumenti-e-download" else ""
+    voci.append(f'<li><a class="nav-cta" href="{p}approfondimenti/strumenti-e-download.html#installazione"{cur}>Installazione e download</a></li>')
     brand_href = "#contenuto" if home else f"{p}index.html"
     return f"""<body>
 <a class="skip-link" href="#contenuto">Vai al contenuto principale</a>
@@ -216,7 +218,7 @@ def pagina_approfondimento(slug, titolo, meta, corpo, sezioni_per_pagina, prec, 
         pager.append(f'<a class="pager-next" href="{succ[0]}.html"><span>Capitolo successivo</span>{esc(succ[1])}</a>')
     lead = f'<p class="lead">{meta["lead"]}</p>' if meta.get("lead") else ""
     return (testa(f"{titolo} – Pseudomania", meta.get("description", titolo), p, f"approfondimenti/{slug}.html")
-            + intestazione(p, False, "approfondimenti")
+            + intestazione(p, False, "strumenti-e-download" if slug == "strumenti-e-download" else "approfondimenti")
             + f"""<div class="wrap docs-layout">
   <button type="button" class="tree-toggle" id="tree-toggle" aria-expanded="false" aria-controls="docs-nav">{ICON_MENU}<span>Indice degli approfondimenti</span></button>
   <nav class="docs-nav" id="docs-nav" aria-label="Indice degli approfondimenti">
