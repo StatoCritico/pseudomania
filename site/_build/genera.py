@@ -293,6 +293,29 @@ def genera_privacy():
     (SITE / "privacy.html").write_text(out, encoding="utf-8")
 
 
+def genera_404():
+    """Pagina per gli indirizzi inesistenti (Cloudflare Pages la serve con stato 404).
+    Collegamenti assoluti: la pagina può comparire a qualunque profondità."""
+    corpo = """<section class="section"><div class="wrap prose">
+  <h1>Pagina non trovata</h1>
+  <p class="lead">L'indirizzo che hai aperto non esiste o è stato spostato.</p>
+  <ul>
+    <li><a href="/">Pagina principale</a></li>
+    <li><a href="/approfondimenti/strumenti-e-download.html#installazione">Installazione e download</a></li>
+    <li><a href="/approfondimenti/index.html">Approfondimenti</a></li>
+    <li><a href="/approfondimenti/faq.html">Domande frequenti</a></li>
+  </ul>
+  <p>Se il collegamento si trovava su questo sito, segnalalo nelle
+  <a href="REPO_ISSUES">issue del repository</a>.</p>
+</div></section>""".replace("REPO_ISSUES", REPO + "/issues")
+    out = (re.sub(r'<link rel="canonical"[^>]*>\n?', "", testa("Pagina non trovata – Pseudomania", "Pagina non trovata.", "/", "404.html"))
+           .replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="robots" content="noindex">', 1)
+           + intestazione("/", False, "404")
+           + f'<main id="contenuto" tabindex="-1">\n{corpo}\n</main>\n'
+           + piede("/"))
+    (SITE / "404.html").write_text(out, encoding="utf-8")
+
+
 def genera_approfondimenti():
     pagine = {}
     sezioni = {}
@@ -348,6 +371,7 @@ def controlla_collegamenti():
 if __name__ == "__main__":
     genera_home()
     genera_privacy()
+    genera_404()
     genera_approfondimenti()
     errori = controlla_collegamenti()
     for e in errori:

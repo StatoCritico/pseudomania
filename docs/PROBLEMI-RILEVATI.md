@@ -1,7 +1,7 @@
 # Problemi e incongruenze rilevati
 
-Aggiornato il 31/10/2026 (seconda revisione della documentazione, dopo DECISIONI.md del
-31/10/2026 e la riscrittura di SPEC.md). Confronto tra SPEC.md/DECISIONI.md e i file di
+Aggiornato il 5/11/2026 (esiti della prima prova reale della Personal edition, 4/11/2026; prima
+revisione: 31/10/2026, dopo DECISIONI.md e la riscrittura di SPEC.md). Confronto tra SPEC.md/DECISIONI.md e i file di
 `deploy/`, `server/`, `tools/custodi/`, `extension/`. **Nessun file fuori da `docs/` è stato
 modificato**: dove serve la documentazione indica un rimedio operativo.
 
@@ -11,20 +11,32 @@ Gravità: **A** = blocca o rompe una funzione; **M** = rischio o lavoro manuale;
 
 | # | Gravità | Dove | Problema | Effetto | Rimedio proposto | Nei docs |
 |---|---|---|---|---|---|---|
-| 1 | **A** | `server/pseudogate/main.py` (riga ~224, `CORSMiddleware`) | `allow_methods=["GET","POST","DELETE","OPTIONS"]` non include **PUT**, usato da `PUT /v1/dictionary/rekey`. Il manifest non contiene l'host del server in `host_permissions` (solo `optional_host_permissions`, che in Server edition non vengono richiesti all'utente). | La preflight CORS del `PUT` fallisce: la **rotazione delle chiavi** ogni 90 giorni (e quella forzata) non si completa, gli escrow vecchi non vengono distrutti. | Aggiungere `PUT` ad `allow_methods`; in alternativa (o in aggiunta) inserire l'host del server in `host_permissions` prima di impacchettare. Lo segnala anche `extension/README.md` §2.2. | configurazione.md §C.4; verifica-pilota.md J6 |
-| 2 | M | `deploy/scripts/genera-segreti.sh` + compose (`./secrets/api` montata in `/run/secrets/pseudogate`) | `secrets/api` viene creata con `umask 077` dentro `secrets/` (700, root) e non viene assegnata all'uid 10001; nessuno script crea `admin-api-token`. | Se si attiva `ADMIN_API_TOKEN` l'api non riesce a leggerlo; `POST /v1/keys/recovered` resta disabilitato. | Creare il token e fare `chown 10001` in `genera-segreti.sh` (o documentare); è comunque facoltativo (c'è `custodia importa-recuperate`). | installazione-ente.md §10; custodi.md §4.4 |
-| 3 | M | Langfuse condiviso (`docker-compose.yml`, `Caddyfile`) | Senza profilo `langfuse`, Caddy richiede comunque `LANGFUSE_DOMAIN` e i certificati `langfuse.*` e fa da proxy verso un `langfuse-web` inesistente. `OIDC_CA_FILE` vale solo per le chiamate OIDC (`auth.py`), non per l'SDK Langfuse né per il job di pulizia; `HTTPS_PROXY` (da `OIDC_HTTPS_PROXY`) vale per tutto il processo e `NO_PROXY` non comprende l'host di un Langfuse condiviso. | Con un Langfuse condiviso su CA interna o raggiungibile solo direttamente le trace e la pulizia possono fallire; configurazione di Caddy inutile. | Rendere facoltativo il blocco Langfuse del Caddyfile; variabile CA generale (es. `SSL_CERT_FILE`) e `NO_PROXY` configurabile. | installazione-ente.md §14.2 |
 | 4 | M | `server/pseudogate/retention.py` (`purge_langfuse`) | Usa `GET /api/public/traces` e `DELETE /api/public/traces` (`traceIds`). Non provato contro un server Langfuse 4.72 reale. | Se l'endpoint differisce la conservazione delle trace (30/7 giorni) non è applicata. | Prova su Langfuse reale; registrare l'esito del job nel registro amministrativo. | installazione-ente.md §14.3; verifica-pilota.md G8d |
-| 5 | M | Personal edition (Rizzo-PII desktop) | Nessuna istruzione verificata per installare l'app desktop di Rizzo-PII (pacchetti, avvio automatico, cache del modello); chiamate dal service worker senza CORS provate solo con un Rizzo-PII simulato. | L'installazione personale può fallire o richiedere il fork di Rizzo-PII previsto in DECISIONI.md. | Prova con l'app reale; se serve, fork con `Access-Control-Allow-Origin: chrome-extension://<ID>`. | installazione-personale.md §2, §13 |
 | 6 | M | Rischio residuo (DECISIONI.md) | Con OpenBao sbloccato, root sulla VM può usare l'AppRole dell'api per calcolare HMAC (verificare se un valore indovinato è nel dizionario) e intercettare i testi delle richieste future. Non può decifrare i dizionari passati. | Dichiarato; non è un difetto del codice. | DPIA, accesso root limitato e registrato. | installazione-ente.md §2 |
-| 7 | B | `server/pseudogate/__main__.py` (`custodia esporta-*`) | `--out` scrive nel filesystem del container, che è in sola lettura tranne `/tmp` (tmpfs) e `/var/lib/pseudogate/registro`; `docker compose cp` non legge i tmpfs. | Lavoro manuale per estrarre i file (o rischio di lasciarli in `deploy/registro/`, che finisce nei backup). | Supportare `--out -` (stdout). | custodi.md §4.2, §5 (uso di `cat`) |
-| 8 | B | `deploy/scripts/backup.sh` | Chiama `cancellazioni esporta` senza `--operatore`: avviso «operatore non indicato» e voce `admin_log` con operatore «non indicato». | Registro amministrativo meno chiaro. | Passare `--operatore backup`. | — |
-| 9 | B | `deploy/openbao/config/openbao.hcl` | Nessun `disable_mlock`; il container non ha `IPC_LOCK`. [DA VERIFICARE] se OpenBao 2.7 con raft richiede l'una o l'altra. | Possibile mancato avvio di `openbao`. | Prova di avvio; se serve `disable_mlock = true`. | — |
-| 10 | B | `tools/custodi/__pycache__/` | File `.pyc` presenti nel repository. | Rumore; possibile disallineamento con il sorgente. | Rimuoverli e aggiungere `__pycache__/` a `.gitignore`. | — |
-| 11 | B | Sostituzione della chiave di custodia | Non è documentato (né provato) il comportamento durante la transizione: escrow di chiavi utente ancora legati alla vecchia `escrowKeyId`, errore `escrow_key_mismatch` per estensioni con config in cache. | Possibili errori temporanei dopo il cambio. | Test e nota nella SPEC. | custodi.md §8 |
 | 12 | B | `deploy/VERSIONS.md` | Tag delle immagini non verificati sui registri. | Possibile errore al primo `pull`. | Verificare al primo pull. | — |
 | 13 | B | Podman | Non provato (contesto Git, reti interne, healthcheck, `chown`). | Possibili errori. | Prova su VM. | installazione-ente.md §6.2 |
 | 14 | B | `.env.example` / README estensione | `OIDC_AUDIENCE=pseudogate` con client di esempio `pseudogate-extension`: con Keycloak serve un mapper di audience. | 401 se non configurato. | Citare il mapper nel README. | configurazione.md §B.1.a |
+| 15 | M | `deploy/` (immagine `rizzo-pii`) | Lo stack costruisce Rizzo-PII 1.5.0 (`RIZZO_MODEL_REVISION=v1.5.0`, commit `9057eef`); la Personal edition è stata provata con l'app 2.0. | Possibili differenze di rilevamento tra le edizioni. | Aggiornare build e modello alla 2.0 e ripetere il collaudo. | installazione-ente.md §7 |
+| 16 | M | `extension/manifest.json` | L'host del server non è in `host_permissions` (solo in `optional_host_permissions`, che nella Server edition non vengono richiesti all'utente). | Le chiamate al server possono fallire. | Aggiungere l'host prima di impacchettare l'estensione per l'ente (`extension/README.md` §2.2). | — |
+| 17 | B | Personal edition, PDF scaricati da Claude | L'app Rizzo-PII 2.0 non offre il ripristino dei PDF: l'estensione genera un PDF di solo testo. | Impaginazione persa nei PDF scaricati. | Proposta a Rizzo-PII di `POST /restore/pdf` (5/11/2026); l'estensione la usa già se presente. | personal-edition (sito) |
+
+## Prova reale della Personal edition (4/11/2026)
+
+Prova su un PC Windows con l'app desktop Rizzo-PII 2.0.0 e claude.ai, con i documenti di
+`collaudo/prova-personal/` (tutti i 24 tag di Rizzo-PII). Correzioni nelle versioni 0.1.1-0.1.13.
+
+| # | Stato | Esito |
+|---|---|---|
+| 5 | **Risolto** | L'app desktop di Rizzo-PII 2.0 accetta le chiamate del service worker dell'estensione: nessun fork necessario. |
+| — | **Corretto** | Falsi «Invio bloccato … file «file»» sui dati tecnici di claude.ai (telemetria): passano, i documenti restano controllati. |
+| — | **Corretto** | Allegati elaborati ma non consegnati: la graffetta apre ora la finestra «Carica o aggiungi file» e il trascinamento una zona di rilascio temporanea; i file pseudonimizzati vanno al campo file della casella di scrittura. Trascinamento: la finestra «Trascina i file qui» si chiude da sola. |
+| — | **Corretto** | Timeout di Rizzo-PII diagnosticato come blocco CORS; «Rizzo-PII» mascherato come nome di persona (ora tra i termini consentiti). |
+| — | **Corretto** | Errore «Extension context invalidated» dopo l'aggiornamento dell'estensione: ora avviso di ricaricare la pagina. |
+| — | **Aggiunto** | Ripristino dei PDF scaricati (vedi n. 17), indicatore di attesa, registro delle attività nelle impostazioni. |
+| — | **OK** | Testi con tutti i tag, termini consentiti e omonimie, blocco di dati sanitari e giudiziari, DOCX scaricato ripristinato. |
+
+Test automatici eseguiti per la prima volta il 4/11/2026 in un ambiente Linux: server 66 superati (4 saltati:
+richiedono PostgreSQL e Rizzo-PII reali), strumento dei custodi 12/12, estensione (unit) 50/50.
 
 ## Correzioni dell'agente server (31/10/2026, terza revisione)
 

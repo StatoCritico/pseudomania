@@ -1,6 +1,6 @@
 # Pseudomania – riepilogo per riprendere il lavoro
 
-Aggiornato al 4/11/2026 (codice pubblicato su GitHub, sito online su Cloudflare Pages, Piano d'azione aggiornato). Questo file serve a riprendere la conversazione da zero: incollalo (o allegalo) all'inizio di una nuova sessione insieme all'archivio del progetto.
+Aggiornato al 5/11/2026 (prima prova reale della Personal edition riuscita, estensione 0.1.13 e release su GitHub, «Enterprise edition» rinominata «Server edition»). Questo file serve a riprendere la conversazione da zero: incollalo (o allegalo) all'inizio di una nuova sessione insieme all'archivio del progetto.
 
 ## 1. Obiettivo
 
@@ -82,42 +82,55 @@ Fonti principali: Garante 27/11/2008 (amministratori di sistema), Garante su Reg
 
 ## 7. Stato e prossimi passi
 
-**Nulla è stato provato in condizioni reali**: i test automatici passano contro simulazioni di claude.ai, del server e di Rizzo-PII. Container mai avviati (registri bloccati nell'ambiente di sviluppo).
+**Personal edition provata in condizioni reali il 4/11/2026** (PC Windows, app desktop Rizzo-PII 2.0, claude.ai).
+La **Server edition** non è ancora stata avviata: i suoi test automatici passano, ma manca un ambiente di prova.
 
-### 7.0 Pubblicazione (4/11/2026)
+### 7.1 Pubblicazione
 
-- **Repository pubblico**: <https://github.com/StatoCritico/pseudomania> (ramo `main`, primo commit «Prima versione pubblica di Pseudomania»). Identità git locale del repository: Paolo Bianco, eugenio@statocritico.it; `core.autocrlf false` e `.gitattributes` (LF, binari intatti). Segnalazione privata delle vulnerabilità attiva (`SECURITY.md`). Aggiunti `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`.
-- **Esclusi dal repository** (`.gitignore`): `Gateway_LLM_PA_Piano_d_azione.docx` (documento interno, aggiornato al 3/11/2026 e senza firma) e `site/_screens/`.
-- **Sito**: progetto Cloudflare Pages `pseudomania` collegato al repository (ogni push su `main` ripubblica), build che copia solo le pagine pubblicabili in `dist/`, intestazioni di sicurezza in `site/_headers`, dominio `pseudomania.statocritico.it` (CNAME creato da Cloudflare). Dettagli in `site/PUBBLICAZIONE.md` §3.1.
-- **Segnaposto risolti**: link al repository (`StatoCritico/pseudomania`) nel sito e in `publiccode.yml.draft`; dati dell'ente tolti dalla pagina privacy; contatto di sicurezza = segnalazione privata di GitHub.
-- **Da fare**: prima release (i pulsanti «Scarica» del sito puntano a `releases/latest`, ancora vuota) dopo la prova della Personal edition; pagina 404 (oggi gli indirizzi inesistenti mostrano la home); `publiccode.yml` definitivo.
+- **Repository**: <https://github.com/StatoCritico/pseudomania> (AGPL-3.0). Identità git locale: Paolo Bianco,
+  eugenio@statocritico.it; `core.autocrlf false` e `.gitattributes` (LF). Segnalazione privata delle
+  vulnerabilità attiva (`SECURITY.md`).
+- **Release automatica**: un tag `vX.Y.Z` uguale alla versione di `extension/manifest.json` avvia
+  `.github/workflows/release.yml` (test unitari, zip dell'estensione, manuale PDF). Ultima: **0.1.13 (prova)**.
+- **Sito**: Cloudflare Pages collegato al repository (ogni push su `main` ripubblica), dominio
+  `pseudomania.statocritico.it`, intestazioni di sicurezza in `site/_headers`, pagina 404. Sorgenti in
+  `site/_build/`, rigenerare con `python3 site/_build/genera.py`. Menu con «Installazione e download».
+- **Esclusi dal repository**: `Gateway_LLM_PA_Piano_d_azione.docx` (documento interno) e `site/_screens/`.
 
-### 7.1 Verifica del 3/11/2026
+### 7.2 Esiti della prova della Personal edition (4/11/2026)
 
-- **Nessuna modifica** ai contenuti dopo il 1/11/2026. La cartella non è un repository git.
-- **Test dell'estensione (unit)**: 50/50 superati con Node 22. Test DOM ed e2e non eseguiti (Playwright non installato).
-- **Test del server e dello strumento dei custodi**: non eseguiti (PyPI non raggiungibile dal PC di lavoro, pytest assente). Da eseguire sulla VM di prova.
-- Confermato nel codice: `PUT` nei metodi CORS del server (problema n. 1 risolto).
-- **Ancora aperto (Server edition)**: l'host del server non è in `host_permissions` del `manifest.json` (solo in `optional_host_permissions`): va aggiunto prima di impacchettare l'estensione per l'ente (`extension/README.md` §2.2).
-- **Problemi aperti** in `docs/PROBLEMI-RILEVATI.md`: n. 4 (pulizia tracce Langfuse v4, da provare), 5 (app desktop di Rizzo-PII e CORS), 6 (rischio residuo root, dichiarato), 12 (tag delle immagini), 13 (Podman), 14 (mapper di audience Keycloak). I n. 1-3 e 7-11 sono risolti ma restano nella tabella «Aperti» per tracciabilità: da spostare tra i risolti dopo la prova.
-- **[DA VERIFICARE]**: 145 occorrenze in 26 file Markdown (docs, governance, manuale, README).
-- **Segnaposto ancora presenti nel sito**: `ORG/pseudogate` (repository) e testi «segnaposto» in privacy, server-edition, strumenti-e-download, scelte-di-progetto e altre pagine.
-- `Gateway_LLM_PA_Piano_d_azione.docx` (30/10/2026) è **superato** in più punti (memoria attiva, dizionario cifrato sul server, errori del server che bloccano l'invio): prevale `DECISIONI.md`. Aggiornarlo o archiviarlo.
+Documenti di prova con tutti i 24 tag di Rizzo-PII in `collaudo/prova-personal/` (generatore
+`collaudo/genera_prova_personal.py`).
 
-### 7.2 Prossimi passi, nell'ordine
+- **OK**: testi con tutti i tag; termini consentiti e omonimie; blocco dei dati sanitari e giudiziari; allegati
+  dal pulsante +, per trascinamento e per incolla; DOCX scaricato con i valori reali; nessun fork di Rizzo-PII
+  necessario (il servizio locale accetta le chiamate dell'estensione).
+- **Limite**: i PDF scaricati da Claude sono ripristinati come PDF di solo testo. Proposta a Rizzo-PII di
+  `POST /restore/pdf` (ripristino con impaginazione); l'estensione la usa già se l'app la offre. La Server
+  edition ripristina i PDF con l'impaginazione (riga per riga).
+- **Correzioni** (0.1.1-0.1.13): dettagli in `CHANGELOG.md` e in `docs/PROBLEMI-RILEVATI.md`.
+- **Test automatici** (4/11/2026): server 66 superati (4 saltati), custodi 12/12, estensione unit 50/50.
 
-1. **Prova della Personal edition**: installare l'app desktop di Rizzo-PII e l'estensione; verificare che il servizio locale risponda all'estensione (se no, fork di Rizzo-PII); lanciare lo script di verifica dei selettori su claude.ai (`extension/dev/verifica-sito-reale/`). Prima, `npm install` in `extension/` per i test DOM/e2e.
-2. Correggere con gli agenti ciò che emerge dalla prova.
-3. Prova della Server edition su una VM di prova (`docs/installazione-ente.md`, `docs/verifica-pilota.md`), compresi i test `pytest` di `server/` e `tools/custodi/` e l'aggiunta dell'host del server a `host_permissions`.
-4. Inviare la lettera ad Anthropic.
+### 7.3 Da fare
+
+1. Pull request a Rizzo-PII per `POST /restore/pdf` (patch e testo pronti).
+2. Prove ancora da fare sulla Personal edition: Progetti di Claude, risposta lunga (documento 09), allegati CSV e
+   MD; script `extension/dev/verifica-sito-reale/`.
+3. **Server edition**: ambiente di prova (nessuna VM disponibile: PC con WSL2 e Docker per la prova tecnica, VM
+   dell'ente per il pilota); aggiornare Rizzo-PII nello stack alla 2.0; host del server in `host_permissions`;
+   prova secondo `docs/verifica-pilota.md`.
+4. Lettera ad Anthropic (bozza in `governance/verifiche-fase0.md`).
 5. Verifiche dall'Italia: catalogo ACN e lista DPF.
-6. Adempimenti prima del pilota: DPIA con il DPO, accordo sindacale o autorizzazione dell'Ispettorato, informativa, regolamento, generazione della chiave di custodia.
-7. Link del Chrome Web Store e prima release su GitHub.
+6. Adempimenti prima del pilota: DPIA con il DPO, accordo sindacale o autorizzazione dell'Ispettorato,
+   informativa, regolamento, designazione dei custodi e chiave di custodia.
+7. Punti `[DA VERIFICARE]` nei documenti; Chrome Web Store dopo il pilota.
 
 ## 8. Note di metodo
 
 - L'utente preferisce che il lavoro venga svolto da **agenti** (sub-agenti), per non saturare la conversazione principale.
 - Prima di produrre documenti, discutere le scelte in chat.
+- Quando l'utente deve fare qualcosa (Chrome, PowerShell, GitHub, Cloudflare), dare **sempre istruzioni passo per passo**, numerate, una azione per passo, con ciò che deve comparire alla fine.
+- Le correzioni preparate fuori dal PC principale arrivano come patch (`git am`): verificare prima che la base coincida con `origin/main`.
 - I file di riferimento per gli agenti sono `DECISIONI.md` (prevale) e `SPEC.md`.
 
 ## 9. Come ripartire con gli agenti in una nuova conversazione

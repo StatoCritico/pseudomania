@@ -17,3 +17,4 @@ Gateway_LLM_PA_Piano_d_azione.docx
 site/_screens/
 # Node
 node_modules/
+dist/

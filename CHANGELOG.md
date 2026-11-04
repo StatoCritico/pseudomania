@@ -1,5 +1,10 @@
 # Registro delle modifiche
 
+## Non rilasciato
+
+- Sito: pagina 404; «Gratuito e open source» al posto di «Freeware»; build di Cloudflare Pages in `site/_build/pubblica.sh`.
+- Riepilogo e problemi rilevati aggiornati con gli esiti della prova della Personal edition.
+
 ## 0.1.13 – 4/11/2026 (versione di prova)
 
 Prima prova della Personal edition in condizioni reali (app desktop Rizzo-PII 2.0 e claude.ai) e correzioni

@@ -96,7 +96,7 @@ Impostazioni del progetto Pages `pseudomania`:
 |---|---|
 | Repository | `StatoCritico/pseudomania`, ramo `main` |
 | Framework preset | None |
-| Build command | `mkdir -p dist && cp -r site/index.html site/privacy.html site/approfondimenti site/assets site/_headers dist/` |
+| Build command | `sh site/_build/pubblica.sh` (copia in `dist/` solo le pagine pubblicabili, compresa la pagina `404.html`) |
 | Build output directory | `dist` |
 | Dominio personalizzato | `pseudomania.statocritico.it` (Custom domains → Set up a custom domain; il record CNAME viene creato da Cloudflare) |
 
