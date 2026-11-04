@@ -89,6 +89,8 @@ terms:
   # --- Prodotti e servizi citati spesso ---------------------------------------
   - "Claude"
   - "Anthropic"
+  - "Rizzo-PII"
+  - "Rizzo PII"
   - "PseudoGate"
   - "Microsoft Word"
   - "Microsoft Excel"

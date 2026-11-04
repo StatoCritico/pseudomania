@@ -104,10 +104,13 @@
      */
     async health() {
       try {
-        const r = await this._fetch('/health', { method: 'GET' }, 3000);
+        const r = await this._fetch('/health', { method: 'GET' }, 8000);
         if (r.ok) return 'ok';
         return r.status === 503 ? 'loading' : 'down';
-      } catch (_) {
+      } catch (e) {
+        // Un servizio lento (modello occupato su CPU) non è un rifiuto CORS: il timeout non va
+        // scambiato per un blocco dell'origine.
+        if (e && e.name === 'AbortError') return 'down';
         try {
           await this._fetch('/health', { method: 'GET', mode: 'no-cors' }, 3000);
           return 'cors'; // la richiesta «opaca» passa: il servizio c'è, ma blocca CORS

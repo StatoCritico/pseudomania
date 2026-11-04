@@ -71,6 +71,8 @@
       "Claude",
       "Anthropic",
       "Pseudomania",
+      "Rizzo-PII",
+      "Rizzo PII",
       "Microsoft Word",
       "Microsoft Excel"
     ],
