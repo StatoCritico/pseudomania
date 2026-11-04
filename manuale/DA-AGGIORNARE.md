@@ -46,7 +46,7 @@ e l'impostazione *Rate chats* (da `governance/verifiche-fase0.md`).
 | §3.9 | domini di claude.ai per il proxy; restrizioni per tenant sul piano Team |
 | §3.10 | percorsi e identificativi di Claude Desktop (Windows, macOS) e dell'estensione «Claude in Chrome» |
 
-## 4. Enterprise edition: punti tecnici aperti
+## 4. Server edition: punti tecnici aperti
 
 Da `docs/PROBLEMI-RILEVATI.md` (la cartella `docs/` è in aggiornamento: ricontrollare).
 

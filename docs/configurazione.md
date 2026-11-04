@@ -1,4 +1,4 @@
-# Pseudomania Enterprise edition – configurazione fuori dalla VM
+# Pseudomania Server edition – configurazione fuori dalla VM
 
 Tutto ciò che va impostato **fuori** dal server di Pseudomania perché il pilota sia protetto:
 console di Claude Team, identity provider, policy di Chrome, blocco delle app di Claude su PC
@@ -803,8 +803,8 @@ La **Personal edition** (solo estensione + app desktop di Rizzo-PII sul PC, ness
 una scelta **volontaria** del singolo: l'utente può disattivarla con un clic, usare un altro
 browser o l'app di Claude. Non è un controllo dell'ente e non va presentata come tale.
 
-- Sui PC dell'ente vale solo l'Enterprise edition: la policy `mode="ente"` prevale su qualsiasi
-  impostazione locale. In Enterprise la protezione è **sempre attiva**: il pulsante della barra
+- Sui PC dell'ente vale solo la Server edition: la policy `mode="ente"` prevale su qualsiasi
+  impostazione locale. In Server edition la protezione è **sempre attiva**: il pulsante della barra
   degli strumenti e la scorciatoia Alt+Maiusc+P sono **bloccati su acceso** (`allowDisable=false`)
   e non esiste lo stato per conversazione né il banner della Personal edition; senza policy l'estensione parte in Personal edition, quindi la policy
   deve essere applicata a **tutti** i profili Chrome dei PC del pilota.

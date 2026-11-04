@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Strumento OFFLINE dei custodi di Pseudomania (Enterprise edition).
+"""Strumento OFFLINE dei custodi di Pseudomania (Server edition).
 
 Da usare su un computer NON collegato alla rete (es. portatile dedicato avviato da una
 chiavetta live), alla presenza dei custodi, con verbale. Requisiti: Python 3.10+ e il
@@ -355,7 +355,7 @@ VERBALI = {
 
 def cmd_verbale(a) -> int:
     title, items = VERBALI[a.tipo]
-    lines = [f"# {title}", "", "Pseudomania - Enterprise edition", "",
+    lines = [f"# {title}", "", "Pseudomania - Server edition", "",
              f"Protocollo n. __________ del __________ (bozza generata il {_dt.date.today().isoformat()})", ""]
     for i, it in enumerate(items, 1):
         lines += [f"{i}. {it}", "", "   ______________________________________________", ""]

@@ -42,7 +42,7 @@
         <li><a href="../index.html#soluzione">La soluzione</a></li>
         <li><a href="../index.html#non-solo-software">Non solo software</a></li>
         <li><a href="../index.html#personal">Personal edition</a></li>
-        <li><a href="../index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="../index.html#server">Server edition</a></li>
         <li><a href="../approfondimenti/index.html" aria-current="page">Approfondimenti</a></li>
       </ul>
     </div>
@@ -104,17 +104,17 @@
 <li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
 <li><a href="personal-edition.html#limiti-personal">Limiti specifici</a></li>
 </ul></details></li>
-<li><details><summary>Enterprise edition</summary><ul>
-<li><a href="enterprise-edition.html">Panoramica</a></li>
-<li><a href="enterprise-edition.html#architettura">Architettura</a></li>
-<li><a href="enterprise-edition.html#requisiti">Requisiti</a></li>
-<li><a href="enterprise-edition.html#installazione">Installazione</a></li>
-<li><a href="enterprise-edition.html#estensione-policy">Estensione gestita da policy</a></li>
-<li><a href="enterprise-edition.html#sso">SSO e accesso condizionato</a></li>
-<li><a href="enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
-<li><a href="enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></li>
-<li><a href="enterprise-edition.html#conservazione">Conservazione</a></li>
-<li><a href="enterprise-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
+<li><details><summary>Server edition</summary><ul>
+<li><a href="server-edition.html">Panoramica</a></li>
+<li><a href="server-edition.html#architettura">Architettura</a></li>
+<li><a href="server-edition.html#requisiti">Requisiti</a></li>
+<li><a href="server-edition.html#installazione">Installazione</a></li>
+<li><a href="server-edition.html#estensione-policy">Estensione gestita da policy</a></li>
+<li><a href="server-edition.html#sso">SSO e accesso condizionato</a></li>
+<li><a href="server-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
+<li><a href="server-edition.html#langfuse">Osservabilità con Langfuse</a></li>
+<li><a href="server-edition.html#conservazione">Conservazione</a></li>
+<li><a href="server-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
 </ul></details></li>
 <li><details><summary>Guida all&#x27;uso</summary><ul>
 <li><a href="guida-all-uso.html">Panoramica</a></li>
@@ -158,7 +158,7 @@
 <li><a href="strumenti-e-download.html" aria-current="page">Panoramica</a></li>
 <li><a href="strumenti-e-download.html#estensione">Estensione Chrome</a></li>
 <li><a href="strumenti-e-download.html#rizzo-pii">App desktop Rizzo-PII (Personal edition)</a></li>
-<li><a href="strumenti-e-download.html#server">Server (Enterprise edition)</a></li>
+<li><a href="strumenti-e-download.html#server">Server (Server edition)</a></li>
 <li><a href="strumenti-e-download.html#documentazione">Documentazione</a></li>
 <li><a href="strumenti-e-download.html#modelli">Modelli di governance</a></li>
 <li><a href="strumenti-e-download.html#custodi-tool">Strumento dei custodi</a></li>
@@ -176,7 +176,7 @@
 <div class="grid grid-2">
   <article class="card dl-card">
     <h3>Pacchetto ZIP</h3>
-    <p>Estensione Manifest V3 per entrambe le edizioni: senza policy funziona come Personal edition, con la policy dell'ente come Enterprise edition. Nella Enterprise edition il pacchetto è servito anche dal server interno.</p>
+    <p>Estensione Manifest V3 per entrambe le edizioni: senza policy funziona come Personal edition, con la policy dell'ente come Server edition. Nella Server edition il pacchetto è servito anche dal server interno.</p>
     <a class="btn btn-primary" href="https://github.com/StatoCritico/pseudomania/releases/latest">Scarica l'estensione<span class="visually-hidden"> (pagina dell'ultima release)</span></a>
   </article>
   <article class="card dl-card" id="chrome-web-store">
@@ -190,14 +190,14 @@
 <p>Il servizio di riconoscimento dei dati personali che la Personal edition usa sul tuo PC (<code>127.0.0.1:5005</code>). È distribuito dal progetto Rizzo-PII, non da Pseudomania.</p>
 <p><a class="btn btn-outline" href="https://github.com/Rizzo-AI-Academy/rizzo-pii/releases">Release di Rizzo-PII</a></p>
 
-<h2 id="server">Server (Enterprise edition)</h2>
+<h2 id="server">Server (Server edition)</h2>
 <p>Codice dell'API, file Docker Compose, configurazione di Caddy, OpenBao e PostgreSQL, script di backup, estensione da distribuire. Si scarica con il codice sorgente o dalla release.</p>
 <p><a class="btn btn-outline" href="https://github.com/StatoCritico/pseudomania/releases/latest">Scarica il server<span class="visually-hidden"> (pagina dell'ultima release)</span></a></p>
 
 <h2 id="documentazione">Documentazione</h2>
 <ul>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/README.md">Indice della documentazione</a></li>
-  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md">Installazione della Enterprise edition</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md">Installazione della Server edition</a></li>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/configurazione.md">Configurazione di Claude Team, identity provider e Chrome</a></li>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-personale.md">Installazione della Personal edition</a></li>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/verifica-pilota.md">Verifica prima del go-live</a></li>

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 gli autori di Pseudomania
 //
-// Server di PROVA dell'Enterprise edition: implementa le API di SPEC.md/DECISIONI.md (cifratura
+// Server di PROVA della Server edition: implementa le API di SPEC.md/DECISIONI.md (cifratura
 // lato client del dizionario, escrow, rotazione, recupero) con un rilevatore banale a regex.
 // Solo per sviluppo e test dell'estensione: NON usarlo con dati reali.
 //
@@ -507,7 +507,7 @@ function createServer(opts) {
 if (require.main === module) {
   const port = Number(process.env.PORT || 8787);
   createServer().listen(port, '127.0.0.1', () => {
-    console.log(`Server di prova Pseudomania (Enterprise) su http://127.0.0.1:${port} (token: ${process.env.MOCK_TOKEN || 'dev-token'})`);
+    console.log(`Server di prova Pseudomania (Server edition) su http://127.0.0.1:${port} (token: ${process.env.MOCK_TOKEN || 'dev-token'})`);
   });
 }
 

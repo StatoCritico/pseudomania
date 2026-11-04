@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 gli autori di Pseudomania
 //
-// Enterprise edition: cifratura lato client del dizionario (DECISIONI.md, «Progetto crittografico»).
+// Server edition: cifratura lato client del dizionario (DECISIONI.md, «Progetto crittografico»).
 //
 //  - K_u: AES-GCM 256 generata qui. La copia grezza viene cifrata con la chiave pubblica di
 //    custodia (RSA-OAEP-4096 SHA-256, `escrowPublicKey` da /v1/config) e inviata come escrow

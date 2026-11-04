@@ -15,7 +15,7 @@ Sito ufficiale: <https://pseudomania.statocritico.it> · Licenza: AGPL-3.0-or-la
 1. **Scrivi** in claude.ai come al solito (testo, allegati, istruzioni e file dei progetti).
 2. Al momento dell'invio l'estensione passa il testo al **servizio di riconoscimento**: l'app
    desktop **Rizzo-PII** sul tuo PC (Personal edition) oppure il **server Pseudomania**
-   dell'organizzazione sulla rete interna (Enterprise edition).
+   dell'organizzazione sulla rete interna (Server edition).
 3. I dati riconosciuti diventano **segnaposto** nella forma `[TIPO_N]`, per esempio
    `[FULLNAME_1]` (nome e cognome), `[EMAIL_1]`, `[CF_1]` (codice fiscale), `[IBAN_1]`. Lo
    stesso valore, nella stessa conversazione o nello stesso progetto, riceve sempre lo stesso
@@ -29,7 +29,7 @@ Sito ufficiale: <https://pseudomania.statocritico.it> · Licenza: AGPL-3.0-or-la
 
 ## 1.3 Le due edizioni
 
-| | **Personal edition** | **Enterprise edition** |
+| | **Personal edition** | **Server edition** |
 |---|---|---|
 | Per chi | singolo professionista, piccola organizzazione | enti pubblici e imprese |
 | Componenti | estensione + app desktop **Rizzo-PII** sul PC | estensione imposta da policy di Chrome + **server** su VM interna + Langfuse (facoltativo) |

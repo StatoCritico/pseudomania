@@ -1,13 +1,13 @@
 <!--meta
 title: Informativa privacy dell'estensione – Pseudomania
-description: Informativa sul trattamento dei dati dell'estensione Chrome Pseudomania (Personal ed Enterprise edition): quali dati tratta, dove li invia, cosa riceve claude.ai.
+description: Informativa sul trattamento dei dati dell'estensione Chrome Pseudomania (Personal e Server edition): quali dati tratta, dove li invia, cosa riceve claude.ai.
 -->
   <section class="hero" aria-labelledby="titolo">
     <div class="wrap prose">
       <span class="eyebrow">Informativa privacy</span>
       <h1 id="titolo">Come l'estensione Pseudomania tratta i dati</h1>
-      <p class="lead">L'estensione invia ciò che scrivi su claude.ai <strong>solo</strong> al servizio di rilevamento configurato: l'app Rizzo-PII sul tuo PC (Personal edition) o il server interno del tuo ente (Enterprise edition). Gli sviluppatori di Pseudomania non ricevono nulla: nessuna statistica, nessuna telemetria, nessun tracciamento.</p>
-      <p class="meta-note">Versione [1.0] del [GG/MM/AAAA]. Nella Enterprise edition questa pagina integra, e non sostituisce, l'informativa che l'ente fornisce ai dipendenti ai sensi dell'art. 13 GDPR.</p>
+      <p class="lead">L'estensione invia ciò che scrivi su claude.ai <strong>solo</strong> al servizio di rilevamento configurato: l'app Rizzo-PII sul tuo PC (Personal edition) o il server interno del tuo ente (Server edition). Gli sviluppatori di Pseudomania non ricevono nulla: nessuna statistica, nessuna telemetria, nessun tracciamento.</p>
+      <p class="meta-note">Versione [1.0] del [GG/MM/AAAA]. Nella Server edition questa pagina integra, e non sostituisce, l'informativa che l'ente fornisce ai dipendenti ai sensi dell'art. 13 GDPR.</p>
     </div>
   </section>
 
@@ -20,7 +20,7 @@ description: Informativa sul trattamento dei dati dell'estensione Chrome Pseudom
           <p>Il rilevamento avviene sul tuo computer, con l'app Rizzo-PII all'indirizzo <code>127.0.0.1:5005</code>; dizionario e registro restano nel browser. Nessun altro, sviluppatori compresi, ha accesso ai dati. Se usi Pseudomania per il tuo lavoro, sei tu il titolare dei dati dei tuoi clienti.</p>
         </article>
         <article class="card accent">
-          <h3>Enterprise edition</h3>
+          <h3>Server edition</h3>
           <p>Titolare del trattamento è l'ente che ha installato l'estensione:</p>
           <p>I dati di contatto del titolare e del responsabile della protezione dei dati (RPD/DPO) sono nell'informativa che l'ente consegna agli utenti.</p>
           <p>Il server è gestito dall'ente nella propria rete interna.</p>
@@ -39,13 +39,13 @@ description: Informativa sul trattamento dei dati dell'estensione Chrome Pseudom
           <caption class="visually-hidden">Dati trattati dall'estensione, finalità e destinazione</caption>
           <thead><tr><th scope="col">Dato</th><th scope="col">Perché</th><th scope="col">Dove va</th></tr></thead>
           <tbody>
-            <tr><th scope="row">Testo che invii: messaggi, modifiche, istruzioni di progetto</th><td data-label="Perché">Riconoscere i dati personali e sostituirli con segnaposto prima dell'invio</td><td data-label="Dove va">App Rizzo-PII sul PC (Personal) o server dell'ente (Enterprise)</td></tr>
+            <tr><th scope="row">Testo che invii: messaggi, modifiche, istruzioni di progetto</th><td data-label="Perché">Riconoscere i dati personali e sostituirli con segnaposto prima dell'invio</td><td data-label="Dove va">App Rizzo-PII sul PC (Personal) o server dell'ente (Server edition)</td></tr>
             <tr><th scope="row">Allegati e documenti di progetto (PDF, DOCX, XLSX, TXT, MD, CSV)</th><td data-label="Perché">Pseudonimizzare anche il contenuto dei file</td><td data-label="Dove va">Come sopra; nella Personal edition DOCX e XLSX sono elaborati nel browser</td></tr>
-            <tr><th scope="row">Dizionario dei segnaposto (es. <span class="ph">[FULLNAME_1]</span> → nome reale)</th><td data-label="Perché">Ripristinare i valori reali nelle risposte</td><td data-label="Dove va">Cifrato nel browser con una chiave non estraibile. Personal: resta nel browser. Enterprise: conservato cifrato sul server, con una copia di custodia della chiave apribile solo da due custodi</td></tr>
-            <tr><th scope="row">Identificativo della conversazione o del progetto</th><td data-label="Perché">Usare lo stesso segnaposto per lo stesso dato nella stessa chat o progetto</td><td data-label="Dove va">Browser; server dell'ente (Enterprise)</td></tr>
-            <tr><th scope="row">Risposte di Claude</th><td data-label="Perché">Ripristino locale; nella Enterprise edition la versione con segnaposto è tracciata per misurare il rilevamento</td><td data-label="Dove va">Elaborate nel browser; versione con segnaposto al server dell'ente (Enterprise)</td></tr>
-            <tr><th scope="row">Registro delle azioni</th><td data-label="Perché">Sicurezza e verifica del funzionamento; senza testi, con pseudonimo dell'utente, conteggi e impronta SHA-256 del testo inviato</td><td data-label="Dove va">Browser (Personal) o server dell'ente (Enterprise)</td></tr>
-            <tr><th scope="row">Credenziali (solo Enterprise)</th><td data-label="Perché">Autenticarsi al server con l'accesso unico (SSO) dell'ente</td><td data-label="Dove va">Server dell'ente; conservate nel browser</td></tr>
+            <tr><th scope="row">Dizionario dei segnaposto (es. <span class="ph">[FULLNAME_1]</span> → nome reale)</th><td data-label="Perché">Ripristinare i valori reali nelle risposte</td><td data-label="Dove va">Cifrato nel browser con una chiave non estraibile. Personal: resta nel browser. Server edition: conservato cifrato sul server, con una copia di custodia della chiave apribile solo da due custodi</td></tr>
+            <tr><th scope="row">Identificativo della conversazione o del progetto</th><td data-label="Perché">Usare lo stesso segnaposto per lo stesso dato nella stessa chat o progetto</td><td data-label="Dove va">Browser; server dell'ente (Server edition)</td></tr>
+            <tr><th scope="row">Risposte di Claude</th><td data-label="Perché">Ripristino locale; nella Server edition la versione con segnaposto è tracciata per misurare il rilevamento</td><td data-label="Dove va">Elaborate nel browser; versione con segnaposto al server dell'ente (Server edition)</td></tr>
+            <tr><th scope="row">Registro delle azioni</th><td data-label="Perché">Sicurezza e verifica del funzionamento; senza testi, con pseudonimo dell'utente, conteggi e impronta SHA-256 del testo inviato</td><td data-label="Dove va">Browser (Personal) o server dell'ente (Server edition)</td></tr>
+            <tr><th scope="row">Credenziali (solo Server edition)</th><td data-label="Perché">Autenticarsi al server con l'accesso unico (SSO) dell'ente</td><td data-label="Dove va">Server dell'ente; conservate nel browser</td></tr>
             <tr><th scope="row">Impostazioni dell'estensione</th><td data-label="Perché">Funzionamento</td><td data-label="Dove va">Solo nel browser</td></tr>
           </tbody>
         </table>
@@ -59,10 +59,10 @@ description: Informativa sul trattamento dei dati dell'estensione Chrome Pseudom
       <h2 id="h-destinatari">3. A chi vengono inviati i dati</h2>
       <ul class="check-list">
         <li><strong>Personal edition</strong>: solo all'app Rizzo-PII sul tuo computer (<code>http://127.0.0.1:5005</code>). Nessun server esterno.</li>
-        <li><strong>Enterprise edition</strong>: solo al server dell'ente indicato dalle policy di Chrome (es. <code>https://pseudogate.ente.local</code>), che l'utente non può cambiare. Il server vede il testo durante la singola richiesta per riconoscere i dati, non conserva testi né valori in chiaro e non può decifrare i dizionari.</li>
+        <li><strong>Server edition</strong>: solo al server dell'ente indicato dalle policy di Chrome (es. <code>https://pseudogate.ente.local</code>), che l'utente non può cambiare. Il server vede il testo durante la singola richiesta per riconoscere i dati, non conserva testi né valori in chiaro e non può decifrare i dizionari.</li>
         <li><strong>Nessun invio agli sviluppatori</strong>, a servizi di statistica, a reti pubblicitarie o ad altri terzi. I dati non sono venduti né usati per altre finalità.</li>
       </ul>
-      <p>Nella Enterprise edition i contenuti delle conversazioni possono essere recuperati, tramite l'esportazione di Claude Team e la procedura dei custodi, solo su richiesta scritta dell'autorità giudiziaria.</p>
+      <p>Nella Server edition i contenuti delle conversazioni possono essere recuperati, tramite l'esportazione di Claude Team e la procedura dei custodi, solo su richiesta scritta dell'autorità giudiziaria.</p>
     </div>
   </section>
 
@@ -84,8 +84,8 @@ description: Informativa sul trattamento dei dati dell'estensione Chrome Pseudom
       <h2 id="h-conservazione">5. Per quanto tempo</h2>
       <ul>
         <li><strong>Dizionari delle chat</strong>: 30 giorni dall'ultimo uso.</li>
-        <li><strong>Dizionari dei progetti</strong>: Personal, finché non li elimini; Enterprise, durata del progetto più 30 giorni dall'ultimo uso, con conferma annuale.</li>
-        <li><strong>Registro (Enterprise)</strong>: 90 giorni in forma pseudonima, poi solo conteggi anonimi. Tracce di osservabilità: 30 giorni nel pilota, poi 7. Durate complete: <a href="approfondimenti/scelte-di-progetto.html#tabella-conservazione">tabella di conservazione</a>.</li>
+        <li><strong>Dizionari dei progetti</strong>: Personal, finché non li elimini; Server edition, durata del progetto più 30 giorni dall'ultimo uso, con conferma annuale.</li>
+        <li><strong>Registro (Server edition)</strong>: 90 giorni in forma pseudonima, poi solo conteggi anonimi. Tracce di osservabilità: 30 giorni nel pilota, poi 7. Durate complete: <a href="approfondimenti/scelte-di-progetto.html#tabella-conservazione">tabella di conservazione</a>.</li>
         <li>Puoi cancellare in anticipo i dati di una conversazione o di un progetto dal pannello dell'estensione.</li>
       </ul>
     </div>
@@ -94,7 +94,7 @@ description: Informativa sul trattamento dei dati dell'estensione Chrome Pseudom
   <section class="alt" aria-labelledby="h-diritti">
     <div class="wrap prose">
       <h2 id="h-diritti">6. I tuoi diritti</h2>
-      <p>Nella Enterprise edition puoi esercitare i diritti previsti dagli artt. 15-22 GDPR scrivendo al titolare o al DPO (sezione 1) e proporre reclamo al Garante per la protezione dei dati personali (<a href="https://www.garanteprivacy.it/">garanteprivacy.it</a>). Base giuridica, destinatari e trasferimenti sono indicati nell'informativa ai dipendenti dell'ente: [link all'informativa dell'ente].</p>
+      <p>Nella Server edition puoi esercitare i diritti previsti dagli artt. 15-22 GDPR scrivendo al titolare o al DPO (sezione 1) e proporre reclamo al Garante per la protezione dei dati personali (<a href="https://www.garanteprivacy.it/">garanteprivacy.it</a>). Base giuridica, destinatari e trasferimenti sono indicati nell'informativa ai dipendenti dell'ente: [link all'informativa dell'ente].</p>
       <p>Nella Personal edition i dati restano sul tuo PC: puoi cancellarli in qualsiasi momento dal pannello o disinstallando l'estensione.</p>
     </div>
   </section>

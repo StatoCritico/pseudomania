@@ -10,7 +10,7 @@ cd "$MAN"
 REF="$MAN/../governance/reference-a4.docx"
 REFOPT=""
 [ -f "$REF" ] && REFOPT="--reference-doc=$REF"
-for g in guida-rapida-personal guida-rapida-utente-enterprise; do
+for g in guida-rapida-personal guida-rapida-utente-server; do
   # shellcheck disable=SC2086
   pandoc "$g.md" -f markdown+pipe_tables $REFOPT -o "$g.docx"
   pandoc "$g.md" -f markdown+pipe_tables -s --embed-resources \

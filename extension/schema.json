@@ -3,7 +3,7 @@
   "properties": {
     "mode": {
       "title": "Modalità",
-      "description": "\"ente\" = Enterprise edition (gestita, non disattivabile). Se assente: Personal edition (estensione autonoma con Rizzo-PII desktop, senza server).",
+      "description": "\"ente\" = Server edition (gestita, non disattivabile). Se assente: Personal edition (estensione autonoma con Rizzo-PII desktop, senza server).",
       "type": "string",
       "enum": [
         "ente",

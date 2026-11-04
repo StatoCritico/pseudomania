@@ -6,7 +6,7 @@ Estensione Chrome (Manifest V3) che, su **claude.ai**, pseudonimizza automaticam
 l'utente invia (messaggi, modifiche, allegati, conoscenze e istruzioni di progetto) e ripristina i
 valori reali nelle risposte, direttamente nella pagina. Due edizioni con lo stesso codice:
 
-| | **Enterprise edition** | **Personal edition** |
+| | **Server edition** | **Personal edition** |
 |---|---|---|
 | Attivazione | policy di Chrome (`mode: "ente"`) | nessuna policy |
 | Rilevamento | server Pseudomania dell'ente (Rizzo-PII sulla VM) | app desktop di **Rizzo-PII** sul PC (`http://127.0.0.1:5005`) |
@@ -23,7 +23,7 @@ Licenza: AGPL-3.0-or-later. Deriva in parte da *Privacy Guardrail* del DFKI (Apa
 ## Indice
 
 1. [Installazione per sviluppo (nessuna build)](#1-installazione-per-sviluppo-nessuna-build)
-2. [Enterprise edition: distribuzione con policy](#2-enterprise-edition-distribuzione-con-policy)
+2. [Server edition: distribuzione con policy](#2-server-edition-distribuzione-con-policy)
 3. [Personal edition](#3-personal-edition)
 4. [Come funziona](#4-come-funziona)
 5. [Test](#5-test)
@@ -42,7 +42,7 @@ Il codice è JavaScript puro, **senza passaggi di build**. Si carica direttament
    cd extension
    npm run mock-rizzo         # http://127.0.0.1:5005, rilevatore a regex, NON usare con dati reali
    ```
-4. Enterprise edition senza policy (solo installazioni decompresse): server di prova e configurazione
+4. Server edition senza policy (solo installazioni decompresse): server di prova e configurazione
    gestita simulata
    ```bash
    npm run mock-server        # http://127.0.0.1:8787, token "dev-token"
@@ -55,15 +55,15 @@ Il codice è JavaScript puro, **senza passaggi di build**. Si carica direttament
 
 Requisiti: Chrome/Chromium ≥ 116 (pannello laterale), Node ≥ 20 solo per test e server di prova.
 
-## 2. Enterprise edition: distribuzione con policy
+## 2. Server edition: distribuzione con policy
 
-Nell'Enterprise edition l'estensione è installata forzatamente, la configurazione arriva da
+Nella Server edition l'estensione è installata forzatamente, la configurazione arriva da
 `chrome.storage.managed` (schema in [`schema.json`](schema.json)) e **non può essere disattivata**
 dall'utente. I valori gestiti prevalgono sempre su quelli del server e su quelli locali.
 
 | Chiave | Tipo | Predefinito (ente) | Note |
 |---|---|---|---|
-| `mode` | stringa | — | `"ente"` = Enterprise edition (se assente: Personal edition) |
+| `mode` | stringa | — | `"ente"` = Server edition (se assente: Personal edition) |
 | `serverUrl` | stringa | — | es. `https://pseudogate.ente.local` (senza `/v1`) |
 | `oidcIssuer` | stringa | — | deve esporre `/.well-known/openid-configuration` |
 | `oidcClientId` | stringa | — | client **pubblico** con PKCE |
@@ -73,7 +73,7 @@ dall'utente. I valori gestiti prevalgono sempre su quelli del server e su quelli
 | `allowDisable` | booleano | `false` | |
 | `sites` | lista | `["claude.ai"]` | |
 
-Nell'Enterprise edition `failClosed` e `allowDisable` si leggono **solo** dalla policy (predefiniti `true` /
+Nella Server edition `failClosed` e `allowDisable` si leggono **solo** dalla policy (predefiniti `true` /
 `false`): i valori restituiti da `/v1/config` non possono indebolirli. Da `/v1/config` (che richiede
 autenticazione) l'estensione prende `tagInstruction`, `allowlist` e `maxFileMB`; se il server non è
 raggiungibile usa una copia locale dell'istruzione identica alla SPEC. Da `/v1/config` arrivano anche
@@ -404,12 +404,12 @@ risposta in streaming    ◀── restore.js (MutationObserver, dizionario da /
   (associazione salvata in locale), viene inviato un evento `page_unrecognized` con
   `details.reason = "scope_rebind_conflict"` e un avviso arancione informa l'utente.
 - **Codice sorgente (AGPL)**: la pagina Impostazioni e informazioni (raggiungibile dal pulsante
-  dell'estensione anche nell'Enterprise edition) mostra il sito di Pseudomania e il link restituito da
+  dell'estensione anche nella Server edition) mostra il sito di Pseudomania e il link restituito da
   `GET /v1/source`.
-- **Enterprise edition**: protezione sempre attiva; il pulsante apre un riquadro che spiega che è
+- **Server edition**: protezione sempre attiva; il pulsante apre un riquadro che spiega che è
   gestita dall'organizzazione (la scorciatoia mostra lo stesso avviso nella pagina).
 - **Due edizioni, stessa interfaccia**: gli script di contenuto parlano solo con il service worker;
-  `sw.js` inoltra al server (Enterprise, con `keys.js` per la cifratura) oppure a `local.js`
+  `sw.js` inoltra al server (Server edition, con `keys.js` per la cifratura) oppure a `local.js`
   (Personal: Rizzo-PII, dizionario e registro locali, DOCX/XLSX/PDF in JavaScript).
 
 ### Struttura
@@ -422,10 +422,10 @@ extension/
                    zip.js ooxml.js textfile.js (DOCX/XLSX/testo in JavaScript)
   src/sites/       claude.js (TUTTO ciò che è specifico di claude.ai) registry.js
   src/content/     content.js restore.js ui.js dom-input.js page-hook.js page.css
-  src/background/  sw.js api.js auth.js keys.js (cifratura Enterprise) local.js (Personal) idb.js
+  src/background/  sw.js api.js auth.js keys.js (cifratura Server edition) local.js (Personal) idb.js
   src/sidepanel/ src/popup/ src/options/ src/ui/common.css
   icons/  scripts/make-icons.js scripts/extension-id.js scripts/genera-policy.py
-  dev/mock-server/server.js   server di prova Enterprise (cifratura, escrow, rotazione, recupero)
+  dev/mock-server/server.js   server di prova Server edition (cifratura, escrow, rotazione, recupero)
   dev/mock-rizzo/server.js    Rizzo-PII finto per la Personal edition (senza CORS, come l'originale)
   dev/fixture/claude-like.html pagina che imita claude.ai per i test
   dev/verifica-sito-reale/    script di verifica dei selettori sul sito reale (pilota)
@@ -439,15 +439,15 @@ cd extension
 npm test           # unitari (node:test): segnaposto, scope, configurazione, regole, Rizzo-PII, ZIP/DOCX/XLSX
 npm run test:dom   # DOM in Chromium headless: ripristino su nodi spezzati/streaming, selettori
 npm run test:e2e   # end-to-end: estensione in Chromium + pagina finta di claude.ai
-                   #   smoke.test.js / crypto.test.js: Enterprise con server di prova (escrow, rotazione, recupero)
+                   #   smoke.test.js / crypto.test.js: Server edition con server di prova (escrow, rotazione, recupero)
                    #   personal.test.js: Personal con Rizzo-PII finto (DOCX, PDF→txt, CORS, Rizzo spento)
                    #   activation.test.js: attivazione per conversazione (banner, badge per scheda,
-                   #     ripresa, OFF solo in uscita, scorciatoia) e pulsante bloccato nell'Enterprise
+                   #     ripresa, OFF solo in uscita, scorciatoia) e pulsante bloccato nella Server edition
 ```
 
 Servono Node ≥ 20 e Playwright con Chromium. I test DOM usano Chromium reale invece di jsdom.
 L'end-to-end serve la pagina `dev/fixture/claude-like.html` all'indirizzo `https://claude.ai/*`
-tramite `context.route` (nessuna connessione a claude.ai). L'Enterprise edition è provata con
+tramite `context.route` (nessuna connessione a claude.ai). La Server edition è provata con
 `pgDevManaged` + `devStaticToken` (solo installazioni *decompresse*).
 
 ## 6. Aggiornare i selettori di claude.ai
@@ -491,7 +491,7 @@ Per aggiungere un sito (es. ChatGPT) si crea `src/sites/chatgpt.js` con la stess
 - **Memoria di Claude**: spenta per decisione dell'ente (console Team), quindi nessun riferimento tra
   conversazioni; segnaposto di altri scope risulterebbero comunque «sconosciuti». Le preferenze personali
   del profilo Claude non sono intercettate (il regolamento vieta di inserirvi dati personali).
-- **Enterprise, cambio PC**: senza recupero i dizionari creati sull'altro computer non sono
+- **Server edition, cambio PC**: senza recupero i dizionari creati sull'altro computer non sono
   ripristinabili (per le chat il recupero non è previsto); le voci non caricate entro
   `pendingEntryMinutes` (10) restano non ripristinabili.
 - **Pulsante e scorciatoia nei test**: Chrome non permette di simulare il clic sul pulsante della

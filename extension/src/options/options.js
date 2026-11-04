@@ -4,7 +4,7 @@
 // Impostazioni e informazioni.
 //  - Personal edition: indirizzo di Rizzo-PII desktop (solo locale) e verifica del servizio, compreso
 //    il caso in cui Rizzo-PII risponde ma rifiuta le chiamate dell'estensione (CORS).
-//  - Enterprise edition: tutto è gestito dalla policy; si mostrano il server e le informazioni.
+//  - Server edition: tutto è gestito dalla policy; si mostrano il server e le informazioni.
 
 (function () {
   'use strict';
@@ -76,7 +76,7 @@
   // Informazioni: sito, versione, codice sorgente (AGPL-3.0, art. 13: GET /v1/source del server).
   async function about(ent) {
     $('aboutTitle').textContent = S.infoTitolo;
-    $('aboutExt').textContent = S.infoVersione(chrome.runtime.getManifest().version) + ' ' + (ent ? S.edizioneEnterprise : S.edizionePersonal) + '.';
+    $('aboutExt').textContent = S.infoVersione(chrome.runtime.getManifest().version) + ' ' + (ent ? S.edizioneServer : S.edizionePersonal) + '.';
     $('aboutSiteLbl').textContent = S.infoSito;
     $('aboutSite').href = S.sito;
     $('aboutSite').textContent = S.sito;

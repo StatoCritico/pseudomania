@@ -1,7 +1,7 @@
 # 4. Uso quotidiano
 
 Questo capitolo è per **chi usa claude.ai** con Pseudomania, in entrambe le edizioni. Dove il
-comportamento è diverso è indicato **(Personal)** o **(Enterprise)**.
+comportamento è diverso è indicato **(Personal)** o **(Server edition)**.
 
 > I nomi dei pulsanti di claude.ai citati qui possono cambiare con gli aggiornamenti del sito
 > **[DA VERIFICARE sull'interfaccia reale]**. I testi dei messaggi di Pseudomania sono invece quelli
@@ -11,7 +11,7 @@ comportamento è diverso è indicato **(Personal)** o **(Enterprise)**.
 
 - Sopra la casella di scrittura deve esserci la **barra di Pseudomania** con la scritta
   «Pseudomania attivo: i dati personali vengono pseudonimizzati prima dell'invio».
-- **(Enterprise)** Se compare «Accesso richiesto: effettua il login a Pseudomania dal pulsante
+- **(Server edition)** Se compare «Accesso richiesto: effettua il login a Pseudomania dal pulsante
   dell'estensione», clic sul pulsante di Pseudomania → **Accedi**. Il pulsante è sempre acceso:
   la protezione non si può spegnere.
 - **(Personal)** Il badge sul pulsante deve essere **ON** verde per la conversazione aperta (§2.5).
@@ -39,7 +39,7 @@ segnaposto e parte.
 
 Trascina, incolla o scegli i file come sempre: l'estensione li intercetta prima del caricamento.
 
-| Formato | (Personal) | (Enterprise) |
+| Formato | (Personal) | (Server edition) |
 |---|---|---|
 | DOCX, XLSX | pseudonimizzati nell'estensione | pseudonimizzati dal server |
 | TXT, CSV, MD | pseudonimizzati | pseudonimizzati |
@@ -64,7 +64,7 @@ dizionario**: lo stesso nome ha lo stesso segnaposto in tutte le chat del proget
 
 - I dizionari dei progetti durano più a lungo di quelli delle chat (vedi §4.11, §2.8 e §3.11).
 - **Non condividere** progetti con i colleghi: ogni dizionario appartiene a una sola persona e i
-  colleghi vedrebbero solo segnaposto **(Enterprise: la condivisione è spenta dall'ente)**.
+  colleghi vedrebbero solo segnaposto **(Server edition: la condivisione è spenta dall'ente)**.
 
 ## 4.5 La risposta con i dati ripristinati
 
@@ -101,7 +101,7 @@ Usala soprattutto con testi lunghi, elenchi di persone, testi con nomi stranieri
 Sotto ogni messaggio inviato compare un contrassegno, per esempio «3 dati protetti» (oppure
 «nessun dato personale»). Cliccandolo si apre a lato il pannello **«Ispezione Pseudomania»** (in
 alternativa: **(Personal)** clic destro sul pulsante di Pseudomania → **Apri pannello di ispezione**;
-**(Enterprise)** clic sul pulsante → **Apri pannello di ispezione**).
+**(Server edition)** clic sul pulsante → **Apri pannello di ispezione**).
 
 Il pannello mostra:
 
@@ -111,7 +111,7 @@ Il pannello mostra:
 - i pulsanti di **segnalazione** (§4.8) e, dopo un invio bloccato, **Segnala blocco errato** (§4.9);
 - **Elimina i dati di questa conversazione / di questo progetto**: cancella il dizionario (definitivo:
   le risposte già ricevute non saranno più ripristinate);
-- **(Enterprise)** la **conferma annuale** del progetto (§4.11), il **recupero** da un altro computer
+- **(Server edition)** la **conferma annuale** del progetto (§4.11), il **recupero** da un altro computer
   (§4.10) e l'identificativo abbreviato della chiave di cifratura attiva.
 
 Il contenuto «originale/inviato» resta solo nella memoria della sessione: chiudendo il browser si
@@ -130,7 +130,7 @@ Nel campo «Nota facoltativa» **non scrivere dati reali**: usa i segnaposto o d
 dato («un cognome straniero», «un numero di pratica»). La nota viene comunque ripulita dai valori
 noti.
 
-- **(Enterprise)** la segnalazione va al server dell'organizzazione e serve a migliorare il
+- **(Server edition)** la segnalazione va al server dell'organizzazione e serve a migliorare il
   rilevamento. Se è partito un dato reale, avvisa **anche** il referente indicato dal regolamento:
   può essere una violazione di dati da valutare.
 - **(Personal)** la segnalazione resta nel registro locale («Segnalazione salvata nel registro locale»).
@@ -153,11 +153,11 @@ Pseudomania».
   sezione dedicata mostra «Ultimo invio bloccato (categoria «…») alle …». Funziona **anche se il
   messaggio non è partito** e non invia il testo: registra solo la categoria del blocco
   («Segnalazione inviata. Grazie.»; **(Personal)** la segnalazione resta nel registro locale).
-  **(Enterprise)** Per casi urgenti puoi rivolgerti anche all'help desk.
+  **(Server edition)** Per casi urgenti puoi rivolgerti anche all'help desk.
 - Il blocco non sostituisce il tuo giudizio: i dati particolari **non vanno inseriti** anche quando
   l'estensione non li riconosce.
 
-Altri blocchi possibili: server o servizio di riconoscimento non disponibile **(Enterprise)**, pagina
+Altri blocchi possibili: server o servizio di riconoscimento non disponibile **(Server edition)**, pagina
 non riconosciuta, testo che non è stato possibile sostituire nella casella. In tutti questi casi
 l'invio è fermato per sicurezza: vedi il capitolo 6.
 
@@ -169,7 +169,7 @@ l'avviso «… segnaposto non sono ripristinabili: il dizionario è stato cifrat
 
 - **Chat**: il recupero **non è previsto** (in nessuna edizione).
 - **Progetti (Personal)**: nessun recupero.
-- **Progetti (Enterprise)**: recupero possibile **su richiesta motivata**, approvata dal dirigente:
+- **Progetti (Server edition)**: recupero possibile **su richiesta motivata**, approvata dal dirigente:
   1. apri il progetto sul nuovo PC, poi il pannello di ispezione → sezione «Recupero da un altro
      computer (solo progetti)» → **Prepara il recupero**;
   2. il pannello mostra «Codice del dispositivo da comunicare all'assistenza: …»: apri un ticket
@@ -183,7 +183,7 @@ l'avviso «… segnaposto non sono ripristinabili: il dizionario è stato cifrat
 Le voci create negli ultimi minuti prima del cambio (non ancora caricate entro 10 minuti) possono
 restare non ripristinabili.
 
-## 4.11 Conferma annuale dei progetti (Enterprise)
+## 4.11 Conferma annuale dei progetti (Server edition)
 
 Ogni progetto ha una scadenza di conferma. Nel pannello di ispezione, sezione **«Conferma annuale del
 progetto»**, compare: «Senza conferma il dizionario di questo progetto scade il …». Se il progetto è
@@ -203,7 +203,7 @@ non sono più ripristinabili. Cancella tu i progetti che non ti servono più.
    ricerca: le query sono elaborate da un sub-fornitore del servizio.
 3. **Non usare l'app desktop o mobile di Claude**, altri browser o la navigazione in incognito per
    dati personali: lì Pseudomania non c'è.
-4. **(Enterprise)** Non accedere all'account dell'ente da **dispositivi personali** o non gestiti, e non
+4. **(Server edition)** Non accedere all'account dell'ente da **dispositivi personali** o non gestiti, e non
    usare account personali per dati dell'ente (nemmeno con la Personal edition).
 5. **Non chiedere a Claude di modificare, spiegare, tradurre o "indovinare" i segnaposto**, e non
    fornire indizi per risalire al valore originale.
@@ -223,7 +223,7 @@ non sono più ripristinabili. Cancella tu i progetti che non ti servono più.
 ha riconosciuto e tutto ciò che non passa dall'estensione (§1.5).
 
 **Perché nel mio messaggio vedo `[FULLNAME_1]` invece del nome?** Perché è ciò che è stato inviato. Il
-nome reale è nel dizionario sul tuo computer (o cifrato sul server, Enterprise).
+nome reale è nel dizionario sul tuo computer (o, nella Server edition, cifrato sul server).
 
 **Lo stesso nome ha sempre lo stesso segnaposto?** Sì, all'interno della stessa conversazione o dello
 stesso progetto. In un'altra conversazione la numerazione riparte.
@@ -234,21 +234,21 @@ usando solo i segnaposto presenti.
 
 **Posso spegnere Pseudomania?** **(Personal)** Sì, per la sola conversazione aperta: clic sul
 pulsante o Alt+Maiusc+P. Si spegne solo l'uscita: i segnaposto delle risposte vengono comunque
-ripristinati. La scelta resta salvata per quella conversazione. **(Enterprise)** No: «Protezione
+ripristinati. La scelta resta salvata per quella conversazione. **(Server edition)** No: «Protezione
 sempre attiva: Pseudomania è gestito dalla tua organizzazione e non può essere disattivato.»
 
 **Ho spento la protezione e poi l'ho riaccesa: ciò che ho inviato nel frattempo è protetto?** No.
 Quanto inviato con la protezione spenta è già arrivato a Claude in chiaro; se conteneva dati di terzi,
 cancella la conversazione e valuta se si tratta di una violazione.
 
-**Il server è irraggiungibile e non posso inviare: posso aggirare?** No **(Enterprise)**: l'invio è
+**Il server è irraggiungibile e non posso inviare: posso aggirare?** No **(Server edition)**: l'invio è
 bloccato per tutelare i dati. Riprova più tardi o contatta l'assistenza.
 
 **Ho cambiato PC e vedo segnaposto grigi.** Vedi §4.10.
 
 **Il PDF è arrivato a Claude come .txt.** È previsto nella Personal edition (§2.7).
 
-**L'amministratore può leggere le mie conversazioni?** **(Enterprise)** No in via ordinaria: il server
+**L'amministratore può leggere le mie conversazioni?** **(Server edition)** No in via ordinaria: il server
 non conserva testi (solo un registro minimo con impronte e uno pseudonimo, e tracce pseudonimizzate
 per pochi giorni) e i dizionari sono cifrati con la tua chiave. I contenuti si estraggono **solo su
 richiesta dell'autorità giudiziaria**, con due custodi e verbale (regolamento, art. 10).

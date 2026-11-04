@@ -42,7 +42,7 @@
         <li><a href="#soluzione">La soluzione</a></li>
         <li><a href="#non-solo-software">Non solo software</a></li>
         <li><a href="#personal">Personal edition</a></li>
-        <li><a href="#enterprise">Enterprise edition</a></li>
+        <li><a href="#server">Server edition</a></li>
         <li><a href="approfondimenti/index.html">Approfondimenti</a></li>
       </ul>
     </div>
@@ -59,11 +59,11 @@
   <section class="hero" aria-labelledby="titolo">
     <div class="wrap">
       <h1 id="titolo">Pseudonimizzazione trasparente con Claude e Chrome</h1>
-      <p class="lead">Pseudomania è la soluzione per la mitigazione del rischio: usa un modello open source (<a href="https://github.com/Rizzo-AI-Academy/rizzo-pii">Rizzo-PII</a>) per sostituire nomi, codici fiscali, IBAN, indirizzi e altri dati personali con segnaposto come <span class="ph">[FULLNAME_1]</span> prima che il testo arrivi a Claude, e rimette i valori reali nella risposta, direttamente in Chrome, senza bisogno di operazioni manuali, anche per allegati PDF, XLSX, DOCX e file di testo. Freeware, open source, disponibile sia per utente singolo che in versione enterprise. <a href="approfondimenti/personal-edition.html#installazione">Vai alle istruzioni</a>, oppure approfondisci qui sotto.</p>
+      <p class="lead">Pseudomania è la soluzione per la mitigazione del rischio: usa un modello open source (<a href="https://github.com/Rizzo-AI-Academy/rizzo-pii">Rizzo-PII</a>) per sostituire nomi, codici fiscali, IBAN, indirizzi e altri dati personali con segnaposto come <span class="ph">[FULLNAME_1]</span> prima che il testo arrivi a Claude, e rimette i valori reali nella risposta, direttamente in Chrome, senza bisogno di operazioni manuali, anche per allegati PDF, XLSX, DOCX e file di testo. Freeware, open source, disponibile sia per utente singolo che in versione server. <a href="approfondimenti/personal-edition.html#installazione">Vai alle istruzioni</a>, oppure approfondisci qui sotto.</p>
       <p class="honest"><strong>Detto con onestà:</strong> è una misura che riduce il rischio, non una garanzia di anonimizzazione. I dati pseudonimizzati restano dati personali, il riconoscimento automatico può sbagliare e lo strumento funziona solo dentro un insieme di regole e impostazioni.</p>
       <div class="cta">
         <a class="btn btn-primary" href="#personal">Personal edition</a>
-        <a class="btn btn-primary" href="#enterprise">Enterprise edition</a>
+        <a class="btn btn-primary" href="#server">Server edition</a>
         <a class="btn btn-outline" href="approfondimenti/come-funziona.html">Come funziona</a>
       </div>
 
@@ -344,22 +344,22 @@
     </div>
   </section>
 
-  <section id="enterprise" class="home-sec alt" aria-labelledby="h-enterprise">
+  <section id="server" class="home-sec alt" aria-labelledby="h-server">
     <div class="wrap">
       <span class="eyebrow">Per gli enti</span>
-      <h2 id="h-enterprise">Enterprise edition</h2>
+      <h2 id="h-server">Server edition</h2>
       <p class="section-intro">Per le organizzazioni che vogliono usare Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità. Attenzione: la pseudonimizzazione è un trattamento, e i dati dell'osservabilità richiedono regole di accesso e accordi sindacali o autorizzazione dell'Ispettorato.</p>
-      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="Enterprise edition: punti principali">
+      <div class="carousel" role="region" aria-roledescription="carosello" aria-label="Server edition: punti principali">
         <div class="car-controls">
-          <button type="button" class="car-btn car-prev" aria-controls="car-enterprise" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+          <button type="button" class="car-btn car-prev" aria-controls="car-server" aria-label="Schede precedenti"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
           <span class="car-status" aria-hidden="true"></span>
-          <button type="button" class="car-btn car-next" aria-controls="car-enterprise" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+          <button type="button" class="car-btn car-next" aria-controls="car-server" aria-label="Schede successive"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
         </div>
-        <ul class="car-track" id="car-enterprise">
+        <ul class="car-track" id="car-server">
         <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="1 di 6">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">01</span>
-            <h3><a href="approfondimenti/enterprise-edition.html#architettura">Server nella rete dell&#x27;ente</a></h3>
+            <h3><a href="approfondimenti/server-edition.html#architettura">Server nella rete dell&#x27;ente</a></h3>
             <p>Una VM interna con API, Rizzo-PII senza accesso a Internet, PostgreSQL, OpenBao e un key store separato.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
@@ -367,7 +367,7 @@
         <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="2 di 6">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">02</span>
-            <h3><a href="approfondimenti/enterprise-edition.html#estensione-policy">Estensione gestita</a></h3>
+            <h3><a href="approfondimenti/server-edition.html#estensione-policy">Estensione gestita</a></h3>
             <p>Installata dalle policy di Chrome e sempre attiva in ogni conversazione: il pulsante è bloccato su acceso; se il server non risponde l'invio si blocca.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
@@ -375,7 +375,7 @@
         <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="3 di 6">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">03</span>
-            <h3><a href="approfondimenti/enterprise-edition.html#sso">SSO e accesso condizionato</a></h3>
+            <h3><a href="approfondimenti/server-edition.html#sso">SSO e accesso condizionato</a></h3>
             <p>Accesso con l'identity provider dell'ente; claude.ai raggiungibile solo dal Chrome gestito.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
@@ -383,7 +383,7 @@
         <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="4 di 6">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">04</span>
-            <h3><a href="approfondimenti/enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></h3>
+            <h3><a href="approfondimenti/server-edition.html#chiavi-custodi">Chiavi e custodi</a></h3>
             <p>Chiave per utente generata nel browser, copia di custodia apribile solo da due custodi, rotazione ogni 90 giorni.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
@@ -391,7 +391,7 @@
         <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="5 di 6">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">05</span>
-            <h3><a href="approfondimenti/enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></h3>
+            <h3><a href="approfondimenti/server-edition.html#langfuse">Osservabilità con Langfuse</a></h3>
             <p>Tracce dei testi pseudonimizzati per misurare il rilevamento, conservate 30 giorni nel pilota, poi 7.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>
@@ -399,7 +399,7 @@
         <li class="car-slide" role="group" aria-roledescription="scheda" aria-label="6 di 6">
           <div class="car-card">
             <span class="car-num" aria-hidden="true">06</span>
-            <h3><a href="approfondimenti/enterprise-edition.html#conservazione">Conservazione documentata</a></h3>
+            <h3><a href="approfondimenti/server-edition.html#conservazione">Conservazione documentata</a></h3>
             <p>Ogni durata è motivata con fonti; i backup si rendono illeggibili distruggendo le chiavi.</p>
             <span class="car-more" aria-hidden="true">Approfondisci</span>
           </div>

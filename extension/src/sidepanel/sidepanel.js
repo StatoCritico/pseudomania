@@ -15,7 +15,7 @@
   let reportType = null;
   let dict = {};
   let dictInfo = { unrecoverable: [], confirmBy: null };
-  let edition = 'enterprise';
+  let edition = 'server';
   const openedTraces = new Set();
 
   function send(type, payload) {
@@ -94,14 +94,14 @@
       records = r && r.ok ? r.data : [];
     }
     const st = (await chrome.storage.local.get('pgState')).pgState;
-    edition = st && st.config && st.config.mode === 'ente' ? 'enterprise' : 'personal';
+    edition = st && st.config && st.config.mode === 'ente' ? 'server' : 'personal';
     dictInfo = { unrecoverable: [], confirmBy: null };
     if (target && target.scope) {
       const d = await send('pg:dictionary', { scope: target.scope });
       dict = d && d.ok ? d.data.entries || {} : {};
       if (d && d.ok) dictInfo = { unrecoverable: d.data.unrecoverable || [], confirmBy: d.data.confirmBy || null };
     }
-    renderEnterprise();
+    renderServer();
     renderBlock();
     const sel = $('records');
     sel.textContent = '';
@@ -174,9 +174,9 @@
     }
   }
 
-  /** Enterprise: conferma annuale dei progetti e recupero delle chiavi. */
-  async function renderEnterprise() {
-    const ent = edition === 'enterprise';
+  /** Server edition: conferma annuale dei progetti e recupero delle chiavi. */
+  async function renderServer() {
+    const ent = edition === 'server';
     const project = Boolean(target && target.scope && target.scope.type === 'project');
     const cb = $('confirmBox');
     cb.hidden = !(ent && project && dictInfo.confirmBy);
@@ -231,7 +231,7 @@
     $('btnPrepare').disabled = false;
     if (r && r.ok) $('recoveryCode').textContent = S.pannelloRecuperoCodice(r.data.deviceKeyId);
     else $('msg').textContent = S.pannelloErrore + ((r && (r.message || r.error)) || '');
-    renderEnterprise();
+    renderServer();
   }
 
   async function importRecovered() {

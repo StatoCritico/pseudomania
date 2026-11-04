@@ -1,4 +1,4 @@
-# Pseudomania Enterprise edition – procedure dei custodi
+# Pseudomania Server edition – procedure dei custodi
 
 Per i custodi, il DPO e gli amministratori di sistema. Descrive la **chiave di custodia** e le
 operazioni che richiedono i custodi: generazione, verifica, recupero dopo un cambio PC,

@@ -42,7 +42,7 @@
         <li><a href="../index.html#soluzione">La soluzione</a></li>
         <li><a href="../index.html#non-solo-software">Non solo software</a></li>
         <li><a href="../index.html#personal">Personal edition</a></li>
-        <li><a href="../index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="../index.html#server">Server edition</a></li>
         <li><a href="../approfondimenti/index.html" aria-current="page">Approfondimenti</a></li>
       </ul>
     </div>
@@ -104,17 +104,17 @@
 <li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
 <li><a href="personal-edition.html#limiti-personal">Limiti specifici</a></li>
 </ul></details></li>
-<li><details><summary>Enterprise edition</summary><ul>
-<li><a href="enterprise-edition.html">Panoramica</a></li>
-<li><a href="enterprise-edition.html#architettura">Architettura</a></li>
-<li><a href="enterprise-edition.html#requisiti">Requisiti</a></li>
-<li><a href="enterprise-edition.html#installazione">Installazione</a></li>
-<li><a href="enterprise-edition.html#estensione-policy">Estensione gestita da policy</a></li>
-<li><a href="enterprise-edition.html#sso">SSO e accesso condizionato</a></li>
-<li><a href="enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
-<li><a href="enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></li>
-<li><a href="enterprise-edition.html#conservazione">Conservazione</a></li>
-<li><a href="enterprise-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
+<li><details><summary>Server edition</summary><ul>
+<li><a href="server-edition.html">Panoramica</a></li>
+<li><a href="server-edition.html#architettura">Architettura</a></li>
+<li><a href="server-edition.html#requisiti">Requisiti</a></li>
+<li><a href="server-edition.html#installazione">Installazione</a></li>
+<li><a href="server-edition.html#estensione-policy">Estensione gestita da policy</a></li>
+<li><a href="server-edition.html#sso">SSO e accesso condizionato</a></li>
+<li><a href="server-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
+<li><a href="server-edition.html#langfuse">Osservabilità con Langfuse</a></li>
+<li><a href="server-edition.html#conservazione">Conservazione</a></li>
+<li><a href="server-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
 </ul></details></li>
 <li><details><summary>Guida all&#x27;uso</summary><ul>
 <li><a href="guida-all-uso.html">Panoramica</a></li>
@@ -158,7 +158,7 @@
 <li><a href="strumenti-e-download.html">Panoramica</a></li>
 <li><a href="strumenti-e-download.html#estensione">Estensione Chrome</a></li>
 <li><a href="strumenti-e-download.html#rizzo-pii">App desktop Rizzo-PII (Personal edition)</a></li>
-<li><a href="strumenti-e-download.html#server">Server (Enterprise edition)</a></li>
+<li><a href="strumenti-e-download.html#server">Server (Server edition)</a></li>
 <li><a href="strumenti-e-download.html#documentazione">Documentazione</a></li>
 <li><a href="strumenti-e-download.html#modelli">Modelli di governance</a></li>
 <li><a href="strumenti-e-download.html#custodi-tool">Strumento dei custodi</a></li>
@@ -192,7 +192,7 @@
 </details>
 <details class="acc" id="faq-abbonamento">
   <summary>Serve un abbonamento?</summary>
-  <div class="acc-body"><p>Pseudomania è gratuito. Serve un account claude.ai: la Enterprise edition è pensata per <strong>Claude Team</strong>; la Personal edition funziona anche con Pro e Max. Verifica le condizioni del tuo piano, in particolare sull'uso dei dati per l'addestramento.</p></div>
+  <div class="acc-body"><p>Pseudomania è gratuito. Serve un account claude.ai: la Server edition è pensata per <strong>Claude Team</strong>; la Personal edition funziona anche con Pro e Max. Verifica le condizioni del tuo piano, in particolare sull'uso dei dati per l'addestramento.</p></div>
 </details>
 <details class="acc" id="faq-anonimizza">
   <summary>Pseudomania anonimizza i dati?</summary>
@@ -214,7 +214,7 @@
 </details>
 <details class="acc" id="faq-server">
   <summary>Che cosa succede se il server o l'app Rizzo-PII non risponde?</summary>
-  <div class="acc-body"><p>Nella Enterprise edition l'invio si blocca finché il server non torna disponibile. Nella Personal edition ricevi un avviso e devi confermare esplicitamente se inviare senza protezione.</p></div>
+  <div class="acc-body"><p>Nella Server edition l'invio si blocca finché il server non torna disponibile. Nella Personal edition ricevi un avviso e devi confermare esplicitamente se inviare senza protezione.</p></div>
 </details>
 <details class="acc" id="faq-admin">
   <summary>L'amministratore del server può leggere i miei dati?</summary>
@@ -226,7 +226,7 @@
 </details>
 <details class="acc" id="faq-durata">
   <summary>Quanto dura il dizionario?</summary>
-  <div class="acc-body"><p>Chat: 30 giorni dall'ultimo uso. Progetti: per tutta la durata del progetto più 30 giorni dall'ultimo uso, con conferma annuale nella Enterprise edition; nella Personal edition finché non li elimini. Puoi cancellare prima dal pannello.</p></div>
+  <div class="acc-body"><p>Chat: 30 giorni dall'ultimo uso. Progetti: per tutta la durata del progetto più 30 giorni dall'ultimo uso, con conferma annuale nella Server edition; nella Personal edition finché non li elimini. Puoi cancellare prima dal pannello.</p></div>
 </details>
 
 <h2 id="faq-uso">Uso</h2>
@@ -240,11 +240,11 @@
 </details>
 <details class="acc" id="faq-disattivare">
   <summary>Posso disattivarlo?</summary>
-  <div class="acc-body"><p>Nella Enterprise edition no: la protezione è sempre attiva e il pulsante è bloccato dalla policy. Nella Personal edition sì, per singola conversazione, con un clic sul pulsante o <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd>; lo spegnimento riguarda solo ciò che invii, il ripristino dei segnaposto resta attivo. <a href="personal-edition.html#attivazione">Dettagli</a>.</p></div>
+  <div class="acc-body"><p>Nella Server edition no: la protezione è sempre attiva e il pulsante è bloccato dalla policy. Nella Personal edition sì, per singola conversazione, con un clic sul pulsante o <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd>; lo spegnimento riguarda solo ciò che invii, il ripristino dei segnaposto resta attivo. <a href="personal-edition.html#attivazione">Dettagli</a>.</p></div>
 </details>
 <details class="acc" id="faq-cambio-pc">
   <summary>Ho cambiato PC: perché vedo segnaposto non ripristinabili?</summary>
-  <div class="acc-body"><p>Perché la chiave che cifra il dizionario resta nel browser del vecchio PC. Le chat non si recuperano; nella Enterprise edition i progetti sì, su richiesta motivata, tramite i custodi.</p></div>
+  <div class="acc-body"><p>Perché la chiave che cifra il dizionario resta nel browser del vecchio PC. Le chat non si recuperano; nella Server edition i progetti sì, su richiesta motivata, tramite i custodi.</p></div>
 </details>
 
 <h2 id="faq-enti">Enti e conformità</h2>
@@ -253,8 +253,8 @@
   <div class="acc-body"><p>No. Servono anche DPIA, accordo con il fornitore, regolamento, informativa, formazione e, per i dipendenti, l'accordo sindacale o l'autorizzazione previsti dall'art. 4 dello Statuto dei lavoratori. Vedi <a href="non-solo-software.html">Non solo software</a>.</p></div>
 </details>
 <details class="acc" id="faq-edizioni">
-  <summary>Che differenza c'è tra Personal ed Enterprise edition?</summary>
-  <div class="acc-body"><p>La Personal è solo l'estensione con l'app Rizzo-PII sul PC, volontaria e senza server. La Enterprise aggiunge un server nella rete dell'ente, installazione forzata, SSO, custodi, registro minimo e Langfuse. <a href="scelte-di-progetto.html#due-edizioni">Perché due edizioni</a>.</p></div>
+  <summary>Che differenza c'è tra Personal e Server edition?</summary>
+  <div class="acc-body"><p>La Personal è solo l'estensione con l'app Rizzo-PII sul PC, volontaria e senza server. La Server edition aggiunge un server nella rete dell'ente, installazione forzata, SSO, custodi, registro minimo e Langfuse. <a href="scelte-di-progetto.html#due-edizioni">Perché due edizioni</a>.</p></div>
 </details>
 
 <h2 id="faq-licenza">Licenza e riuso</h2>

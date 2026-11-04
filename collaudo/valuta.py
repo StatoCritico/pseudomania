@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Valutazione di Pseudomania (Enterprise edition) sul corpus sintetico (collaudo, fase 4).
+"""Valutazione di Pseudomania (Server edition) sul corpus sintetico (collaudo, fase 4).
 
 Esegue ogni documento di collaudo/corpus/manifest.json contro un'API di Pseudomania in
 esecuzione e produce un rapporto Markdown in italiano con:

@@ -152,41 +152,41 @@
       ]
     },
     {
-      "id": "enterprise",
+      "id": "server",
       "eyebrow": "Per gli enti",
-      "titolo": "Enterprise edition",
+      "titolo": "Server edition",
       "intro": "Per le organizzazioni che vogliono usare Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità. Attenzione: la pseudonimizzazione è un trattamento, e i dati dell'osservabilità richiedono regole di accesso e accordi sindacali o autorizzazione dell'Ispettorato.",
       "alt": true,
       "schede": [
         {
           "titolo": "Server nella rete dell'ente",
           "testo": "Una VM interna con API, Rizzo-PII senza accesso a Internet, PostgreSQL, OpenBao e un key store separato.",
-          "href": "approfondimenti/enterprise-edition.html#architettura"
+          "href": "approfondimenti/server-edition.html#architettura"
         },
         {
           "titolo": "Estensione gestita",
           "testo": "Installata dalle policy di Chrome e sempre attiva in ogni conversazione: il pulsante è bloccato su acceso; se il server non risponde l'invio si blocca.",
-          "href": "approfondimenti/enterprise-edition.html#estensione-policy"
+          "href": "approfondimenti/server-edition.html#estensione-policy"
         },
         {
           "titolo": "SSO e accesso condizionato",
           "testo": "Accesso con l'identity provider dell'ente; claude.ai raggiungibile solo dal Chrome gestito.",
-          "href": "approfondimenti/enterprise-edition.html#sso"
+          "href": "approfondimenti/server-edition.html#sso"
         },
         {
           "titolo": "Chiavi e custodi",
           "testo": "Chiave per utente generata nel browser, copia di custodia apribile solo da due custodi, rotazione ogni 90 giorni.",
-          "href": "approfondimenti/enterprise-edition.html#chiavi-custodi"
+          "href": "approfondimenti/server-edition.html#chiavi-custodi"
         },
         {
           "titolo": "Osservabilità con Langfuse",
           "testo": "Tracce dei testi pseudonimizzati per misurare il rilevamento, conservate 30 giorni nel pilota, poi 7.",
-          "href": "approfondimenti/enterprise-edition.html#langfuse"
+          "href": "approfondimenti/server-edition.html#langfuse"
         },
         {
           "titolo": "Conservazione documentata",
           "testo": "Ogni durata è motivata con fonti; i backup si rendono illeggibili distruggendo le chiavi.",
-          "href": "approfondimenti/enterprise-edition.html#conservazione"
+          "href": "approfondimenti/server-edition.html#conservazione"
         }
       ]
     },

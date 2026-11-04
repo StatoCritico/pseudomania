@@ -2,7 +2,7 @@
 // Copyright (C) 2026 gli autori di Pseudomania
 //
 // Service worker. Due edizioni, stessa interfaccia di messaggi verso gli script di contenuto:
-//  - Enterprise edition: parla con il server Pseudomania dell'ente; cifra/decifra il dizionario
+//  - Server edition: parla con il server Pseudomania dell'ente; cifra/decifra il dizionario
 //    nel browser (keys.js); token OIDC.
 //  - Personal edition: estensione autonoma con Rizzo-PII desktop (local.js); nessun server.
 // Dizionari decifrati in chrome.storage.session (memoria, solo contesti fidati), record di ispezione idem.
@@ -40,7 +40,7 @@ async function readManaged() {
   }
   let dev = false;
   if (!managed || !Object.keys(managed).length) {
-    // Solo per installazioni «decompresse» di sviluppo: permette di provare l'Enterprise edition
+    // Solo per installazioni «decompresse» di sviluppo: permette di provare la Server edition
     // senza policy. Ignorato nelle installazioni gestite o dal Web Store.
     try {
       const self = await chrome.management.getSelf();
@@ -128,7 +128,7 @@ async function publishStateNow(opts) {
   return state;
 }
 
-/** Enterprise: chiave al primo avvio, rotazione periodica o forzata, chiavi recuperate. */
+/** Server edition: chiave al primo avvio, rotazione periodica o forzata, chiavi recuperate. */
 async function keyMaintenance(cfg) {
   try {
     const before = await PG.keys.activeKey();
@@ -211,7 +211,7 @@ globalThis.pgToggleForTab = toggleForTab; // usato anche dai test end-to-end
 
 async function updateIcon(cfg, auth) {
   // Personal: niente popup, il clic sul pulsante attiva/disattiva la conversazione della scheda.
-  // Enterprise: il popup spiega che la protezione è gestita dall'ente.
+  // Server edition: il popup spiega che la protezione è gestita dall'ente.
   await chrome.action.setPopup({ popup: isPersonal(cfg) ? '' : 'src/popup/popup.html' });
   if (isPersonal(cfg)) {
     const bad = !lastHealth.ok;
@@ -249,7 +249,7 @@ function noteResult(r) {
   if (r.ok && !lastHealth.ok) publishState();
 }
 
-// --- Eventi (Enterprise: al server, con coda; Personal: registro locale cifrato) -------------
+// --- Eventi (Server edition: al server, con coda; Personal: registro locale cifrato) -------------
 async function sendEvent(cfg, body) {
   if (isPersonal(cfg)) return PG.local.event(body);
   const r = await PG.api.event(cfg, body);
@@ -338,7 +338,7 @@ async function mergeDictionary(scope, values) {
   await chrome.storage.session.set({ [k]: cur });
 }
 
-/** Enterprise: cifra le voci nuove e le carica (POST /v1/dictionary/entries). */
+/** Server edition: cifra le voci nuove e le carica (POST /v1/dictionary/entries). */
 async function uploadNewEntries(cfg, scope, newEntries) {
   if (!newEntries || !newEntries.length) return null;
   try {

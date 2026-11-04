@@ -1,0 +1,10 @@
+Prepara una tabella riassuntiva con una riga per ciascuna di queste persone, con le colonne Nome, Codice fiscale, IBAN, Città, Telefono. Poi scrivi per ognuna un paragrafo di tre righe che ripete nome e codice fiscale. Infine elenca tutti gli IBAN in un blocco di codice.
+
+- Niccolò Valentini, CF VLNNCL69H08E289M, IBAN IT38R0417642380725109276080, Reggio Emilia, tel. +39 332 872 8712
+- Beatrice Farina, CF FRNBRC96D67E289A, IBAN IT87B0951711625822602189415, Ravenna, tel. +39 327 811 2614
+- Valentina Cattaneo, CF CTTVNT03E66H199N, IBAN IT94A0853479986606546351960, Bologna, tel. +39 330 318 6239
+- Valentina Lombardi, CF LMBVNT67B59G337B, IBAN IT92X0607897016858686577964, Ravenna, tel. +39 321 550 4663
+- Martina Bernardi, CF BRNMTN57B43A944L, IBAN IT70O0816793550111840767560, Ravenna, tel. +39 348 430 1899
+- Giulia Testa, CF TSTGLI95S52D704L, IBAN IT51T0931924112152188023554, Imola, tel. +39 337 757 1381
+- Camilla Leone, CF LNECLL91C52E289O, IBAN IT82B0979210641286801007724, Modena, tel. +39 346 934 5366
+- Jacopo Testa, CF TSTJCP71D10F257E, IBAN IT18T0708318318086612678090, Modena, tel. +39 321 597 6495

@@ -45,7 +45,7 @@ Modifiche apportate da Pseudomania (ai sensi della sezione 4(b) della licenza Ap
     src/shared/de-anonymizer.ts (osservazione delle risposte e ripristino dei
     segnaposto), riscritto per il ripristino in linea anche su nodi di testo spezzati.
 - Il loghi e il nome "Privacy Guardrail" e DFKI non sono usati nell'interfaccia.
-- Aggiunte (file nuovi): cifratura lato client del dizionario (Enterprise edition), Personal edition
+- Aggiunte (file nuovi): cifratura lato client del dizionario (Server edition), Personal edition
   autonoma con Rizzo-PII desktop, elaborazione DOCX/XLSX in JavaScript (porting del motore OOXML del
   server Pseudomania).
 - Tutti gli altri file sono nuovi e coperti da AGPL-3.0-or-later.

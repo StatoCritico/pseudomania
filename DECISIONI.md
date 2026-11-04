@@ -87,14 +87,14 @@ Questo file prevale su SPEC.md dove sono in conflitto. L'agente server aggiorna 
 
 - Il prodotto si chiama **Pseudomania** (sostituisce il nome provvisorio PseudoGate in testi, UI, documenti, sito; identificatori tecnici come nomi di pacchetti/servizi possono restare `pseudogate` dove rinominarli è rischioso, ma i testi visibili dicono Pseudomania).
 - Sito ufficiale: **https://pseudomania.statocritico.it** (sostituisce i segnaposto ORG/github.io come URL del sito; il repository resta un segnaposto finché non deciso).
-- Edizioni: **Personal edition** e **Enterprise edition** (nomi visibili).
-- Struttura della landing page: sezioni **Il problema**, **La soluzione**, **Non solo software** (impostazioni di Claude, policy, DPIA, accordo sindacale, custodi), **Personal edition**, **Enterprise edition**, **Approfondimenti** (FAQ, licenza, note legali, guida all'uso, link agli strumenti). Ogni sezione è un **carosello** di schede sui punti principali; ogni scheda cliccata porta alla sezione corrispondente degli approfondimenti.
+- Edizioni: **Personal edition** e **Server edition** (nomi visibili).
+- Struttura della landing page: sezioni **Il problema**, **La soluzione**, **Non solo software** (impostazioni di Claude, policy, DPIA, accordo sindacale, custodi), **Personal edition**, **Server edition**, **Approfondimenti** (FAQ, licenza, note legali, guida all'uso, link agli strumenti). Ogni sezione è un **carosello** di schede sui punti principali; ogni scheda cliccata porta alla sezione corrispondente degli approfondimenti.
 - Pagine di approfondimento raggruppate per capitoli/argomenti, con **menu laterale ad albero** cliccabile, espandibile e comprimibile.
 - Serve un **manuale utente** (installazione, configurazione, uso, creazione di una policy in versione "light" e "strutturata") con **disclaimer**: la responsabilità legale resta interamente di chi adotta e usa il sistema.
 
 ## Attivazione per conversazione (aggiornamento 1/11/2026)
 
-- **Enterprise edition**: protezione sempre attiva, pulsante bloccato su acceso (policy).
+- **Server edition**: protezione sempre attiva, pulsante bloccato su acceso (policy).
 - **Personal edition**: pulsante nella barra degli strumenti di Chrome (chrome.action) con stato per scheda/conversazione (badge ON/OFF, barra verde/rossa sopra il campo di testo), scorciatoia da tastiera (es. Alt+Maiusc+P, configurabile da chrome://extensions/shortcuts).
   - Lo stato si salva **per conversazione/progetto** (scope).
   - **Nuova conversazione**: se l'ultimo stato scelto dall'utente era "attivo" si attiva da sola; se era "disattivato" chiede se riattivarsi (banner con «Attiva» / «Continua senza protezione»).

@@ -1,7 +1,7 @@
 # 6. Risoluzione dei problemi
 
 Regola generale: **se Pseudomania non funziona come previsto, non inviare dati personali** finché il
-problema non è risolto. Per l'Enterprise edition i problemi del server sono trattati in
+problema non è risolto. Per la Server edition i problemi del server sono trattati in
 `docs/installazione-ente.md` §25.
 
 ## 6.1 Per tutti gli utenti
@@ -9,19 +9,19 @@ problema non è risolto. Per l'Enterprise edition i problemi del server sono tra
 | Sintomo / messaggio | Causa probabile | Che cosa fare |
 |---|---|---|
 | Nessuna barra di Pseudomania sopra la casella di claude.ai | estensione disattivata o rimossa, pagina non ancora caricata, sito cambiato | ricarica la pagina; controlla in `chrome://extensions` che Pseudomania sia attiva; se persiste, non inviare dati e aggiorna l'estensione / avvisa l'assistenza |
-| «Pagina non riconosciuta da Pseudomania» / «Pseudomania non riconosce la struttura di questa pagina…» | claude.ai è stato aggiornato e i selettori non corrispondono più | non inviare dati personali; attendi l'aggiornamento dell'estensione; (Enterprise) contatta l'assistenza |
+| «Pagina non riconosciuta da Pseudomania» / «Pseudomania non riconosce la struttura di questa pagina…» | claude.ai è stato aggiornato e i selettori non corrispondono più | non inviare dati personali; attendi l'aggiornamento dell'estensione; (Server edition) contatta l'assistenza |
 | «Non è stato possibile sostituire il testo nella casella di scrittura: l'invio è bloccato per sicurezza.» | la casella non ha accettato il testo pseudonimizzato | ricarica la pagina e riprova; se si ripete, segnalalo |
 | Segnaposto in **rosso** nella risposta | Claude ha inventato o alterato un segnaposto | controlla quel punto; chiedi a Claude di usare solo i segnaposto presenti |
-| Segnaposto in **grigio**, «… non sono ripristinabili» | dizionario cifrato su un altro computer o profilo | chat: nessun recupero; progetti Enterprise: §4.10 |
+| Segnaposto in **grigio**, «… non sono ripristinabili» | dizionario cifrato su un altro computer o profilo | chat: nessun recupero; progetti Server edition: §4.10 |
 | Segnaposto non ripristinati in una chat vecchia, senza avviso | dizionario scaduto (30 giorni dall'ultimo uso) o eliminato | comportamento previsto; recupera i dati dai tuoi documenti |
 | «Invio bloccato» con riferimento all'art. 9 o 10 GDPR | filtro delle categorie particolari | riformula senza quei riferimenti; se è un errore usa **Segnala blocco errato** (§4.9) |
 | «Il file «…» non è stato allegato: …» | formato non gestito (es. immagine) o file troppo grande | converti in DOCX/PDF/TXT senza immagini o riduci il file |
 | PDF arrivato a Claude come `.txt` | Personal edition | comportamento previsto (§2.7) |
 | File scaricato con i segnaposto e un avviso | formato non ripristinabile (es. PDF nella Personal) o errore del servizio | sostituisci a mano i valori o rigenera in DOCX/XLSX |
-| Il contrassegno «dati protetti» apre nulla | Chrome ha rifiutato l'apertura del pannello laterale | (Personal) clic destro sul pulsante → **Apri pannello di ispezione**; (Enterprise) clic sul pulsante → **Apri pannello di ispezione** |
+| Il contrassegno «dati protetti» apre nulla | Chrome ha rifiutato l'apertura del pannello laterale | (Personal) clic destro sul pulsante → **Apri pannello di ispezione**; (Server edition) clic sul pulsante → **Apri pannello di ispezione** |
 | Contrassegni spariti sui messaggi vecchi | i dati di ispezione restano solo nella sessione | comportamento previsto dopo la chiusura del browser |
 | Microfono/dettatura non funzionano su claude.ai | dettatura disattivata da Pseudomania | comportamento previsto |
-| Avviso arancione «non è stato possibile associare i segnaposto a questa conversazione (conflitto sul server)» | conflitto nel passaggio dal dizionario provvisorio a quello della chat | la protezione resta attiva; continua pure; segnala se si ripete (Enterprise) |
+| Avviso arancione «non è stato possibile associare i segnaposto a questa conversazione (conflitto sul server)» | conflitto nel passaggio dal dizionario provvisorio a quello della chat | la protezione resta attiva; continua pure; segnala se si ripete (Server edition) |
 
 ## 6.2 Personal edition
 
@@ -40,7 +40,7 @@ problema non è risolto. Per l'Enterprise edition i problemi del server sono tra
 | Dizionario perso dopo un aggiornamento | l'estensione è stata rimossa e reinstallata | aggiorna sempre nella stessa cartella con **Aggiorna** (§2.9); i dati persi non si recuperano |
 | L'estensione dal pacchetto si disattiva all'avvio di Chrome | alcune versioni di Chrome avvisano per le estensioni in modalità sviluppatore **[DA VERIFICARE]** | riattivala in `chrome://extensions`; usa la versione del Web Store quando disponibile |
 
-## 6.3 Enterprise edition (utente e help desk)
+## 6.3 Server edition (utente e help desk)
 
 | Sintomo / messaggio | Causa probabile | Che cosa fare |
 |---|---|---|

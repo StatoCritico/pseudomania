@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Pseudomania (Enterprise edition) - immagine dell'API (Python 3.12, utente non root).
+# Pseudomania (Server edition) - immagine dell'API (Python 3.12, utente non root).
 #
 #   docker build -t pseudogate-api:0.1.0 server/
 #
@@ -20,7 +20,7 @@ RUN python -m venv /opt/venv \
 
 # --- immagine finale -------------------------------------------------------------
 FROM ${PYTHON_IMAGE}
-LABEL org.opencontainers.image.title="Pseudomania API (Enterprise edition)" \
+LABEL org.opencontainers.image.title="Pseudomania API (Server edition)" \
       org.opencontainers.image.url="https://pseudomania.statocritico.it" \
       org.opencontainers.image.licenses="AGPL-3.0-or-later" \
       org.opencontainers.image.description="Pseudonimizzazione reversibile per claude.ai"

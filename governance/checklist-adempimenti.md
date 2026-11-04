@@ -1,5 +1,5 @@
 ---
-title: "Checklist degli adempimenti prima dell'avvio del pilota – Pseudomania Enterprise edition"
+title: "Checklist degli adempimenti prima dell'avvio del pilota – Pseudomania Server edition"
 subtitle: "BOZZA – da verificare con il RPD/DPO"
 lang: it-IT
 ---

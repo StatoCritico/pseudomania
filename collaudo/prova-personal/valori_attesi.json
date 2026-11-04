@@ -1,0 +1,219 @@
+{
+ "01_lettera_tutti_i_tag.txt": {
+  "FULLNAME": [
+   "Serena Rinaldi",
+   "Pietro Lombardi",
+   "Camilla Rinaldi",
+   "Filippo Valentini",
+   "Filippo Testa"
+  ],
+  "GENDER": [
+   "femmina"
+  ],
+  "AGE": [
+   "63 anni"
+  ],
+  "DATE": [
+   "18/10/2026",
+   "12/06/1963",
+   "03/04/2025"
+  ],
+  "TIME": [
+   "ore 16:15"
+  ],
+  "STREET": [
+   "Via Garibaldi"
+  ],
+  "BUILDINGNUM": [
+   "59"
+  ],
+  "ZIPCODE": [
+   "40026"
+  ],
+  "CITY": [
+   "Imola",
+   "Forlì"
+  ],
+  "PROVINCE": [
+   "BO"
+  ],
+  "EMAIL": [
+   "s.rinaldi@example.it",
+   "rinaldi.serena@pec.example.it"
+  ],
+  "TELEPHONENUM": [
+   "+39 332 106 9872",
+   "+39 346 955 5757"
+  ],
+  "CF": [
+   "RNLSRN63H52D704I",
+   "LMBPTR59R08A944P"
+  ],
+  "PIVA": [
+   "28731440286"
+  ],
+  "ID_DOC": [
+   "CE37884BL",
+   "PR9452343S"
+  ],
+  "IBAN": [
+   "IT40Y0442552332547053478360"
+  ],
+  "CREDITCARDNUMBER": [
+   "5555 5560 7287 3143"
+  ],
+  "AMOUNT": [
+   "€ 80.562,95",
+   "€ 28.871,90"
+  ],
+  "TARGA": [
+   "EE 860 VA",
+   "FR 420 FP"
+  ],
+  "ORG": [
+   "Assicurazioni Riunite Esempio S.p.A.",
+   "Studio Associato Ferri & Lodi"
+  ],
+  "DOCID": [
+   "17941/2026"
+  ],
+  "CATASTO": [
+   "Foglio 221, particella 1395, sub. 16"
+  ],
+  "URL": [
+   "https://www.rinaldi-consulenze.example.it/area-clienti"
+  ],
+  "IPADDR": [
+   "198.51.100.51"
+  ],
+  "NON_MASCHERARE": [
+   "Tribunale di Bologna"
+  ]
+ },
+ "02_scheda_cliente.md": {
+  "FULLNAME": [
+   "Niccolò Fontana"
+  ],
+  "CF": [
+   "FNTNCL81A05A944H"
+  ],
+  "IBAN": [
+   "IT84Q0675874733478377541704"
+  ],
+  "ID_DOC": [
+   "YH1791414"
+  ],
+  "ORG": [
+   "Logistica Appennino S.r.l.s."
+  ],
+  "PIVA": [
+   "87526320780"
+  ]
+ },
+ "03_anagrafica_clienti.csv": {
+  "righe": 12,
+  "CF": [
+   "VLNNCL69H08E289M",
+   "FRNBRC96D67E289A",
+   "CTTVNT03E66H199N",
+   "LMBVNT67B59G337B",
+   "BRNMTN57B43A944L",
+   "TSTGLI95S52D704L",
+   "LNECLL91C52E289O",
+   "TSTJCP71D10F257E",
+   "CRSDRD53L05H199O",
+   "GLLPTR97A09H199H",
+   "GLLRNN70H56H294I",
+   "BRNMTT57L18E289I"
+  ],
+  "IBAN": [
+   "IT38R0417642380725109276080",
+   "IT87B0951711625822602189415",
+   "IT94A0853479986606546351960",
+   "IT92X0607897016858686577964",
+   "IT70O0816793550111840767560",
+   "IT51T0931924112152188023554",
+   "IT82B0979210641286801007724",
+   "IT18T0708318318086612678090",
+   "IT79E0702050807263769530221",
+   "IT86H0830539197112379889465",
+   "IT57B0579299602840958261435",
+   "IT55N0461892708100419467484"
+  ]
+ },
+ "04_atto_citazione.docx": {
+  "FULLNAME": [
+   "Serena Rinaldi",
+   "Filippo Testa",
+   "Pietro Lombardi",
+   "Filippo Valentini"
+  ],
+  "note": "nome della controparte in grassetto (run separato); dati anche in intestazione, piè di pagina, elenco numerato e tabella",
+  "NON_MASCHERARE": [
+   "TRIBUNALE ORDINARIO DI BOLOGNA"
+  ]
+ },
+ "05_prospetto_pagamenti.xlsx": {
+  "fogli": [
+   "Clienti",
+   "Movimenti",
+   "Fornitori"
+  ],
+  "note": "la formula =SUM del totale deve restare una formula",
+  "FULLNAME": [
+   "Emanuele Rinaldi",
+   "Riccardo Lombardi",
+   "Giulia Martini",
+   "Martina Fontana",
+   "Francesca Marchetti",
+   "Alessio Gentile",
+   "Lorenzo Pellegrini",
+   "Arianna Moretti"
+  ]
+ },
+ "06_verbale_sinistro.pdf": {
+  "FULLNAME": [
+   "Serena Rinaldi",
+   "Tommaso Farina"
+  ],
+  "TARGA": [
+   "FR 420 FP",
+   "DT 838 ZB"
+  ],
+  "ID_DOC": [
+   "PR9452343S",
+   "FE9025160D"
+  ],
+  "DOCID": [
+   "Polizza n. 45996199"
+  ]
+ },
+ "07_blocco_dati_sanitari.txt": {
+  "atteso": "invio BLOCCATO (art. 9 GDPR, dati sanitari e disabilità)"
+ },
+ "07b_blocco_dati_giudiziari.txt": {
+  "atteso": "invio BLOCCATO (art. 10 GDPR, condanne penali)"
+ },
+ "08_trappole.txt": {
+  "NON_MASCHERARE": [
+   "Claude",
+   "Anthropic",
+   "Pseudomania",
+   "Rizzo-PII",
+   "GDPR",
+   "AI Act",
+   "Tribunale di Bologna",
+   "d.lgs. 196/2003",
+   "2.3.55.987"
+  ],
+  "da_mascherare": [
+   "Rizzo (cognome del cliente)",
+   "Serena Rinaldi (sempre lo stesso segnaposto)",
+   "CF e IBAN con spazi",
+   "email in maiuscolo"
+  ]
+ },
+ "09_richiesta_risposta_lunga.txt": {
+  "atteso": "nella risposta tutti i segnaposto tornano valori reali, anche in tabella e nel blocco di codice"
+ }
+}

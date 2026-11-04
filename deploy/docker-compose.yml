@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Pseudomania - Enterprise edition, su una singola VM Linux (Docker Engine + Compose v2).
+# Pseudomania - Server edition, su una singola VM Linux (Docker Engine + Compose v2).
 # Sito: https://pseudomania.statocritico.it  (gli identificatori tecnici restano "pseudogate")
 #
 # Componenti (vedi deploy/VERSIONS.md per versioni e licenze):

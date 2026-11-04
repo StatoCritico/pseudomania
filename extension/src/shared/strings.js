@@ -10,9 +10,9 @@
   const S = {
     nome: 'Pseudomania',
     sito: 'https://pseudomania.statocritico.it',
-    // Pagina della procedura di recupero dei dizionari di progetto (Enterprise edition)
+    // Pagina della procedura di recupero dei dizionari di progetto (Server edition)
     urlRecupero: 'https://pseudomania.statocritico.it/approfondimenti/#recupero-chiavi',
-    edizioneEnterprise: 'Enterprise edition',
+    edizioneServer: 'Server edition',
     edizionePersonal: 'Personal edition',
     // Indicatore di stato sopra la casella di scrittura
     statoAttivo: 'Pseudomania attivo: i dati personali vengono pseudonimizzati prima dell\'invio',
@@ -38,7 +38,7 @@
     badgeTitolo_off: 'protezione disattivata in questa conversazione (clic o Alt+Maiusc+P per attivare)',
     badgeTitolo_ask: 'in attesa di scelta per questa conversazione',
     statoServerGiu: 'Server Pseudomania non raggiungibile',
-    // Stato del servizio di rilevamento (Personal: Rizzo-PII locale; Enterprise: server)
+    // Stato del servizio di rilevamento (Personal: Rizzo-PII locale; Server edition: server)
     statoServizio: (mode, h) => {
       const d = h ? h.detector : 'down';
       if (mode !== 'ente') {
@@ -164,7 +164,7 @@
     pannelloChiave: (id, data) => `Chiave di cifratura attiva: ${id ? id.slice(0, 8) + '…' : 'nessuna'}${data ? ' del ' + data : ''}`,
 
     // Popup / impostazioni
-    modalitaEnte: 'Enterprise edition (gestita dall\'ente)',
+    modalitaEnte: 'Server edition (gestita dall\'ente)',
     modalitaPersonale: 'Personal edition',
     attiva: 'Protezione attiva',
     disattiva: 'Protezione disattivata',

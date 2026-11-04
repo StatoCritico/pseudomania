@@ -3,7 +3,7 @@
 Pseudomania (https://pseudomania.statocritico.it; identificatore tecnico `pseudogate`) è
 distribuito con licenza **AGPL-3.0-or-later** (file `LICENSE`). Questo file riguarda i
 componenti di terze parti usati da `server/`, `deploy/`, `tools/custodi/` e `collaudo/`
-(Enterprise edition; la Personal edition usa l'app desktop di Rizzo-PII): codice incluso nel
+(Server edition; la Personal edition usa l'app desktop di Rizzo-PII): codice incluso nel
 repository, dipendenze installate nelle immagini, immagini container e il modello di
 rilevamento con i relativi dati di addestramento. L'elenco completo di versioni e licenze
 delle immagini è in [`deploy/VERSIONS.md`](deploy/VERSIONS.md); le parti dell'estensione
@@ -21,7 +21,7 @@ Le informazioni sono state verificate sui file di licenza e sulle schede dei pro
 
 ## 2. Rilevatore Rizzo-PII e modello
 
-Il servizio `rizzo-pii` (Enterprise edition) è costruito dal repository ufficiale; la Personal
+Il servizio `rizzo-pii` (Server edition) è costruito dal repository ufficiale; la Personal
 edition usa invece l'app desktop di Rizzo-PII installata dall'utente; il modello viene scaricato da
 Hugging Face durante la build.
 

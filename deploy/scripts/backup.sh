@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Backup cifrato del DB applicativo di Pseudomania (Enterprise edition). Da eseguire sull'host, nella cartella
+# Backup cifrato del DB applicativo di Pseudomania (Server edition). Da eseguire sull'host, nella cartella
 # deploy/, ad esempio ogni notte da cron:
 #   15 2 * * *  cd /opt/pseudogate/deploy && ./scripts/backup.sh >> /var/log/pseudogate-backup.log 2>&1
 #

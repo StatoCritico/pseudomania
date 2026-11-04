@@ -1,4 +1,4 @@
-# Pseudomania Enterprise edition – installazione
+# Pseudomania Server edition – installazione
 
 Guida per gli amministratori di sistema. Parte da una VM Linux appena installata e arriva al
 servizio in esercizio, con backup, cancellazioni e controlli. Gli identificatori tecnici

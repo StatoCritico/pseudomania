@@ -1,13 +1,13 @@
 <!--meta
-description: Pseudomania Enterprise edition per gli enti: server su VM interna, estensione gestita da policy di Chrome, SSO, cifratura lato client con custodi, Langfuse, conservazione documentata.
-lead: La Enterprise edition è pensata per le amministrazioni che hanno adottato Claude Team: un server nella rete interna, l'estensione installata e configurata dalle policy di Chrome, chiavi con custodi e un'osservabilità minima, documentata.
+description: Pseudomania Server edition per gli enti: server su VM interna, estensione gestita da policy di Chrome, SSO, cifratura lato client con custodi, Langfuse, conservazione documentata.
+lead: La Server edition è pensata per le amministrazioni che hanno adottato Claude Team: un server nella rete interna, l'estensione installata e configurata dalle policy di Chrome, chiavi con custodi e un'osservabilità minima, documentata.
 summary: Architettura e servizi, requisiti, installazione, estensione gestita, SSO, chiavi e custodi, Langfuse, conservazione e verifica prima del go-live.
 -->
 <h2 id="architettura">Architettura</h2>
 <p>Lo stack gira con Docker Compose su una VM della rete interna. Solo il reverse proxy è esposto; Rizzo-PII non ha accesso a Internet.</p>
 <div class="table-wrap">
   <table class="stack-table">
-    <caption class="visually-hidden">Servizi della Enterprise edition</caption>
+    <caption class="visually-hidden">Servizi della Server edition</caption>
     <thead><tr><th scope="col">Servizio</th><th scope="col">Ruolo</th></tr></thead>
     <tbody>
       <tr><th scope="row">Caddy</th><td data-label="Ruolo">TLS con il certificato dell'ente, unico punto esposto; distribuisce anche il pacchetto dell'estensione</td></tr>

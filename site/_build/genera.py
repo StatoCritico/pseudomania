@@ -32,7 +32,7 @@ CAPITOLI = [
     ("scelte-di-progetto", "Scelte di progetto"),
     ("non-solo-software", "Non solo software"),
     ("personal-edition", "Personal edition"),
-    ("enterprise-edition", "Enterprise edition"),
+    ("server-edition", "Server edition"),
     ("guida-all-uso", "Guida all'uso"),
     ("faq", "Domande frequenti"),
     ("licenza-e-crediti", "Licenza e crediti"),
@@ -45,7 +45,7 @@ HOME_NAV = [
     ("soluzione", "La soluzione"),
     ("non-solo-software", "Non solo software"),
     ("personal", "Personal edition"),
-    ("enterprise", "Enterprise edition"),
+    ("server", "Server edition"),
 ]
 
 LOGO = ('<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="12" '

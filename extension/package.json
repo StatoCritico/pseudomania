@@ -2,7 +2,7 @@
   "name": "pseudogate-extension",
   "version": "0.1.0",
   "private": true,
-  "description": "Estensione Chrome MV3 di Pseudomania (Enterprise e Personal edition; nessuna build: caricare la cartella extension/)",
+  "description": "Estensione Chrome MV3 di Pseudomania (Server edition e Personal edition; nessuna build: caricare la cartella extension/)",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "test": "node --test 'test/unit/*.test.js'",

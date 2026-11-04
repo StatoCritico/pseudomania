@@ -4,13 +4,13 @@ lead: Un'estensione per Chrome si mette tra te e claude.ai: prima che un testo p
 summary: Il flusso dei dati in cinque passaggi, i segnaposto, il ripristino, allegati e Progetti, i blocchi, cosa succede se il server non risponde e cosa non viene protetto.
 -->
 <h2 id="flusso">Il flusso in cinque passaggi</h2>
-<p>Lo schema mostra la Enterprise edition, con il server nella rete dell'ente. Nella <a href="personal-edition.html">Personal edition</a> il server non c'è: l'estensione chiama direttamente l'app desktop Rizzo-PII sul tuo computer e tiene il dizionario nel browser.</p>
+<p>Lo schema mostra la Server edition, con il server nella rete dell'ente. Nella <a href="personal-edition.html">Personal edition</a> il server non c'è: l'estensione chiama direttamente l'app desktop Rizzo-PII sul tuo computer e tiene il dizionario nel browser.</p>
 <figure class="diagram">
         
 
         <!-- Schema verticale -->
         <svg class="narrow" viewBox="0 0 360 640" role="img" aria-labelledby="dn-t dn-d">
-          <title id="dn-t">Schema del flusso dei dati in Pseudomania, Enterprise edition</title>
+          <title id="dn-t">Schema del flusso dei dati in Pseudomania, Server edition</title>
           <desc id="dn-d">Il browser con l'estensione invia il testo originale al server Pseudomania nella rete interna, riceve il testo con i segnaposto e invia a claude.ai solo i segnaposto. Il dizionario dei valori reali è cifrato nel browser e conservato cifrato sul server. La risposta di Claude torna al browser, che ripristina i valori reali localmente.</desc>
           <defs>
             <marker id="ahn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 10 5 0 10z"/></marker>
@@ -92,7 +92,7 @@ summary: Il flusso dei dati in cinque passaggi, i segnaposto, il ripristino, all
 <p>Se il servizio riconosce dati relativi alla salute, a condanne e reati o ad altre categorie particolari (artt. 9 e 10 GDPR), l'invio viene bloccato e un banner rosso ne spiega il motivo. Non è possibile forzarlo. Anche questo riconoscimento può sbagliare: il regolamento d'uso vieta comunque di inserire questi dati.</p>
 
 <h2 id="fail-closed">Se il servizio non risponde</h2>
-<p>Nella Enterprise edition, se il server non è raggiungibile o non riconosce la pagina di claude.ai, l'invio è bloccato (comportamento <em>fail-closed</em>): meglio un'attesa che un testo spedito senza protezione. Nella Personal edition, se l'app Rizzo-PII non risponde, ricevi un avviso e devi confermare esplicitamente se procedere.</p>
+<p>Nella Server edition, se il server non è raggiungibile o non riconosce la pagina di claude.ai, l'invio è bloccato (comportamento <em>fail-closed</em>): meglio un'attesa che un testo spedito senza protezione. Nella Personal edition, se l'app Rizzo-PII non risponde, ricevi un avviso e devi confermare esplicitamente se procedere.</p>
 
 <h2 id="cosa-non-protegge">Cosa non protegge</h2>
 <ul class="x-list">
@@ -101,7 +101,7 @@ summary: Il flusso dei dati in cinque passaggi, i segnaposto, il ripristino, all
   <li><strong>Ciò che passa fuori dall'estensione</strong>: le preferenze del profilo Claude, altri browser, le app desktop e mobili.</li>
   <li><strong>Ricerca web</strong>: Claude compone le ricerche partendo dal testo pseudonimizzato, ma un dato sfuggito al rilevamento può finire nella richiesta inviata al motore di ricerca.</li>
   <li><strong>Il testo prima dell'invio</strong>: finché lo scrivi, il testo sta nella casella di claude.ai.</li>
-  <li><strong>Cambi dell'interfaccia di claude.ai</strong>: se il sito cambia, l'estensione può non riconoscerlo; nella Enterprise edition l'invio si blocca.</li>
+  <li><strong>Cambi dell'interfaccia di claude.ai</strong>: se il sito cambia, l'estensione può non riconoscerlo; nella Server edition l'invio si blocca.</li>
   <li><strong>Non anonimizza</strong>: i dati pseudonimizzati restano dati personali (considerando 26 GDPR).</li>
 </ul>
 <p>L'elenco completo dei rischi residui, compresi quelli legati al server, è nelle <a href="scelte-di-progetto.html#rischi-residui">scelte di progetto</a>.</p>

@@ -121,7 +121,7 @@ test('Personal edition: attivazione per conversazione', { timeout: 150000 }, asy
   });
 });
 
-test('Enterprise edition: pulsante bloccato su acceso', { timeout: 60000 }, async (t) => {
+test('Server edition: pulsante bloccato su acceso', { timeout: 60000 }, async (t) => {
   const h = await startHarness();
   t.after(() => h.close());
   const page = await h.context.newPage();

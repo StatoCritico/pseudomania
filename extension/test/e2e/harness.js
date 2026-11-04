@@ -2,7 +2,7 @@
 //
 // Ambiente end-to-end: Chromium con l'estensione caricata (headless "new"), claude.ai servito dalla
 // pagina di prova dev/fixture/claude-like.html tramite context.route.
-//  - Enterprise edition: server di prova (dev/mock-server) + pgDevManaged con devStaticToken.
+//  - Server edition: server di prova (dev/mock-server) + pgDevManaged con devStaticToken.
 //  - Personal edition: Rizzo-PII finto (dev/mock-rizzo), nessun server.
 'use strict';
 const path = require('path');
@@ -16,16 +16,16 @@ const EXT = path.join(__dirname, '..', '..');
 const FIXTURE = fs.readFileSync(path.join(EXT, 'dev', 'fixture', 'claude-like.html'), 'utf8');
 
 /**
- * @param {{edition?:'enterprise'|'personal', devManaged?:object, rizzoHost?:string, waitReady?:boolean}} [opts]
+ * @param {{edition?:'server'|'personal', devManaged?:object, rizzoHost?:string, waitReady?:boolean}} [opts]
  */
 async function startHarness(opts) {
   opts = opts || {};
-  const edition = opts.edition || 'enterprise';
+  const edition = opts.edition || 'server';
   let server = null;
   let serverUrl = null;
   let rizzo = null;
   let rizzoUrl = null;
-  if (edition === 'enterprise') {
+  if (edition === 'server') {
     server = createServer({ quiet: true });
     await new Promise((r) => server.listen(0, '127.0.0.1', r));
     serverUrl = `http://127.0.0.1:${server.address().port}`;
@@ -63,7 +63,7 @@ async function startHarness(opts) {
   let sw = context.serviceWorkers()[0];
   if (!sw) sw = await context.waitForEvent('serviceworker');
   const extensionId = new URL(sw.url()).host;
-  if (edition === 'enterprise') {
+  if (edition === 'server') {
     const dev = Object.assign({ mode: 'ente', serverUrl, devStaticToken: 'dev-token' }, opts.devManaged || {});
     await sw.evaluate(async (dev) => chrome.storage.local.set({ pgDevManaged: dev }), dev);
   } else {
@@ -77,7 +77,7 @@ async function startHarness(opts) {
         const st = (await sw.evaluate(() => chrome.storage.local.get('pgState'))).pgState;
         lastState = st;
         if (!st || !st.health || !st.health.ok) return false;
-        if (edition === 'enterprise') return st.config.serverUrl === serverUrl && st.keys && st.keys.keyId;
+        if (edition === 'server') return st.config.serverUrl === serverUrl && st.keys && st.keys.keyId;
         return st.config.rizzoUrl === rizzoUrl;
       }, 25000);
     } catch (e) {

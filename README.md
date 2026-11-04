@@ -16,7 +16,7 @@ Sito: **<https://pseudomania.statocritico.it>**
 
 ## Due edizioni
 
-| | Personal edition | Enterprise edition |
+| | Personal edition | Server edition |
 |---|---|---|
 | Per chi | Singolo professionista | Ente pubblico (Claude Team) |
 | Cosa installare | Estensione Chrome + app desktop di [Rizzo-PII](https://github.com/Rizzo-AI-Academy/rizzo-pii) | Estensione installata d'ufficio + server interno (docker-compose) |
@@ -31,7 +31,7 @@ Supporta solo **Google Chrome** e **claude.ai**; ciò che è specifico del sito 
 | Cartella | Contenuto |
 |---|---|
 | [`extension/`](extension/) | Estensione Chrome (entrambe le edizioni), test, simulazioni, script di verifica su claude.ai |
-| [`server/`](server/), [`deploy/`](deploy/) | API (FastAPI), stack docker-compose della Enterprise edition, backup, OpenBao |
+| [`server/`](server/), [`deploy/`](deploy/) | API (FastAPI), stack docker-compose della Server edition, backup, OpenBao |
 | [`tools/custodi/`](tools/custodi/) | Strumento offline dei custodi (chiave di custodia divisa con Shamir) |
 | [`collaudo/`](collaudo/) | Documenti di prova inventati e script di valutazione |
 | [`docs/`](docs/) | Installazione, configurazione, procedure dei custodi, verifica del pilota |
@@ -45,7 +45,7 @@ tecnico tra i componenti), [`RIEPILOGO.md`](RIEPILOGO.md) (stato del progetto).
 ## Per iniziare
 
 - Personal edition: [`docs/installazione-personale.md`](docs/installazione-personale.md)
-- Enterprise edition: [`docs/installazione-ente.md`](docs/installazione-ente.md) e
+- Server edition: [`docs/installazione-ente.md`](docs/installazione-ente.md) e
   [`docs/configurazione.md`](docs/configurazione.md)
 - Test dell'estensione: `cd extension && npm install && npm run test:all`
 - Test del server: `cd server && pip install -r requirements-dev.txt && pytest`

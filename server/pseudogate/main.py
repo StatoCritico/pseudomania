@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""API di Pseudomania (Enterprise edition), FastAPI. Contratto: SPEC.md e DECISIONI.md.
+"""API di Pseudomania (Server edition), FastAPI. Contratto: SPEC.md e DECISIONI.md.
 
 Il server non conserva mai i valori in chiaro: li restituisce una sola volta in
 `newEntries` all'utente che li ha appena inviati; l'estensione li cifra con la chiave

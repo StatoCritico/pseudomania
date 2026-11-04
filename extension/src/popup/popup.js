@@ -23,7 +23,7 @@
     $('dot').className = 'dot ' + cls;
     $('stateText').textContent = text;
 
-    // Il popup si apre solo nell'Enterprise edition (Personal: il clic sul pulsante attiva/disattiva
+    // Il popup si apre solo nella Server edition (Personal: il clic sul pulsante attiva/disattiva
     // la conversazione). Interruttore solo se la policy lo consente esplicitamente.
     const entMode = c.mode === 'ente';
     $('switchRow').hidden = !(entMode && c.allowDisable);

@@ -312,7 +312,7 @@ L'estensione serve in due forme: per i **professionisti** (installazione libera)
    categoria, icona 128×128, almeno uno screenshot 1280×800 o 640×400, link al sito e al supporto.
 3. Indicare nelle **istruzioni per i revisori** come provare l'estensione: senza policy funziona come
    **Personal edition** e richiede l'app desktop di Rizzo-PII avviata su `127.0.0.1:5005` (spiegare come
-   installarla); la Enterprise edition richiede un server dell'ente. Senza queste indicazioni la
+   installarla); la Server edition richiede un server dell'ente. Senza queste indicazioni la
    revisione può fallire.
 
 ### 5.3 Pratiche relative alla privacy (scheda *Privacy*)
@@ -327,7 +327,7 @@ Il Web Store richiede di compilare:
 - **Codice remoto**: dichiarare che l'estensione **non** esegue codice remoto (MV3 non lo consente).
 - **Dati utente raccolti**: dichiarare con esattezza le categorie trattate, verosimilmente
   «Informazioni personali identificabili», «Contenuti del sito web» e «Informazioni di autenticazione»
-  (token OIDC nella Enterprise edition), precisando che sono inviati **solo** all'app Rizzo-PII locale
+  (token OIDC nella Server edition), precisando che sono inviati **solo** all'app Rizzo-PII locale
   o al server configurato dall'ente e non a sviluppatori o terzi.
 - **Certificazioni** sull'uso dei dati (incluse le norme sull'uso limitato).
 - **URL dell'informativa privacy**: `https://pseudomania.statocritico.it/privacy.html`.
@@ -390,7 +390,7 @@ Dettagli operativi: `docs/installazione-ente.md`, `docs/configurazione.md` e, pr
 | `[Nome Cognome del referente tecnico]` | `publiccode.yml.draft` | referente della manutenzione |
 | `softwareVersion`, `releaseDate` | `publiccode.yml.draft` | ultima release |
 | link «Chrome Web Store – in arrivo» | `site/_build/pagine/strumenti-e-download.html` | URL della scheda nel Web Store |
-| requisiti hardware indicativi | `site/_build/pagine/enterprise-edition.html` (stime di `docs/installazione-ente.md`) | valori misurati nel pilota |
+| requisiti hardware indicativi | `site/_build/pagine/server-edition.html` (stime di `docs/installazione-ente.md`) | valori misurati nel pilota |
 | `[NOME ENTE]`, `[indirizzo]`, `pec@ENTE.it`, `rpd@ENTE.it`, versione/data, link all'informativa | `site/_build/pagine/privacy.html` | dati dell'ente e del DPO |
 
 ---

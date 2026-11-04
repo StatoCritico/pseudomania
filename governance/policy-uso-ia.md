@@ -1,6 +1,6 @@
 ---
 title: "Regolamento per l'uso degli strumenti di intelligenza artificiale generativa in cloud"
-subtitle: "BOZZA da sottoporre al Responsabile della protezione dei dati (RPD/DPO) – Pseudomania Enterprise edition"
+subtitle: "BOZZA da sottoporre al Responsabile della protezione dei dati (RPD/DPO) – Pseudomania Server edition"
 lang: it-IT
 ---
 
@@ -9,7 +9,7 @@ lang: it-IT
 > verificate prima dell'adozione. I riferimenti normativi segnati `[DA VERIFICARE]` non sono stati
 > controllati sul testo ufficiale.
 >
-> Il presente Regolamento riguarda la **Pseudomania Enterprise edition** (estensione + server interno
+> Il presente Regolamento riguarda la **Pseudomania Server edition** (estensione + server interno
 > dell'Ente). La **Personal edition** è uno strumento a uso individuale fuori dai trattamenti dell'Ente
 > (art. 1, c. 5); per i piccoli enti e i professionisti è disponibile un modello separato
 > (`policy-light.md`).
@@ -63,7 +63,7 @@ Il Regolamento si inserisce nel quadro di:
 
 - **Servizio IA**: servizio di IA generativa in cloud autorizzato dall'Ente (nella fase pilota:
   Claude Team).
-- **Pseudomania (Enterprise edition)**: sistema composto dall'estensione Chrome installata in modo
+- **Pseudomania (Server edition)**: sistema composto dall'estensione Chrome installata in modo
   forzato e non disattivabile sui browser gestiti e dal server interno che rileva i dati personali e li
   sostituisce con segnaposto prima dell'invio al Servizio IA; i valori reali sono ripristinati solo nel
   browser dell'Utente.

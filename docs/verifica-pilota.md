@@ -1,4 +1,4 @@
-# Pseudomania Enterprise edition – verifica prima dell'avvio del pilota
+# Pseudomania Server edition – verifica prima dell'avvio del pilota
 
 Lista di controllo da completare **prima** di aprire il servizio ai 6 utenti del pilota.
 Per ogni prova: come eseguirla, risultato atteso, esito. Usare **solo dati di prova**
@@ -115,7 +115,7 @@ Legenda esito: ☐ da fare, ✔ superata, ✘ non superata (annotare il motivo e
 | F2 | Rilevatore spento | `sudo docker compose stop rizzo-pii`; inviare T1 | bloccato (503 → blocco) | ☐ |
 | F3 | OpenBao sigillato | `sudo docker compose restart openbao`; inviare T1 | bloccato; dopo `./scripts/openbao-unseal.sh` torna a funzionare | ☐ |
 | F4 | Rete del PC verso il server interrotta | bloccare `pseudogate.ente.local` sul PC (es. regola firewall locale di prova) | bloccato | ☐ |
-| F5 | Disattivare l'estensione | `chrome://extensions` | Pseudomania «Installata dall'amministratore»: interruttore e Rimuovi non disponibili; nel popup «Nell'Enterprise edition la protezione non può essere disattivata.» | ☐ |
+| F5 | Disattivare l'estensione | `chrome://extensions` | Pseudomania «Installata dall'amministratore»: interruttore e Rimuovi non disponibili; nel popup «Nella Server edition la protezione non può essere disattivata.» | ☐ |
 | F6 | Incognito | Ctrl+Maiusc+N | finestra incognito non disponibile | ☐ |
 | F7 | Ospite / nuovo profilo | menu profilo → Ospite / Aggiungi | non disponibili; un eventuale altro profilo ha comunque l'estensione forzata | ☐ |
 | F8 | DevTools | F12 su claude.ai | non si aprono | ☐ |

@@ -1,7 +1,7 @@
-# 3. Enterprise edition
+# 3. Server edition
 
 Per **enti pubblici e imprese** che danno ai dipendenti account **Claude Team** e vogliono
-ridurre il rischio che dati personali arrivino al fornitore. L'Enterprise edition **non è solo
+ridurre il rischio che dati personali arrivino al fornitore. La Server edition **non è solo
 software**: funziona solo insieme a impostazioni della console di Claude, policy di Chrome, accesso
 condizionato, regole d'uso, DPIA, accordo sindacale e custodi.
 
@@ -227,7 +227,7 @@ Due integrazioni distinte (`docs/configurazione.md` §B):
    certificato del dispositivo). Così l'estensione non si aggira usando un PC personale.
 
 Per l'utente il login all'estensione avviene dal pulsante **Accedi** nella finestra che si apre
-cliccando il pulsante di Pseudomania (normalmente in modo silenzioso). Nell'Enterprise edition il
+cliccando il pulsante di Pseudomania (normalmente in modo silenzioso). Nella Server edition il
 pulsante è **bloccato su acceso**: la stessa finestra spiega «Protezione sempre attiva: Pseudomania è
 gestito dalla tua organizzazione e non può essere disattivato.» e la scorciatoia Alt+Maiusc+P non ha
 effetto. I token restano nella memoria della sessione del browser.

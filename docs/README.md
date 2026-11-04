@@ -5,7 +5,7 @@ Codice: AGPL-3.0-or-later. Sito: https://pseudomania.statocritico.it
 
 Due edizioni:
 
-- **Enterprise edition** – per gli enti: estensione Chrome imposta da policy + server su VM
+- **Server edition** – per gli enti: estensione Chrome imposta da policy + server su VM
   interna (dizionario cifrato nel browser, key store separato, custodi) + Langfuse;
 - **Personal edition** – per il singolo professionista: solo estensione + app desktop di
   Rizzo-PII sul PC. Nessun server, nessun Docker.
@@ -13,7 +13,7 @@ Due edizioni:
 Contratto tecnico: [`../SPEC.md`](../SPEC.md); decisioni vincolanti (prevalgono):
 [`../DECISIONI.md`](../DECISIONI.md).
 
-## Enterprise edition
+## Server edition
 
 | Documento | Per chi | Contenuto |
 |---|---|---|

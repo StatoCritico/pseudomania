@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 //
-// Enterprise edition: cifratura lato client del dizionario (DECISIONI.md) end-to-end:
+// Server edition: cifratura lato client del dizionario (DECISIONI.md) end-to-end:
 // escrow, voci cifrate, rotazione forzata, cambio PC (voci non ripristinabili), recupero tramite
 // chiave del dispositivo, conferma annuale dei progetti.
 'use strict';

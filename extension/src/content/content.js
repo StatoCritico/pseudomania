@@ -25,7 +25,7 @@
   let projectMap = {}; // conversationId -> projectId
   let instrSent = {}; // convKey -> timestamp
   let scopeAlias = {}; // conversationId -> 'pending:<uuid4>' (rebind rifiutato con 409)
-  // Personal edition: attivazione per conversazione (DECISIONI.md). Enterprise: sempre attiva.
+  // Personal edition: attivazione per conversazione (DECISIONI.md). Server edition: sempre attiva.
   let activation = new PG.activation.Activation();
   let actState = 'on'; // 'on' | 'off' | 'ask' per la conversazione corrente
   let actKey = null; // convKey a cui si riferisce actState
@@ -192,7 +192,7 @@
     }
   }
 
-  // Enterprise: voci cifrate con una chiave che questo browser non ha (cambio PC).
+  // Server edition: voci cifrate con una chiave che questo browser non ha (cambio PC).
   const unrecWarned = new Set();
   function warnUnrecoverable(sc, unrec) {
     const key = PG.scope.scopeKey(sc);

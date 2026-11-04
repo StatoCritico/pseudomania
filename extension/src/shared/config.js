@@ -5,7 +5,7 @@
 //
 // Precedenza, dalla più forte (SPEC.md, «Estensione: configurazione»):
 //   1. chrome.storage.managed  (policy dell'ente: prevale sempre)
-//   2. GET /v1/config del server (Enterprise: tagInstruction, allowlist, maxFileMB, chiave di custodia,
+//   2. GET /v1/config del server (Server edition: tagInstruction, allowlist, maxFileMB, chiave di custodia,
 //      rotazione; failClosed/allowDisable valgono SOLO dalla policy)
 //   3. chrome.storage.local    (Personal edition: indirizzo di Rizzo-PII, interruttore on/off)
 //   4. valori predefiniti della modalità
@@ -66,7 +66,7 @@
     const d = MODE_DEFAULTS[mode];
     const isEnte = mode === 'ente';
 
-    // Enterprise edition: server dell'ente. Personal edition: nessun server, solo Rizzo-PII locale.
+    // Server edition: server dell'ente. Personal edition: nessun server, solo Rizzo-PII locale.
     const serverUrl = isEnte ? stripSlash(pick(managed.serverUrl)) || '' : '';
     const rizzoUrl = isEnte ? '' : stripSlash(pick(local.rizzoUrl, DEFAULT_RIZZO_URL));
     // In modalità ente failClosed e allowDisable vengono SOLO dalla policy (SPEC/DECISIONI): /v1/config
@@ -87,7 +87,7 @@
 
     return {
       mode,
-      edition: isEnte ? 'enterprise' : 'personal',
+      edition: isEnte ? 'server' : 'personal',
       managedKeys: Object.keys(managed),
       isManaged: (key) => Object.prototype.hasOwnProperty.call(managed, key),
       serverUrl,
@@ -105,7 +105,7 @@
       maxFileMB: Number.isFinite(server.maxFileMB) ? server.maxFileMB : 20,
       policyVersion: server.policyVersion || null,
       serverMode: server.mode || null,
-      // Cifratura lato client (solo Enterprise edition)
+      // Cifratura lato client (solo Server edition)
       escrowPublicKey: typeof server.escrowPublicKey === 'string' ? server.escrowPublicKey : '',
       escrowKeyId: typeof server.escrowKeyId === 'string' ? server.escrowKeyId : '',
       rotateKey: server.rotateKey === true,

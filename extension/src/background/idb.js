@@ -3,7 +3,7 @@
 //
 // IndexedDB del service worker. Le CryptoKey vengono salvate come oggetti (clonazione
 // strutturata): restano NON estraibili anche dopo il salvataggio.
-//   keys    chiavi utente K_u dell'Enterprise edition {keyId, key, createdAt, active, legacy}
+//   keys    chiavi utente K_u della Server edition {keyId, key, createdAt, active, legacy}
 //   device  coppia RSA-OAEP del dispositivo per il recupero {id:'device', privateKey, publicKey, deviceKeyId}
 //   meta    chiavi locali e stato {id, ...}
 //   pdict   Personal edition: dizionari cifrati per scope {scopeKey, ...}

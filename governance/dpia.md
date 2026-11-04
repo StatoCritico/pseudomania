@@ -1,5 +1,5 @@
 ---
-title: "Valutazione d'impatto sulla protezione dei dati (DPIA) – Pseudomania Enterprise edition e uso di Claude Team"
+title: "Valutazione d'impatto sulla protezione dei dati (DPIA) – Pseudomania Server edition e uso di Claude Team"
 subtitle: "BOZZA ai sensi dell'art. 35 del Regolamento (UE) 2016/679"
 lang: it-IT
 ---
@@ -15,7 +15,7 @@ lang: it-IT
 | Titolare | `[DA DEFINIRE]` |
 | RPD/DPO | `[DA DEFINIRE]` |
 | Redattori | `[DA DEFINIRE]` |
-| Trattamento | Uso di Claude Team (claude.ai) da parte del personale, con pseudonimizzazione automatica tramite **Pseudomania Enterprise edition** (https://pseudomania.statocritico.it) |
+| Trattamento | Uso di Claude Team (claude.ai) da parte del personale, con pseudonimizzazione automatica tramite **Pseudomania Server edition** (https://pseudomania.statocritico.it) |
 | Fase | Pilota: 6 utenti, solo Claude, solo chat (inclusi Progetti, allegati e ricerca web) |
 | Stato | BOZZA 0.3 (31/10/2026): recepisce le decisioni dell'Ente del 31/10/2026 (memoria spenta, ricerca web attiva, cifratura lato client con custodia delle chiavi, osservabilità ibrida, durate di conservazione) |
 | Documenti collegati | Regolamento d'uso (bozza, con Allegati A informativa, B cancellazione e backup, C Custodi); Checklist adempimenti; Verifiche di fase 0; SPEC.md e DECISIONI.md del progetto; registro dei trattamenti `[DA DEFINIRE]` |

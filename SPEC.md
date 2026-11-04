@@ -8,7 +8,7 @@ recepisce (aggiornato il 31/10/2026); in caso di conflitto prevale DECISIONI.md.
 Scopo: pseudonimizzare in automatico ciò che un dipendente invia a claude.ai (piano Claude Team) e
 ripristinare i dati reali nelle risposte. Due edizioni:
 
-- **Enterprise edition**: estensione Chrome + server su VM interna (questo contratto) + Langfuse
+- **Server edition**: estensione Chrome + server su VM interna (questo contratto) + Langfuse
   (progetto dedicato, anche su un Langfuse condiviso dell'ente).
 - **Personal edition**: SOLO estensione + app desktop di Rizzo-PII su `http://127.0.0.1:5005`.
   Nessun server Pseudomania, nessun Docker, nessun Langfuse (vedi sezione in fondo).
@@ -23,13 +23,13 @@ pseudogate/
   LICENSE                 AGPL-3.0; THIRD_PARTY_NOTICES.md attribuzioni
   extension/              estensione Chrome MV3 (fork di Privacy Guardrail del DFKI, Apache-2.0)
   server/                 API FastAPI + Dockerfile + config (allowlist, categorie particolari)
-  deploy/                 docker-compose (Enterprise), .env.example, Caddyfile, script, backup
+  deploy/                 docker-compose (Server edition), .env.example, Caddyfile, script, backup
   tools/custodi/          strumento OFFLINE dei custodi (chiave di custodia, Shamir, recupero)
   collaudo/               corpus sintetico e valutazione
   docs/  site/  governance/
 ```
 
-## Servizi (Enterprise edition, rete interna)
+## Servizi (Server edition, rete interna)
 
 | Servizio compose | Immagine / build | Porta interna | Note |
 |---|---|---|---|
@@ -194,7 +194,7 @@ Errori: `{"error":code,"message"}`; 400 richiesta non valida, 401 token non vali
 
 `chrome.storage.managed` (schema `extension/schema.json`): `mode` ("ente"), `serverUrl`, `oidcIssuer`, `oidcClientId`,
 `oidcScopes`, `oidcTokenType` ("access_token" predefinito | "id_token"; con id_token `OIDC_AUDIENCE` = `oidcClientId`),
-`failClosed` (default true), `allowDisable` (default false), `sites` (default `["claude.ai"]`). In Enterprise edition
+`failClosed` (default true), `allowDisable` (default false), `sites` (default `["claude.ai"]`). In Server edition
 `failClosed` e `allowDisable` si leggono SOLO dalla policy: `/v1/config` non può indebolirli. La memoria di Claude è
 spenta dall'ente (DECISIONI.md, punto 1): non esiste uno scope globale dei tag.
 Se `managed.mode` è assente → **Personal edition**.

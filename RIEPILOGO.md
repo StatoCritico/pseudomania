@@ -8,7 +8,7 @@ Permettere ai dipendenti di un ente pubblico italiano di usare Claude (piano **C
 
 È una **misura di mitigazione del rischio**, non una garanzia: oggi i dipendenti usano account Team senza alcun controllo. La pseudonimizzazione resta un trattamento di dati personali. Tutta la responsabilità legale resta in capo a chi adotta e usa il sistema.
 
-Nome: **Pseudomania**. Sito: **https://pseudomania.statocritico.it**. Due edizioni: **Personal edition** e **Enterprise edition**.
+Nome: **Pseudomania**. Sito: **https://pseudomania.statocritico.it**. Due edizioni: **Personal edition** e **Server edition**.
 
 ## 2. Percorso delle decisioni (in sintesi)
 
@@ -33,17 +33,17 @@ Nome: **Pseudomania**. Sito: **https://pseudomania.statocritico.it**. Due edizio
 | Accesso | SSO obbligatorio con accesso condizionato dell'identity provider. Il proxy aziendale (che autentica già gli utenti) lascia passare claude.ai solo da Chrome gestito |
 | Dizionario | Cifrato **nel browser**, chiave automatica (nessuna frase segreta) non estraibile, rotazione ogni 90 giorni. Copia della chiave cifrata per i custodi (chiave privata di custodia offline, divisa 2 su 3). Root sulla VM non può decifrare in blocco i dizionari |
 | Cambio PC | Le chat vecchie restano con i tag. I progetti si recuperano tramite i custodi, su richiesta |
-| Osservabilità | Ibrida: i contenuti si recuperano con l'esportazione di Claude Team (Primary Owner su account di servizio con credenziali e MFA divise tra due custodi, solo su richiesta dell'autorità giudiziaria, verbale). Sul server resta un registro minimo senza testi, con hash di ogni messaggio. Langfuse solo nell'Enterprise edition, eventualmente condiviso con altre applicazioni dell'ente |
+| Osservabilità | Ibrida: i contenuti si recuperano con l'esportazione di Claude Team (Primary Owner su account di servizio con credenziali e MFA divise tra due custodi, solo su richiesta dell'autorità giudiziaria, verbale). Sul server resta un registro minimo senza testi, con hash di ogni messaggio. Langfuse solo nella Server edition, eventualmente condiviso con altre applicazioni dell'ente |
 | Accesso ai registri | Solo i custodi, su richiesta dell'autorità giudiziaria (come per la videosorveglianza). Serve l'accordo sindacale o l'autorizzazione dell'Ispettorato (art. 4 L. 300/1970) |
 | Backup | Cancellazione crittografica: si distrugge la chiave, non il record. Archivio delle chiavi separato dai backup del database |
 | Personal edition | Solo estensione + app desktop di Rizzo-PII. Nessun server, nessun Docker, nessun Langfuse. I PDF vengono inviati come testo pseudonimizzato |
-| Attivazione | Enterprise: sempre attiva, pulsante bloccato. Personal: pulsante nella barra di Chrome (e Alt+Maiusc+P) con stato **per conversazione**; nuova chat: si attiva da sola se l'ultima scelta era "attivo", altrimenti chiede; chat ripresa: si riattiva se era attiva, altrimenti chiede; mentre chiede, i messaggi restano protetti; spenta vale solo in uscita, il ripristino in entrata è sempre attivo |
+| Attivazione | Server edition: sempre attiva, pulsante bloccato. Personal: pulsante nella barra di Chrome (e Alt+Maiusc+P) con stato **per conversazione**; nuova chat: si attiva da sola se l'ultima scelta era "attivo", altrimenti chiede; chat ripresa: si riattiva se era attiva, altrimenti chiede; mentre chiede, i messaggi restano protetti; spenta vale solo in uscita, il ripristino in entrata è sempre attivo |
 | Browser e chatbot supportati | Solo **Chrome** e **claude.ai** (quelli usati dall'autore). Tutto ciò che è specifico del sito sta in un modulo adattatore (`extension/src/sites/claude.js`, `registry.js`): altri possono aggiungere chatbot o portarla su altri browser Chromium sotto AGPL; Firefox richiede adattamenti. FAQ sul sito: `#faq-altri-siti` |
 | Licenza | Codice in AGPL-3.0, componenti con licenze compatibili (MIT, Apache, BSD, MPL, PostgreSQL) |
 | Realizzazione | Team interno + fornitore |
 | Lettera ad Anthropic | Da inviare **dopo** la prova tecnica (bozza in `governance/verifiche-fase0.md`) |
 
-## 4. Durate di conservazione (Enterprise edition)
+## 4. Durate di conservazione (Server edition)
 
 | Dato | Durata |
 |---|---|
@@ -72,10 +72,10 @@ Fonti principali: Garante 27/11/2008 (amministratori di sistema), Garante su Reg
 |---|---|
 | `DECISIONI.md`, `SPEC.md` | Decisioni vincolanti e contratto tecnico tra i componenti |
 | `extension/` | Estensione Chrome (entrambe le edizioni), test, server di simulazione, script di verifica dei selettori su claude.ai |
-| `server/`, `deploy/` | API, stack docker-compose Enterprise, script di backup e ripristino, OpenBao |
+| `server/`, `deploy/` | API, stack docker-compose Server edition, script di backup e ripristino, OpenBao |
 | `tools/custodi/` | Strumento offline per i custodi |
 | `collaudo/` | Documenti di prova inventati e script di valutazione della qualità |
-| `docs/` | Installazione Enterprise, configurazione esterna, Personal edition, procedure dei custodi, verifica del pilota, problemi aperti |
+| `docs/` | Installazione Server edition, configurazione esterna, Personal edition, procedure dei custodi, verifica del pilota, problemi aperti |
 | `governance/` | Regolamento con allegati, DPIA, checklist, verifiche della fase 0 con lettera ad Anthropic, policy light (MD e DOCX) |
 | `site/` | Sito statico (caroselli e approfondimenti), privacy, guida alla pubblicazione, bozza di `publiccode.yml` |
 | `manuale/` | Manuale utente completo e due guide rapide (MD, DOCX, PDF) |
@@ -98,17 +98,17 @@ Fonti principali: Garante 27/11/2008 (amministratori di sistema), Garante su Reg
 - **Test dell'estensione (unit)**: 50/50 superati con Node 22. Test DOM ed e2e non eseguiti (Playwright non installato).
 - **Test del server e dello strumento dei custodi**: non eseguiti (PyPI non raggiungibile dal PC di lavoro, pytest assente). Da eseguire sulla VM di prova.
 - Confermato nel codice: `PUT` nei metodi CORS del server (problema n. 1 risolto).
-- **Ancora aperto (Enterprise)**: l'host del server non è in `host_permissions` del `manifest.json` (solo in `optional_host_permissions`): va aggiunto prima di impacchettare l'estensione per l'ente (`extension/README.md` §2.2).
+- **Ancora aperto (Server edition)**: l'host del server non è in `host_permissions` del `manifest.json` (solo in `optional_host_permissions`): va aggiunto prima di impacchettare l'estensione per l'ente (`extension/README.md` §2.2).
 - **Problemi aperti** in `docs/PROBLEMI-RILEVATI.md`: n. 4 (pulizia tracce Langfuse v4, da provare), 5 (app desktop di Rizzo-PII e CORS), 6 (rischio residuo root, dichiarato), 12 (tag delle immagini), 13 (Podman), 14 (mapper di audience Keycloak). I n. 1-3 e 7-11 sono risolti ma restano nella tabella «Aperti» per tracciabilità: da spostare tra i risolti dopo la prova.
 - **[DA VERIFICARE]**: 145 occorrenze in 26 file Markdown (docs, governance, manuale, README).
-- **Segnaposto ancora presenti nel sito**: `ORG/pseudogate` (repository) e testi «segnaposto» in privacy, enterprise-edition, strumenti-e-download, scelte-di-progetto e altre pagine.
+- **Segnaposto ancora presenti nel sito**: `ORG/pseudogate` (repository) e testi «segnaposto» in privacy, server-edition, strumenti-e-download, scelte-di-progetto e altre pagine.
 - `Gateway_LLM_PA_Piano_d_azione.docx` (30/10/2026) è **superato** in più punti (memoria attiva, dizionario cifrato sul server, errori del server che bloccano l'invio): prevale `DECISIONI.md`. Aggiornarlo o archiviarlo.
 
 ### 7.2 Prossimi passi, nell'ordine
 
 1. **Prova della Personal edition**: installare l'app desktop di Rizzo-PII e l'estensione; verificare che il servizio locale risponda all'estensione (se no, fork di Rizzo-PII); lanciare lo script di verifica dei selettori su claude.ai (`extension/dev/verifica-sito-reale/`). Prima, `npm install` in `extension/` per i test DOM/e2e.
 2. Correggere con gli agenti ciò che emerge dalla prova.
-3. Prova dell'Enterprise edition su una VM di prova (`docs/installazione-ente.md`, `docs/verifica-pilota.md`), compresi i test `pytest` di `server/` e `tools/custodi/` e l'aggiunta dell'host del server a `host_permissions`.
+3. Prova della Server edition su una VM di prova (`docs/installazione-ente.md`, `docs/verifica-pilota.md`), compresi i test `pytest` di `server/` e `tools/custodi/` e l'aggiunta dell'host del server a `host_permissions`.
 4. Inviare la lettera ad Anthropic.
 5. Verifiche dall'Italia: catalogo ACN e lista DPF.
 6. Adempimenti prima del pilota: DPIA con il DPO, accordo sindacale o autorizzazione dell'Ispettorato, informativa, regolamento, generazione della chiave di custodia.
@@ -140,7 +140,7 @@ Da includere (o far includere) in ogni incarico:
 - Leggere prima `DECISIONI.md` (vincolante; contiene anche la sezione "Deviazioni") e `SPEC.md` (contratto tecnico).
 - Lavorare **solo nella propria cartella**; segnalare, non correggere, i problemi trovati in cartelle altrui (in `docs/PROBLEMI-RILEVATI.md` o nel rapporto finale).
 - Se un cambiamento tocca il contratto tra estensione e server, scriverlo in `DECISIONI.md` sotto "Deviazioni" e avvisare il coordinatore; `SPEC.md` lo aggiorna solo l'agente server.
-- Testi visibili in **italiano**; nome **Pseudomania**; edizioni **Personal edition** / **Enterprise edition**; sito https://pseudomania.statocritico.it.
+- Testi visibili in **italiano**; nome **Pseudomania**; edizioni **Personal edition** / **Server edition**; sito https://pseudomania.statocritico.it.
 - Licenza AGPL-3.0-or-later per il codice nuovo; solo componenti open source con licenze compatibili.
 - Eseguire i test esistenti prima di consegnare; dichiarare sempre cosa è stato verificato e cosa no; segnare `[DA VERIFICARE]` i fatti non controllati su fonti aperte.
 - Mai inserire chiavi private nel repository (la chiave dell'estensione va generata dall'ente: vedi `extension/README.md`).
@@ -152,7 +152,7 @@ Da includere (o far includere) in ogni incarico:
 |---|---|---|---|
 | **Estensione** | `extension/` | Selettori claude.ai, cifratura nel browser, Personal edition con Rizzo-PII desktop, pannello, test (unit, DOM, e2e con Playwright) | `extension/README.md`, `src/sites/claude.js`, `dev/` |
 | **Server e stack** | `server/`, `deploy/`, `tools/custodi/`, `collaudo/`, `SPEC.md`, `THIRD_PARTY_NOTICES.md` | API, archivio chiavi, durate e pulizie, Langfuse, backup, strumento dei custodi, corpus di prova | `deploy/.env.example`, `deploy/VERSIONS.md`, `server/tests/` |
-| **Documentazione tecnica** | `docs/` | Installazione Enterprise, configurazione esterna (Claude Team, IdP, Chrome, MDM, proxy), Personal edition, custodi, verifica del pilota, problemi aperti | tutto `deploy/`, `extension/README.md`, `tools/custodi/` |
+| **Documentazione tecnica** | `docs/` | Installazione Server edition, configurazione esterna (Claude Team, IdP, Chrome, MDM, proxy), Personal edition, custodi, verifica del pilota, problemi aperti | tutto `deploy/`, `extension/README.md`, `tools/custodi/` |
 | **Governance** | `governance/` | Regolamento e allegati, DPIA, checklist, verifiche della fase 0, lettera ad Anthropic, policy light; rigenerare i .docx con pandoc (`reference-a4.docx`) | `DECISIONI.md`, fonti citate nelle sezioni "Riferimenti" |
 | **Sito** | `site/` | Pagine sorgente in `site/_build/` (non modificare le pagine generate), rigenerare con `python3 site/_build/genera.py`, controlli Playwright a 1280/375/360 px chiaro/scuro | `site/PUBBLICAZIONE.md` |
 | **Manuale** | `manuale/` | Manuale e guide rapide, build con `manuale/build/build.sh` e `build-guide.sh` (DOCX + PDF) | `manuale/DA-AGGIORNARE.md`, `extension/src/shared/` (testi dell'interfaccia) |
@@ -170,7 +170,7 @@ Da includere (o far includere) in ogni incarico:
 **Dopo la prova della Personal edition:**
 > Agente Estensione: leggi le regole in `RIEPILOGO.md` §9.2. Ecco il resoconto della prova reale con Rizzo-PII desktop e claude.ai: [incollare esito, rapporto dello script `extension/dev/verifica-sito-reale/`, errori della console]. Correggi i selettori e il collegamento a Rizzo-PII; se Rizzo-PII non risponde all'estensione, prepara il fork minimo di Rizzo-PII (solo header CORS o modifica necessaria) in una nuova cartella `rizzo-pii-fork/` e documentalo. Aggiorna i test e il README.
 
-**Dopo la prova dell'Enterprise edition su VM:**
+**Dopo la prova della Server edition su VM:**
 > Agente Server e stack: leggi le regole in `RIEPILOGO.md` §9.2. Ecco gli esiti della prova su VM: [log di `docker compose`, errori, esito di `docs/verifica-pilota.md`]. Correggi `server/`, `deploy/`, `tools/custodi/`; aggiorna `SPEC.md` e segna in `docs/PROBLEMI-RILEVATI.md` i problemi risolti.
 
 **Allineamento a valle:**

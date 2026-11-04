@@ -42,7 +42,7 @@
         <li><a href="../index.html#soluzione">La soluzione</a></li>
         <li><a href="../index.html#non-solo-software">Non solo software</a></li>
         <li><a href="../index.html#personal">Personal edition</a></li>
-        <li><a href="../index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="../index.html#server">Server edition</a></li>
         <li><a href="../approfondimenti/index.html" aria-current="page">Approfondimenti</a></li>
       </ul>
     </div>
@@ -104,17 +104,17 @@
 <li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
 <li><a href="personal-edition.html#limiti-personal">Limiti specifici</a></li>
 </ul></details></li>
-<li><details><summary>Enterprise edition</summary><ul>
-<li><a href="enterprise-edition.html">Panoramica</a></li>
-<li><a href="enterprise-edition.html#architettura">Architettura</a></li>
-<li><a href="enterprise-edition.html#requisiti">Requisiti</a></li>
-<li><a href="enterprise-edition.html#installazione">Installazione</a></li>
-<li><a href="enterprise-edition.html#estensione-policy">Estensione gestita da policy</a></li>
-<li><a href="enterprise-edition.html#sso">SSO e accesso condizionato</a></li>
-<li><a href="enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
-<li><a href="enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></li>
-<li><a href="enterprise-edition.html#conservazione">Conservazione</a></li>
-<li><a href="enterprise-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
+<li><details><summary>Server edition</summary><ul>
+<li><a href="server-edition.html">Panoramica</a></li>
+<li><a href="server-edition.html#architettura">Architettura</a></li>
+<li><a href="server-edition.html#requisiti">Requisiti</a></li>
+<li><a href="server-edition.html#installazione">Installazione</a></li>
+<li><a href="server-edition.html#estensione-policy">Estensione gestita da policy</a></li>
+<li><a href="server-edition.html#sso">SSO e accesso condizionato</a></li>
+<li><a href="server-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
+<li><a href="server-edition.html#langfuse">Osservabilità con Langfuse</a></li>
+<li><a href="server-edition.html#conservazione">Conservazione</a></li>
+<li><a href="server-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
 </ul></details></li>
 <li><details><summary>Guida all&#x27;uso</summary><ul>
 <li><a href="guida-all-uso.html">Panoramica</a></li>
@@ -158,7 +158,7 @@
 <li><a href="strumenti-e-download.html">Panoramica</a></li>
 <li><a href="strumenti-e-download.html#estensione">Estensione Chrome</a></li>
 <li><a href="strumenti-e-download.html#rizzo-pii">App desktop Rizzo-PII (Personal edition)</a></li>
-<li><a href="strumenti-e-download.html#server">Server (Enterprise edition)</a></li>
+<li><a href="strumenti-e-download.html#server">Server (Server edition)</a></li>
 <li><a href="strumenti-e-download.html#documentazione">Documentazione</a></li>
 <li><a href="strumenti-e-download.html#modelli">Modelli di governance</a></li>
 <li><a href="strumenti-e-download.html#custodi-tool">Strumento dei custodi</a></li>
@@ -214,7 +214,7 @@
 <details class="acc" id="attivazione-conversazione">
   <summary>Perché nella Personal edition la protezione si attiva per conversazione?</summary>
   <div class="acc-body">
-    <p>Un professionista non usa Claude solo con dati di clienti: per una ricerca generica la pseudonimizzazione è superflua. Un interruttore globale verrebbe spento e dimenticato; uno per conversazione limita l'effetto alla chat in cui serve. Per ridurre gli errori: lo stato è sempre visibile, una nuova conversazione eredita l'ultima scelta solo se era «attiva» (altrimenti chiede), finché il banner aspetta i messaggi sono protetti, e lo spegnimento riguarda solo l'uscita, mai il ripristino. Nella Enterprise edition non c'è scelta: la protezione è sempre attiva.</p>
+    <p>Un professionista non usa Claude solo con dati di clienti: per una ricerca generica la pseudonimizzazione è superflua. Un interruttore globale verrebbe spento e dimenticato; uno per conversazione limita l'effetto alla chat in cui serve. Per ridurre gli errori: lo stato è sempre visibile, una nuova conversazione eredita l'ultima scelta solo se era «attiva» (altrimenti chiede), finché il banner aspetta i messaggi sono protetti, e lo spegnimento riguarda solo l'uscita, mai il ripristino. Nella Server edition non c'è scelta: la protezione è sempre attiva.</p>
   </div>
 </details>
 
@@ -327,7 +327,7 @@
 <h2 id="sp-conservazione">Conservazione</h2>
 
 <div class="acc-open-block" id="tabella-conservazione">
-<p>Durate dell'Enterprise edition, con le motivazioni. Dettagli e rinvii nella DPIA (§ 2.5) e nel regolamento d'uso (art. 11).</p>
+<p>Durate della Server edition, con le motivazioni. Dettagli e rinvii nella DPIA (§ 2.5) e nel regolamento d'uso (art. 11).</p>
 <div class="table-wrap">
   <table class="stack-table retention">
     <caption>Durate di conservazione e fonti</caption>
@@ -390,7 +390,7 @@
       <li><strong>Il server vede il testo in chiaro durante la singola richiesta</strong>, per riconoscere i dati. Chi ha i privilegi di root sulla VM può modificare il servizio e <strong>intercettare le richieste future</strong>; non può decifrare i dizionari passati. Può però verificare se un valore che già conosce è presente (tramite l'impronta HMAC). Contromisure: amministratori designati, registri inalterabili, verifica annuale.</li>
       <li><strong>Quasi-identificatori</strong>: il contesto può identificare una persona anche senza nome.</li>
       <li><strong>Falsi negativi</strong> del riconoscimento: un dato non riconosciuto arriva a Claude e, con la ricerca web attiva, può arrivare al motore di ricerca.</li>
-      <li><strong>Cambi dell'interfaccia di claude.ai</strong>: selettori e richieste interne del sito possono cambiare senza preavviso; l'estensione se ne accorge e, nella Enterprise edition, blocca l'invio, con un disservizio fino all'aggiornamento.</li>
+      <li><strong>Cambi dell'interfaccia di claude.ai</strong>: selettori e richieste interne del sito possono cambiare senza preavviso; l'estensione se ne accorge e, nella Server edition, blocca l'invio, con un disservizio fino all'aggiornamento.</li>
       <li><strong>Elusione</strong>: altri browser, dispositivi personali, app non gestite. Si contrasta con SSO, accesso condizionato, proxy e regolamento, non con l'estensione.</li>
       <li><strong>Voci non caricate in tempo</strong>: se l'estensione non riesce a salvare una nuova voce entro 10 minuti, quel valore non sarà ripristinabile (verrà riproposto alla prossima occorrenza).</li>
       <li><strong>Termini del fornitore</strong>: in attesa di conferma scritta da Anthropic sull'uso dell'estensione.</li>

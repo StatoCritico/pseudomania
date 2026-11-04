@@ -7,7 +7,7 @@ Questo capitolo guida alla stesura in due versioni:
 | Modello | Per chi | Base | Documenti |
 |---|---|---|---|
 | **Light** | professionista, studio, piccola organizzazione con la **Personal edition** | `governance/policy-light.md` | una pagina di regole firmata, più alcune verifiche |
-| **Strutturato** | **ente pubblico** (o impresa) con l'**Enterprise edition** | `governance/policy-uso-ia.md`, `governance/dpia.md`, `governance/checklist-adempimenti.md` | regolamento, informativa, DPIA, accordo sindacale, procedura dei custodi, procedura di cancellazione, durate |
+| **Strutturato** | **ente pubblico** (o impresa) con l'**Server edition** | `governance/policy-uso-ia.md`, `governance/dpia.md`, `governance/checklist-adempimenti.md` | regolamento, informativa, DPIA, accordo sindacale, procedura dei custodi, procedura di cancellazione, durate |
 
 > **Modelli, non consulenza legale.** I testi sono bozze da adattare con il proprio DPO o consulente.
 > La responsabilità delle scelte resta interamente di chi adotta il sistema (capitolo 0). I
@@ -212,7 +212,7 @@ Schema dei contenuti dell'accordo (da negoziare; non è un testo approvato):
 
 ```text
 ACCORDO AI SENSI DELL'ART. 4, COMMA 1, L. 300/1970
-sull'uso del servizio Claude Team tramite Pseudomania Enterprise edition – SCHEMA
+sull'uso del servizio Claude Team tramite Pseudomania Server edition – SCHEMA
 
 Parti: [Ente] e [RSU / organizzazioni sindacali]          Data: [ ]
 
@@ -301,7 +301,7 @@ pienamente applicabili GDPR, DPIA, art. 4 L. 300/1970 e art. 4 AI Act.
 
 ---
 
-## 5.4 Tabella delle durate con le fonti (Enterprise edition)
+## 5.4 Tabella delle durate con le fonti (Server edition)
 
 Fonti: DECISIONI.md (durate vincolanti), regolamento art. 11 e DPIA §2.5 (motivazioni). I link sono
 nell'Appendice.

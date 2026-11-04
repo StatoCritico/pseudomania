@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Enterprise edition – Pseudomania</title>
-<meta name="description" content="Pseudomania Enterprise edition per gli enti: server su VM interna, estensione gestita da policy di Chrome, SSO, cifratura lato client con custodi, Langfuse, conservazione documentata.">
+<title>Server edition – Pseudomania</title>
+<meta name="description" content="Pseudomania Server edition per gli enti: server su VM interna, estensione gestita da policy di Chrome, SSO, cifratura lato client con custodi, Langfuse, conservazione documentata.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0059b3">
 <meta name="referrer" content="no-referrer">
-<link rel="canonical" href="https://pseudomania.statocritico.it/approfondimenti/enterprise-edition.html">
+<link rel="canonical" href="https://pseudomania.statocritico.it/approfondimenti/server-edition.html">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/style.css">
 <script src="../assets/theme-init.js"></script>
@@ -42,7 +42,7 @@
         <li><a href="../index.html#soluzione">La soluzione</a></li>
         <li><a href="../index.html#non-solo-software">Non solo software</a></li>
         <li><a href="../index.html#personal">Personal edition</a></li>
-        <li><a href="../index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="../index.html#server">Server edition</a></li>
         <li><a href="../approfondimenti/index.html" aria-current="page">Approfondimenti</a></li>
       </ul>
     </div>
@@ -104,17 +104,17 @@
 <li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
 <li><a href="personal-edition.html#limiti-personal">Limiti specifici</a></li>
 </ul></details></li>
-<li><details open><summary class="tree-current">Enterprise edition</summary><ul>
-<li><a href="enterprise-edition.html" aria-current="page">Panoramica</a></li>
-<li><a href="enterprise-edition.html#architettura">Architettura</a></li>
-<li><a href="enterprise-edition.html#requisiti">Requisiti</a></li>
-<li><a href="enterprise-edition.html#installazione">Installazione</a></li>
-<li><a href="enterprise-edition.html#estensione-policy">Estensione gestita da policy</a></li>
-<li><a href="enterprise-edition.html#sso">SSO e accesso condizionato</a></li>
-<li><a href="enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
-<li><a href="enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></li>
-<li><a href="enterprise-edition.html#conservazione">Conservazione</a></li>
-<li><a href="enterprise-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
+<li><details open><summary class="tree-current">Server edition</summary><ul>
+<li><a href="server-edition.html" aria-current="page">Panoramica</a></li>
+<li><a href="server-edition.html#architettura">Architettura</a></li>
+<li><a href="server-edition.html#requisiti">Requisiti</a></li>
+<li><a href="server-edition.html#installazione">Installazione</a></li>
+<li><a href="server-edition.html#estensione-policy">Estensione gestita da policy</a></li>
+<li><a href="server-edition.html#sso">SSO e accesso condizionato</a></li>
+<li><a href="server-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
+<li><a href="server-edition.html#langfuse">Osservabilità con Langfuse</a></li>
+<li><a href="server-edition.html#conservazione">Conservazione</a></li>
+<li><a href="server-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
 </ul></details></li>
 <li><details><summary>Guida all&#x27;uso</summary><ul>
 <li><a href="guida-all-uso.html">Panoramica</a></li>
@@ -158,7 +158,7 @@
 <li><a href="strumenti-e-download.html">Panoramica</a></li>
 <li><a href="strumenti-e-download.html#estensione">Estensione Chrome</a></li>
 <li><a href="strumenti-e-download.html#rizzo-pii">App desktop Rizzo-PII (Personal edition)</a></li>
-<li><a href="strumenti-e-download.html#server">Server (Enterprise edition)</a></li>
+<li><a href="strumenti-e-download.html#server">Server (Server edition)</a></li>
 <li><a href="strumenti-e-download.html#documentazione">Documentazione</a></li>
 <li><a href="strumenti-e-download.html#modelli">Modelli di governance</a></li>
 <li><a href="strumenti-e-download.html#custodi-tool">Strumento dei custodi</a></li>
@@ -169,14 +169,14 @@
 </ul>
   </nav>
   <main class="docs-main" id="contenuto" tabindex="-1">
-    <nav aria-label="Percorso" class="breadcrumb"><ol><li><a href="../index.html">Pseudomania</a></li><li><a href="index.html">Approfondimenti</a></li><li aria-current="page">Enterprise edition</li></ol></nav>
-    <h1>Enterprise edition</h1>
-    <p class="lead">La Enterprise edition è pensata per le amministrazioni che hanno adottato Claude Team: un server nella rete interna, l'estensione installata e configurata dalle policy di Chrome, chiavi con custodi e un'osservabilità minima, documentata.</p>
+    <nav aria-label="Percorso" class="breadcrumb"><ol><li><a href="../index.html">Pseudomania</a></li><li><a href="index.html">Approfondimenti</a></li><li aria-current="page">Server edition</li></ol></nav>
+    <h1>Server edition</h1>
+    <p class="lead">La Server edition è pensata per le amministrazioni che hanno adottato Claude Team: un server nella rete interna, l'estensione installata e configurata dalle policy di Chrome, chiavi con custodi e un'osservabilità minima, documentata.</p>
     <h2 id="architettura">Architettura</h2>
 <p>Lo stack gira con Docker Compose su una VM della rete interna. Solo il reverse proxy è esposto; Rizzo-PII non ha accesso a Internet.</p>
 <div class="table-wrap">
   <table class="stack-table">
-    <caption class="visually-hidden">Servizi della Enterprise edition</caption>
+    <caption class="visually-hidden">Servizi della Server edition</caption>
     <thead><tr><th scope="col">Servizio</th><th scope="col">Ruolo</th></tr></thead>
     <tbody>
       <tr><th scope="row">Caddy</th><td data-label="Ruolo">TLS con il certificato dell'ente, unico punto esposto; distribuisce anche il pacchetto dell'estensione</td></tr>

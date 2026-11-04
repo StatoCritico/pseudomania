@@ -1,7 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Inizializzazione di OpenBao per Pseudomania (Enterprise edition) (idempotente: si può rieseguire).
+# Inizializzazione di OpenBao per Pseudomania (Server edition) (idempotente: si può rieseguire).
 #
 #   docker compose --profile init run --rm openbao-init
 #

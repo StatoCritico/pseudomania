@@ -11,12 +11,12 @@ convinzioni religiose o filosofiche, appartenenza sindacale, dati genetici, biom
 salute, alla vita o all'orientamento sessuale (art. 9 GDPR); a questi si aggiungono i dati relativi a
 condanne penali e reati (art. 10 GDPR). Pseudomania blocca gli invii in cui li rileva.
 
-**Chiave di custodia** – Coppia di chiavi RSA dell'organizzazione (Enterprise). La chiave pubblica
+**Chiave di custodia** – Coppia di chiavi RSA dell'organizzazione (Server edition). La chiave pubblica
 è sul server e serve a cifrare le copie di custodia; la chiave privata non è mai sul server ed è
 divisa in quote tra i custodi.
 
 **Chiave utente** – Chiave AES-256 generata automaticamente dal browser di ciascun utente, **non
-estraibile**, con cui l'estensione cifra il dizionario. Ruota ogni 90 giorni (Enterprise).
+estraibile**, con cui l'estensione cifra il dizionario. Ruota ogni 90 giorni (Server edition).
 
 **Claude Team** – Piano commerciale di Anthropic per claude.ai destinato alle organizzazioni.
 
@@ -41,7 +41,7 @@ GDPR).
 **DPO / RPD** – Responsabile della protezione dei dati (artt. 37-39 GDPR).
 
 **Fail-closed** – Comportamento per cui, se il servizio di riconoscimento non risponde, l'invio viene
-bloccato invece di partire senza protezione (Enterprise).
+bloccato invece di partire senza protezione (Server edition).
 
 **HMAC** – Impronta calcolata con una chiave segreta. Serve a dare lo stesso segnaposto allo stesso
 valore senza conservarlo in chiaro, e a rendere pseudonima l'identità degli utenti nel registro.
@@ -55,7 +55,7 @@ Microsoft Entra ID), usato per l'SSO e per l'accesso dell'estensione al server.
 **Key store** – Database separato in cui il server conserva le copie di custodia, con backup propri a
 14 giorni.
 
-**Langfuse** – Piattaforma di osservabilità in cui l'Enterprise edition registra, per pochi giorni,
+**Langfuse** – Piattaforma di osservabilità in cui la Server edition registra, per pochi giorni,
 i testi **già pseudonimizzati**, per misurare la qualità del riconoscimento.
 
 **OpenBao** – Servizio che custodisce sul server la sola chiave HMAC; si sblocca con le quote dei
@@ -64,10 +64,10 @@ custodi.
 **Pannello di ispezione** – Pannello laterale di Pseudomania che mostra originale e testo inviato,
 dati sostituiti, segnalazioni, cancellazione dei dati, conferma e recupero dei progetti.
 
-**Personal edition / Enterprise edition** – Le due edizioni di Pseudomania (capitolo 1, §1.3).
+**Personal edition / Server edition** – Le due edizioni di Pseudomania (capitolo 1, §1.3).
 
 **Primary Owner** – Ruolo più alto di un'organizzazione Claude Team; è l'unico che può esportare i dati
-dell'organizzazione. Nell'Enterprise edition è assegnato a un account di servizio a doppia custodia.
+dell'organizzazione. Nella Server edition è assegnato a un account di servizio a doppia custodia.
 
 **Progetto** – Funzione di claude.ai che raccoglie chat, istruzioni e file; in Pseudomania ha un unico
 dizionario per tutte le sue chat.
@@ -82,11 +82,11 @@ persona (ruolo unico, data e luogo di un fatto, numero di protocollo…). Pseudo
 **Quota (Shamir)** – Parte di un segreto diviso con lo schema di Shamir: servono almeno «soglia» quote
 (es. 2 di 3) per ricomporlo; una sola quota non rivela nulla.
 
-**Registro minimo** – Registro del server (Enterprise) con data e ora, pseudonimo dell'utente, ufficio,
+**Registro minimo** – Registro del server (Server edition) con data e ora, pseudonimo dell'utente, ufficio,
 azioni, conteggi, blocchi e impronta SHA-256 del testo pseudonimizzato; **nessun testo**.
 
 **Rizzo-PII** – Modello e servizio open source per il riconoscimento dei dati personali in italiano;
-nella Personal edition gira come app desktop sul PC, nell'Enterprise edition sul server.
+nella Personal edition gira come app desktop sul PC, nella Server edition sul server.
 
 **Scope** – Ambito di un dizionario: una conversazione, un progetto o una chat nuova non ancora salvata
 (`pending:`).

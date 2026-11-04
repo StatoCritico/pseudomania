@@ -32,7 +32,7 @@ test('ente: fail-closed, non disattivabile, impostazioni locali ignorate', () =>
     managed: { mode: 'ente', serverUrl: 'https://pg.ente.local', oidcIssuer: 'https://idp/', oidcClientId: 'pg' },
     local: { rizzoUrl: 'http://127.0.0.1:1', enabled: false },
   });
-  assert.equal(c.edition, 'enterprise');
+  assert.equal(c.edition, 'server');
   assert.equal(c.serverUrl, 'https://pg.ente.local');
   assert.equal(c.rizzoUrl, '');
   assert.equal(c.failClosed, true);

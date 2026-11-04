@@ -16,7 +16,7 @@ CAPITOLI = [
     "00-avvertenze.md",
     "01-come-funziona.md",
     "02-personal-edition.md",
-    "03-enterprise-edition.md",
+    "03-server-edition.md",
     "04-uso-quotidiano.md",
     "05-creare-una-policy.md",
     "06-risoluzione-problemi.md",

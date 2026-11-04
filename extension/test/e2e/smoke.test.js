@@ -20,7 +20,7 @@ async function typeAndSend(page, text, key) {
   await page.keyboard.press(key || 'Enter');
 }
 
-test('flusso completo (Enterprise edition)', { timeout: 120000 }, async (t) => {
+test('flusso completo (Server edition)', { timeout: 120000 }, async (t) => {
   const h = await startHarness();
   t.after(() => h.close());
   const page = await h.context.newPage();

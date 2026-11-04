@@ -1,5 +1,5 @@
 ---
-title: "Pseudomania Enterprise edition – guida rapida"
+title: "Pseudomania Server edition – guida rapida"
 subtitle: "Per chi usa Claude nella propria organizzazione · bozza 0.1"
 lang: it-IT
 ---

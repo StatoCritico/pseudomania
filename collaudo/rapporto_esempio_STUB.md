@@ -1,5 +1,5 @@
 > **ATTENZIONE - RISULTATI DI PROVA, NON INDICATIVI DEL MODELLO REALE.**
-> Prodotto il 31/10/2026 contro l'API di Pseudomania (Enterprise edition) avviata in locale con
+> Prodotto il 31/10/2026 contro l'API di Pseudomania (Server edition) avviata in locale con
 > PostgreSQL reale (DB applicativo + key store), un OpenBao simulato (solo HMAC), OIDC di prova e il
 > **vero codice server di Rizzo-PII con il modello neurale sostituito da uno stub** che non rileva nulla:
 > restano attive solo le regex/checksum di Rizzo (CF, IBAN, P.IVA, email, telefono, targa, importi,

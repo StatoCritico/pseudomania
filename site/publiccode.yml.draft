@@ -62,7 +62,7 @@ description:
       Progetti di Claude.
 
 
-      Enterprise edition: server su una VM della rete interna dell'ente,
+      Server edition: server su una VM della rete interna dell'ente,
       estensione installata e configurata dalle policy di Chrome e non
       disattivabile, accesso unico OIDC. Il dizionario dei segnaposto è
       cifrato nel browser con una chiave per utente non estraibile; il server
@@ -99,7 +99,7 @@ description:
       - Rotazione automatica delle chiavi e cancellazione crittografica
       - Registro minimo senza testi, con impronte SHA-256
       - Osservabilità facoltativa con Langfuse
-      - Enterprise edition gestita da policy di Chrome, con SSO OIDC
+      - Server edition gestita da policy di Chrome, con SSO OIDC
       - Personal edition con la sola app desktop di Rizzo-PII, senza server
       - Comportamento fail-closed se il server non è raggiungibile
     # screenshots:
@@ -147,11 +147,11 @@ dependsOn:
       optional: true
     - name: Caddy
       version: "2"
-    - name: Rizzo-PII (immagine per la Enterprise edition, app desktop per la Personal edition)
-    - name: Docker Engine o Podman con Compose (solo Enterprise edition)
+    - name: Rizzo-PII (immagine per la Server edition, app desktop per la Personal edition)
+    - name: Docker Engine o Podman con Compose (solo Server edition)
   proprietary:
     - name: Google Chrome
-    - name: Claude (claude.ai; piano Team per la Enterprise edition)
+    - name: Claude (claude.ai; piano Team per la Server edition)
 
 it:
   countryExtensionVersion: "1.0"

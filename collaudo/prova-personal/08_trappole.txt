@@ -1,0 +1,9 @@
+Nota interna sull'uso di Claude e Rizzo-PII nello studio.
+
+Usiamo Claude di Anthropic con Pseudomania e Rizzo-PII, nel rispetto del GDPR e dell'AI Act. La circolare del Tribunale di Bologna e il d.lgs. 196/2003 restano i riferimenti.
+
+Il signor Rizzo, nostro cliente, non c'entra con Rizzo-PII. La signora Serena Rinaldi ha chiamato tre volte: Serena Rinaldi chiede notizie; ricordarsi di richiamare Serena Rinaldi entro venerdì. Anche la sorella, S. Rinaldi, è cliente.
+
+Codice fiscale scritto con spazi: RNLS RN63 H52D 704I. IBAN con spazi: IT40 Y044 2552 3325 4705 3478 360.
+Telefono senza prefisso: 332 106 9872. Email in maiuscolo: S.RINALDI@EXAMPLE.IT.
+Versione del software: 2.3.55.987 (non è un indirizzo IP).

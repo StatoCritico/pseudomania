@@ -3,7 +3,7 @@
 //
 // Personal edition: estensione AUTONOMA, senza server Pseudomania. Parla direttamente con
 // Rizzo-PII desktop (http://127.0.0.1:5005) e offre agli script di contenuto la stessa interfaccia
-// di messaggi dell'Enterprise edition (pg:pseudonymize, pg:pseudonymizeFile, pg:dictionary…).
+// di messaggi della Server edition (pg:pseudonymize, pg:pseudonymizeFile, pg:dictionary…).
 //
 // - Tag stabili per scope assegnati qui; dizionario in IndexedDB, valori cifrati con una chiave
 //   AES-GCM locale NON estraibile; l'indice valore→tag usa un HMAC con una chiave locale non

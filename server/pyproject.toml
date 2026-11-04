@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pseudogate-server"
 version = "0.1.0"
-description = "Pseudomania (Enterprise edition): API di pseudonimizzazione reversibile per claude.ai"
+description = "Pseudomania (Server edition): API di pseudonimizzazione reversibile per claude.ai"
 readme = { text = "Vedi SPEC.md nella radice del repository.", content-type = "text/plain" }
 license = "AGPL-3.0-or-later"
 requires-python = ">=3.12,<3.14"

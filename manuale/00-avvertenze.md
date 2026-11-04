@@ -1,7 +1,7 @@
 # 0. Avvertenze e disclaimer di responsabilità
 
 > **Leggere prima di installare o usare Pseudomania.** Queste avvertenze valgono per entrambe le
-> edizioni (Personal edition ed Enterprise edition) e sono richiamate alla fine del manuale.
+> edizioni (Personal edition e Server edition) e sono richiamate alla fine del manuale.
 
 ## 0.1 Che cosa è Pseudomania, e che cosa non è
 

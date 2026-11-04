@@ -42,7 +42,7 @@
         <li><a href="../index.html#soluzione">La soluzione</a></li>
         <li><a href="../index.html#non-solo-software">Non solo software</a></li>
         <li><a href="../index.html#personal">Personal edition</a></li>
-        <li><a href="../index.html#enterprise">Enterprise edition</a></li>
+        <li><a href="../index.html#server">Server edition</a></li>
         <li><a href="../approfondimenti/index.html" aria-current="page">Approfondimenti</a></li>
       </ul>
     </div>
@@ -104,17 +104,17 @@
 <li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
 <li><a href="personal-edition.html#limiti-personal">Limiti specifici</a></li>
 </ul></details></li>
-<li><details><summary>Enterprise edition</summary><ul>
-<li><a href="enterprise-edition.html">Panoramica</a></li>
-<li><a href="enterprise-edition.html#architettura">Architettura</a></li>
-<li><a href="enterprise-edition.html#requisiti">Requisiti</a></li>
-<li><a href="enterprise-edition.html#installazione">Installazione</a></li>
-<li><a href="enterprise-edition.html#estensione-policy">Estensione gestita da policy</a></li>
-<li><a href="enterprise-edition.html#sso">SSO e accesso condizionato</a></li>
-<li><a href="enterprise-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
-<li><a href="enterprise-edition.html#langfuse">Osservabilità con Langfuse</a></li>
-<li><a href="enterprise-edition.html#conservazione">Conservazione</a></li>
-<li><a href="enterprise-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
+<li><details><summary>Server edition</summary><ul>
+<li><a href="server-edition.html">Panoramica</a></li>
+<li><a href="server-edition.html#architettura">Architettura</a></li>
+<li><a href="server-edition.html#requisiti">Requisiti</a></li>
+<li><a href="server-edition.html#installazione">Installazione</a></li>
+<li><a href="server-edition.html#estensione-policy">Estensione gestita da policy</a></li>
+<li><a href="server-edition.html#sso">SSO e accesso condizionato</a></li>
+<li><a href="server-edition.html#chiavi-custodi">Chiavi e custodi</a></li>
+<li><a href="server-edition.html#langfuse">Osservabilità con Langfuse</a></li>
+<li><a href="server-edition.html#conservazione">Conservazione</a></li>
+<li><a href="server-edition.html#verifica-pilota">Verifica prima del go-live</a></li>
 </ul></details></li>
 <li><details open><summary class="tree-current">Guida all&#x27;uso</summary><ul>
 <li><a href="guida-all-uso.html" aria-current="page">Panoramica</a></li>
@@ -158,7 +158,7 @@
 <li><a href="strumenti-e-download.html">Panoramica</a></li>
 <li><a href="strumenti-e-download.html#estensione">Estensione Chrome</a></li>
 <li><a href="strumenti-e-download.html#rizzo-pii">App desktop Rizzo-PII (Personal edition)</a></li>
-<li><a href="strumenti-e-download.html#server">Server (Enterprise edition)</a></li>
+<li><a href="strumenti-e-download.html#server">Server (Server edition)</a></li>
 <li><a href="strumenti-e-download.html#documentazione">Documentazione</a></li>
 <li><a href="strumenti-e-download.html#modelli">Modelli di governance</a></li>
 <li><a href="strumenti-e-download.html#custodi-tool">Strumento dei custodi</a></li>
@@ -179,7 +179,7 @@
   <li>Controlla che il badge dell'estensione indichi <strong>ON</strong> su claude.ai (<a href="#attivazione">stati del pulsante</a>).</li>
   <li>Verifica le impostazioni di Claude: memoria spenta, feedback e connettori disattivati.</li>
   <li>Leggi il regolamento d'uso della tua organizzazione o, se lavori da solo, scrivi il tuo (<a href="#policy">sotto</a>).</li>
-  <li>Installazione: <a href="personal-edition.html#installazione">Personal edition</a> · <a href="enterprise-edition.html#installazione">Enterprise edition</a>.</li>
+  <li>Installazione: <a href="personal-edition.html#installazione">Personal edition</a> · <a href="server-edition.html#installazione">Server edition</a>.</li>
 </ul>
 
 <h2 id="attivazione">Attivare la protezione (Personal edition)</h2>
@@ -188,7 +188,7 @@
   <li>Clic sul pulsante o <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd> per cambiare lo stato della conversazione aperta. La scelta vale solo per quella conversazione e viene ricordata.</li>
   <li>Se compare il banner «Attiva» / «Continua senza protezione» (nuova conversazione dopo averla spenta, o conversazione ripresa che era spenta), scegli: nell'attesa i messaggi sono comunque protetti.</li>
   <li>Spegnere riguarda solo ciò che invii: i segnaposto già presenti continuano a essere ripristinati. Riattivare non ripulisce ciò che è già partito in chiaro.</li>
-  <li>Nella Enterprise edition non devi fare nulla: la protezione è sempre attiva.</li>
+  <li>Nella Server edition non devi fare nulla: la protezione è sempre attiva.</li>
 </ul>
 
 <h2 id="scrivere">Scrivere e inviare</h2>
@@ -216,7 +216,7 @@
 <h2 id="invio-bloccato">Se l'invio è bloccato</h2>
 <ul>
   <li><strong>Banner rosso con motivo</strong>: il testo contiene dati sanitari, giudiziari o di altre categorie particolari, oppure un formato non supportato. Riformula senza quei dati; il blocco non si può forzare.</li>
-  <li><strong>Server o servizio non raggiungibile</strong>: nella Enterprise edition attendi o avvisa l'assistenza; nella Personal edition riavvia l'app Rizzo-PII prima di inviare.</li>
+  <li><strong>Server o servizio non raggiungibile</strong>: nella Server edition attendi o avvisa l'assistenza; nella Personal edition riavvia l'app Rizzo-PII prima di inviare.</li>
   <li><strong>Pagina non riconosciuta</strong>: claude.ai potrebbe essere cambiato. Non aggirare il blocco con altri browser: segnala il problema.</li>
 </ul>
 
@@ -224,7 +224,7 @@
 <p>Dal pannello di ispezione puoi segnalare un <strong>dato non riconosciuto</strong> (falso negativo) o un <strong>mascheramento inutile</strong> (falso positivo); la nota viene ripulita dai valori reali noti. Se è partito un dato personale non mascherato: cancella la chat, annota l'accaduto senza ricopiare il dato e avvisa il referente privacy (nella Personal edition valuta tu se si tratta di una violazione da notificare entro 72 ore, art. 33 GDPR).</p>
 
 <h2 id="cambio-pc">Cambio di PC o di browser</h2>
-<p>Su un nuovo PC l'estensione crea una chiave nuova: i segnaposto delle chat precedenti appaiono come «non ripristinabili». Nella Enterprise edition puoi chiedere, con motivazione, il recupero dei dizionari dei <strong>progetti</strong> tramite i custodi. Nella Personal edition non è previsto alcun recupero. Procedura passo per passo: <a href="index.html#recupero-chiavi">recupero delle chiavi</a>.</p>
+<p>Su un nuovo PC l'estensione crea una chiave nuova: i segnaposto delle chat precedenti appaiono come «non ripristinabili». Nella Server edition puoi chiedere, con motivazione, il recupero dei dizionari dei <strong>progetti</strong> tramite i custodi. Nella Personal edition non è previsto alcun recupero. Procedura passo per passo: <a href="index.html#recupero-chiavi">recupero delle chiavi</a>.</p>
 
 <h2 id="policy">Creare un regolamento d'uso</h2>
 <div class="grid grid-2">
@@ -255,7 +255,7 @@
 <h2 id="responsabilita">Chi è responsabile</h2>
 <p>Chi adotta Pseudomania (l'ente come titolare, o il professionista) decide se e come usarlo, configura il servizio di IA, scrive le regole e ne risponde. Chi usa il sistema risponde del rispetto delle regole e del contenuto di ciò che invia. Gli autori del software non forniscono alcuna garanzia né assistenza obbligatoria: <a href="note-legali.html#responsabilita">note legali</a>.</p>
 
-    <nav class="pager" aria-label="Capitoli"><a class="pager-prev" href="enterprise-edition.html"><span>Capitolo precedente</span>Enterprise edition</a><a class="pager-next" href="faq.html"><span>Capitolo successivo</span>Domande frequenti</a></nav>
+    <nav class="pager" aria-label="Capitoli"><a class="pager-prev" href="server-edition.html"><span>Capitolo precedente</span>Server edition</a><a class="pager-next" href="faq.html"><span>Capitolo successivo</span>Domande frequenti</a></nav>
   </main>
 </div>
 <footer class="site-footer">
