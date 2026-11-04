@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Crea la release su GitHub quando viene pubblicato un tag di versione (es. v0.1.0).
+# Allega lo zip dell'estensione pronto da caricare in Chrome e il manuale.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Controlla che il tag corrisponda alla versione del manifest
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VER=$(python3 -c "import json;print(json.load(open('extension/manifest.json'))['version'])")
+          echo "tag=$TAG manifest=$VER"
+          test "$TAG" = "$VER"
+
+      - name: Test dell'estensione (unit)
+        working-directory: extension
+        run: node --test test/unit/*.test.js
+
+      - name: Prepara lo zip dell'estensione
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          mkdir -p out/pseudomania-estensione-$VER/extension
+          cp -r extension/manifest.json extension/src extension/icons extension/schema.json \
+                extension/LICENSE-APACHE-2.0 extension/NOTICE extension/README.md \
+                out/pseudomania-estensione-$VER/extension/
+          cp LICENSE out/pseudomania-estensione-$VER/
+          cp manuale/guida-rapida-personal.pdf out/pseudomania-estensione-$VER/ || true
+          cd out && zip -qr pseudomania-estensione-$VER.zip pseudomania-estensione-$VER
+
+      - name: Crea la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          cat > note.md <<NOTE
+          **Versione di prova, non ancora collaudata in condizioni reali.** Non usarla con dati reali di clienti o cittadini prima della prova tecnica.
+
+          ### Personal edition
+          1. Installa l'app desktop di [Rizzo-PII 2.0](https://github.com/Rizzo-AI-Academy/rizzo-pii/releases) e avviala.
+          2. Scarica **pseudomania-estensione-$VER.zip** qui sotto e scompattalo in una cartella che non sposterai.
+          3. In Chrome apri \`chrome://extensions\`, attiva **Modalità sviluppatore**, scegli **Carica estensione non pacchettizzata** e seleziona la cartella \`extension\`.
+
+          Guida completa: https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-personale.md
+
+          ### Server edition
+          Server e configurazione sono nel codice sorgente (zip qui sotto): vedi https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md
+
+          Modifiche: [CHANGELOG.md](https://github.com/StatoCritico/pseudomania/blob/main/CHANGELOG.md)
+          NOTE
+          gh release create "$GITHUB_REF_NAME" out/pseudomania-estensione-$VER.zip \
+            manuale/Manuale-Pseudomania.pdf \
+            --title "Pseudomania $VER (prova)" --notes-file note.md
