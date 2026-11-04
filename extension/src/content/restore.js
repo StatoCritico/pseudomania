@@ -174,6 +174,7 @@
         if (s.highlights.length) this.highlights.set(node, s.highlights);
         else this.highlights.delete(node);
       });
+      this.markInstruction(nodes);
       this.onProcessed(plan.restored);
       if (plan.unknown.length) {
         const fresh = plan.unknown.filter((t) => !this.unknownSeen.has(t));
@@ -183,6 +184,24 @@
         }
       }
       this.scheduleHighlights();
+    }
+
+    /**
+     * Segna il paragrafo che contiene solo l'istruzione fissa sui segnaposto, così il foglio di
+     * stile lo riduce a un'etichetta. Si aggiunge solo un attributo: la struttura resta del sito.
+     */
+    markInstruction(nodes) {
+      const instr = this.excludeTexts().map((s) => String(s).replace(/\s+/g, ' ').trim()).filter(Boolean);
+      if (!instr.length) return;
+      const seen = new Set();
+      for (const n of nodes) {
+        const b = closestBlock(n);
+        if (!b || seen.has(b) || b.hasAttribute('data-pg-instr')) continue;
+        seen.add(b);
+        if (b.isContentEditable) continue;
+        const txt = (b.textContent || '').replace(/\s+/g, ' ').trim();
+        if (instr.includes(txt)) b.setAttribute('data-pg-instr', '');
+      }
     }
 
     /** Riporta tutti i nodi al testo con segnaposto (estensione disattivata). */

@@ -13,3 +13,16 @@
   background-color: rgba(120, 120, 120, 0.22);
   text-decoration: underline dashed rgba(90, 90, 90, 0.9);
 }
+
+/* Istruzione fissa sui segnaposto nei messaggi dell'utente: ridotta a un'etichetta. */
+[data-pg-instr] {
+  font-size: 0 !important;
+  line-height: 0 !important;
+  margin: 0 0 4px 0 !important;
+}
+[data-pg-instr]::before {
+  content: "\1F6E1  Istruzione di Pseudomania sui segnaposto (nascosta)";
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: 0.6;
+}

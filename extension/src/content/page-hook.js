@@ -198,8 +198,10 @@
     if (body == null) return body;
     if (rule.formFiles) {
       if (body instanceof FormData) return guardForm(rule, body);
-      if (body instanceof Blob && !(typeof body.type === 'string' && body.type.includes('json'))) {
-        // Caricamento di un Blob grezzo: trattato come file.
+      // Corpo grezzo: è un caricamento solo se è un File con nome. I Blob anonimi (telemetria,
+      // registri compressi del sito) non sono file dell'utente e passano.
+      if (typeof File !== 'undefined' && body instanceof File && body.name &&
+          !(typeof body.type === 'string' && body.type.includes('json'))) {
         const fd = new FormData();
         fd.append('file', body, body.name || 'file');
         const g = await guardForm(rule, fd);
