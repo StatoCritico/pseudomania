@@ -6,7 +6,7 @@
       "id": "problema",
       "eyebrow": "Perché",
       "titolo": "Il problema",
-      "intro": "L'IA generativa è già entrata negli uffici e negli studi. Con lei, nomi, codici fiscali e IBAN finiscono sui server di un fornitore esterno.",
+      "intro": "L'IA generativa è già entrata negli uffici e negli studi. Con lei, nomi, codici fiscali e IBAN finiscono sui server di un fornitore esterno. Puoi mitigare il rischio usando un software che pseudonimizza i marcatori, ma questo ti costringe a fare avanti e indietro con i tuoi file e con il copia-incolla.",
       "alt": true,
       "schede": [
         {
@@ -40,7 +40,7 @@
       "id": "soluzione",
       "eyebrow": "Cosa fa",
       "titolo": "La soluzione",
-      "intro": "Un'estensione per Chrome intercetta ciò che invii a claude.ai, fa riconoscere i dati personali dal modello italiano Rizzo-PII e manda a Claude solo segnaposto.",
+      "intro": "Un'estensione per Chrome intercetta ciò che invii a claude.ai, fa riconoscere i dati personali dal modello italiano Rizzo-PII e manda a Claude solo segnaposto. Il processo è trasparente, niente più copia-incolla, e l'estensione si attiva e disattiva con un click (Personal edition), in ciascuna pagina di Chrome.",
       "schede": [
         {
           "titolo": "Segnaposto al posto dei dati",
@@ -78,7 +78,7 @@
       "id": "non-solo-software",
       "eyebrow": "Governance",
       "titolo": "Non solo software",
-      "intro": "Pseudomania funziona solo dentro un insieme di impostazioni, regole e garanzie. Il repository offre modelli per ciascuna.",
+      "intro": "Usare un software non è sufficiente per rispettare le normative sulla riservatezza dei dati. Pseudomania funziona solo dentro un insieme di impostazioni, regole e garanzie, valutate rispetto a GDPR e AI Act. Il repository offre modelli per ciascuna.",
       "alt": true,
       "schede": [
         {
@@ -117,7 +117,7 @@
       "id": "personal",
       "eyebrow": "Per i professionisti",
       "titolo": "Personal edition",
-      "intro": "Per avvocati, commercialisti, consulenti e chiunque usi Claude con dati di clienti. Due componenti sul tuo PC, nessun server.",
+      "intro": "Per avvocati, commercialisti, consulenti e chiunque usi Claude con dati di clienti. Due componenti sul tuo PC, nessun server; attivazione e disattivazione con un singolo click, in ogni scheda, riattivazione automatica e de-pseudonimizzazione sempre attiva. Completa di policy in bozza (non garantita!).",
       "schede": [
         {
           "titolo": "Per chi è",
@@ -155,7 +155,7 @@
       "id": "enterprise",
       "eyebrow": "Per gli enti",
       "titolo": "Enterprise edition",
-      "intro": "Per le amministrazioni con Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità.",
+      "intro": "Per le organizzazioni che vogliono usare Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità. Attenzione: la pseudonimizzazione è un trattamento, e i dati dell'osservabilità richiedono regole di accesso e accordi sindacali o autorizzazione dell'Ispettorato.",
       "alt": true,
       "schede": [
         {

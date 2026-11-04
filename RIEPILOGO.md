@@ -1,6 +1,6 @@
 # Pseudomania – riepilogo per riprendere il lavoro
 
-Aggiornato al 3/11/2026 (verifica dello stato dopo il collegamento della cartella; contenuti fermi al 1/11/2026: pulsante di attivazione per conversazione, sito, manuale e docs rigenerati). Questo file serve a riprendere la conversazione da zero: incollalo (o allegalo) all'inizio di una nuova sessione insieme all'archivio del progetto.
+Aggiornato al 4/11/2026 (codice pubblicato su GitHub, sito online su Cloudflare Pages, Piano d'azione aggiornato). Questo file serve a riprendere la conversazione da zero: incollalo (o allegalo) all'inizio di una nuova sessione insieme all'archivio del progetto.
 
 ## 1. Obiettivo
 
@@ -84,6 +84,14 @@ Fonti principali: Garante 27/11/2008 (amministratori di sistema), Garante su Reg
 
 **Nulla è stato provato in condizioni reali**: i test automatici passano contro simulazioni di claude.ai, del server e di Rizzo-PII. Container mai avviati (registri bloccati nell'ambiente di sviluppo).
 
+### 7.0 Pubblicazione (4/11/2026)
+
+- **Repository pubblico**: <https://github.com/StatoCritico/pseudomania> (ramo `main`, primo commit «Prima versione pubblica di Pseudomania»). Identità git locale del repository: Paolo Bianco, eugenio@statocritico.it; `core.autocrlf false` e `.gitattributes` (LF, binari intatti). Segnalazione privata delle vulnerabilità attiva (`SECURITY.md`). Aggiunti `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`.
+- **Esclusi dal repository** (`.gitignore`): `Gateway_LLM_PA_Piano_d_azione.docx` (documento interno, aggiornato al 3/11/2026 e senza firma) e `site/_screens/`.
+- **Sito**: progetto Cloudflare Pages `pseudomania` collegato al repository (ogni push su `main` ripubblica), build che copia solo le pagine pubblicabili in `dist/`, intestazioni di sicurezza in `site/_headers`, dominio `pseudomania.statocritico.it` (CNAME creato da Cloudflare). Dettagli in `site/PUBBLICAZIONE.md` §3.1.
+- **Segnaposto risolti**: link al repository (`StatoCritico/pseudomania`) nel sito e in `publiccode.yml.draft`; dati dell'ente tolti dalla pagina privacy; contatto di sicurezza = segnalazione privata di GitHub.
+- **Da fare**: prima release (i pulsanti «Scarica» del sito puntano a `releases/latest`, ancora vuota) dopo la prova della Personal edition; pagina 404 (oggi gli indirizzi inesistenti mostrano la home); `publiccode.yml` definitivo.
+
 ### 7.1 Verifica del 3/11/2026
 
 - **Nessuna modifica** ai contenuti dopo il 1/11/2026. La cartella non è un repository git.
@@ -104,7 +112,7 @@ Fonti principali: Garante 27/11/2008 (amministratori di sistema), Garante su Reg
 4. Inviare la lettera ad Anthropic.
 5. Verifiche dall'Italia: catalogo ACN e lista DPF.
 6. Adempimenti prima del pilota: DPIA con il DPO, accordo sindacale o autorizzazione dell'Ispettorato, informativa, regolamento, generazione della chiave di custodia.
-7. Riempire i segnaposto: indirizzo del repository, nome dell'ente e contatti del DPO nella pagina privacy, contatto per la sicurezza, link del Chrome Web Store.
+7. Link del Chrome Web Store e prima release su GitHub.
 
 ## 8. Note di metodo
 
