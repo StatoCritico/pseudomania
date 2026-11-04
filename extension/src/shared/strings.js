@@ -56,6 +56,12 @@
 
     // Banner di blocco
     bloccatoTitolo: 'Invio bloccato',
+    pdfRipristinatoTesto: 'PDF scaricato con i dati reali, ma come testo semplice: l\'impaginazione originale non si conserva. Per un documento impaginato chiedi a Claude un file Word.',
+    bloccatoRete: (r) => `Pseudomania ha fermato un invio a claude.ai: ${r}. Se un allegato non compare, rimuovilo e allegalo di nuovo; se il problema resta, scarica il registro dalle impostazioni.`,
+    registroTitolo: 'Registro delle attività',
+    registroVuoto: 'Nessuna attività registrata.',
+    registroScarica: 'Scarica il registro (JSON)',
+    registroAiuto: 'Solo azioni, conteggi e impronte: nessun testo. Conservato cifrato nel browser per 90 giorni.',
     estensioneAggiornataTitolo: 'Pseudomania è stato aggiornato',
     estensioneAggiornataTesto: 'Ricarica questa pagina (F5) per riprendere la protezione. Fino ad allora gli invii restano bloccati.',
     bloccatoServerGiu:

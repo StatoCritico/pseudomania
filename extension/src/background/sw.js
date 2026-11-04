@@ -15,6 +15,7 @@ importScripts(
   '../shared/tags.js',
   '../shared/policy-data.js',
   '../shared/policy.js',
+  '../shared/pdfwrite.js',
   '../shared/rizzo.js',
   '../shared/zip.js',
   '../shared/ooxml.js',

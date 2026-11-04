@@ -913,6 +913,7 @@
       PG.ui.toast('Download senza ripristino dei dati reali: ' + ((r.data && r.data.blockReason) || r.message || r.error || 'formato non supportato'), 6000);
       return { handled: false };
     }
+    if (r.data.notice) PG.ui.toast(r.data.notice, 8000);
     const blob = new Blob([bufferFromB64(r.data.contentB64)], { type: r.data.mime || p.type });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -933,7 +934,10 @@
     if (d.op === 'nav') return void (domStarted && checkLocation());
     if (d.op === 'micBlocked') return PG.ui.toast(S.dettaturaBloccata);
     if (d.op === 'blockedNotice') {
-      if (d.payload && d.payload.reason === 'not_ready') status.banner('error', S.bloccatoTitolo, S.bloccatoNonRiconosciuto);
+      const reason = d.payload && d.payload.reason;
+      if (reason === 'not_ready') status.banner('error', S.bloccatoTitolo, S.bloccatoNonRiconosciuto);
+      else status.banner('error', S.bloccatoTitolo, S.bloccatoRete(reason || 'motivo non indicato'), { replace: false });
+      event('network_blocked', { ruleId: (d.payload && d.payload.ruleId) || null, reason: String(reason || '').slice(0, 200) });
       return;
     }
     let result;

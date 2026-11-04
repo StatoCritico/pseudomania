@@ -180,6 +180,17 @@
         out.append(k, v, v.name);
         continue;
       }
+      // Parti binarie senza nome di file (metadati JSON, Blob anonimi «blob»): passano, a meno che
+      // il contenuto sia un documento (PDF o Office), che resta sotto controllo.
+      const anon = !(v instanceof File) || !v.name || v.name === 'blob' || /json/i.test(v.type || '');
+      if (anon) {
+        const h = new Uint8Array(bytes.slice(0, 4));
+        const isDoc = (h[0] === 0x25 && h[1] === 0x50 && h[2] === 0x44 && h[3] === 0x46) || (h[0] === 0x50 && h[1] === 0x4b);
+        if (!isDoc) {
+          out.append(k, v, v.name);
+          continue;
+        }
+      }
       const res = await call('guardFile', { name: v.name || 'file', type: v.type, bytes });
       if (!res || res.blocked || res.error) throw new Blocked((res && (res.reason || res.error)) || 'blocked');
       if (res.passthrough) {

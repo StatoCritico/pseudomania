@@ -26,6 +26,46 @@
     }
   }
 
+  // Registro locale delle attività (solo Personal edition): ultime voci e download in JSON.
+  async function showLog() {
+    $('log').hidden = false;
+    $('logTitle').textContent = S.registroTitolo;
+    $('logHelp').textContent = S.registroAiuto;
+    $('btnLog').textContent = S.registroScarica;
+    let rows = [];
+    try {
+      const r = await chrome.runtime.sendMessage({ type: 'pg:localLog' });
+      rows = (r && r.ok && r.data) || [];
+    } catch (_) { /* estensione non pronta */ }
+    rows.sort((a, b) => String(b.ts).localeCompare(String(a.ts)));
+    const tb = $('logTable');
+    tb.textContent = '';
+    if (!rows.length) {
+      tb.insertRow().insertCell().textContent = S.registroVuoto;
+    }
+    for (const r of rows.slice(0, 300)) {
+      const tr = tb.insertRow();
+      const d = new Date(r.ts);
+      const rest = Object.assign({}, r);
+      delete rest.ts;
+      delete rest.action;
+      delete rest.traceId;
+      [d.toLocaleString('it-IT'), r.action || r.event || '', JSON.stringify(rest)].forEach((v) => {
+        const c = tr.insertCell();
+        c.textContent = v;
+        c.style.cssText = 'border-bottom:1px solid #ddd;padding:3px 6px;vertical-align:top;word-break:break-word';
+      });
+    }
+    $('btnLog').onclick = () => {
+      const blob = new Blob([JSON.stringify(rows, null, 1)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `pseudomania-registro-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+    };
+  }
+
   async function init() {
     let managed = {};
     try {
@@ -36,6 +76,7 @@
     const cfg = st && st.config ? st.config : PG.config.resolveConfig({ managed, local });
     const ent = cfg.mode === 'ente';
     $('edition').textContent = ent ? S.modalitaEnte : S.modalitaPersonale;
+    if (!ent) showLog();
     if (ent) {
       $('managed').hidden = false;
       $('managed').textContent = S.impGestite;

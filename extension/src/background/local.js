@@ -333,8 +333,22 @@
           r.unknown.forEach((x) => unknownTags.add(x));
           return r.edits;
         }));
+    } else if (fk.kind === 'pdf') {
+      // PDF: Rizzo-PII ne estrae il testo, i segnaposto vengono ripristinati e si genera un PDF di
+      // solo testo (l'impaginazione originale non si conserva).
+      let text;
+      try {
+        text = (await rizzo(cfg).analyzeFile(msg.name, bytes, 'application/pdf')).text || '';
+      } catch (e) {
+        return failure(e);
+      }
+      const { edits, unknown } = findTagEdits(text, entries);
+      unknown.forEach((t) => unknownTags.add(t));
+      const restored = PG.rizzo.applyReplacements(text, edits.map((e) => ({ start: e.start, end: e.end, tag: e.text })));
+      out = PG.pdfwrite.textToPdf(restored);
+      return { ok: true, data: { filename: msg.name, mime: 'application/pdf', contentB64: b64(out), entities: [], unknownTags: [...unknownTags], traceId: null, notice: PG.strings.pdfRipristinatoTesto } };
     } else {
-      return { ok: false, error: 'http', status: 415, message: 'Ripristino non disponibile per questo formato nella Personal edition (PDF e altri formati).' };
+      return { ok: false, error: 'http', status: 415, message: 'Ripristino non disponibile per questo formato nella Personal edition.' };
     }
     return { ok: true, data: { filename: msg.name, mime: msg.mime, contentB64: b64(out), entities: [], unknownTags: [...unknownTags], traceId: null } };
   }
