@@ -71,7 +71,45 @@
   const failClosed = () => !cfg || cfg.failClosed;
 
   // --- Comunicazione -----------------------------------------------------------------------------
+  // Dopo un aggiornamento o una ricarica dell'estensione questo script resta nella pagina ma perde
+  // il collegamento con l'estensione («Extension context invalidated»): si avvisa una volta sola e
+  // si chiede di ricaricare la pagina. Gli invii restano bloccati (nessun dato parte in chiaro).
+  let orphanNotified = false;
+  function contextAlive() {
+    try {
+      return Boolean(chrome.runtime && chrome.runtime.id);
+    } catch (_) {
+      return false;
+    }
+  }
+  function notifyOrphan() {
+    if (orphanNotified) return;
+    orphanNotified = true;
+    try {
+      status.banner('error', S.estensioneAggiornataTitolo, S.estensioneAggiornataTesto, { replace: true });
+    } catch (_) { /* interfaccia non ancora pronta */ }
+  }
+  function storageSet(obj) {
+    if (!contextAlive()) return notifyOrphan();
+    try {
+      chrome.storage.local.set(obj).catch(() => notifyOrphan());
+    } catch (_) {
+      notifyOrphan();
+    }
+  }
+  window.addEventListener('unhandledrejection', (ev) => {
+    const m = String((ev.reason && ev.reason.message) || ev.reason || '');
+    if (/Extension context invalidated/i.test(m)) {
+      ev.preventDefault();
+      notifyOrphan();
+    }
+  });
+
   async function bg(type, payload) {
+    if (!contextAlive()) {
+      notifyOrphan();
+      return { ok: false, error: 'extension', message: 'context invalidated' };
+    }
     try {
       const r = await chrome.runtime.sendMessage(Object.assign({ type }, payload || {}));
       return r || { ok: false, error: 'extension' };
@@ -171,7 +209,7 @@
     if (keys.length > 2000) for (const k of keys.slice(0, keys.length - 2000)) delete instrSent[k];
     const ak = Object.keys(scopeAlias);
     if (ak.length > 2000) for (const k of ak.slice(0, ak.length - 2000)) delete scopeAlias[k];
-    chrome.storage.local.set({ pgProjectMap: projectMap, pgInstrSent: instrSent, pgScopeAlias: scopeAlias });
+    storageSet({ pgProjectMap: projectMap, pgInstrSent: instrSent, pgScopeAlias: scopeAlias });
   }
 
   async function refreshDict(force) {
@@ -214,7 +252,7 @@
 
   // --- Attivazione per conversazione (Personal edition) -----------------------------------------
   function saveActivation() {
-    chrome.storage.local.set({ pgActivation: activation.toJSON() });
+    storageSet({ pgActivation: activation.toJSON() });
   }
 
   function hasProtectedData() {

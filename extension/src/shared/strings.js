@@ -56,6 +56,8 @@
 
     // Banner di blocco
     bloccatoTitolo: 'Invio bloccato',
+    estensioneAggiornataTitolo: 'Pseudomania è stato aggiornato',
+    estensioneAggiornataTesto: 'Ricarica questa pagina (F5) per riprendere la protezione. Fino ad allora gli invii restano bloccati.',
     bloccatoServerGiu:
       'Il server Pseudomania non è raggiungibile: per tutelare i dati personali l\'invio è bloccato. ' +
       'Riprova tra poco o contatta l\'assistenza informatica.',
