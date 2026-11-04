@@ -735,6 +735,22 @@
     const coords = { clientX: e.clientX, clientY: e.clientY };
     const out = await processFiles(files, kind);
     if (!out.length) return;
+    // Consegna tramite il campo file della casella di scrittura: un evento di trascinamento o
+    // incolla sintetico, arrivato dopo l'elaborazione, non viene più raccolto da claude.ai
+    // (la zona di rilascio sparisce appena finisce il trascinamento vero).
+    const alt = kind === 'attachment' && adapter.findComposerFileInput ? adapter.findComposerFileInput(document) : null;
+    if (alt) {
+      alt.files = filesToDataTransfer(out).files;
+      alt.__pgBypass = true;
+      try {
+        alt.dispatchEvent(new Event('input', { bubbles: true }));
+        alt.dispatchEvent(new Event('change', { bubbles: true }));
+      } finally {
+        alt.__pgBypass = false;
+      }
+      event('file_delivered', { kind, n: out.length, via: type + '_to_composer_input' });
+      return;
+    }
     const ndt = filesToDataTransfer(out);
     const ev =
       type === 'drop'
