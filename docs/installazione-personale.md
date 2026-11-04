@@ -148,7 +148,7 @@ La protezione si accende e si spegne **per singola conversazione** (o pagina di 
 |---|---|
 | DOCX, XLSX | pseudonimizzati nell'estensione (testo, intestazioni, note, commenti, celle); il file inviato a Claude ha i segnaposto; al download dei file generati da Claude i valori vengono ripristinati |
 | TXT, CSV, MD | pseudonimizzati |
-| PDF | il testo viene estratto da Rizzo-PII e inviato a Claude come **file di testo pseudonimizzato (.txt)** al posto del PDF, con un avviso: impaginazione e immagini **non** vengono inviate; al download non c'è ripristino del PDF |
+| PDF | il testo viene estratto da Rizzo-PII e inviato a Claude come **file di testo pseudonimizzato (.txt)** al posto del PDF, con un avviso: impaginazione e immagini **non** vengono inviate; i PDF **scaricati** da Claude vengono ripristinati: con l'impaginazione originale se l'app Rizzo-PII offre `/restore/pdf` (proposta in corso), altrimenti come PDF di solo testo |
 | Immagini e altri formati | bloccati |
 
 ## 7. Dove stanno i dati e per quanto

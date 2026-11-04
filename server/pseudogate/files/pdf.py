@@ -46,28 +46,20 @@ def redact(data: bytes, tag_to_value: dict[str, str]) -> bytes:
 
 
 def restore(data: bytes, tag_to_value: dict[str, str]) -> bytes:
-    """Sostituisce i segnaposto nel layer di testo del PDF con i valori reali.
-    Best effort: se il valore non entra nello spazio del segnaposto il testo viene
-    rimpicciolito fino a 4 pt."""
+    """Sostituisce i segnaposto nel PDF con i valori reali, impaginazione conservata.
+
+    Riga per riga (pdf_export.restore_pdf): ogni riga con un segnaposto viene rimossa dal
+    content stream e riscritta nella stessa posizione, così un valore più lungo del
+    segnaposto (un IBAN al posto di [IBAN_1]) sposta il resto della riga invece di
+    sovrapporsi al testo che segue."""
     if not HAVE_PYMUPDF:
         raise PdfProblem("Il supporto PDF non è installato su questo server.")
-    import fitz as _fitz
-
-    doc = _fitz.open(stream=data, filetype="pdf")
+    if not tag_to_value:
+        return data
     try:
-        if doc.needs_pass:
-            raise PdfProblem("PDF protetto da password.")
-        changed = False
-        for page in doc:
-            found = False
-            for tag, value in tag_to_value.items():
-                for rect in page.search_for(tag):
-                    fs = pdf_export._fit_fontsize(value, rect) or 4
-                    pdf_export._add_redact_annot(page, rect, value, fs, (1, 1, 1), (0, 0, 0))
-                    found = True
-            if found:
-                page.apply_redactions()
-                changed = True
-        return doc.tobytes(garbage=3, deflate=True) if changed else data
-    finally:
-        doc.close()
+        out, report = pdf_export.restore_pdf(data, tag_to_value)
+    except pdf_export.PdfError as e:
+        raise PdfProblem(str(e)) from e
+    if report.get("shrunk"):
+        log.info("PDF ripristinato: %d righe con corpo ridotto per starci", report["shrunk"])
+    return out

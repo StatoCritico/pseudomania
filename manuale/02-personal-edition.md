@@ -191,7 +191,7 @@ attiva. Consigli:
 |---|---|
 | **DOCX, XLSX** | pseudonimizzati **dentro l'estensione** (testo, intestazioni e piè di pagina, note, commenti, proprietà del documento, celle e valori delle formule). A Claude arriva il file con i segnaposto. Quando scarichi un DOCX o XLSX generato da Claude, i valori reali vengono ripristinati. |
 | **TXT, CSV, MD** | pseudonimizzati |
-| **PDF** | il testo viene estratto da Rizzo-PII e inviato a Claude come **file di testo pseudonimizzato (.txt)** al posto del PDF. Compare l'avviso: «Il PDF … è stato convertito in un file di testo pseudonimizzato (.txt): impaginazione, immagini e tabelle grafiche non vengono inviate a Claude.» Il PDF non viene ripristinato al download. |
+| **PDF** | il testo viene estratto da Rizzo-PII e inviato a Claude come **file di testo pseudonimizzato (.txt)** al posto del PDF. Compare l'avviso: «Il PDF … è stato convertito in un file di testo pseudonimizzato (.txt): impaginazione, immagini e tabelle grafiche non vengono inviate a Claude.» I PDF **scaricati** da Claude vengono ripristinati: con l'impaginazione originale se la tua versione dell'app Rizzo-PII lo consente, altrimenti come PDF di solo testo (compare un avviso). |
 | Immagini e altri formati | **bloccati**: il file non viene allegato |
 
 Consiglio: per documenti lunghi apri l'**anteprima** (Ctrl+Maiusc+Invio, §4.6) o il pannello di

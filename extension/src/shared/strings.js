@@ -53,6 +53,8 @@
     statoNonRiconosciuto: 'Pagina non riconosciuta da Pseudomania',
     statoAccesso: 'Accesso richiesto: effettua il login a Pseudomania dal pulsante dell\'estensione',
     inElaborazione: 'Pseudonimizzazione in corso…',
+    fileInElaborazione: (n, i, tot) => `Pseudonimizzazione di «${n}»${tot > 1 ? ` (${i} di ${tot})` : ''}… attendi`,
+    ripristinoInCorso: 'Ripristino dei dati reali nel file…',
 
     // Banner di blocco
     bloccatoTitolo: 'Invio bloccato',

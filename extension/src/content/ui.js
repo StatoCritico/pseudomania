@@ -248,5 +248,63 @@
     setTimeout(() => el.remove(), ms || 3500);
   }
 
-  PG.ui = { StatusArea, confirmUnprotected, confirmOff, preview, badge, toast, highlighted, tagRanges, h };
+  // Indicatore di attesa: orologio con la lancetta che gira e secondi trascorsi, in basso al
+  // centro. Compare solo se l'attesa supera 300 ms (niente lampeggi sulle operazioni rapide).
+  const BUSY_CSS = `
+    .busy { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2147483647;
+            display: flex; align-items: center; gap: 10px; background: #1f5f8b; color: #fff;
+            padding: 10px 16px; border-radius: 22px; font-size: 13px; box-shadow: 0 4px 16px rgba(0,0,0,.25);
+            max-width: min(92vw, 640px); white-space: nowrap; }
+    .busy span:first-of-type { overflow: hidden; text-overflow: ellipsis; }
+    .busy svg { width: 22px; height: 22px; flex: none; }
+    .busy .hand { transform-origin: 12px 12px; animation: pg-spin 1.2s linear infinite; }
+    .busy .sec { opacity: .8; font-variant-numeric: tabular-nums; flex: none; }
+    @keyframes pg-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .busy .hand { animation: none; } }
+  `;
+  function busy(text) {
+    let el = null;
+    let label = null;
+    let sec = null;
+    let msg = text;
+    const t0 = Date.now();
+    let tick = null;
+    const show = setTimeout(() => {
+      const hs = host('busy'); // chiusa: il nome del file originale può contenere dati personali
+      el = hs.el;
+      const st = document.createElement('style');
+      st.textContent = BUSY_CSS;
+      const box = document.createElement('div');
+      box.className = 'busy';
+      box.setAttribute('role', 'status');
+      box.setAttribute('aria-live', 'polite');
+      box.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="#fff" stroke-width="2"/>' +
+        '<line x1="12" y1="12" x2="12" y2="7.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>' +
+        '<line class="hand" x1="12" y1="12" x2="12" y2="4.5" stroke="#ffd166" stroke-width="2" stroke-linecap="round"/></svg>';
+      label = document.createElement('span');
+      label.textContent = msg;
+      sec = document.createElement('span');
+      sec.className = 'sec';
+      box.append(label, sec);
+      hs.shadow.append(st, box);
+      document.documentElement.append(el);
+      const upd = () => { sec.textContent = Math.round((Date.now() - t0) / 1000) + ' s'; };
+      upd();
+      tick = setInterval(upd, 1000);
+    }, 300);
+    return {
+      update(t) {
+        msg = t;
+        if (label) label.textContent = t;
+      },
+      done() {
+        clearTimeout(show);
+        if (tick) clearInterval(tick);
+        if (el) el.remove();
+      },
+    };
+  }
+
+  PG.ui = { StatusArea, confirmUnprotected, confirmOff, preview, badge, toast, busy, highlighted, tagRanges, h };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

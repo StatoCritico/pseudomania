@@ -448,7 +448,13 @@
       event('page_unrecognized', { site: adapter.id, during: kind });
       return { action: 'abort' };
     }
-    const r = await bg('pg:pseudonymize', { scope: sc, kind, text: original });
+    const wait = PG.ui.busy(S.inElaborazione);
+    let r;
+    try {
+      r = await bg('pg:pseudonymize', { scope: sc, kind, text: original });
+    } finally {
+      wait.done();
+    }
     if (!r.ok) return handleFailure(r.error, original);
     const d = r.data;
     if (d.blocked) {
@@ -647,9 +653,15 @@
         continue;
       }
       const buf = await f.arrayBuffer();
-      const r = await bg('pg:pseudonymizeFile', {
-        scope: scope(), kind, name: f.name, mime: f.type || 'application/octet-stream', b64: b64FromBuffer(buf),
-      });
+      const wait = PG.ui.busy(S.fileInElaborazione(f.name, files.indexOf(f) + 1, files.length));
+      let r;
+      try {
+        r = await bg('pg:pseudonymizeFile', {
+          scope: scope(), kind, name: f.name, mime: f.type || 'application/octet-stream', b64: b64FromBuffer(buf),
+        });
+      } finally {
+        wait.done();
+      }
       if (!r.ok) {
         if (r.error === 'too_large') {
           status.banner('error', S.bloccatoTitolo, S.fileBloccato(f.name, S.bloccatoFileGrande(cfg.maxFileMB)), { replace: false });
@@ -962,9 +974,15 @@
   async function reidentifyFile(p) {
     // Ripristino in entrata: sempre attivo, anche con la protezione in uscita disattivata.
     if (!cfg || !scope()) return { handled: false };
-    const r = await bg('pg:reidentifyFile', {
-      scope: scope(), name: p.name, mime: p.type || 'application/octet-stream', b64: b64FromBuffer(p.bytes),
-    });
+    const wait = PG.ui.busy(S.ripristinoInCorso);
+    let r;
+    try {
+      r = await bg('pg:reidentifyFile', {
+        scope: scope(), name: p.name, mime: p.type || 'application/octet-stream', b64: b64FromBuffer(p.bytes),
+      });
+    } finally {
+      wait.done();
+    }
     if (!r.ok || !r.data || !r.data.contentB64) {
       PG.ui.toast('Download senza ripristino dei dati reali: ' + ((r.data && r.data.blockReason) || r.message || r.error || 'formato non supportato'), 6000);
       return { handled: false };
