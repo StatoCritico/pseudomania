@@ -194,10 +194,13 @@ Errori: `{"error":code,"message"}`; 400 richiesta non valida, 401 token non vali
 
 `chrome.storage.managed` (schema `extension/schema.json`): `mode` ("ente"), `serverUrl`, `oidcIssuer`, `oidcClientId`,
 `oidcScopes`, `oidcTokenType` ("access_token" predefinito | "id_token"; con id_token `OIDC_AUDIENCE` = `oidcClientId`),
-`failClosed` (default true), `allowDisable` (default false), `sites` (default `["claude.ai"]`). In Server edition
+`failClosed` (default true), `allowDisable` (default false), `sites` (default `["claude.ai"]`), `imagePolicy`
+("block" predefinito | "confirm" | "ocr"; "ocr" non ancora disponibile, vale come "block"). In Server edition
 `failClosed` e `allowDisable` si leggono SOLO dalla policy: `/v1/config` non può indebolirli. La memoria di Claude è
 spenta dall'ente (DECISIONI.md, punto 1): non esiste uno scope globale dei tag.
 Se `managed.mode` è assente → **Personal edition**.
+Personal edition, impostazioni locali (`chrome.storage.local`): `imagePolicy` (predefinito "confirm") e
+`activationMode` ("off" predefinito | "on" | "ask"). Vedi DECISIONI.md, aggiornamento 5/11/2026 (sera).
 
 ## Personal edition
 

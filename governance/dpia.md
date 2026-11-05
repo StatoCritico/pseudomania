@@ -202,7 +202,7 @@ Valutazioni **preliminari**, da confermare dopo i test della fase pilota.
 
 | ID | Rischio | Fonte | P | G | Rischio inerente | Misure (rif. progetto) | P res. | G res. | Rischio residuo |
 |---|---|---|---|---|---|---|---|---|---|
-| R1 | **Dati personali non rilevati** (falsi negativi) inviati ad Anthropic | Limiti del modello NER; formati insoliti; OCR di PDF; tabelle XLSX | 4 | 3 | 12 molto alto | Rizzo-PII su testo e allegati; allowlist controllata; ispezione; segnalazione falsi negativi; test periodici con corpus dell'Ente; formazione; *fail-closed* | 3 | 2 | 6 medio |
+| R1 | **Dati personali non rilevati** (falsi negativi) inviati ad Anthropic | Limiti del modello NER; formati insoliti; OCR di PDF; tabelle XLSX; testo nelle immagini (non pseudonimizzato) | 4 | 3 | 12 molto alto | Rizzo-PII su testo e allegati; allowlist controllata; ispezione; segnalazione falsi negativi; test periodici con corpus dell'Ente; formazione; *fail-closed* | 3 | 2 | 6 medio |
 | R2 | **Quasi-identificatori** che consentono la re-identificazione | Contesto descrittivo | 3 | 3 | 9 alto | Art. 6 Regolamento; formazione; ispezione; mascheramento di DATE, CITY, ORG, AGE; esclusione artt. 9-10 | 2 | 3 | 6 medio |
 | R3 | **Furto o lettura del dizionario** e re-identificazione massiva | Compromissione VM, DB, backup o abuso dei privilegi di root | 2 | 4 | 8 alto | **Cifratura lato client** con chiave utente non estraibile: DB e backup contengono solo testi cifrati; chiave privata di custodia offline e divisa 2 di 3; key store separato con backup propri; rotazione 90 giorni; scadenze; amministratori designati e tracciati. **Residuo dichiarato:** (a) il server vede il testo in chiaro durante la singola richiesta e root può intercettare **richieste future**; (b) root può verificare se un **valore indovinato** è presente (HMAC); (c) non può decifrare i dizionari passati | 1 | 3 | 3 basso |
 | R3b | **Perdita di disponibilità del dizionario** (cambio di PC, profilo Chrome cancellato, voci non caricate entro 10 minuti) | Chiave legata al browser | 3 | 1 | 3 basso | Recupero via Custodi per i progetti; per le chat perdita accettata; segnaposto mostrati come "non ripristinabili" | 3 | 1 | 3 basso |
@@ -236,6 +236,7 @@ misure ulteriori (es. esclusione degli uffici a rischio dalla fase pilota) oppur
 | Estensione forzata, non disattivabile, *fail-closed* (letti solo dalla policy) | Chrome policy, `chrome.storage.managed` | R1, R5, R8 |
 | Pseudonimizzazione testi e allegati, file e istruzioni dei Progetti | `/v1/pseudonymize`, `/v1/pseudonymize/file` | R1, R2, R6 |
 | Blocco artt. 9-10 senza override | `blocked=true` | R10 |
+| Immagini bloccate per impostazione predefinita; se l'Ente abilita la conferma: anteprima con avviso, nome di file generico, regola d'uso (art. 5, n. 13 Regolamento) | policy Chrome `imagePolicy` (`block` predefinito \| `confirm`) | R1 |
 | Istruzione fissa sui segnaposto; `unknownTags`; memoria spenta | `/v1/config`; console Team | R7 |
 | Cifratura lato client del dizionario; chiave non estraibile; escrow con chiave pubblica di custodia | Estensione; `/v1/dictionary/entries`; `/v1/keys/escrow` | R3, R12 |
 | Key store separato; rotazione 90 giorni; rotazione forzata | `postgres-keys`; `/v1/dictionary/rekey`; `rotateKey` | R3, R16 |

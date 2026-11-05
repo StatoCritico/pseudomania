@@ -12,7 +12,7 @@ valori reali nelle risposte, direttamente nella pagina. Due edizioni con lo stes
 | Rilevamento | server Pseudomania dell'ente (Rizzo-PII sulla VM) | app desktop di **Rizzo-PII** sul PC (`http://127.0.0.1:5005`) |
 | Dizionario | sul server, **cifrato nel browser** (chiave utente automatica con copia di custodia) | nel browser (IndexedDB), cifrato con chiave locale |
 | Registro | server (+ Langfuse) | locale, cifrato, senza testi |
-| Disattivabile | no (pulsante bloccato su acceso) | sì, **per conversazione**: clic sul pulsante o Alt+Maiusc+P |
+| Disattivabile | no (pulsante bloccato su acceso) | sì, **per conversazione**: disattivata di default, si attiva con un clic sul pulsante o Alt+Maiusc+P |
 | Server | sì | **nessuno** (niente Docker) |
 
 Contratto con il server: [`../SPEC.md`](../SPEC.md) e [`../DECISIONI.md`](../DECISIONI.md) (prevale).
@@ -72,9 +72,11 @@ dall'utente. I valori gestiti prevalgono sempre su quelli del server e su quelli
 | `failClosed` | booleano | `true` | blocca l'invio se il server non risponde |
 | `allowDisable` | booleano | `false` | |
 | `sites` | lista | `["claude.ai"]` | |
+| `imagePolicy` | stringa | `block` | immagini (screenshot, foto): `block` = bloccate; `confirm` = inviate dopo conferma per ogni immagine, con nome di file generico; `ocr` = oscuramento automatico, non ancora disponibile (vale come `block`). Il testo nelle immagini **non** viene pseudonimizzato: `confirm` va previsto nella DPIA e nel regolamento |
 
 Nella Server edition `failClosed` e `allowDisable` si leggono **solo** dalla policy (predefiniti `true` /
-`false`): i valori restituiti da `/v1/config` non possono indebolirli. Da `/v1/config` (che richiede
+`false`): i valori restituiti da `/v1/config` non possono indebolirli. Anche `imagePolicy` arriva solo dalla
+policy: nelle impostazioni l'utente la vede in sola lettura («… (impostato dall'ente)»). Da `/v1/config` (che richiede
 autenticazione) l'estensione prende `tagInstruction`, `allowlist` e `maxFileMB`; se il server non è
 raggiungibile usa una copia locale dell'istruzione identica alla SPEC. Da `/v1/config` arrivano anche
 la chiave pubblica di custodia e i parametri della rotazione (§2.7).
@@ -214,6 +216,7 @@ Windows Registry Editor Version 5.00
 "oidcScopes"="openid profile"
 "failClosed"=dword:00000001
 "allowDisable"=dword:00000000
+"imagePolicy"="block"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\3rdparty\extensions\ID_ESTENSIONE\policy\sites]
 "1"="claude.ai"
@@ -237,6 +240,7 @@ utile anche come riferimento per strumenti che generano GPO):
         "oidcScopes": "openid profile",
         "failClosed": true,
         "allowDisable": false,
+        "imagePolicy": "block",
         "sites": ["claude.ai"]
       }
     }
@@ -259,6 +263,7 @@ Chrome tramite ID* (o *Aggiungi da URL personalizzato* con `update.xml`) → cri
   "oidcScopes": { "Value": "openid profile" },
   "failClosed": { "Value": true },
   "allowDisable": { "Value": false },
+  "imagePolicy": { "Value": "block" },
   "sites": { "Value": ["claude.ai"] }
 }
 ```
@@ -311,7 +316,12 @@ server Pseudomania, nessun Docker, nessun Langfuse.
 1. Installare e avviare l'app desktop di **Rizzo-PII** (servizio locale `http://127.0.0.1:5005`).
 2. Installare l'estensione (vedi §1 o pacchetto fornito). Senza policy parte già in Personal edition.
 3. Facoltativo: **Impostazioni** → indirizzo di Rizzo-PII (solo indirizzi locali) → **Verifica connessione**.
-4. Attivazione **per conversazione** (DECISIONI.md, aggiornamento 1/11/2026), vedi sotto.
+4. Attivazione **per conversazione**, disattivata di default (DECISIONI.md, aggiornamenti 1/11/2026 e 5/11/2026), vedi sotto.
+5. **Impostazioni** (salvate subito in `chrome.storage.local`):
+   - «Attivazione nelle conversazioni» (`activationMode`): `off` = disattivata di default (predefinita),
+     `on` = attiva di default, `ask` = attiva con richiesta (§3.1);
+   - «Immagini (screenshot, foto)» (`imagePolicy`): `confirm` = conferma per ogni immagine (predefinita),
+     `block` = bloccate; `ocr` = oscuramento automatico (in arrivo), visibile ma non selezionabile (§3.2).
 
 ### 3.1 Attivazione per conversazione
 
@@ -319,22 +329,32 @@ server Pseudomania, nessun Docker, nessun Langfuse.
   della conversazione aperta nella scheda. Stessa funzione con la **scorciatoia Alt+Maiusc+P**
   (modificabile da `chrome://extensions/shortcuts`). Clic destro sul pulsante: «Apri pannello di
   ispezione» e «Impostazioni e informazioni». Su una scheda che non è claude.ai il clic apre le impostazioni.
-- **Stato per scheda**: badge **ON** verde / **OFF** rosso (icona grigia) / **?** arancione (in attesa
-  di scelta) / **!** rosso (Rizzo-PII spento, in avvio o bloccato da CORS); barra verde/rossa con
-  didascalia sopra la casella di scrittura, sempre riferita alla conversazione aperta.
+- **Stato per scheda**: badge **ON** verde / **OFF** arancione (icona grigia) / **!** rosso (Rizzo-PII
+  spento, in avvio o bloccato da CORS); barra verde/arancione con didascalia sopra la casella di
+  scrittura, sempre riferita alla conversazione aperta.
 - **Lo stato si salva per conversazione** (in un progetto: per chat; la pagina del progetto ha il
   proprio stato fino al primo invio). Una nuova chat riceve l'id definitivo dopo il primo invio: lo
   stato la segue. Il cambio di chat nella stessa scheda (senza ricaricare la pagina) è rilevato subito.
-- **Nuova conversazione**: se l'ultima scelta era «attiva» si attiva da sola; se era «disattivata»
-  compare il banner «Attiva» / «Continua senza protezione». **Conversazione ripresa**: era attiva → si
-  riattiva da sola; era disattivata → stesso banner. Finché l'utente non sceglie, per prudenza i
-  messaggi vengono comunque pseudonimizzati (barra arancione).
+- **Disattivata di default** (dal 5/11/2026, `DECISIONI.md`): ogni nuova conversazione, pagina di
+  progetto o nuova scheda parte con la protezione **disattivata**, senza domande. Compaiono solo la
+  barra arancione («Protezione disattivata: i messaggi partono in chiaro. Per attivarla clicca l'icona
+  di Pseudomania o premi Alt+Maiusc+P») e il badge **OFF**. Si attiva solo con il pulsante o la
+  scorciatoia. **Conversazione ripresa**: se era stata attivata si riattiva da sola (anche in
+  un'altra scheda o dopo il riavvio); ogni altra conversazione (nuova, mai vista o spenta) parte
+  disattivata. Questa è la modalità predefinita (`activationMode` = `off`).
+- **Altre modalità** (impostazione «Attivazione nelle conversazioni», DECISIONI.md 5/11/2026 sera):
+  - `on` – **Attiva di default**: ogni nuova conversazione parte protetta; si spegne con il pulsante o la
+    scorciatoia; le conversazioni spente restano spente quando si riaprono.
+  - `ask` – **Attiva con richiesta** (comportamento del 1/11/2026): se l'ultima scelta era «attiva» le
+    nuove conversazioni partono protette, altrimenti compare il banner «Attiva» / «Continua senza
+    protezione» con il badge **?** arancione; le conversazioni spente chiedono quando si riaprono.
+    Mentre chiede, i messaggi restano protetti.
 - **La disattivazione riguarda solo l'uscita** (messaggi e allegati inviati in chiaro). Il ripristino
   dei segnaposto in entrata, nella pagina, negli appunti e nei download, resta **sempre attivo**.
 - Al **primo spegnimento** in una conversazione che contiene già dati protetti compare un avviso: ciò
   che verrà inviato andrà in chiaro e riattivare non ripulisce quanto già inviato.
 - Ogni cambio di stato va nel registro locale cifrato (`extension_enabled` / `extension_disabled`
-  con `details.per = "conversation"` e `trigger` = `toolbar` | `shortcut` | `banner`), senza testi.
+  con `details.per = "conversation"` e `trigger` = `toolbar` | `shortcut`), senza testi.
 
 Funzionamento:
 
@@ -361,6 +381,22 @@ esempio servito da un altro indirizzo o bloccato da una policy di Chrome), l'est
 (stato «CORS»: risponde alle richieste opache ma non a quelle dell'estensione) e mostra un messaggio
 chiaro: in quel caso servirà una **versione modificata (fork) di Rizzo-PII** che risponda con
 `Access-Control-Allow-Origin: chrome-extension://<ID>` (non ancora realizzata).
+
+### 3.2 Immagini
+
+Il testo contenuto nelle immagini (screenshot, foto) **non** viene pseudonimizzato. Impostazione
+«Immagini» (`imagePolicy`):
+
+- `confirm` – **Conferma per ogni immagine** (predefinita nella Personal edition): prima dell'invio una
+  finestra mostra l'anteprima e avvisa che i dati visibili arriveranno a Claude così come sono; pulsanti
+  «Annulla» e «Invia l'immagine». Il nome del file diventa generico (es. `immagine-20261105183000.png`).
+  Il registro annota `image_sent_confirmed` o `image_cancelled`, senza l'immagine.
+- `block` – **Bloccate**: banner rosso, l'immagine non parte (evento `blocked`, `reason = "image"`).
+- `ocr` – **Oscuramento automatico (in arrivo)**: non ancora disponibile; nel pannello è visibile ma non
+  selezionabile; se impostato dalla policy vale come `block`.
+
+Con la protezione disattivata le immagini partono come qualsiasi file, senza controlli. Nella Server
+edition decide l'ente con la policy `imagePolicy` (predefinito `block`, §2).
 
 ## 4. Come funziona
 
@@ -441,7 +477,7 @@ npm run test:dom   # DOM in Chromium headless: ripristino su nodi spezzati/strea
 npm run test:e2e   # end-to-end: estensione in Chromium + pagina finta di claude.ai
                    #   smoke.test.js / crypto.test.js: Server edition con server di prova (escrow, rotazione, recupero)
                    #   personal.test.js: Personal con Rizzo-PII finto (DOCX, PDF→txt, CORS, Rizzo spento)
-                   #   activation.test.js: attivazione per conversazione (banner, badge per scheda,
+                   #   activation.test.js: attivazione per conversazione (disattivata di default, badge per scheda,
                    #     ripresa, OFF solo in uscita, scorciatoia) e pulsante bloccato nella Server edition
 ```
 
@@ -504,7 +540,9 @@ Per aggiungere un sito (es. ChatGPT) si crea `src/sites/chatgpt.js` con la stess
   gestito (raro). Il funzionamento con l'app desktop reale di Rizzo-PII non è stato provato.
 - **Record di ispezione** (originale/inviato) solo in `chrome.storage.session`: si perdono alla
   chiusura del browser; i contrassegni sui messaggi più vecchi non ricompaiono.
-- **Immagini** e formati non gestiti vengono bloccati (`blocked=true`).
+- **Immagini**: il testo che contengono non viene pseudonimizzato; sono bloccate o inviate dopo conferma
+  secondo `imagePolicy` (§3.2). L'oscuramento automatico con OCR non è ancora disponibile. Gli altri
+  formati non gestiti vengono bloccati (`blocked=true`).
 - **Solo Chrome desktop**: app desktop/mobile di Claude e altri browser non sono coperti.
 - Il primo messaggio di ogni conversazione mostra l'istruzione fissa nel fumetto dell'utente.
 - `chrome.sidePanel.open` dal contrassegno richiede un gesto dell'utente; se Chrome lo rifiuta, aprire

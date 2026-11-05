@@ -11,9 +11,9 @@ propri clienti. La Personal edition è fatta di **due soli componenti sul tuo PC
 Nessun server di Pseudomania, nessun Docker, nessun account aggiuntivo. Dizionario e registro
 restano nel browser, cifrati.
 
-> La Personal edition è **volontaria**: puoi disattivarla in ogni conversazione e non protegge altri
-> browser né le app di Claude. La responsabilità dei trattamenti resta interamente tua, come
-> titolare o responsabile. Una traccia di regole d'uso è in
+> La Personal edition è **volontaria**: la protezione parte disattivata e la attivi tu in ogni
+> conversazione che ne ha bisogno. Non protegge altri browser né le app di Claude. La
+> responsabilità dei trattamenti resta interamente tua, come titolare o responsabile. Una traccia di regole d'uso è in
 > [`governance/policy-light.md`](../governance/policy-light.md).
 
 ## Indice
@@ -23,7 +23,7 @@ restano nel browser, cifrati.
 3. [Installare l'estensione](#3-installare-lestensione)
 4. [Verificare il collegamento](#4-verificare-il-collegamento)
 5. [Uso quotidiano](#5-uso-quotidiano)
-6. [File: DOCX, XLSX, PDF](#6-file-docx-xlsx-pdf)
+6. [File: DOCX, XLSX, PDF, immagini](#6-file-docx-xlsx-pdf-immagini)
 7. [Dove stanno i dati e per quanto](#7-dove-stanno-i-dati-e-per-quanto)
 8. [Backup, cambio PC e cancellazione](#8-backup-cambio-pc-e-cancellazione)
 9. [Aggiornare](#9-aggiornare)
@@ -104,8 +104,8 @@ La protezione si accende e si spegne **per singola conversazione** (o pagina di 
 | Badge | Barra sopra la casella | Significato |
 |---|---|---|
 | **ON** verde | verde | protezione attiva in questa conversazione |
-| **OFF** rosso (icona grigia) | rossa | protezione disattivata: messaggi e allegati partono **in chiaro** |
-| **?** arancione | arancione | in attesa della tua scelta (banner); intanto i messaggi vengono **comunque pseudonimizzati** |
+| **OFF** arancione (icona grigia) | arancione | protezione disattivata (stato di partenza): messaggi e allegati partono **in chiaro** |
+| **?** arancione | banner «Attiva» / «Continua senza protezione» | solo in modalità «Attiva con richiesta» (§5.2): in attesa della tua scelta; intanto i messaggi restano protetti |
 | **!** rosso | — | Rizzo-PII spento, in avvio o bloccato (CORS) |
 
 ### 5.2 Regole per le conversazioni nuove e riprese
@@ -113,21 +113,35 @@ La protezione si accende e si spegne **per singola conversazione** (o pagina di 
 - Lo stato si **salva per conversazione** (in un progetto: per chat; la pagina del progetto ha il
   proprio stato fino al primo invio). Una chat nuova riceve il suo id dopo il primo invio: lo stato
   la segue. Il passaggio a un'altra chat nella stessa scheda viene rilevato subito.
-- **Nuova conversazione:** se la tua ultima scelta era «attiva», la protezione si attiva da sola;
-  se era «disattivata», compare un banner con **«Attiva»** / **«Continua senza protezione»**.
-- **Conversazione ripresa:** se era attiva si riattiva da sola; se era disattivata compare lo
-  stesso banner.
-- Finché non scegli nel banner, per prudenza i messaggi vengono pseudonimizzati (badge **?**).
+- **Modalità di attivazione.** Nelle impostazioni dell'estensione (clic sull'icona da una scheda
+  che non è claude.ai), gruppo «Attivazione nelle conversazioni», puoi scegliere tra tre modalità.
+  La scelta si salva subito.
+  - **Disattivata di default** (predefinita): descritta nei punti che seguono.
+  - **Attiva di default:** ogni nuova conversazione parte protetta. La spegni con il pulsante o
+    Alt+Maiusc+P. Le conversazioni spente restano spente quando le riapri.
+  - **Attiva con richiesta:** se l'ultima scelta era «attiva», le nuove conversazioni partono
+    protette; altrimenti compare il banner «Attiva» / «Continua senza protezione» (badge **?**).
+    Le conversazioni spente chiedono di nuovo quando le riapri. Finché non scegli, i messaggi
+    restano protetti.
+- **Disattivata di default:** ogni nuova conversazione, ogni pagina di progetto e ogni nuova scheda
+  partono con la protezione **disattivata**. Non compare nessuna domanda: solo la barra arancione
+  «Protezione disattivata: i messaggi partono in chiaro. Per attivarla clicca l'icona di
+  Pseudomania o premi Alt+Maiusc+P» e il badge **OFF**.
+- **Per attivarla** clicca il pulsante di Pseudomania o premi **Alt+Maiusc+P**, prima di scrivere
+  dati di clienti.
+- **Conversazione ripresa:** se l'avevi attivata si riattiva da sola (anche in un'altra scheda o
+  dopo il riavvio di Chrome). Ogni altra conversazione (nuova, mai vista o spenta) parte disattivata.
 - **La disattivazione riguarda solo l'uscita.** Il ripristino dei segnaposto nelle risposte, negli
   appunti e nei download resta **sempre attivo**, anche con OFF.
 - Al **primo spegnimento** in una conversazione che contiene già dati protetti compare un avviso:
   ciò che invierai andrà in chiaro, e riattivare la protezione non ripulisce quanto già inviato.
-- Ogni cambio di stato (da pulsante, scorciatoia o banner) viene annotato nel registro locale
+- Ogni cambio di stato (da pulsante o scorciatoia) viene annotato nel registro locale
   cifrato, senza testi.
 
 ### 5.3 Prova rapida e altre funzioni
 
-- **Prova rapida:** scrivi «Scrivi una lettera a Mario Rossi, mario.rossi@example.it» e invia.
+- **Prova rapida:** attiva la protezione (badge **ON**), poi scrivi «Scrivi una lettera a Mario
+  Rossi, mario.rossi@example.it» e invia.
   Nel messaggio inviato compaiono `[FULLNAME_1]` e `[EMAIL_1]`; nella risposta di Claude i valori
   reali tornano visibili (evidenziati in verde). Lo stesso valore nella stessa chat riceve sempre
   lo stesso segnaposto.
@@ -142,14 +156,29 @@ La protezione si accende e si spegne **per singola conversazione** (o pagina di 
   nell'estensione e sono una bozza: segnala i falsi positivi dal pannello.
 - **Allowlist:** termini pubblici (enti, istituzioni) non vengono mascherati.
 
-## 6. File: DOCX, XLSX, PDF
+## 6. File: DOCX, XLSX, PDF, immagini
 
 | Formato | Cosa succede |
 |---|---|
 | DOCX, XLSX | pseudonimizzati nell'estensione (testo, intestazioni, note, commenti, celle); il file inviato a Claude ha i segnaposto; al download dei file generati da Claude i valori vengono ripristinati |
 | TXT, CSV, MD | pseudonimizzati |
 | PDF | il testo viene estratto da Rizzo-PII e inviato a Claude come **file di testo pseudonimizzato (.txt)** al posto del PDF, con un avviso: impaginazione e immagini **non** vengono inviate; i PDF **scaricati** da Claude vengono ripristinati: con l'impaginazione originale se l'app Rizzo-PII offre `/restore/pdf` (proposta in corso), altrimenti come PDF di solo testo |
-| Immagini e altri formati | bloccati |
+| Immagini (screenshot, foto) | il testo nell'immagine **non** viene pseudonimizzato. Secondo l'impostazione «Immagini»: **conferma per ogni immagine** (predefinita) oppure **bloccate**. Vedi sotto |
+| Altri formati | bloccati |
+
+**Immagini.** Nelle impostazioni dell'estensione, gruppo «Immagini (screenshot, foto)», puoi
+scegliere:
+
+- **Conferma per ogni immagine** (predefinita): prima dell'invio compare una finestra con
+  l'anteprima e l'avviso che i dati visibili nell'immagine arriveranno a Claude così come sono.
+  Scegli «Annulla» o «Invia l'immagine». Il nome del file diventa generico (es.
+  `immagine-20261105183000.png`). Il registro locale annota la scelta, senza l'immagine.
+- **Bloccate:** le immagini non vengono inviate (banner rosso).
+- **Oscuramento automatico (in arrivo):** lettura del testo con OCR e copertura dei dati
+  personali. Non ancora disponibile: è visibile ma non selezionabile.
+
+Invia solo immagini senza dati personali. Con la protezione **disattivata** le immagini partono
+come qualsiasi file, senza controlli.
 
 ## 7. Dove stanno i dati e per quanto
 
@@ -220,6 +249,7 @@ generalizza. Per un uso professionale stabile con dati di clienti valuta un pian
 | «Rizzo-PII si sta avviando» a lungo | memoria insufficiente o primo download del modello: attendere, chiudere altri programmi |
 | Porta 5005 occupata da altro | chiudere il programma; se l'app di Rizzo-PII permette un'altra porta, indicarla nelle impostazioni (solo `127.0.0.1`) |
 | Messaggio sul CORS | §13 |
+| Barra arancione e badge **OFF** in una chat nuova | comportamento previsto: la protezione parte disattivata; attivala con il pulsante o Alt+Maiusc+P (§5.2) |
 | Nessuna barra colorata su claude.ai | il sito è cambiato: aggiornare l'estensione; nel frattempo non inviare dati di clienti |
 | Segnaposto non ripristinati in una chat vecchia | dizionario scaduto (30 giorni), cancellato o creato su un altro PC |
 | PDF arriva a Claude come .txt | comportamento previsto (§6) |

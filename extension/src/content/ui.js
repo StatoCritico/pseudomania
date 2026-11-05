@@ -198,6 +198,31 @@
     });
   }
 
+  /** Immagine da inviare: anteprima e conferma esplicita (il testo dell'immagine non è protetto). */
+  function confirmImage(file) {
+    const url = URL.createObjectURL(file);
+    return modal((dlg, done) => {
+      const end = (v) => {
+        URL.revokeObjectURL(url);
+        done(v);
+      };
+      dlg.append(
+        h('h2', {}, S.immagineTitolo),
+        h('p', {}, S.immagineTesto),
+        h('img', { src: url, alt: S.immagineAlt, style: 'max-width:100%;max-height:50vh;display:block;margin:8px auto;border:1px solid #ccc;border-radius:6px' }),
+        h('p', { class: 'small' }, S.immagineNome),
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn', 'data-pg-cancel': '', onclick: () => end(false) }, S.annulla),
+          h('button', { class: 'btn danger', onclick: () => end(true) }, S.immagineInvia))
+      );
+      // Il tasto Invio non deve inviare l'immagine per errore: il focus va su «Annulla».
+      setTimeout(() => {
+        const c = dlg.querySelector('[data-pg-cancel]');
+        if (c) c.focus();
+      }, 0);
+    });
+  }
+
   /** Primo spegnimento in una conversazione che contiene già dati protetti. */
   function confirmOff() {
     return modal((dlg, done) => {
@@ -306,5 +331,5 @@
     };
   }
 
-  PG.ui = { StatusArea, confirmUnprotected, confirmOff, preview, badge, toast, busy, highlighted, tagRanges, h };
+  PG.ui = { StatusArea, confirmUnprotected, confirmOff, confirmImage, preview, badge, toast, busy, highlighted, tagRanges, h };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

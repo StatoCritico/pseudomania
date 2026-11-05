@@ -15,7 +15,9 @@ problema non è risolto. Per la Server edition i problemi del server sono tratta
 | Segnaposto in **grigio**, «… non sono ripristinabili» | dizionario cifrato su un altro computer o profilo | chat: nessun recupero; progetti Server edition: §4.10 |
 | Segnaposto non ripristinati in una chat vecchia, senza avviso | dizionario scaduto (30 giorni dall'ultimo uso) o eliminato | comportamento previsto; recupera i dati dai tuoi documenti |
 | «Invio bloccato» con riferimento all'art. 9 o 10 GDPR | filtro delle categorie particolari | riformula senza quei riferimenti; se è un errore usa **Segnala blocco errato** (§4.9) |
-| «Il file «…» non è stato allegato: …» | formato non gestito (es. immagine) o file troppo grande | converti in DOCX/PDF/TXT senza immagini o riduci il file |
+| «Il file «…» non è stato allegato: …» | formato non gestito o file troppo grande | converti in DOCX/PDF/TXT o riduci il file |
+| **Immagine bloccata**: «Il file «…» non è stato allegato: le immagini sono bloccate…» (banner rosso) | il testo nelle immagini non viene pseudonimizzato. (Personal) hai scelto «Bloccate» nelle impostazioni; (Server edition) l'ente blocca le immagini (impostazione predefinita) | (Personal) se l'immagine non contiene dati personali, scegli «Conferma per ogni immagine» nelle impostazioni (§2.7); (Server edition) non si può cambiare: trascrivi il testo che serve senza dati personali o chiedi all'ente |
+| Finestra «Inviare questa immagine?» | le immagini sono consentite con conferma | controlla l'anteprima: se mostra dati personali scegli **Annulla** |
 | PDF arrivato a Claude come `.txt` | Personal edition | comportamento previsto (§2.7) |
 | File scaricato con i segnaposto e un avviso | formato non ripristinabile (es. PDF nella Personal) o errore del servizio | sostituisci a mano i valori o rigenera in DOCX/XLSX |
 | Il contrassegno «dati protetti» apre nulla | Chrome ha rifiutato l'apertura del pannello laterale | (Personal) clic destro sul pulsante → **Apri pannello di ispezione**; (Server edition) clic sul pulsante → **Apri pannello di ispezione** |
@@ -32,10 +34,10 @@ problema non è risolto. Per la Server edition i problemi del server sono tratta
 | Porta 5005 occupata | un altro programma usa la porta | chiudi il programma oppure scegli un'altra porta in Rizzo-PII e indicala in **Impostazioni** (solo `127.0.0.1`) **[DA VERIFICARE con l'app reale]** |
 | «Rizzo-PII risponde ma rifiuta le chiamate dell'estensione (CORS)» | il servizio locale non accetta l'estensione | **non usare la Personal edition con dati di clienti**; scarica la versione modificata di Rizzo-PII quando sarà fornita sul sito (§2.2) |
 | Finestra «Rizzo-PII non risponde» con **Invia senza protezione** | Rizzo-PII spento durante l'uso | scegli **Annulla**, riavvia Rizzo-PII, riprova |
-| Badge **OFF** rosso, barra rossa | protezione disattivata **in questa conversazione** | clic sul pulsante o Alt+Maiusc+P (§2.6) |
-| Badge **?** arancione, banner «Vuoi attivare Pseudomania per questa conversazione?» | conversazione nuova o ripresa dopo uno spegnimento | scegli **Attiva** o **Continua senza protezione**; nel frattempo i messaggi sono pseudonimizzati |
+| Badge **OFF** arancione, barra arancione «Protezione disattivata: i messaggi partono in chiaro…» | protezione disattivata **in questa conversazione**: è lo stato di partenza di ogni nuova conversazione, pagina di progetto o nuova scheda | clic sul pulsante o Alt+Maiusc+P (§2.6) |
 | Alt+Maiusc+P non fa nulla | scorciatoia occupata da un altro programma o modificata | `chrome://extensions/shortcuts` |
-| La protezione si è riaccesa (o spenta) da sola cambiando chat | lo stato è salvato per conversazione | comportamento previsto: controlla il badge a ogni chat |
+| La protezione si è riaccesa (o spenta) da sola cambiando chat | lo stato è salvato per conversazione: le chat che avevi attivato si riattivano, le altre partono secondo la modalità scelta (predefinita: disattivate) | comportamento previsto: controlla il badge a ogni chat |
+| Badge **?** e banner «Attiva» / «Continua senza protezione» | hai scelto la modalità «Attiva con richiesta» | scegli una delle due voci; per non vedere più la domanda cambia modalità nelle impostazioni (§2.6) |
 | «Sono ammessi solo indirizzi locali» nelle impostazioni | indirizzo non locale | usa `http://127.0.0.1:<porta>` o `http://localhost:<porta>` |
 | Dizionario perso dopo un aggiornamento | l'estensione è stata rimossa e reinstallata | aggiorna sempre nella stessa cartella con **Aggiorna** (§2.9); i dati persi non si recuperano |
 | L'estensione dal pacchetto si disattiva all'avvio di Chrome | alcune versioni di Chrome avvisano per le estensioni in modalità sviluppatore **[DA VERIFICARE]** | riattivala in `chrome://extensions`; usa la versione del Web Store quando disponibile |

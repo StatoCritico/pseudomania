@@ -47,6 +47,13 @@ test('Personal edition: flusso completo senza server', { timeout: 120000 }, asyn
   const page = await h.context.newPage();
   await page.goto('https://claude.ai/new');
   await page.waitForSelector('pg-ui[data-pg-ui="status"]', { state: 'attached', timeout: 10000 });
+  // Dal 5/11/2026 la protezione è disattivata di default: si attiva dal pulsante della barra.
+  const tabId = await h.sw.evaluate(async () => (await chrome.tabs.query({ url: 'https://claude.ai/*' }))[0].id);
+  await h.sw.evaluate((id) => globalThis.pgToggleForTab({ id }, 'toolbar'), tabId);
+  await page.waitForFunction(() => {
+    const e = document.querySelector('pg-ui[data-pg-ui="status"]');
+    return e && e.getAttribute('data-pg-activation') === 'on';
+  }, null, { timeout: 8000 });
 
   await t.test('stato: Personal edition, Rizzo-PII raggiungibile, nessun server', async () => {
     const st = await h.state();
@@ -122,6 +129,43 @@ test('Personal edition: flusso completo senza server', { timeout: 120000 }, asyn
     await page.waitForFunction(() => [...document.querySelectorAll('.chip')].some((c) => c.textContent === 'Nota_Mario Rossi.txt'), null, { timeout: 5000 });
   });
 
+  await t.test('immagini: conferma con anteprima e nome generico; Annulla = nessun invio; bloccate dalle impostazioni', async () => {
+    // PNG 1x1
+    const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+    const uploads = () => h.apiRequests.filter((r) => r.path.endsWith('/upload'));
+    const modal = 'pg-ui[data-pg-ui="modal"]';
+    // 1) Annulla: nessun caricamento
+    let before = uploads().length;
+    await page.setInputFiles('#file', { name: 'Screenshot_Mario_Rossi.png', mimeType: 'image/png', buffer: png });
+    await page.waitForSelector(modal, { state: 'attached', timeout: 5000 });
+    await page.keyboard.press('Enter'); // il focus è su «Annulla»
+    await page.waitForTimeout(800);
+    assert.equal(uploads().length, before, 'immagine annullata: nessun invio');
+    // 2) Conferma: caricamento con nome generico e contenuto invariato
+    before = uploads().length;
+    await page.setInputFiles('#file', { name: 'Screenshot_Mario_Rossi.png', mimeType: 'image/png', buffer: png });
+    await page.waitForSelector(modal, { state: 'attached', timeout: 5000 });
+    await page.keyboard.press('Tab'); // da «Annulla» a «Invia l'immagine»
+    await page.keyboard.press('Enter');
+    const up = await waitFor(() => (uploads().length > before ? uploads()[uploads().length - 1] : null), 8000);
+    const raw = up.buffer.toString('latin1');
+    assert.ok(!raw.includes('Mario_Rossi'), 'il nome originale non parte');
+    assert.match(raw, /filename="immagine-\d{14}\.png"/);
+    // 3) Bloccate dalle impostazioni: nessuna richiesta di conferma
+    await ext.evaluate(() => chrome.storage.local.set({ imagePolicy: 'block' }));
+    await waitFor(async () => (await h.state()).config.imagePolicy === 'block', 5000);
+    before = uploads().length;
+    await page.setInputFiles('#file', { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: png });
+    await page.waitForTimeout(1200);
+    assert.equal(await page.$(modal), null, 'nessuna conferma con le immagini bloccate');
+    assert.equal(uploads().length, before);
+    await ext.evaluate(() => chrome.storage.local.remove('imagePolicy'));
+    const log = (await msg({ type: 'pg:localLog' })).data;
+    assert.ok(log.some((e) => e.event === 'image_sent_confirmed'));
+    assert.ok(log.some((e) => e.event === 'image_cancelled'));
+    assert.ok(!JSON.stringify(log).includes('Mario_Rossi'));
+  });
+
   await t.test('allegato DOCX elaborato in JavaScript (anche il nome del file)', async () => {
     const before = h.apiRequests.filter((r) => r.path.endsWith('/upload')).length;
     await page.setInputFiles('#file', { name: 'Lettera_Luigi_Verdi.docx', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', buffer: await makeDocx() });
@@ -192,7 +236,8 @@ test('Personal edition: Rizzo-PII che rifiuta CORS viene riconosciuto e segnalat
   }, 15000);
   assert.equal(st.health.ok, false);
   await ext.reload();
-  await ext.waitForFunction(() => document.getElementById('server').textContent.includes('CORS'), null, { timeout: 5000 });
+  // la pagina dell'estensione vieta eval (CSP): niente waitForFunction, si legge il testo
+  await waitFor(async () => ((await ext.textContent('#server')) || '').includes('CORS'), 5000);
   const r = await ext.evaluate((u) => chrome.runtime.sendMessage({ type: 'pg:testRizzo', rizzoUrl: u }), h.rizzoUrl);
   assert.equal(r.data.state, 'cors');
 });

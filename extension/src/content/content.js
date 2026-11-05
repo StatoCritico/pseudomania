@@ -27,7 +27,7 @@
   let scopeAlias = {}; // conversationId -> 'pending:<uuid4>' (rebind rifiutato con 409)
   // Personal edition: attivazione per conversazione (DECISIONI.md). Server edition: sempre attiva.
   let activation = new PG.activation.Activation();
-  let actState = 'on'; // 'on' | 'off' | 'ask' per la conversazione corrente
+  let actState = 'off'; // 'on' | 'off' per la conversazione corrente (Personal edition)
   let actKey = null; // convKey a cui si riferisce actState
   let askBanner = null;
   let domStarted = false;
@@ -285,7 +285,7 @@
   /** Ingresso in una conversazione (cambio di chat, anche senza ricaricare la pagina). */
   function enterConversation(key) {
     actKey = key;
-    actState = isPersonal() ? activation.enter(key) : 'on';
+    actState = isPersonal() ? activation.enter(key, cfg && cfg.activationMode) : 'on';
     if (isPersonal()) saveActivation();
     clearAskBanner();
     applyActivation();
@@ -642,11 +642,66 @@
     }
   }
 
+  // Finestra delle istruzioni di progetto: il campo contiene il testo salvato, con i segnaposto e
+  // l'istruzione fissa. Quando la protezione è attiva lo si mostra con i valori reali e senza
+  // l'istruzione; al salvataggio handleInstructions lo pseudonimizza di nuovo. Con la protezione
+  // spenta il campo resta com'è, perché un salvataggio manderebbe i valori in chiaro.
+  function restoreInstructionsField() {
+    const found = adapter.findInstructionsDialog ? adapter.findInstructionsDialog(document) : null;
+    if (!found || !found.field || found.field.dataset.pgRestored) return;
+    if (!protectionActive()) return;
+    found.field.dataset.pgRestored = '1';
+    let text = found.field.value || '';
+    const instr = cfg.tagInstruction;
+    if (instr && text.includes(instr)) text = text.replace(instr, '').replace(/^\s+/, '');
+    const r = PG.tags.restoreText(text, dict);
+    if (r.text !== found.field.value) {
+      PG.domInput.setFormControlValue(found.field, r.text);
+      event('instructions_restored', { restored: Array.isArray(r.restored) ? r.restored.length : (r.restored || 0) });
+    }
+  }
+
   // --- File (selettore, trascinamento, incolla) ------------------------------------------------
+  const IMAGE_EXT = /\.(png|jpe?g|gif|webp|heic|tiff?|bmp)$/i;
+  function isImageFile(f) {
+    return /^image\//i.test(f.type || '') || IMAGE_EXT.test(f.name || '');
+  }
+
+  /**
+   * Immagini: il testo che contengono non viene pseudonimizzato. Secondo l'impostazione
+   * (Personal edition) o la policy dell'ente (Server edition) sono bloccate oppure inviate dopo una
+   * conferma esplicita, con un nome di file generico. Il registro annota la scelta, senza l'immagine.
+   * @returns {Promise<File|null>}
+   */
+  async function handleImage(f, kind) {
+    const policy = (cfg && cfg.imagePolicyEffective) || 'block';
+    if (policy !== 'confirm') {
+      status.banner('error', S.bloccatoTitolo, S.fileBloccato(f.name, isPersonal() ? S.immaginiBloccatePersonal : S.immaginiBloccateEnte), { replace: false });
+      event('blocked', { kind, reason: 'image', policy });
+      return null;
+    }
+    const ok = await PG.ui.confirmImage(f);
+    if (!ok) {
+      event('image_cancelled', { kind });
+      return null;
+    }
+    const bytes = await f.arrayBuffer();
+    const ext = (String(f.name || '').match(IMAGE_EXT) || ['.png'])[0].toLowerCase();
+    const nf = new File([bytes], `immagine-${new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '')}${ext}`, { type: f.type || 'image/png', lastModified: Date.now() });
+    toPage('approveFile', { hash: await sha256Hex(bytes) });
+    event('image_sent_confirmed', { kind, bytes: bytes.byteLength });
+    return nf;
+  }
+
   async function processFiles(files, kind) {
     const out = [];
     const maxBytes = (cfg.maxFileMB || 20) * 1024 * 1024;
     for (const f of files) {
+      if (isImageFile(f)) {
+        const img = await handleImage(f, kind);
+        if (img) out.push(img);
+        continue;
+      }
       if (f.size > maxBytes) {
         status.banner('error', S.bloccatoTitolo, S.fileBloccato(f.name, S.bloccatoFileGrande(cfg.maxFileMB)), { replace: false });
         event('blocked', { kind, reason: 'too_large' });
@@ -924,7 +979,9 @@
     if (approved.has(norm(p.text))) return { passthrough: true };
     if (p.kind === 'project_knowledge') {
       const sc = scope();
-      const name = p.fileName || 'testo.txt';
+      // Il campo «content» è il testo già estratto da claude.ai (anche da un DOCX o PDF): va
+      // trattato come testo, qualunque sia l'estensione del nome del file.
+      const name = (p.fileName || 'testo').replace(/\.[a-z0-9]{1,5}$/i, '') + '.txt';
       const r = await bg('pg:pseudonymizeFile', {
         scope: sc, kind: 'project_knowledge', name, mime: 'text/plain',
         b64: b64FromBuffer(new TextEncoder().encode(p.text).buffer),
@@ -1122,6 +1179,7 @@
       setInterval(() => {
         checkLocation();
         selfCheck();
+        restoreInstructionsField();
         const composer = adapter.findComposer(document);
         if (composer) status.attach(adapter.composerAnchor(composer));
       }, 500);

@@ -82,7 +82,10 @@ Legenda esito: ☐ da fare, ✔ superata, ✘ non superata (annotare il motivo e
 | C3 | XLSX | allegare `prova.xlsx` (nomi in celle) | come C1 | ☐ |
 | C4 | TXT/CSV/MD | allegare `prova.txt` | come C1 | ☐ |
 | C5 | Trascinamento e incolla | trascinare `prova.docx` nella casella; incollare un file dagli appunti | come C2 | ☐ |
-| C6 | Formato non supportato | allegare `prova.png` | invio bloccato con messaggio in italiano | ☐ |
+| C6 | Immagine bloccata (policy predefinita) | senza `imagePolicy` nella policy (o con `"block"`), allegare `prova.png` | banner rosso «Invio bloccato»: le immagini sono bloccate dalla policy dell'ente; l'immagine non parte; nelle impostazioni «Immagini: bloccate (impostato dall'ente)» | ☐ |
+| C6a | Immagine con conferma | solo se l'ente lo prevede (DPIA e regolamento): impostare `imagePolicy` = `"confirm"`, ricaricare i criteri, allegare `prova.png`, clic su «Invia l'immagine» | finestra con anteprima e avviso che i dati dell'immagine arrivano a Claude così come sono; l'immagine arriva a Claude con un nome generico (es. `immagine-20261105183000.png`), non `prova.png` | ☐ |
+| C6b | Annulla | come C6a, ma clic su «Annulla» | nessun invio, nessun allegato nella casella; riportare poi `imagePolicy` al valore deciso dall'ente | ☐ |
+| C6c | Formato non supportato | allegare un file `.zip` | invio bloccato con messaggio in italiano | ☐ |
 | C7 | File troppo grande | allegare un PDF oltre `MAX_FILE_MB` (20 MB) | messaggio di file troppo grande, nessun invio | ☐ |
 | C8 | PDF lungo | PDF di 30+ pagine | completato entro `RIZZO_TIMEOUT_S` o bloccato con messaggio; annotare il tempo (dimensionamento) | ☐ |
 | C9 | Download | chiedere a Claude di creare un file (artifact scaricabile, es. CSV/DOCX con i nomi) e scaricarlo | il file scaricato contiene i valori reali; se il formato non è supportato, avviso e file con segnaposto | ☐ |
@@ -203,19 +206,18 @@ Legenda esito: ☐ da fare, ✔ superata, ✘ non superata (annotare il motivo e
 | # | Prova | Come | Risultato atteso | Esito |
 |---|---|---|---|---|
 | K1 | Rizzo-PII locale | app desktop avviata; impostazioni → Verifica connessione | «Rizzo-PII raggiungibile.» | ☐ |
-| K2 | Testo | T1 in una nuova chat | segnaposto nel testo inviato, valori ripristinati nella risposta | ☐ |
+| K2 | Testo | nuova chat, attivare la protezione con il pulsante (badge **ON**), inviare T1 | segnaposto nel testo inviato, valori ripristinati nella risposta | ☐ |
 | K3 | DOCX/XLSX/PDF | allegare i file di prova | DOCX/XLSX pseudonimizzati; PDF inviato come .txt con avviso | ☐ |
-| K4 | Rizzo-PII spento | chiudere l'app e inviare T1 | avviso e richiesta di conferma; annullando non parte nulla; badge **!** rosso | ☐ |
-| K5 | Disattivazione con il pulsante | in una chat **senza** dati protetti, clic sul pulsante della barra degli strumenti | badge **OFF** rosso, icona grigia, barra rossa; T1 parte in chiaro | ☐ |
+| K4 | Rizzo-PII spento | chiudere l'app e inviare T1 in una chat con protezione attiva | avviso e richiesta di conferma; annullando non parte nulla; badge **!** rosso | ☐ |
+| K5 | Disattivazione con il pulsante | in una chat **senza** dati protetti e con protezione attiva, clic sul pulsante della barra degli strumenti | badge **OFF** arancione, icona grigia, barra arancione; T1 parte in chiaro | ☐ |
 | K5a | Scorciatoia | Alt+Maiusc+P (e dopo averla cambiata in `chrome://extensions/shortcuts`) | stato invertito come con il pulsante | ☐ |
 | K5b | Avviso al primo spegnimento | in una chat che contiene già dati protetti, spegnere la protezione | avviso: l'invio andrà in chiaro e riattivare non ripulisce il già inviato; solo la prima volta in quella chat | ☐ |
 | K5c | Solo l'uscita | con OFF, chiedere a Claude di ripetere il messaggio con i segnaposto inviato prima | i segnaposto nella risposta vengono ancora ripristinati (anche copia e download) | ☐ |
 | K5d | Stato per scheda | due schede con due chat, una ON e una OFF; passare dall'una all'altra e cambiare chat nella stessa scheda senza ricaricare | badge e barra seguono sempre la conversazione aperta | ☐ |
-| K5e | Nuova chat dopo «attiva» | ultima scelta = ON, aprire una nuova chat | si attiva da sola (ON), nessun banner; dopo il primo invio lo stato resta ON con l'id definitivo | ☐ |
-| K5f | Nuova chat dopo «disattivata» | ultima scelta = OFF, aprire una nuova chat | banner «Attiva» / «Continua senza protezione», badge **?** arancione; inviando T1 prima di scegliere il testo è comunque pseudonimizzato | ☐ |
-| K5g | Chat ripresa | riaprire una chat lasciata ON e una lasciata OFF | la prima si riattiva da sola; la seconda mostra il banner | ☐ |
-| K5h | Scelta dal banner | «Attiva» in una chat, «Continua senza protezione» in un'altra | ON / OFF rispettivamente; la scelta resta memorizzata per quella chat | ☐ |
-| K5i | Registro | dopo K5–K5h, pannello di ispezione / registro locale | eventi `extension_enabled`/`extension_disabled` con `per = conversation` e `trigger` = `toolbar`, `shortcut`, `banner`; nessun testo | ☐ |
+| K5e | Nuova chat: disattivata di default | anche dopo aver attivato un'altra chat, aprire una nuova chat, una pagina di progetto e una nuova scheda | badge **OFF** arancione e barra arancione «Protezione disattivata: i messaggi partono in chiaro. Per attivarla clicca l'icona di Pseudomania o premi Alt+Maiusc+P»; nessuna domanda, nessun pulsante «Attiva» / «Continua senza protezione» | ☐ |
+| K5f | Attivazione di una nuova chat | nella nuova chat clic sul pulsante (o Alt+Maiusc+P), inviare T1 | badge **ON**, T1 pseudonimizzato; dopo il primo invio lo stato resta ON con l'id definitivo | ☐ |
+| K5g | Chat ripresa | riaprire una chat lasciata ON e una lasciata OFF (anche in un'altra scheda o dopo il riavvio di Chrome) | la prima si riattiva da sola; la seconda resta disattivata, senza domande | ☐ |
+| K5h | Registro | dopo K5–K5g, pannello di ispezione / registro locale | eventi `extension_enabled`/`extension_disabled` con `per = conversation` e `trigger` = `toolbar` o `shortcut`; nessun testo | ☐ |
 | K6 | Dati locali cifrati | DevTools dell'estensione → IndexedDB `pseudomania` | valori cifrati, nessun valore leggibile | ☐ |
 | K7 | CORS | K1 con l'app desktop reale | nessun messaggio CORS (se compare: PROBLEMI-RILEVATI.md, fork di Rizzo-PII) | ☐ |
 

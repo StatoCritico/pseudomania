@@ -426,6 +426,18 @@ Chiavi da `extension/schema.json`:
 | `failClosed` | booleano | `true` |
 | `allowDisable` | booleano | `false` |
 | `sites` | lista | `["claude.ai"]` |
+| `imagePolicy` | stringa | assente o `"block"` (= immagini bloccate) |
+
+`imagePolicy` decide cosa succede alle **immagini** (screenshot, foto). Il testo dentro le immagini
+**non** viene pseudonimizzato.
+
+- `"block"` (predefinito): le immagini non vengono inviate.
+- `"confirm"`: prima dell'invio l'utente vede l'anteprima e conferma ogni immagine; il nome del
+  file diventa generico (es. `immagine-20261105183000.png`); il registro annota la scelta, senza
+  l'immagine. Abilitarlo va previsto nella DPIA e nel regolamento d'uso.
+- `"ocr"`: oscuramento automatico, **non ancora disponibile**; per ora vale come `"block"`.
+
+L'utente vede il valore nelle impostazioni dell'estensione, in sola lettura.
 
 ### C.4 Permessi di rete dell'estensione (CORS)
 
@@ -516,6 +528,7 @@ Windows Registry Editor Version 5.00
 "oidcScopes"="openid profile"
 "failClosed"=dword:00000001
 "allowDisable"=dword:00000000
+"imagePolicy"="block"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\3rdparty\extensions\ID_ESTENSIONE\policy\sites]
 "1"="claude.ai"
@@ -556,6 +569,7 @@ Set-ItemProperty -Path $base -Name oidcClientId -Value "pseudogate-extension"
 Set-ItemProperty -Path $base -Name oidcScopes   -Value "openid profile"
 Set-ItemProperty -Path $base -Name failClosed   -Value 1 -Type DWord
 Set-ItemProperty -Path $base -Name allowDisable -Value 0 -Type DWord
+Set-ItemProperty -Path $base -Name imagePolicy  -Value "block"
 Set-ItemProperty -Path "$base\sites" -Name "1"  -Value "claude.ai"
 ```
 
@@ -580,6 +594,7 @@ Set-ItemProperty -Path "$base\sites" -Name "1"  -Value "claude.ai"
   "oidcScopes": { "Value": "openid profile" },
   "failClosed": { "Value": true },
   "allowDisable": { "Value": false },
+  "imagePolicy": { "Value": "block" },
   "sites": { "Value": ["claude.ai"] }
 }
 ```

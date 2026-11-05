@@ -221,3 +221,20 @@ def test_cors_put_and_rebind_conflict_event(client):
     for body in ({"event": "scope_rebind_conflict", "details": {}},
                  {"event": "page_unrecognized", "details": {"reason": "scope_rebind_conflict"}}):
         assert client.post("/v1/events", headers=AUTH, json=body).status_code == 204
+
+
+def test_image_events_only_safe_details(client, scope):
+    """Eventi delle immagini e dei file: accettati, nel registro solo motivi e contatori."""
+    for body in ({"event": "image_sent_confirmed", "details": {"kind": "attachment", "bytes": 1234}},
+                 {"event": "image_cancelled", "details": {"kind": "attachment"}},
+                 {"event": "blocked", "details": {"reason": "image", "policy": "block",
+                                                  "nome": "Screenshot Mario Rossi.png"}},
+                 {"event": "network_blocked", "details": {"reason": "Mario Rossi ha scritto"}}):
+        assert client.post("/v1/events", headers=AUTH, json=dict(body, scope=scope)).status_code == 204
+    svc = client.app.state.svc
+    with svc.engine.connect() as c:
+        rows = c.execute(select(audit_events).order_by(audit_events.c.id)).mappings().all()
+    dump = json.dumps([dict(r) for r in rows], default=str)
+    assert "Mario" not in dump
+    acts = [r["action"] for r in rows]
+    assert "image_sent_confirmed" in acts and "image_cancelled" in acts

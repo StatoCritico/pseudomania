@@ -157,7 +157,10 @@ e) formazione, approfondimento e supporto alla scrittura di codice non contenent
     a fini di informazione del pubblico]`;
 12. inviare **feedback** o segnalazioni al fornitore tramite claude.ai: i feedback sono conservati dal
     fornitore fino a 5 anni e possono essere usati per l'addestramento; la funzione è disattivata
-    dall'Ente.
+    dall'Ente;
+13. `[SOLO SE L'ENTE ABILITA L'INVIO DI IMMAGINI CON CONFERMA]` inviare **immagini** (screenshot, foto,
+    scansioni) che mostrano dati personali: il testo contenuto nelle immagini **non** viene
+    pseudonimizzato e arriva al fornitore così come è.
 
 # Art. 6 – Cautele sui quasi-identificatori
 
@@ -213,6 +216,9 @@ Le misure sono descritte nella DPIA e nella documentazione tecnica. In sintesi:
    l'invio è bloccato (*fail-closed*);
 2. rilevamento dei dati personali con Rizzo-PII sul server interno, senza accesso a reti esterne;
    pseudonimizzazione anche di allegati (PDF, DOCX, XLSX) e dei file e delle istruzioni dei Progetti;
+   le **immagini** (screenshot, foto), il cui testo non viene pseudonimizzato, sono bloccate per
+   impostazione predefinita; se l'Ente abilita l'invio con conferma per ogni immagine, si applica
+   l'art. 5, n. 13;
 3. **dizionario cifrato nel browser** con chiave utente automatica e non esportabile; copia di
    custodia cifrata con la chiave pubblica dell'Ente e conservata in un key store separato; rotazione
    automatica della chiave ogni 90 giorni; l'amministratore del server **non può decifrare in blocco**

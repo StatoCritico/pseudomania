@@ -23,20 +23,26 @@ lang: it-IT
    sviluppatore** → **Carica estensione non pacchettizzata** → cartella `extension`.
 2. Fissa l'icona di Pseudomania (puzzle → puntina).
 3. **Clic destro** sul pulsante → **Impostazioni e informazioni** → **Verifica connessione** → «Rizzo-PII raggiungibile.» → **Salva**.
+4. Nella stessa pagina, se vuoi, cambia due scelte (si salvano subito):
+   - **Attivazione nelle conversazioni**: «Disattivata di default» (predefinita), «Attiva di
+     default» o «Attiva con richiesta»;
+   - **Immagini (screenshot, foto)**: «Conferma per ogni immagine» (predefinita) o «Bloccate».
 
 ## 3. Controlla l'indicatore
 
 | Badge sul pulsante | Significato (per la conversazione aperta) |
 |---|---|
 | **ON** verde | protezione attiva |
-| **OFF** rosso | protezione disattivata: ciò che invii parte in chiaro |
-| **?** arancione | in attesa della tua scelta: intanto i messaggi sono pseudonimizzati |
+| **OFF** arancione | protezione disattivata (stato di partenza): ciò che invii parte in chiaro |
+| **?** arancione | solo con «Attiva con richiesta»: scegli «Attiva» o «Continua senza protezione» |
 | **!** rosso | Rizzo-PII spento, in avvio o non raggiungibile |
 
-Su claude.ai, sopra la casella: «Pseudomania attivo: i dati personali vengono pseudonimizzati prima
-dell'invio».
+Con l'impostazione predefinita ogni nuova chat parte **disattivata**: sopra la casella vedi la barra arancione «Protezione
+disattivata: i messaggi partono in chiaro. Per attivarla clicca l'icona di Pseudomania o premi
+Alt+Maiusc+P». Dopo l'attivazione: «Pseudomania attivo: i dati personali vengono pseudonimizzati
+prima dell'invio».
 
-**Prova**: invia `Scrivi una breve lettera a Mario Rossi, mario.rossi@example.it`. Nel tuo messaggio
+**Prova**: attiva la protezione (badge **ON**), poi invia `Scrivi una breve lettera a Mario Rossi, mario.rossi@example.it`. Nel tuo messaggio
 vedi `[FULLNAME_1]` e `[EMAIL_1]`; nella risposta i valori reali tornano, **in verde**.
 
 ## 4. Usa
@@ -45,7 +51,10 @@ vedi `[FULLNAME_1]` e `[EMAIL_1]`; nella risposta i valori reali tornano, **in v
 - **Anteprima**: **Ctrl+Maiusc+Invio** → «Anteprima di ciò che verrà inviato».
 - **Ispezione**: clic su «N dati protetti» sotto il messaggio → originale e testo inviato.
 - **File**: DOCX, XLSX, TXT, CSV, MD pseudonimizzati (anche il nome del file); i **PDF** partono come
-  file di testo pseudonimizzato (.txt); immagini bloccate.
+  file di testo pseudonimizzato (.txt).
+- **Immagini**: il testo nelle immagini **non** viene pseudonimizzato. Di partenza compare la
+  finestra «Inviare questa immagine?» con l'anteprima: **Annulla** o **Invia l'immagine** (il nome
+  del file diventa generico). Puoi bloccarle nelle impostazioni. L'oscuramento automatico è in arrivo.
 - **Dati particolari** (salute, reati…): «Invio bloccato»; se è un errore, **Segnala blocco errato**.
 - Segnaposto **rossi** nella risposta = inventati da Claude: controlla quel punto.
 - Cambio PC o cancellazione dei dati del browser: il dizionario è perso, nessun recupero.
@@ -54,9 +63,11 @@ vedi `[FULLNAME_1]` e `[EMAIL_1]`; nella risposta i valori reali tornano, **in v
 
 - **Clic** sul pulsante o **Alt+Maiusc+P**: attiva/disattiva la conversazione aperta. Clic destro:
   «Apri pannello di ispezione», «Impostazioni e informazioni».
-- La scelta resta salvata per quella conversazione. Nuova chat: si attiva da sola se l'ultima volta
-  era attiva; altrimenti banner **Attiva** / **Continua senza protezione** (stesso banner quando
-  riprendi una chat disattivata).
+- Con l'impostazione predefinita ogni nuova chat, pagina di progetto o nuova scheda parte
+  **disattivata**, senza domande. Nelle impostazioni puoi scegliere «Attiva di default» (parte
+  protetta) o «Attiva con richiesta» (ti viene chiesto).
+- La scelta resta salvata per quella conversazione: una chat che hai attivato si riattiva da sola
+  quando la riapri.
 - Spegnere riguarda **solo ciò che invii**: le risposte vengono comunque ripristinate.
 - Primo spegnimento in una chat con dati protetti: avviso; **riattivare non ripulisce quanto già
   inviato**.
@@ -71,8 +82,9 @@ sono dati di clienti.
 - **App desktop o mobile** di Claude, altri browser, incognito per dati di clienti.
 - Dati sanitari, giudiziari, di minori, password, segreti non autorizzati.
 - Chiedere a Claude di modificare o «indovinare» i segnaposto.
+- Immagini (screenshot, foto) che mostrano dati personali.
 - Feedback (pollici) su chat con dati di clienti; memoria e connettori attivi.
-- Spegnere la protezione (o «Continua senza protezione») in chat con dati di clienti.
+- Scrivere dati di clienti senza aver attivato la protezione, o spegnerla in chat che li contengono.
 
 Se è partito un dato non mascherato: cancella la chat e valuta se è una violazione da notificare
 (art. 33 GDPR). Sito: <https://pseudomania.statocritico.it>

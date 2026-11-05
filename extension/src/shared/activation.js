@@ -7,11 +7,13 @@
 //
 // Stati:  'on'  protezione attiva in uscita
 //         'off' disattivata in uscita (il ripristino in entrata resta SEMPRE attivo)
-//         'ask' in attesa della scelta dell'utente (banner «Attiva» / «Continua senza protezione»);
-//               finché l'utente non sceglie, per prudenza l'uscita resta protetta.
-// Regole: conversazione con stato salvato 'on' → si riattiva da sola; salvato 'off' → 'ask';
-//         nessuno stato salvato (nuova o mai vista) → dipende dall'ultima scelta dell'utente:
-//         'on' → attiva da sola, 'off' → 'ask'.
+// Modalità (impostazione «activationMode» della Personal edition, DECISIONI.md 5/11/2026):
+//   'off' (predefinita) disattivata di default, senza domande: conversazione salvata 'on' → 'on',
+//                        ogni altra → 'off'.
+//   'on'                attiva di default: conversazione salvata 'off' → 'off', ogni altra → 'on'.
+//   'ask'               comportamento del 1/11/2026: salvata 'on' → 'on'; salvata 'off' → 'ask';
+//                        mai vista → 'on' se l'ultima scelta era «attiva», altrimenti 'ask'
+//                        (banner «Attiva» / «Continua senza protezione»; nel frattempo protetta).
 
 (function (root) {
   'use strict';
@@ -23,23 +25,27 @@
     constructor(data) {
       data = data || {};
       this.states = Object.assign({}, data.states);
-      this.last = data.last === 'off' ? 'off' : 'on';
+      this.last = data.last === 'off' ? 'off' : data.last === 'on' ? 'on' : null;
       this.warned = Object.assign({}, data.warned);
     }
 
     /** Stato da applicare entrando in una conversazione. */
-    decide(key) {
-      if (!key) return 'on';
-      const s = this.states[key];
-      if (s === 'on') return 'on';
-      if (s === 'off') return 'ask';
-      return this.last === 'on' ? 'on' : 'ask';
+    decide(key, mode) {
+      const s = key ? this.states[key] : undefined;
+      if (mode === 'on') return s === 'off' ? 'off' : 'on';
+      if (mode === 'ask') {
+        if (!key) return 'on';
+        if (s === 'on') return 'on';
+        if (s === 'off') return 'ask';
+        return this.last === 'off' ? 'ask' : 'on';
+      }
+      return s === 'on' ? 'on' : 'off';
     }
 
-    /** Ingresso in una conversazione: decide e, se si attiva da sola, lo memorizza. */
-    enter(key) {
-      const st = this.decide(key);
-      if (key && st === 'on' && this.states[key] !== 'on') this.states[key] = 'on';
+    /** Ingresso in una conversazione. Solo in modalità 'ask' un'attivazione automatica viene memorizzata. */
+    enter(key, mode) {
+      const st = this.decide(key, mode);
+      if (mode === 'ask' && key && st === 'on' && this.states[key] !== 'on') this.states[key] = 'on';
       this._prune();
       return st;
     }

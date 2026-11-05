@@ -192,8 +192,22 @@ Dettagli ed esempi (GPO/registro, Intune, Console di amministrazione Google, Lin
    | `failClosed` | `true` |
    | `allowDisable` | `false` |
    | `sites` | `["claude.ai"]` |
+   | `imagePolicy` | assente o `"block"` (immagini bloccate) |
 
    `failClosed` e `allowDisable` si leggono **solo** dalla policy: il server non può indebolirli.
+
+   **Immagini** (`imagePolicy`). Il testo contenuto nelle immagini (screenshot, foto) **non**
+   viene pseudonimizzato. Valori:
+
+   | Valore | Effetto |
+   |---|---|
+   | `"block"` (predefinito) | le immagini non vengono inviate (banner rosso) |
+   | `"confirm"` | prima dell'invio l'utente vede l'anteprima e conferma ogni immagine; il nome del file diventa generico (es. `immagine-20261105183000.png`) |
+   | `"ocr"` | oscuramento automatico con OCR: **non ancora disponibile**, vale come `"block"` |
+
+   L'utente vede il valore nelle impostazioni dell'estensione, in sola lettura («… (impostato
+   dall'ente)»). Se l'ente sceglie `"confirm"`, deve prevederlo nella **DPIA** e aggiungere al
+   **regolamento d'uso** la regola «non inviare immagini con dati personali».
 4. **Policy di contorno**:
 
    | Policy | Valore | Scopo |

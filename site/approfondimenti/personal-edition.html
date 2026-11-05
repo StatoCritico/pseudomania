@@ -100,6 +100,7 @@
 <li><a href="personal-edition.html#requisiti">Cosa serve</a></li>
 <li><a href="personal-edition.html#installazione">Installazione</a></li>
 <li><a href="personal-edition.html#attivazione">Attivazione per conversazione</a></li>
+<li><a href="personal-edition.html#impostazioni">Impostazioni</a></li>
 <li><a href="personal-edition.html#uso">Uso quotidiano</a></li>
 <li><a href="personal-edition.html#allegati">Allegati</a></li>
 <li><a href="personal-edition.html#dati-locali">Dove restano i dati</a></li>
@@ -203,23 +204,38 @@
 <p class="note"><strong>Dopo ogni aggiornamento dell'estensione</strong> ricarica le schede di claude.ai già aperte (<kbd>F5</kbd>): finché non lo fai, la pagina mostra un avviso e gli invii restano bloccati.</p>
 
 <h2 id="attivazione">Attivazione per conversazione</h2>
-<p>Nella Personal edition decidi tu, conversazione per conversazione, se proteggere ciò che invii.</p>
+<p>Nella Personal edition decidi tu, conversazione per conversazione, se proteggere ciò che invii. Di default la protezione parte <strong>disattivata</strong>: la attivi tu dove serve. Nelle <a href="#impostazioni">impostazioni</a> puoi scegliere anche di farla partire attiva o con una richiesta.</p>
 <ul>
   <li><strong>Pulsante nella barra degli strumenti</strong> di Chrome: un clic attiva o disattiva la protezione della conversazione aperta. Stessa funzione con <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd> (modificabile da <code>chrome://extensions/shortcuts</code>). Clic destro: pannello di ispezione e impostazioni.</li>
-  <li><strong>Stato sempre visibile</strong>: sul pulsante il badge <strong>ON</strong> (verde), <strong>OFF</strong> (arancione), <strong>?</strong> (arancione, in attesa della tua scelta) o <strong>!</strong> (rosso, Rizzo-PII spento, in avvio o non raggiungibile); sopra la casella di scrittura una barra colorata con didascalia.</li>
+  <li><strong>Stato sempre visibile</strong>: sul pulsante il badge <strong>ON</strong> (verde), <strong>OFF</strong> (arancione) o <strong>!</strong> (rosso, Rizzo-PII spento, in avvio o non raggiungibile); sopra la casella di scrittura una barra colorata con didascalia. Solo nella modalità «Attiva con richiesta» compare anche il badge <strong>?</strong>.</li>
   <li><strong>Lo stato si ricorda per ogni conversazione</strong> (nei progetti, per ogni chat).</li>
-  <li><strong>Nuova conversazione</strong>: se l'ultima scelta era «attiva» la protezione si attiva da sola; se era «disattivata» compare un banner con «Attiva» / «Continua senza protezione».</li>
-  <li><strong>Conversazione ripresa</strong>: se era attiva si riattiva da sola; se era disattivata compare lo stesso banner.</li>
-  <li><strong>Finché il banner aspetta</strong> la tua scelta, per prudenza i messaggi vengono comunque pseudonimizzati.</li>
+  <li><strong>Disattivata di default</strong> (modalità predefinita): ogni nuova conversazione, ogni pagina di progetto e ogni nuova scheda partono con la protezione disattivata, senza domande. Vedi solo il badge <strong>OFF</strong> e la barra arancione «Protezione disattivata: i messaggi partono in chiaro. Per attivarla clicca l'icona di Pseudomania o premi Alt+Maiusc+P».</li>
+  <li><strong>Conversazione ripresa</strong>: se l'avevi attivata si riattiva da sola, anche in un'altra scheda o dopo il riavvio di Chrome. Ogni altra conversazione parte disattivata.</li>
   <li><strong>Spegnere riguarda solo l'uscita</strong>: messaggi e allegati partono in chiaro, ma il ripristino dei segnaposto già presenti (nella pagina, negli appunti, nei download) resta sempre attivo.</li>
   <li>Al primo spegnimento in una conversazione che contiene già dati protetti, un avviso ricorda che ciò che invierai andrà in chiaro e che riattivare non ripulisce quanto già inviato.</li>
   <li>Ogni cambio di stato è annotato nel registro locale cifrato, senza testi. Il registro si consulta e si scarica dalle impostazioni dell'estensione (clic sull'icona da una scheda che non sia claude.ai → «Registro delle attività»).</li>
 </ul>
 <p>Nella <a href="server-edition.html#estensione-policy">Server edition</a> la protezione è sempre attiva: il pulsante è bloccato su acceso dalla policy.</p>
 
+<h2 id="impostazioni">Impostazioni</h2>
+<p>Le impostazioni si aprono con un clic sull'icona di Pseudomania da una scheda che non sia claude.ai (oppure clic destro → «Impostazioni e informazioni»). Oltre all'indirizzo di Rizzo-PII e al registro ci sono due gruppi di scelte, che si salvano subito.</p>
+<h3>Attivazione nelle conversazioni</h3>
+<ul>
+  <li><strong>Disattivata di default</strong> (predefinita): il comportamento descritto sopra.</li>
+  <li><strong>Attiva di default</strong>: ogni nuova conversazione parte protetta. La spegni con l'icona o <kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>P</kbd>. Le conversazioni spente restano spente quando le riapri.</li>
+  <li><strong>Attiva con richiesta</strong>: se l'ultima scelta era «attiva», le nuove conversazioni partono protette; altrimenti compare un banner con «Attiva» / «Continua senza protezione» (badge <strong>?</strong>). Le conversazioni spente chiedono di nuovo quando le riapri. Finché non scegli, i messaggi restano protetti.</li>
+</ul>
+<h3>Immagini (screenshot, foto)</h3>
+<ul>
+  <li><strong>Conferma per ogni immagine</strong> (predefinita): prima dell'invio vedi l'anteprima e confermi.</li>
+  <li><strong>Bloccate</strong>: le immagini non vengono inviate.</li>
+  <li><strong>Oscuramento automatico (in arrivo)</strong>: visibile ma non ancora selezionabile.</li>
+</ul>
+<p>Dettagli nella sezione <a href="#immagini">Immagini</a>.</p>
+
 <h2 id="uso">Uso quotidiano</h2>
 <ul>
-  <li>Controlla il badge prima di scrivere: <strong>ON</strong> significa protezione attiva per questa conversazione.</li>
+  <li>Controlla il badge prima di scrivere: <strong>ON</strong> significa protezione attiva per questa conversazione. Se vedi <strong>OFF</strong>, attivala prima di scrivere dati di clienti.</li>
   <li>Se Rizzo-PII non risponde, l'estensione ti avvisa e ti chiede di <strong>confermare</strong> prima di inviare il testo non protetto. La regola consigliata: non inviare finché non l'hai riavviata.</li>
   <li>Il pannello di ispezione mostra cosa è partito davvero; con <kbd>Ctrl</kbd>+<kbd>Maiusc</kbd>+<kbd>Invio</kbd> vedi l'anteprima prima dell'invio.</li>
   <li>Se l'elaborazione supera un secondo compare in basso un <strong>orologio con i secondi trascorsi</strong>: attendi che sparisca prima di inviare.</li>
@@ -231,8 +247,11 @@
 <ul>
   <li><strong>DOCX e XLSX</strong>: elaborati direttamente nell'estensione, che restituisce il file con i segnaposto, formattazione compresa.</li>
   <li><strong>PDF</strong>: il testo viene estratto e analizzato da Rizzo-PII; a Claude arriva un <strong>file di testo pseudonimizzato</strong> (.txt) al posto del PDF, con un avviso. Impaginazione e immagini si perdono.</li>
-  <li><strong>TXT, Markdown, CSV</strong>: pseudonimizzati come testo. Gli archivi (.zip), le immagini e gli altri formati sono bloccati.</li>
+  <li><strong>TXT, Markdown, CSV</strong>: pseudonimizzati come testo. Gli archivi (.zip) e gli altri formati non gestiti sono bloccati.</li>
 </ul>
+<h3 id="immagini">Immagini</h3>
+<p>Il testo contenuto nelle immagini (screenshot, foto) <strong>non viene pseudonimizzato</strong>. Con l'impostazione predefinita, prima dell'invio compare la finestra «Inviare questa immagine?» con l'anteprima e l'avviso che i dati visibili arriveranno a Claude così come sono. Scegli «Annulla» (non parte nulla) o «Invia l'immagine». Il nome del file viene sostituito con un nome generico (es. <code>immagine-20261105183000.png</code>); il registro annota la scelta, senza l'immagine.</p>
+<p>Se nelle impostazioni scegli «Bloccate», le immagini non partono e compare un banner rosso. L'oscuramento automatico dei dati (OCR) è in arrivo. Con la protezione disattivata le immagini partono come qualsiasi file, senza conferma. Invia solo immagini senza dati personali.</p>
 <h3 id="download">File scaricati da Claude</h3>
 <ul>
   <li><strong>DOCX, XLSX, TXT, MD, CSV</strong>: al download i segnaposto tornano valori reali, formattazione compresa.</li>

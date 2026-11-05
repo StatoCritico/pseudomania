@@ -39,6 +39,8 @@ trattamenti che ne derivano (o li svolge per conto del proprio cliente, se respo
 4. Non inserisco password, chiavi, segreti professionali non necessari o informazioni coperte da
    obblighi di riservatezza che il cliente non ha autorizzato.
 5. Non invio feedback (pollici) su chat con contenuti di clienti.
+6. Non invio **immagini** (screenshot, foto) che mostrano dati personali: il testo nelle immagini
+   **non** viene pseudonimizzato. Se Pseudomania chiede conferma, controllo l'anteprima prima di inviare.
 
 ## 4. Impostazioni consigliate di Claude
 

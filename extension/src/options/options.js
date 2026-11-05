@@ -66,17 +66,70 @@
     };
   }
 
+  // Scelte con pulsanti di opzione: salvate subito in chrome.storage.local.
+  function radios(container, name, options, current, disabled, onChange) {
+    container.textContent = '';
+    for (const [value, [title, help]] of Object.entries(options)) {
+      const lab = document.createElement('label');
+      const inp = document.createElement('input');
+      inp.type = 'radio';
+      inp.name = name;
+      inp.value = value;
+      inp.checked = value === current;
+      inp.disabled = disabled.includes(value);
+      if (inp.disabled) lab.className = 'disabled';
+      inp.addEventListener('change', () => onChange(value));
+      const txt = document.createElement('span');
+      const t = document.createElement('span');
+      t.className = 'ttl';
+      t.textContent = title;
+      const hp = document.createElement('span');
+      hp.className = 'help';
+      hp.style.display = 'block';
+      hp.textContent = help;
+      txt.append(t, hp);
+      lab.append(inp, txt);
+      container.append(lab);
+    }
+  }
+
+  async function saveChoice(obj) {
+    await chrome.storage.local.set(obj);
+    $('msg').className = 'ok';
+    $('msg').textContent = S.impSalvatoBreve;
+  }
+
+  function showChoices(cfg, ent) {
+    $('images').hidden = false;
+    $('imgTitle').textContent = S.impImmaginiTitolo;
+    if (ent) {
+      // Server edition: decide l'ente con la policy; qui solo in lettura.
+      radios($('imgOptions'), 'imagePolicy', S.impImmagini, cfg.imagePolicy, Object.keys(S.impImmagini), () => {});
+      $('imgManaged').hidden = false;
+      $('imgManaged').textContent = S.impImmaginiEnte(cfg.imagePolicy);
+      return;
+    }
+    // L'oscuramento automatico non è ancora disponibile: visibile ma non selezionabile.
+    radios($('imgOptions'), 'imagePolicy', S.impImmagini, cfg.imagePolicy === 'ocr' ? 'block' : cfg.imagePolicy, ['ocr'],
+      (v) => saveChoice({ imagePolicy: v }));
+    $('activation').hidden = false;
+    $('actTitle').textContent = S.impAttivazioneTitolo;
+    radios($('actOptions'), 'activationMode', S.impAttivazione, cfg.activationMode || 'off', [],
+      (v) => saveChoice({ activationMode: v }));
+  }
+
   async function init() {
     let managed = {};
     try {
       managed = await chrome.storage.managed.get(null);
     } catch (_) { /* nessuna policy */ }
     const st = (await chrome.storage.local.get('pgState')).pgState;
-    const local = await chrome.storage.local.get(['rizzoUrl']);
+    const local = await chrome.storage.local.get(['rizzoUrl', 'imagePolicy', 'activationMode']);
     const cfg = st && st.config ? st.config : PG.config.resolveConfig({ managed, local });
     const ent = cfg.mode === 'ente';
     $('edition').textContent = ent ? S.modalitaEnte : S.modalitaPersonale;
     if (!ent) showLog();
+    showChoices(cfg, ent);
     if (ent) {
       $('managed').hidden = false;
       $('managed').textContent = S.impGestite;

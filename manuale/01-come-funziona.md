@@ -36,7 +36,7 @@ Sito ufficiale: <https://pseudomania.statocritico.it> · Licenza: AGPL-3.0-or-la
 | Riconoscimento | sul PC (`http://127.0.0.1:5005`) | sul server dell'organizzazione |
 | Dizionario | nel browser, cifrato con chiave locale | sul server, **cifrato nel browser** con chiave utente automatica; copia di custodia apribile solo da due custodi |
 | Registro | locale, cifrato, senza testi | registro minimo sul server senza testi + tracce pseudonimizzate brevi (Langfuse) |
-| Si può spegnere? | sì, per singola conversazione, con un clic o Alt+Maiusc+P (il ripristino resta sempre attivo) | no: pulsante bloccato su acceso dalla policy |
+| Si può spegnere? | sì: parte disattivata e si attiva per singola conversazione con un clic o Alt+Maiusc+P (il ripristino resta sempre attivo) | no: pulsante bloccato su acceso dalla policy |
 | Se il riconoscimento non risponde | avviso e richiesta di conferma | invio **bloccato** (*fail-closed*) |
 | Server Pseudomania, Docker | **nessuno** | sì |
 
@@ -66,7 +66,7 @@ validare con il DPO.
 | allegati DOCX, XLSX, TXT, CSV, MD; PDF (vedi §2.7 e §4.3) | **richieste di ricerca web** che Claude formula da sé |
 | istruzioni e file dei **progetti** | **connettori** (Google Drive, Gmail…) e **memoria** di Claude: vanno spenti |
 | testo lungo incollato che claude.ai trasforma in allegato | **app desktop e mobile** di Claude, altri browser, modalità in incognito |
-| download di file DOCX/XLSX/testo generati da Claude (ripristino) | **immagini** (vengono bloccate, non analizzate) |
+| download di file DOCX/XLSX/testo generati da Claude (ripristino) | **testo nelle immagini** (le immagini sono bloccate o inviate dopo una conferma, mai analizzate) |
 | copia del testo delle risposte (appunti con i valori reali) | il **contesto** che identifica una persona anche senza nome |
 
 Limiti tecnici importanti (dettagli in `extension/README.md` §7):

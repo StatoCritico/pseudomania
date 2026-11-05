@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 //
-// Attivazione per conversazione (DECISIONI.md, aggiornamento 1/11/2026).
+// Attivazione per conversazione (DECISIONI.md, aggiornamento 5/11/2026: disattivata di default).
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -38,9 +38,20 @@ test('Personal edition: attivazione per conversazione', { timeout: 150000 }, asy
 
   const a = await h.context.newPage();
   await a.goto('https://claude.ai/new');
-  await waitActivation(a, 'on');
+  await waitActivation(a, 'off');
 
-  await t.test('prima chat: attiva da sola, messaggio pseudonimizzato', async () => {
+  await t.test('nuova chat: disattivata di default, nessuna domanda, solo la barra arancione', async () => {
+    const tabNew = await tabIdOf('https://claude.ai/new');
+    await waitFor(async () => (await badge(tabNew)) === 'OFF', 5000);
+    assert.match(await a.$eval(STATUS, (e) => e.shadowRoot.textContent), /Protezione disattivata/);
+    assert.equal(await a.getByRole('button', { name: 'Continua senza protezione' }).count(), 0);
+    assert.equal(await a.getByRole('button', { name: 'Attiva', exact: true }).count(), 0);
+  });
+
+  await t.test('attivazione dal pulsante: messaggio pseudonimizzato', async () => {
+    const r = await toggle(await tabIdOf('https://claude.ai/new'), 'toolbar');
+    assert.deepEqual(r.data, { state: 'on' });
+    await waitActivation(a, 'on');
     await typeAndSend(a, 'Gentile Mario Rossi');
     await waitFor(() => completions(h).length === 1, 10000);
     assert.match(completions(h)[0].prompt, /Gentile \[FULLNAME_1\]$/);
@@ -68,26 +79,19 @@ test('Personal edition: attivazione per conversazione', { timeout: 150000 }, asy
       document.getElementById('transcript').appendChild(d);
     });
     await a.waitForFunction(() => document.getElementById('inb').textContent === 'Ricordo Mario Rossi.', null, { timeout: 5000 });
-    // secondo spegnimento/accensione: nessun nuovo avviso
-    await toggle(tabA, 'toolbar');
-    await waitActivation(a, 'on');
-    const r2 = await toggle(tabA, 'toolbar');
-    assert.deepEqual(r2.data, { state: 'off' });
-    assert.equal(await a.$('pg-ui[data-pg-ui="modal"]'), null);
   });
 
   const b = await h.context.newPage();
-  await t.test('nuova chat dopo uno spegnimento: banner «Attiva» / «Continua senza protezione»; badge diversi per scheda', async () => {
+  await t.test('nuova scheda: disattivata anche dopo un\'attivazione; badge diversi per scheda', async () => {
+    await toggle(tabA, 'toolbar');
+    await waitActivation(a, 'on');
     await b.goto('https://claude.ai/new');
-    await waitActivation(b, 'ask');
-    await b.getByRole('button', { name: 'Continua senza protezione' }).waitFor({ timeout: 5000 });
+    await waitActivation(b, 'off');
     const tabB = await tabIdOf('https://claude.ai/new');
-    await waitFor(async () => (await badge(tabB)) === '?', 5000);
-    assert.equal(await badge(tabA), 'OFF');
-    await b.getByRole('button', { name: 'Attiva', exact: true }).click();
+    await waitFor(async () => (await badge(tabB)) === 'OFF', 5000);
+    assert.equal(await badge(tabA), 'ON', 'la scheda A resta accesa');
+    await toggle(tabB, 'toolbar');
     await waitActivation(b, 'on');
-    await waitFor(async () => (await badge(tabB)) === 'ON', 5000);
-    assert.equal(await badge(tabA), 'OFF', 'la scheda A resta spenta');
     await b.evaluate((id) => (window.__nextConv = id), C2);
     const before = completions(h).length;
     await typeAndSend(b, 'Pratica di Anna Gialli');
@@ -95,16 +99,16 @@ test('Personal edition: attivazione per conversazione', { timeout: 150000 }, asy
     assert.match(completions(h)[before].prompt, /\[FULLNAME_\d+\]$/);
     await waitFor(() => b.url().endsWith(C2), 5000);
     await b.waitForTimeout(1500);
+    await toggle(tabA, 'toolbar'); // la chat C1 torna spenta
+    await waitActivation(a, 'off');
   });
 
-  await t.test('navigazione tra chat nella stessa scheda: ripresa spenta → banner; ripresa attiva → da sola', async () => {
-    // cambio di chat subito dopo il primo invio (prima del controllo periodico): la scelta della
-    // nuova chat non deve finire sulla chat aperta dopo
+  await t.test('navigazione tra chat nella stessa scheda: ripresa spenta → spenta senza domande; ripresa attiva → da sola', async () => {
     await b.evaluate((id) => history.pushState({}, '', '/chat/' + id), C1);
-    await waitActivation(b, 'ask');
+    await waitActivation(b, 'off');
+    assert.equal(await b.getByRole('button', { name: 'Continua senza protezione' }).count(), 0);
     await b.evaluate((id) => history.pushState({}, '', '/chat/' + id), C2);
     await waitActivation(b, 'on');
-    assert.equal(await b.getByRole('button', { name: 'Continua senza protezione' }).count(), 0);
     // riapertura in una nuova scheda: stato persistito
     const c = await h.context.newPage();
     await c.goto(`https://claude.ai/chat/${C2}`);
@@ -116,7 +120,7 @@ test('Personal edition: attivazione per conversazione', { timeout: 150000 }, asy
     const log = (await msg({ type: 'pg:localLog' })).data;
     const changes = log.filter((e) => e.event === 'extension_disabled' || e.event === 'extension_enabled');
     assert.ok(changes.some((e) => e.event === 'extension_disabled' && e.details.trigger === 'shortcut'));
-    assert.ok(changes.some((e) => e.event === 'extension_enabled' && e.details.trigger === 'banner'));
+    assert.ok(changes.some((e) => e.event === 'extension_enabled' && e.details.trigger === 'toolbar'));
     assert.ok(!JSON.stringify(log).includes('Luigi'));
   });
 });
@@ -137,6 +141,7 @@ test('Server edition: pulsante bloccato su acceso', { timeout: 60000 }, async (t
   assert.match(completions(h)[0].prompt, /\[FULLNAME_1\]$/, 'sempre protetto');
   const popup = await h.context.newPage();
   await popup.goto(`chrome-extension://${h.extensionId}/src/popup/popup.html`);
-  await popup.waitForFunction(() => /gestito dalla tua organizzazione/.test(document.getElementById('locked').textContent), null, { timeout: 5000 });
+  // la pagina dell'estensione vieta eval (CSP): niente waitForFunction, si legge il testo
+  await waitFor(async () => /gestito dalla tua organizzazione/.test((await popup.textContent('#locked')) || ''), 5000);
   assert.equal(await popup.isVisible('#switchRow'), false);
 });

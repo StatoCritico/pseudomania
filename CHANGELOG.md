@@ -1,7 +1,12 @@
 # Registro delle modifiche
 
-## Non rilasciato
+## 0.1.14 – 5/11/2026 (versione di prova)
 
+- Personal edition: protezione disattivata di default in ogni nuova conversazione e nuova scheda, senza domande; si attiva con l'icona o Alt+Maiusc+P e resta attiva nelle conversazioni in cui è stata attivata.
+- Personal edition: nuova impostazione «Attivazione nelle conversazioni» con tre modalità: disattivata di default (predefinita), attiva di default, attiva con richiesta (il comportamento del 1/11/2026).
+- Immagini (screenshot, foto): il testo che contengono non viene pseudonimizzato. Nuova impostazione «Immagini»: bloccate oppure inviate dopo una conferma per ogni immagine, con anteprima e nome di file generico. Personal edition: sceglie l'utente (predefinito: conferma). Server edition: decide l'ente con la nuova chiave di policy `imagePolicy` (predefinito: bloccate), visibile in sola lettura. Oscuramento automatico con OCR in arrivo.
+- Progetti: i documenti DOCX e PDF caricati nella conoscenza del progetto non vengono più bloccati (il testo estratto da claude.ai era trattato come file Word).
+- Progetti: riaprendo le istruzioni del progetto il campo mostra i valori reali (con la protezione attiva); al salvataggio vengono pseudonimizzati di nuovo.
 - Sito: pagina 404; «Gratuito e open source» al posto di «Freeware»; build di Cloudflare Pages in `site/_build/pubblica.sh`.
 - Riepilogo e problemi rilevati aggiornati con gli esiti della prova della Personal edition.
 

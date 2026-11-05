@@ -26,8 +26,13 @@ Pseudomania», **non inviare dati personali** e avvisa l'assistenza.
 
 - **Messaggi**: i dati riconosciuti diventano segnaposto (`[FULLNAME_1]`, `[CF_1]`…). Nel tuo fumetto
   vedi ciò che è partito; nella risposta i valori reali tornano **in verde**, solo sul tuo schermo.
-- **Allegati**: PDF, DOCX, XLSX, TXT, CSV, MD pseudonimizzati, nome del file compreso; immagini
-  bloccate. I file DOCX/XLSX scaricati da Claude tornano con i valori reali.
+- **Allegati**: PDF, DOCX, XLSX, TXT, CSV, MD pseudonimizzati, nome del file compreso. I file
+  DOCX/XLSX scaricati da Claude tornano con i valori reali.
+- **Immagini** (screenshot, foto): il testo che contengono **non** viene pseudonimizzato. Di norma
+  sono **bloccate** (banner rosso). Se l'organizzazione le consente, prima dell'invio compare la
+  finestra «Inviare questa immagine?» con l'anteprima: **Annulla** o **Invia l'immagine** (il nome
+  del file diventa generico). La scelta dell'organizzazione si vede nelle impostazioni
+  dell'estensione, «… (impostato dall'ente)».
 - **Progetti**: istruzioni e file del progetto pseudonimizzati; un solo dizionario per tutte le chat
   del progetto. Ogni anno conferma i progetti ancora in uso dal pannello: **«Il progetto è ancora in
   uso: conferma»**, altrimenti il dizionario scade.
@@ -66,6 +71,7 @@ recuperate**).
 - **Niente app desktop o mobile** di Claude, altri browser o incognito.
 - Niente dati sanitari o giudiziari, credenziali, atti riservati; non chiedere a Claude di modificare
   i segnaposto; non aggirare l'estensione; niente feedback (pollici).
+- **Niente immagini con dati personali**, anche quando l'organizzazione consente le immagini.
 
 ## 8. A chi rivolgersi
 

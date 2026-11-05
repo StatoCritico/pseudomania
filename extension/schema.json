@@ -56,6 +56,16 @@
       "items": {
         "type": "string"
       }
+    },
+    "imagePolicy": {
+      "title": "Immagini (screenshot, foto)",
+      "description": "\"block\" (predefinito) = immagini bloccate; \"confirm\" = inviate dopo una conferma esplicita per ogni immagine, con nome di file generico (il testo dell'immagine NON viene pseudonimizzato: prevederlo nella DPIA e nel regolamento); \"ocr\" = oscuramento automatico dei dati, non ancora disponibile (vale come \"block\").",
+      "type": "string",
+      "enum": [
+        "block",
+        "confirm",
+        "ocr"
+      ]
     }
   }
 }

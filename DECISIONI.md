@@ -97,8 +97,48 @@ Questo file prevale su SPEC.md dove sono in conflitto. L'agente server aggiorna 
 - **Server edition**: protezione sempre attiva, pulsante bloccato su acceso (policy).
 - **Personal edition**: pulsante nella barra degli strumenti di Chrome (chrome.action) con stato per scheda/conversazione (badge ON/OFF, barra verde/rossa sopra il campo di testo), scorciatoia da tastiera (es. Alt+Maiusc+P, configurabile da chrome://extensions/shortcuts).
   - Lo stato si salva **per conversazione/progetto** (scope).
-  - **Nuova conversazione**: se l'ultimo stato scelto dall'utente era "attivo" si attiva da sola; se era "disattivato" chiede se riattivarsi (banner con «Attiva» / «Continua senza protezione»).
-  - **Conversazione ripresa**: se era attiva si riattiva da sola; se era disattivata mostra lo stesso banner di richiesta.
+  - ~~**Nuova conversazione**: se l'ultimo stato scelto dall'utente era "attivo" si attiva da sola; se era "disattivato" chiede se riattivarsi (banner con «Attiva» / «Continua senza protezione»).~~ **Superato** dall'aggiornamento del 5/11/2026 (sotto).
+  - ~~**Conversazione ripresa**: se era attiva si riattiva da sola; se era disattivata mostra lo stesso banner di richiesta.~~ **Superato** dall'aggiornamento del 5/11/2026 (sotto).
   - **La disattivazione riguarda solo l'uscita** (pseudonimizzazione dei messaggi e allegati inviati). Il ripristino dei tag in entrata è **sempre attivo**.
   - Al primo spegnimento in una conversazione che contiene già dati protetti: avviso che ciò che verrà inviato andrà in chiaro e che riattivare non ripulisce quanto già inviato.
   - Ogni cambio di stato va nel registro locale (senza testi).
+
+### Aggiornamento 5/11/2026: disattivata di default
+
+Sostituisce le regole precedenti per **nuova conversazione** e **conversazione ripresa** (Personal edition).
+
+- La protezione è **disattivata di default** in ogni nuova conversazione, in ogni pagina di progetto e in ogni nuova scheda di Chrome. All'avvio **non compare nessuna domanda**.
+- Non esistono più il banner di richiesta «Attiva» / «Continua senza protezione» né lo stato «in attesa» (badge **?**).
+- Una conversazione che l'utente aveva attivato si **riattiva da sola** quando la riapre (anche in un'altra scheda o dopo il riavvio di Chrome). Ogni altra conversazione (nuova, mai vista o spenta) parte **disattivata**.
+- Con la protezione disattivata compaiono solo la **barra arancione** sopra la casella di scrittura («Protezione disattivata: i messaggi partono in chiaro. Per attivarla clicca l'icona di Pseudomania o premi Alt+Maiusc+P») e il badge **OFF** arancione sull'icona.
+- Si attiva solo con un clic sull'icona di Pseudomania nella barra di Chrome o con **Alt+Maiusc+P**. Lo stato si salva per conversazione.
+- Restano invariati: il ripristino in entrata sempre attivo (anche con OFF); l'avviso al primo spegnimento in una chat che contiene già dati protetti; la registrazione di ogni cambio di stato nel registro locale, senza testi.
+- **Server edition**: nessun cambiamento (protezione sempre attiva, pulsante bloccato).
+- Dal 5/11/2026 (sera) questo è il comportamento della modalità **«Disattivata di default»**, che resta la **predefinita**. L'utente può scegliere anche «Attiva di default» o «Attiva con richiesta»: vedi «Immagini e modalità di attivazione» (sotto).
+
+## Immagini e modalità di attivazione (aggiornamento 5/11/2026, sera)
+
+### Immagini (screenshot, foto)
+
+- Il testo contenuto nelle immagini **non viene pseudonimizzato**.
+- Nuova impostazione **«Immagini»** con tre valori:
+  - `block` – **Bloccate**: le immagini non vengono inviate (banner rosso).
+  - `confirm` – **Conferma per ogni immagine**: prima dell'invio compare una finestra con l'anteprima e l'avviso che i dati visibili nell'immagine arriveranno a Claude così come sono. Pulsanti «Annulla» e «Invia l'immagine». Il nome del file viene sostituito con un nome generico (es. `immagine-20261105183000.png`). Il registro annota la scelta (`image_sent_confirmed` / `image_cancelled`), senza l'immagine.
+  - `ocr` – **Oscuramento automatico (in arrivo)**: lettura del testo con OCR e copertura dei dati personali. **Non ancora disponibile**: nel pannello è visibile ma non selezionabile; se impostato dalla policy vale come «bloccate».
+- **Personal edition**: la sceglie l'utente nelle impostazioni dell'estensione. **Predefinito: conferma per ogni immagine.** Con la protezione disattivata le immagini partono come qualsiasi file, senza controlli.
+- **Server edition**: la decide l'ente con la chiave di policy Chrome `imagePolicy` (`block` | `confirm` | `ocr`). **Predefinito: `block`.** Nelle impostazioni l'utente la vede in sola lettura. Abilitare `confirm` va previsto nella DPIA e nel regolamento d'uso.
+
+### Modalità di attivazione (solo Personal edition)
+
+Nuova impostazione **«Attivazione nelle conversazioni»** (chiave locale `activationMode`):
+
+- `off` – **Disattivata di default** (predefinita): il comportamento dell'«Aggiornamento 5/11/2026: disattivata di default» (sopra).
+- `on` – **Attiva di default**: ogni nuova conversazione parte protetta. Si spegne con l'icona o Alt+Maiusc+P. Le conversazioni spente restano spente quando si riaprono.
+- `ask` – **Attiva con richiesta**: il comportamento del 1/11/2026. Se l'ultima scelta era «attiva» le nuove conversazioni partono protette; altrimenti compare il banner «Attiva» / «Continua senza protezione», con il badge **?**. Le conversazioni spente chiedono quando si riaprono. Mentre chiede, i messaggi restano protetti.
+
+### Pannello delle impostazioni
+
+- Le impostazioni dell'estensione (clic sull'icona da una scheda che non sia claude.ai) hanno due gruppi di scelte:
+  - «Attivazione nelle conversazioni» (solo Personal edition);
+  - «Immagini (screenshot, foto)»: modificabile nella Personal edition; nella Server edition in sola lettura, con la frase «(impostato dall'ente)».
+- Le scelte si salvano subito.

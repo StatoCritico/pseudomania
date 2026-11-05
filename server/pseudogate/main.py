@@ -12,6 +12,7 @@ import base64
 import contextlib
 import json
 import logging
+import re
 import os
 import time
 from dataclasses import dataclass
@@ -52,7 +53,14 @@ TAG_INSTRUCTION = ("I testi contengono segnaposto tra parentesi quadre come [FUL
 MAX_TEXT_CHARS = 2_000_000
 EVENTS = ("response_received", "inspection_opened", "report_false_negative",
           "report_false_positive", "blocked", "extension_disabled", "extension_enabled",
-          "page_unrecognized", "server_unreachable", "scope_rebind_conflict")
+          "page_unrecognized", "server_unreachable", "scope_rebind_conflict",
+          "image_sent_confirmed", "image_cancelled", "file_delivered", "network_blocked",
+          "instructions_restored")
+
+# Dettagli degli eventi conservati nel registro: solo valori brevi e non testuali
+# (motivi e contatori), mai contenuti.
+SAFE_DETAIL_KEYS = {"reason": 40, "policy": 16, "kind": 32, "via": 40, "n": 0, "bytes": 0,
+                    "restored": 0, "ruleId": 40}
 
 
 # --------------------------------------------------------------------------- #
@@ -679,6 +687,16 @@ def create_app(settings: Settings | None = None, **overrides) -> FastAPI:
             if body.traceId and text:
                 svc.tracer.response(trace_id=body.traceId, user=p.user_pseudonym, text=text,
                                     metadata={"unknown_tags": details["unknown_tags"]})
+        elif body.event in ("blocked", "image_sent_confirmed", "image_cancelled", "file_delivered",
+                            "network_blocked", "instructions_restored"):
+            for k, maxlen in SAFE_DETAIL_KEYS.items():
+                v = body.details.get(k)
+                if isinstance(v, bool) or v is None:
+                    continue
+                if maxlen == 0 and isinstance(v, int):
+                    details[k] = v
+                elif maxlen and isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9_.:-]{1,%d}" % maxlen, v):
+                    details[k] = v
         elif body.event in ("report_false_negative", "report_false_positive"):
             details["note"] = _safe_note(str(body.details.get("note") or ""))
             if body.traceId:

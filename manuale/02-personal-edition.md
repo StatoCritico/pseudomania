@@ -90,6 +90,15 @@ Senza alcuna policy aziendale l'estensione parte automaticamente in **Personal e
 
 4. Clic su **Salva** («Impostazioni salvate.»).
 
+Nella stessa pagina ci sono due gruppi di scelte. Si salvano **subito**, senza premere Salva
+(«Impostazione salvata.»):
+
+- **Attivazione nelle conversazioni**: «Disattivata di default» (predefinita), «Attiva di
+  default» o «Attiva con richiesta». Vedi §2.6.
+- **Immagini (screenshot, foto)**: «Conferma per ogni immagine» (predefinita) o «Bloccate».
+  La terza voce, «Oscuramento automatico (in arrivo)», è visibile ma non ancora selezionabile.
+  Vedi §2.7.
+
 Non ci sono altre impostazioni obbligatorie. In fondo alla pagina, nella sezione
 «Informazioni», trovi versione, licenza e sito.
 
@@ -103,17 +112,18 @@ nella scheda.
 | Badge | Significato |
 |---|---|
 | **ON** verde | protezione attiva in questa conversazione |
-| **OFF** rosso (icona grigia) | protezione **disattivata** in questa conversazione: ciò che invii parte in chiaro |
-| **?** arancione | in attesa della tua scelta (§2.6); nel frattempo i messaggi vengono pseudonimizzati |
+| **OFF** arancione (icona grigia) | protezione **disattivata** in questa conversazione (stato di partenza): ciò che invii parte in chiaro |
+| **?** arancione | solo in modalità «Attiva con richiesta»: Pseudomania aspetta la tua scelta (intanto i messaggi restano protetti) |
 | **!** rosso | Rizzo-PII spento, in avvio o non raggiungibile (CORS) |
 
 **Barra colorata sopra la casella di scrittura di claude.ai**: verde «Pseudomania attivo: i dati
-personali vengono pseudonimizzati prima dell'invio»; rossa «Protezione disattivata per questa
-conversazione: …»; arancione mentre attende la tua scelta.
+personali vengono pseudonimizzati prima dell'invio»; arancione «Protezione disattivata: i messaggi
+partono in chiaro. Per attivarla clicca l'icona di Pseudomania o premi Alt+Maiusc+P».
 
 **Prova rapida** (con dati inventati):
 
-1. Apri claude.ai, nuova chat.
+1. Apri claude.ai, nuova chat. La protezione parte disattivata (badge **OFF**): clicca il pulsante
+   di Pseudomania o premi **Alt+Maiusc+P** finché il badge diventa **ON** verde.
 2. Scrivi: `Scrivi una breve lettera a Mario Rossi, mario.rossi@example.it` e invia.
 3. Nel fumetto del messaggio inviato devono comparire `[FULLNAME_1]` e `[EMAIL_1]` (e, nel primo
    messaggio, l'istruzione fissa sui segnaposto).
@@ -126,7 +136,15 @@ Se la prova non riesce, vedi il capitolo 6.
 
 ## 2.6 Attivare e disattivare la protezione (per conversazione)
 
-Nella Personal edition la protezione si sceglie **conversazione per conversazione**.
+Nella Personal edition la protezione si sceglie **conversazione per conversazione**. Di
+partenza è **disattivata di default**: la attivi tu dove serve. Puoi cambiare questo
+comportamento nelle impostazioni (§2.4), alla voce **Attivazione nelle conversazioni**:
+
+| Modalità | Che cosa succede |
+|---|---|
+| **Disattivata di default** (predefinita) | ogni nuova conversazione parte senza protezione; la attivi con il pulsante o Alt+Maiusc+P. Le conversazioni attivate restano attive. È il comportamento descritto in questo paragrafo |
+| **Attiva di default** | ogni nuova conversazione parte protetta; la spegni con il pulsante o Alt+Maiusc+P. Le conversazioni spente restano spente quando le riapri |
+| **Attiva con richiesta** | se l'ultima scelta era «attiva», le nuove conversazioni partono protette; altrimenti compare un banner con **Attiva** / **Continua senza protezione** (badge **?**). Le conversazioni spente chiedono di nuovo quando le riapri. Finché non scegli, i messaggi restano protetti |
 
 **Il pulsante di Pseudomania** nella barra degli strumenti di Chrome (non apre una finestra):
 
@@ -140,22 +158,21 @@ Nella Personal edition la protezione si sceglie **conversazione per conversazion
 **Lo stato si salva per conversazione** (dentro un progetto, per ogni chat). Quando cambi chat
 nella stessa scheda, badge e barra si aggiornano subito.
 
-**Nuova conversazione o conversazione ripresa**
+**Nuova conversazione o conversazione ripresa** (modalità «Disattivata di default»)
 
 | Situazione | Che cosa succede |
 |---|---|
-| nuova conversazione, l'ultima scelta era «attiva» | si attiva da sola |
-| nuova conversazione, l'ultima scelta era «disattivata» | compare il banner «Protezione disattivata l'ultima volta – Vuoi attivare Pseudomania per questa conversazione?» con **Attiva** / **Continua senza protezione** |
-| conversazione ripresa che era attiva | si riattiva da sola |
-| conversazione ripresa che era disattivata | stesso banner |
+| nuova conversazione, pagina di progetto o nuova scheda | protezione **disattivata**, nessuna domanda |
+| conversazione ripresa che avevi attivato | si riattiva da sola (anche in un'altra scheda o dopo il riavvio di Chrome) |
+| conversazione ripresa che era disattivata | resta disattivata |
 
-Finché non scegli, **per prudenza i messaggi vengono comunque pseudonimizzati**: badge **?**
-arancione e barra arancione «Scegli se proteggere questa conversazione: nel frattempo i messaggi
-vengono pseudonimizzati».
+Con la protezione disattivata vedi solo il badge **OFF** arancione e la barra arancione
+«Protezione disattivata: i messaggi partono in chiaro. Per attivarla clicca l'icona di
+Pseudomania o premi Alt+Maiusc+P». Prima di scrivere dati di clienti, **attivala** con il
+pulsante o con Alt+Maiusc+P.
 
 **Che cosa cambia spegnendo.** La disattivazione riguarda **solo ciò che invii**: messaggi e allegati
-partono in chiaro, così come li scrivi (barra rossa «Protezione disattivata per questa conversazione:
-i messaggi partono in chiaro (i segnaposto ricevuti vengono comunque ripristinati)»). Il **ripristino**
+partono in chiaro, così come li scrivi (barra arancione). Il **ripristino**
 dei segnaposto nelle risposte, negli appunti e nei download resta **sempre attivo**.
 
 **Primo spegnimento** in una conversazione che contiene già dati protetti: compare l'avviso
@@ -185,14 +202,28 @@ attiva. Consigli:
 5. Non scrivere dati personali nelle **preferenze del profilo** né chiedere ricerche web su persone.
 6. Per un uso professionale stabile con dati di clienti valuta un **piano commerciale**.
 
-## 2.7 File: PDF, DOCX, XLSX
+## 2.7 File: PDF, DOCX, XLSX, immagini
 
 | Formato | Che cosa succede |
 |---|---|
 | **DOCX, XLSX** | pseudonimizzati **dentro l'estensione** (testo, intestazioni e piè di pagina, note, commenti, proprietà del documento, celle e valori delle formule). A Claude arriva il file con i segnaposto. Quando scarichi un DOCX o XLSX generato da Claude, i valori reali vengono ripristinati. |
 | **TXT, CSV, MD** | pseudonimizzati |
 | **PDF** | il testo viene estratto da Rizzo-PII e inviato a Claude come **file di testo pseudonimizzato (.txt)** al posto del PDF. Compare l'avviso: «Il PDF … è stato convertito in un file di testo pseudonimizzato (.txt): impaginazione, immagini e tabelle grafiche non vengono inviate a Claude.» I PDF **scaricati** da Claude vengono ripristinati: con l'impaginazione originale se la tua versione dell'app Rizzo-PII lo consente, altrimenti come PDF di solo testo (compare un avviso). |
-| Immagini e altri formati | **bloccati**: il file non viene allegato |
+| **Immagini** (screenshot, foto) | il testo nell'immagine **non** viene pseudonimizzato. Secondo l'impostazione «Immagini»: **conferma per ogni immagine** (predefinita) o **bloccate**. Vedi sotto |
+| Altri formati | **bloccati**: il file non viene allegato |
+
+**Immagini.** Con «Conferma per ogni immagine», prima dell'invio compare la finestra
+«Inviare questa immagine?» con l'anteprima e l'avviso: nomi, codici, indirizzi o altri dati
+visibili nell'immagine arriveranno a Claude così come sono. Scegli **Annulla** (non parte nulla)
+o **Invia l'immagine**. Il nome del file viene sostituito con un nome generico (es.
+`immagine-20261105183000.png`). Il registro locale annota la scelta, senza l'immagine.
+
+Con «Bloccate» l'immagine non viene allegata e compare un banner rosso. L'**oscuramento
+automatico** (lettura del testo con OCR e copertura dei dati personali) è **in arrivo**: per ora
+non si può scegliere.
+
+> Invia solo immagini **senza dati personali**. Con la protezione **disattivata** le immagini
+> partono come qualsiasi file, senza finestra di conferma.
 
 Consiglio: per documenti lunghi apri l'**anteprima** (Ctrl+Maiusc+Invio, §4.6) o il pannello di
 ispezione e controlla che cosa parte davvero.

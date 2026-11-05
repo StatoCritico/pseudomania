@@ -117,7 +117,7 @@
       "id": "personal",
       "eyebrow": "Per i professionisti",
       "titolo": "Personal edition",
-      "intro": "Per avvocati, commercialisti, consulenti e chiunque usi Claude con dati di clienti. Due componenti sul tuo PC, nessun server; attivazione e disattivazione con un singolo click, in ogni scheda, riattivazione automatica e de-pseudonimizzazione sempre attiva. Completa di policy in bozza (non garantita!).",
+      "intro": "Per avvocati, commercialisti, consulenti e chiunque usi Claude con dati di clienti. Due componenti sul tuo PC, nessun server; protezione disattivata di default, attivazione con un singolo click in ogni conversazione, riattivazione automatica delle conversazioni già attivate e de-pseudonimizzazione sempre attiva. Completa di policy in bozza (non garantita!).",
       "schede": [
         {
           "titolo": "Per chi è",
@@ -136,7 +136,7 @@
         },
         {
           "titolo": "Attiva per conversazione",
-          "testo": "Un clic sul pulsante (o Alt+Maiusc+P) accende o spegne la protezione della chat aperta; lo stato si ricorda per ogni conversazione.",
+          "testo": "Di default ogni nuova chat parte senza protezione, senza domande; nelle impostazioni puoi farla partire protetta o con una richiesta. Un clic sul pulsante (o Alt+Maiusc+P) la accende o la spegne; lo stato si ricorda per ogni conversazione.",
           "href": "approfondimenti/personal-edition.html#attivazione"
         },
         {

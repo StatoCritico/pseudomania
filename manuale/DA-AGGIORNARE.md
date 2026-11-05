@@ -30,7 +30,7 @@ provati sul sito reale (`extension/README.md` §6; script `extension/dev/verific
 | §2.5 Prova rapida | che l'istruzione fissa compaia nel primo fumetto e i valori tornino evidenziati in verde |
 | §4.7 | apertura del pannello laterale dal contrassegno «dati protetti» |
 | §4.9 | pulsante «Segnala blocco errato» nel banner e nel pannello (corretto nel codice): provarne la comparsa sul sito reale |
-| §2.5, §2.6, guide rapide | attivazione per conversazione (pulsante, Alt+Maiusc+P, badge **?**, banner «Attiva» / «Continua senza protezione», avviso al primo spegnimento): provarla sul sito reale, in particolare il riconoscimento del cambio di chat nella stessa scheda e lo stato delle chat di progetto |
+| §2.5, §2.6, guide rapide | attivazione per conversazione, disattivata di default dal 5/11/2026 (pulsante, Alt+Maiusc+P, badge **OFF** e barra arancione senza domande nelle nuove chat, pagine di progetto e nuove schede, riattivazione automatica delle chat attivate, avviso al primo spegnimento): provarla sul sito reale, in particolare il riconoscimento del cambio di chat nella stessa scheda e lo stato delle chat di progetto |
 | §2.6 | etichetta dell'impostazione di privacy dei piani consumer («Help improve Claude» o simile) |
 | §4.12 | nomi dei campi delle preferenze del profilo |
 

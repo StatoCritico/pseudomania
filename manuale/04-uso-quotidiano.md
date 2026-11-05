@@ -15,8 +15,11 @@ comportamento è diverso è indicato **(Personal)** o **(Server edition)**.
   dell'estensione», clic sul pulsante di Pseudomania → **Accedi**. Il pulsante è sempre acceso:
   la protezione non si può spegnere.
 - **(Personal)** Il badge sul pulsante deve essere **ON** verde per la conversazione aperta (§2.5).
-  Se compare il banner «Vuoi attivare Pseudomania per questa conversazione?», scegli **Attiva**
-  (o **Continua senza protezione** solo per conversazioni senza dati di terzi): vedi §2.6.
+  Con l'impostazione predefinita ogni nuova conversazione parte **disattivata**, senza domande:
+  badge **OFF** e barra arancione «Protezione disattivata: i messaggi partono in chiaro. Per
+  attivarla clicca l'icona di Pseudomania o premi Alt+Maiusc+P». Prima di scrivere dati di terzi
+  clicca il pulsante o premi **Alt+Maiusc+P** (§2.6). Nelle impostazioni puoi scegliere anche
+  «Attiva di default» o «Attiva con richiesta» (§2.6).
 - Se la barra non c'è, o compare «Pagina non riconosciuta da Pseudomania», **non inviare dati
   personali** e vedi il capitolo 6.
 
@@ -44,7 +47,16 @@ Trascina, incolla o scegli i file come sempre: l'estensione li intercetta prima 
 | DOCX, XLSX | pseudonimizzati nell'estensione | pseudonimizzati dal server |
 | TXT, CSV, MD | pseudonimizzati | pseudonimizzati |
 | PDF | inviato come **file di testo pseudonimizzato (.txt)** con avviso (impaginazione e immagini non partono) | pseudonimizzato dal server |
-| Immagini, altri formati | **bloccati** | **bloccati** |
+| Immagini (screenshot, foto) | **conferma per ogni immagine** (predefinita) o **bloccate**, secondo le tue impostazioni | **bloccate**, salvo diversa scelta dell'ente (conferma per ogni immagine) |
+| Altri formati | **bloccati** | **bloccati** |
+
+**Immagini.** Il testo dentro le immagini **non** viene pseudonimizzato. Quando le immagini sono
+consentite con conferma, prima dell'invio compare la finestra «Inviare questa immagine?» con
+l'anteprima e l'avviso che i dati visibili arriveranno a Claude così come sono. Scegli **Annulla**
+(non parte nulla) o **Invia l'immagine**. Il nome del file diventa generico (es.
+`immagine-20261105183000.png`). Quando sono bloccate compare un banner rosso e l'immagine non parte.
+L'oscuramento automatico dei dati nelle immagini è **in arrivo**, non ancora disponibile.
+**(Personal)** Con la protezione disattivata le immagini partono senza conferma.
 
 Anche il **nome del file** può contenere dati personali: viene pseudonimizzato in entrambe le
 edizioni (per esempio `Lettera_Mario_Rossi.docx` parte come `Lettera_[FULLNAME_1].docx`).
@@ -212,9 +224,11 @@ non sono più ripristinabili. Cancella tu i progetti che non ti servono più.
 7. **Non aggirare l'estensione** (scrivere i dati in forma alterata per evitarne il riconoscimento,
    incollare tramite strumenti esterni, usare un altro profilo).
 8. **Non inviare feedback** (pollice su/giù) su chat con dati di terzi.
-9. **(Personal)** Non spegnere la protezione in una conversazione con dati di terzi e non scegliere
-   «Continua senza protezione» per abitudine: riattivare non ripulisce ciò che è già partito.
-10. **Non fidarti ciecamente**: elimina o generalizza i dettagli che identificano senza nome (ruolo
+9. **Non inviare immagini** (screenshot, foto) che mostrano dati personali: il testo nelle
+   immagini non viene pseudonimizzato.
+10. **(Personal)** Attiva la protezione **prima** di scrivere dati di terzi e non spegnerla in una
+   conversazione che li contiene: riattivare non ripulisce ciò che è già partito.
+11. **Non fidarti ciecamente**: elimina o generalizza i dettagli che identificano senza nome (ruolo
     unico, data e luogo precisi, numero di pratica, fatto noto).
 
 ## 4.13 Domande frequenti
@@ -234,7 +248,8 @@ usando solo i segnaposto presenti.
 
 **Posso spegnere Pseudomania?** **(Personal)** Sì, per la sola conversazione aperta: clic sul
 pulsante o Alt+Maiusc+P. Si spegne solo l'uscita: i segnaposto delle risposte vengono comunque
-ripristinati. La scelta resta salvata per quella conversazione. **(Server edition)** No: «Protezione
+ripristinati. La scelta resta salvata per quella conversazione. Con l'impostazione predefinita ogni
+nuova conversazione parte disattivata: la attivi con lo stesso pulsante (le altre modalità al §2.6). **(Server edition)** No: «Protezione
 sempre attiva: Pseudomania è gestito dalla tua organizzazione e non può essere disattivato.»
 
 **Ho spento la protezione e poi l'ho riaccesa: ciò che ho inviato nel frattempo è protetto?** No.
@@ -247,6 +262,11 @@ bloccato per tutelare i dati. Riprova più tardi o contatta l'assistenza.
 **Ho cambiato PC e vedo segnaposto grigi.** Vedi §4.10.
 
 **Il PDF è arrivato a Claude come .txt.** È previsto nella Personal edition (§2.7).
+
+**Posso inviare screenshot e immagini?** Il testo nelle immagini non viene pseudonimizzato.
+**(Personal)** Di partenza ti viene chiesta una conferma per ogni immagine; puoi bloccarle del tutto
+dalle impostazioni (§2.7). **(Server edition)** Decide l'ente: di norma sono bloccate. Se sono
+consentite, invia solo immagini senza dati personali.
 
 **L'amministratore può leggere le mie conversazioni?** **(Server edition)** No in via ordinaria: il server
 non conserva testi (solo un registro minimo con impronte e uno pseudonimo, e tracce pseudonimizzate

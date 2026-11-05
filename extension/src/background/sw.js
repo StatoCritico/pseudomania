@@ -59,7 +59,7 @@ async function readManaged() {
 
 async function getConfig() {
   const { managed, dev } = await readManaged();
-  const local = await chrome.storage.local.get(['rizzoUrl', 'enabled', 'pgServerConfig']);
+  const local = await chrome.storage.local.get(['rizzoUrl', 'enabled', 'pgServerConfig', 'imagePolicy', 'activationMode']);
   const pre = PG.config.resolveConfig({ managed, local });
   const sc = local.pgServerConfig && local.pgServerConfig.url === pre.serverUrl ? local.pgServerConfig : null;
   const cfg = PG.config.resolveConfig({ managed, local, server: sc ? sc.data : null, serverTs: sc ? sc.ts : null });
@@ -639,7 +639,7 @@ chrome.alarms.onAlarm.addListener((a) => {
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'managed' || (area === 'local' && (changes.rizzoUrl || changes.pgDevManaged))) {
+  if (area === 'managed' || (area === 'local' && (changes.rizzoUrl || changes.pgDevManaged || changes.imagePolicy || changes.activationMode))) {
     publishState({ serverConfig: true });
   }
 });

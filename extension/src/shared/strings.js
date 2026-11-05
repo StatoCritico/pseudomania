@@ -18,7 +18,7 @@
     statoAttivo: 'Pseudomania attivo: i dati personali vengono pseudonimizzati prima dell\'invio',
     statoDisattivato: 'Pseudomania disattivato: i messaggi partono SENZA pseudonimizzazione',
     statoDisattivatoConv:
-      'Protezione disattivata per questa conversazione: i messaggi partono in chiaro (i segnaposto ricevuti vengono comunque ripristinati)',
+      'Protezione disattivata: i messaggi partono in chiaro. Per attivarla clicca l\'icona di Pseudomania o premi Alt+Maiusc+P',
     statoInAttesa: 'Scegli se proteggere questa conversazione: nel frattempo i messaggi vengono pseudonimizzati',
     chiediTitolo: 'Protezione disattivata l\'ultima volta',
     chiediTesto: 'Vuoi attivare Pseudomania per questa conversazione?',
@@ -58,6 +58,27 @@
 
     // Banner di blocco
     bloccatoTitolo: 'Invio bloccato',
+    immaginiBloccatePersonal: 'Le immagini sono bloccate nelle impostazioni: il testo che contengono non può essere pseudonimizzato. Puoi consentirle con una conferma per ogni immagine dalle impostazioni di Pseudomania.',
+    immaginiBloccateEnte: 'Le immagini sono bloccate dalla policy dell\'ente: il testo che contengono non può essere pseudonimizzato.',
+    immagineTitolo: 'Inviare questa immagine?',
+    immagineTesto: 'Le immagini NON vengono pseudonimizzate: nomi, codici, indirizzi o altri dati visibili nell\'immagine arriveranno a Claude così come sono. Invia solo se l\'immagine non contiene dati personali.',
+    immagineAlt: 'Anteprima dell\'immagine da inviare',
+    immagineNome: 'Il nome del file viene sostituito con un nome generico (es. immagine-20261105183000.png).',
+    immagineInvia: 'Invia l\'immagine',
+    impAttivazioneTitolo: 'Attivazione nelle conversazioni',
+    impAttivazione: {
+      off: ['Disattivata di default', 'Ogni nuova conversazione parte senza protezione; la attivi con l\'icona o Alt+Maiusc+P. Le conversazioni attivate restano attive.'],
+      on: ['Attiva di default', 'Ogni nuova conversazione parte protetta; la spegni con l\'icona o Alt+Maiusc+P. Le conversazioni spente restano spente.'],
+      ask: ['Attiva con richiesta', 'Se l\'ultima scelta era «attiva» le nuove conversazioni partono protette, altrimenti ti viene chiesto; le conversazioni spente chiedono quando le riapri.'],
+    },
+    impImmaginiTitolo: 'Immagini (screenshot, foto)',
+    impImmagini: {
+      block: ['Bloccate', 'Le immagini non vengono inviate.'],
+      confirm: ['Conferma per ogni immagine', 'Prima dell\'invio vedi l\'anteprima e confermi: il testo nell\'immagine NON viene pseudonimizzato.'],
+      ocr: ['Oscuramento automatico (in arrivo)', 'Il testo dell\'immagine viene letto e i dati personali coperti prima dell\'invio. Non ancora disponibile.'],
+    },
+    impImmaginiEnte: (p) => `Immagini: ${({ block: 'bloccate', confirm: 'conferma per ogni immagine', ocr: 'oscuramento automatico (non ancora disponibile: bloccate)' })[p] || p} (impostato dall'ente).`,
+    impSalvatoBreve: 'Impostazione salvata.',
     allegatoNonConsegnato: 'Il file è stato pseudonimizzato ma claude.ai non lo ha ricevuto: allegalo di nuovo trascinandolo nella casella di scrittura.',
     pdfRipristinatoTesto: 'PDF scaricato con i dati reali, ma come testo semplice: l\'impaginazione originale non si conserva. Per un documento impaginato chiedi a Claude un file Word.',
     bloccatoRete: (r) => `Pseudomania ha fermato un invio a claude.ai: ${r}. Se un allegato non compare, rimuovilo e allegalo di nuovo; se il problema resta, scarica il registro dalle impostazioni.`,

@@ -29,8 +29,15 @@
   const MANAGED_TYPES = {
     mode: 'string', serverUrl: 'string', oidcIssuer: 'string', oidcClientId: 'string',
     oidcScopes: 'string', oidcTokenType: 'string', failClosed: 'boolean', allowDisable: 'boolean',
-    sites: 'array',
+    sites: 'array', imagePolicy: 'string',
   };
+
+  // Immagini (screenshot, foto): il testo che contengono non viene pseudonimizzato.
+  //   'block'   bloccate (predefinito della Server edition)
+  //   'confirm' inviate dopo una conferma esplicita per ogni immagine (predefinito della Personal)
+  //   'ocr'     oscuramento automatico dei dati con OCR: NON ancora disponibile, trattato come 'block'
+  const IMAGE_POLICIES = ['block', 'confirm', 'ocr'];
+  const ACTIVATION_MODES = ['off', 'on', 'ask'];
 
   /** Tiene solo le chiavi note e con il tipo atteso (una policy malformata non deve rompere nulla). */
   function sanitizeManaged(managed) {
@@ -42,6 +49,7 @@
       if (t === 'array' ? Array.isArray(v) : typeof v === t) out[k] = v;
     }
     if (out.mode && out.mode !== 'ente' && out.mode !== 'personale') delete out.mode;
+    if (out.imagePolicy && !IMAGE_POLICIES.includes(out.imagePolicy)) delete out.imagePolicy;
     return out;
   }
 
@@ -84,6 +92,10 @@
     };
     const authMethod = isEnte ? 'oidc' : 'none';
     const configured = isEnte ? Boolean(serverUrl && oidc.issuer && oidc.clientId) : true;
+    const imagePolicy = isEnte
+      ? managed.imagePolicy || 'block'
+      : IMAGE_POLICIES.includes(local.imagePolicy) ? local.imagePolicy : 'confirm';
+    const activationMode = !isEnte && ACTIVATION_MODES.includes(local.activationMode) ? local.activationMode : 'off';
 
     return {
       mode,
@@ -95,6 +107,10 @@
       failClosed,
       allowDisable,
       enabled,
+      imagePolicy,
+      // 'ocr' non è ancora disponibile: finché non lo è, vale come 'block'.
+      imagePolicyEffective: imagePolicy === 'ocr' ? 'block' : imagePolicy,
+      activationMode,
       sites: managed.sites && managed.sites.length ? managed.sites : ['claude.ai'],
       oidc,
       authMethod,
@@ -121,7 +137,7 @@
     return rest;
   }
 
-  const api = { resolveConfig, sanitizeManaged, toPlain, DEFAULT_TAG_INSTRUCTION, DEFAULT_RIZZO_URL, MODE_DEFAULTS };
+  const api = { resolveConfig, sanitizeManaged, toPlain, DEFAULT_TAG_INSTRUCTION, DEFAULT_RIZZO_URL, MODE_DEFAULTS, IMAGE_POLICIES, ACTIVATION_MODES };
   PG.config = api;
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

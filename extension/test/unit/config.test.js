@@ -101,3 +101,23 @@ test('manifest: campo key presente, ID calcolabile, nome Pseudomania e sito', ()
   assert.equal(m.name, 'Pseudomania');
   assert.equal(m.homepage_url, 'https://pseudomania.statocritico.it');
 });
+
+test('immagini e modalità di attivazione: predefiniti per edizione, valori non validi ignorati', () => {
+  const { resolveConfig } = require('../../src/shared/config.js');
+  const p = resolveConfig({});
+  assert.equal(p.imagePolicy, 'confirm');
+  assert.equal(p.activationMode, 'off');
+  const p2 = resolveConfig({ local: { imagePolicy: 'ocr', activationMode: 'ask' } });
+  assert.equal(p2.imagePolicy, 'ocr');
+  assert.equal(p2.imagePolicyEffective, 'block', 'OCR non ancora disponibile: vale come «bloccate»');
+  assert.equal(p2.activationMode, 'ask');
+  const p3 = resolveConfig({ local: { imagePolicy: 'qualsiasi', activationMode: 'x' } });
+  assert.equal(p3.imagePolicy, 'confirm');
+  assert.equal(p3.activationMode, 'off');
+  const e = resolveConfig({ managed: { mode: 'ente', serverUrl: 'https://s' }, local: { imagePolicy: 'confirm' } });
+  assert.equal(e.imagePolicy, 'block', 'Server edition: decide solo la policy');
+  const e2 = resolveConfig({ managed: { mode: 'ente', imagePolicy: 'confirm' } });
+  assert.equal(e2.imagePolicyEffective, 'confirm');
+  const e3 = resolveConfig({ managed: { mode: 'ente', imagePolicy: 'sbagliato' } });
+  assert.equal(e3.imagePolicy, 'block');
+});
