@@ -47,5 +47,21 @@ Modifiche apportate da Pseudomania (ai sensi della sezione 4(b) della licenza Ap
 - Il loghi e il nome "Privacy Guardrail" e DFKI non sono usati nell'interfaccia.
 - Aggiunte (file nuovi): cifratura lato client del dizionario (Server edition), Personal edition
   autonoma con Rizzo-PII desktop, elaborazione DOCX/XLSX in JavaScript (porting del motore OOXML del
-  server Pseudomania).
+  server Pseudomania), elaborazione dei PDF con MuPDF.js (porting in JavaScript di pdf_export.py e
+  pdf_text.py di Rizzo-PII, licenza MIT, già inclusi nel server).
 - Tutti gli altri file sono nuovi e coperti da AGPL-3.0-or-later.
+
+------------------------------------------------------------------------------
+Componenti di terze parti inclusi in src/vendor/ (OCR e PDF della Personal edition):
+
+- tesseract.js 6.0.1 (src/vendor/tesseract/tesseract.min.js, worker.min.js)
+  https://github.com/naptha/tesseract.js – Apache License 2.0 (src/vendor/tesseract/LICENSE)
+- tesseract.js-core 6.1.2 (src/vendor/tesseract/core/) – motore Tesseract OCR compilato in
+  WebAssembly; Tesseract © Google e collaboratori – Apache License 2.0 (src/vendor/tesseract/core/LICENSE)
+- Modello linguistico italiano «ita» (tessdata_best_int, pacchetto @tesseract.js-data/ita 1.0.0)
+  https://github.com/tesseract-ocr/tessdata_best – Apache License 2.0
+- MuPDF.js 1.28.1 (src/vendor/mupdf/: mupdf.js, mupdf-wasm.js, mupdf-wasm.wasm)
+  https://github.com/ArtifexSoftware/mupdf.js – Copyright (C) Artifex Software, Inc.
+  GNU Affero General Public License v3.0 o successiva (AGPL-3.0-or-later) (src/vendor/mupdf/LICENSE).
+  Distribuito alle stesse condizioni di Pseudomania: il sorgente corrispondente è questo repository
+  e il sorgente di MuPDF.js alla versione indicata.

@@ -668,18 +668,27 @@
   }
 
   /**
-   * Immagini: il testo che contengono non viene pseudonimizzato. Secondo l'impostazione
-   * (Personal edition) o la policy dell'ente (Server edition) sono bloccate oppure inviate dopo una
-   * conferma esplicita, con un nome di file generico. Il registro annota la scelta, senza l'immagine.
+   * Immagini, secondo l'impostazione (Personal edition) o la policy dell'ente (Server edition):
+   *  - 'ocr'     (solo Personal) il testo viene letto sul PC con OCR locale, i dati personali sono coperti
+   *              da riquadri neri e l'utente conferma l'anteprima dell'immagine OSCURATA;
+   *  - 'confirm' l'immagine viene inviata così com'è dopo una conferma esplicita, con un nome generico;
+   *  - 'block'   bloccata.
+   * Il registro annota la scelta, senza l'immagine.
    * @returns {Promise<File|null>}
    */
   async function handleImage(f, kind) {
     const policy = (cfg && cfg.imagePolicyEffective) || 'block';
+    if (policy === 'ocr' && isPersonal()) return handleImageOcr(f, kind);
     if (policy !== 'confirm') {
       status.banner('error', S.bloccatoTitolo, S.fileBloccato(f.name, isPersonal() ? S.immaginiBloccatePersonal : S.immaginiBloccateEnte), { replace: false });
       event('blocked', { kind, reason: 'image', policy });
       return null;
     }
+    return confirmOriginalImage(f, kind);
+  }
+
+  /** Immagine originale, non oscurata: anteprima e conferma esplicita, poi nome di file generico. */
+  async function confirmOriginalImage(f, kind) {
     const ok = await PG.ui.confirmImage(f);
     if (!ok) {
       event('image_cancelled', { kind });
@@ -691,6 +700,55 @@
     toPage('approveFile', { hash: await sha256Hex(bytes) });
     event('image_sent_confirmed', { kind, bytes: bytes.byteLength });
     return nf;
+  }
+
+  /** Oscuramento automatico (OCR locale nel documento offscreen, vedi OCR-CONTRATTO.md). */
+  async function handleImageOcr(f, kind) {
+    const buf = await f.arrayBuffer();
+    // Il primo avvio di Tesseract (caricamento del modello) può durare 30-60 s: l'indicatore mostra i secondi.
+    const wait = PG.ui.busy(S.ocrInCorso(f.name));
+    let r;
+    try {
+      r = await bg('pg:pseudonymizeImage', {
+        scope: scope(), kind, name: f.name, mime: f.type || 'image/png', b64: b64FromBuffer(buf),
+      });
+    } finally {
+      wait.done();
+    }
+    if (!r.ok) {
+      if (r.error === 'unsupported') {
+        status.banner('error', S.bloccatoTitolo, S.fileBloccato(f.name, S.immagineOcrNonDisponibile), { replace: false });
+        event('blocked', { kind, reason: 'image', policy: 'ocr', error: 'unsupported' });
+        return null;
+      }
+      // Servizio non disponibile (Rizzo-PII spento, OCR non riuscito…): come per gli altri file.
+      // «Invia senza protezione» però non basta per un'immagine: l'originale parte solo dopo
+      // averne visto l'anteprima e averla confermata esplicitamente.
+      const fb = await handleFailure(r.error, '');
+      if (fb.action !== 'sendOriginal') {
+        event('image_cancelled', { kind, error: r.error || null });
+        return null;
+      }
+      return confirmOriginalImage(f, kind);
+    }
+    const d = r.data || {};
+    if (d.blocked) {
+      showBlocked(S.fileBloccato(f.name, d.blockReason || S.bloccatoGenerico), { kind, category: d.blockCategory, traceId: d.traceId, replace: false });
+      event('blocked', { kind, reason: 'image' }, d.traceId);
+      return null;
+    }
+    const bytes = bufferFromB64(d.contentB64);
+    const redacted = new File([bytes], d.filename || 'immagine.png', { type: d.mime || 'image/png', lastModified: Date.now() });
+    const ok = await PG.ui.confirmImageOcr({ redacted, entities: d.entities || [], ocr: d.ocr || {} });
+    if (!ok) {
+      event('image_cancelled', { kind, ocr: true }, d.traceId);
+      return null;
+    }
+    toPage('approveFile', { hash: await sha256Hex(bytes) });
+    tracker.markUsed();
+    refreshDict(true);
+    event('image_sent_redacted', { kind, covered: (d.ocr && d.ocr.covered) || (d.entities || []).length }, d.traceId);
+    return redacted;
   }
 
   async function processFiles(files, kind) {

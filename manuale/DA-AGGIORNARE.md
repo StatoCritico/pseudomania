@@ -14,7 +14,7 @@ Finora l'estensione è stata provata solo con un Rizzo-PII **simulato** (`extens
 | §2.2 Installazione | procedura d'installazione, primo avvio, durata del download del modello, avvio automatico; schermata di scelta host/porta (citata nelle note del rilascio 2.0.0) |
 | §2.2 riquadro CORS, §6.2 | se il servizio locale accetta le chiamate dal service worker dell'estensione; se no, pubblicare la **versione modificata di Rizzo-PII** e aggiornare il testo con il collegamento |
 | §2.4 Configurazione | esiti di «Verifica connessione» con l'app reale (stati `ok`, `loading`, `down`, `cors`); risposta di `/health` durante il caricamento (le note del rilascio indicano 503 finché il modello non è pronto) |
-| §2.7 PDF | endpoint usato per i PDF: la SPEC indica `/analyze` con caricamento del file, le note del rilascio 2.0.0 citano anche un endpoint `/pdf`; verificare la conversione in `.txt` |
+| §2.7 PDF e immagini | PDF trattati come PDF nell'estensione (MuPDF) e immagini oscurate con OCR locale: provare con l'app reale il rilevamento sul testo estratto, i PDF scansionati e il ripiego in `.txt` |
 | §2.10 Disinstallazione | posizione della cache del modello |
 | §6.2 | porta alternativa; comportamento con porta occupata |
 | §4.3 | nome del file: pseudonimizzato (trattini bassi letti come spazi, il nome ripristinato mostra uno spazio); provarlo con nomi di file reali e con l'app desktop |

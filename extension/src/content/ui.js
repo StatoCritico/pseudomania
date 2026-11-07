@@ -47,6 +47,9 @@
     .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 10px;
              background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; cursor: pointer; margin-top: 4px; }
     .badge:hover { background: #c8e6c9; }
+    .warnbox { background: #fff4e5; color: #663c00; border: 1px solid #ffb74d; border-left: 5px solid #ef6c00;
+               border-radius: 8px; padding: 10px 12px; margin: 8px 0; font-size: 14px; line-height: 1.4; font-weight: 600; }
+    .small { font-size: 12px; color: #555; }
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: #fff;
              padding: 10px 16px; border-radius: 8px; font-size: 13px; z-index: 2147483647; }
   `;
@@ -223,6 +226,40 @@
     });
   }
 
+  /**
+   * Immagine oscurata con OCR locale: anteprima dell'immagine che verrà davvero inviata, numero di dati
+   * coperti e avvisi ben visibili se non è stato trovato testo o se la lettura è incerta.
+   * @param {{redacted: File, entities: Array, ocr: {covered?, noText?, lowConf?}}} p
+   * @returns {Promise<boolean>}
+   */
+  function confirmImageOcr(p) {
+    const ocr = (p && p.ocr) || {};
+    const n = Number.isFinite(ocr.covered) ? ocr.covered : ((p && p.entities) || []).length;
+    const url = URL.createObjectURL(p.redacted);
+    // L'URL viene revocato a ogni chiusura, compresa quella con Esc (che passa da modal).
+    return modal((dlg, done) => {
+      dlg.append(
+        h('h2', {}, S.immagineOcrTitolo),
+        ocr.noText ? h('div', { class: 'warnbox', role: 'alert' }, '⚠ ', S.immagineOcrNessunTesto) : null,
+        !ocr.noText && ocr.lowConf ? h('div', { class: 'warnbox', role: 'alert' }, '⚠ ', S.immagineOcrBassaQualita) : null,
+        h('p', {}, S.immagineOcrTesto(n)),
+        h('img', { src: url, alt: S.immagineOcrAlt, style: 'max-width:100%;max-height:50vh;display:block;margin:8px auto;border:1px solid #ccc;border-radius:6px' }),
+        h('p', { class: 'small' }, S.immagineNome),
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn', 'data-pg-cancel': '', onclick: () => done(false) }, S.annulla),
+          h('button', { class: 'btn primary', onclick: () => done(true) }, S.immagineOcrInvia))
+      );
+      // Il tasto Invio non deve inviare l'immagine per errore: il focus va su «Annulla».
+      setTimeout(() => {
+        const c = dlg.querySelector('[data-pg-cancel]');
+        if (c) c.focus();
+      }, 0);
+    }).then((v) => {
+      URL.revokeObjectURL(url);
+      return v;
+    });
+  }
+
   /** Primo spegnimento in una conversazione che contiene già dati protetti. */
   function confirmOff() {
     return modal((dlg, done) => {
@@ -331,5 +368,5 @@
     };
   }
 
-  PG.ui = { StatusArea, confirmUnprotected, confirmOff, confirmImage, preview, badge, toast, busy, highlighted, tagRanges, h };
+  PG.ui = { StatusArea, confirmUnprotected, confirmOff, confirmImage, confirmImageOcr, preview, badge, toast, busy, highlighted, tagRanges, h };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

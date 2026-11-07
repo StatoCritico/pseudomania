@@ -227,11 +227,17 @@
 </ul>
 <h3>Immagini (screenshot, foto)</h3>
 <ul>
-  <li><strong>Conferma per ogni immagine</strong> (predefinita): prima dell'invio vedi l'anteprima e confermi.</li>
+  <li><strong>Oscuramento automatico</strong> (predefinita): il testo dell'immagine viene letto sul tuo PC e i dati personali vengono coperti; prima dell'invio vedi l'anteprima oscurata e confermi.</li>
+  <li><strong>Conferma per ogni immagine</strong>: l'immagine parte così com'è, dopo che hai visto l'anteprima e confermato.</li>
   <li><strong>Bloccate</strong>: le immagini non vengono inviate.</li>
-  <li><strong>Oscuramento automatico (in arrivo)</strong>: visibile ma non ancora selezionabile.</li>
 </ul>
-<p>Dettagli nella sezione <a href="#immagini">Immagini</a>.</p>
+<h3>Immagini nei PDF (firme, timbri, fotografie, pagine scansionate)</h3>
+<ul>
+  <li><strong>Leggi e copri i dati</strong> (predefinita, consigliata): il testo delle immagini viene letto sul PC e i dati personali trovati vengono coperti.</li>
+  <li><strong>Togli le immagini</strong>: Claude riceve solo il testo impaginato.</li>
+  <li><strong>Lascia le immagini</strong>: arrivano a Claude senza alcun controllo; la scelta chiede una seconda conferma.</li>
+</ul>
+<p>Dettagli nelle sezioni <a href="#immagini">Immagini</a> e <a href="#pdf">PDF</a>.</p>
 
 <h2 id="uso">Uso quotidiano</h2>
 <ul>
@@ -246,16 +252,25 @@
 <p>Puoi allegare i file in tutti i modi di claude.ai: con il pulsante <strong>+</strong> (finestra «Carica o aggiungi file» → «Carica dal computer»), <strong>trascinandoli</strong> sulla pagina o <strong>incollandoli</strong> con <kbd>Ctrl</kbd>+<kbd>V</kbd>. L'estensione li pseudonimizza prima che partano; quando ha finito compare l'anteprima del file nella casella di scrittura.</p>
 <ul>
   <li><strong>DOCX e XLSX</strong>: elaborati direttamente nell'estensione, che restituisce il file con i segnaposto, formattazione compresa.</li>
-  <li><strong>PDF</strong>: il testo viene estratto e analizzato da Rizzo-PII; a Claude arriva un <strong>file di testo pseudonimizzato</strong> (.txt) al posto del PDF, con un avviso. Impaginazione e immagini si perdono.</li>
+  <li><strong>PDF</strong>: elaborati nell'estensione e inviati a Claude <strong>come PDF</strong>, con l'impaginazione originale e i segnaposto al posto dei dati personali. Vedi <a href="#pdf">PDF</a>.</li>
   <li><strong>TXT, Markdown, CSV</strong>: pseudonimizzati come testo. Gli archivi (.zip) e gli altri formati non gestiti sono bloccati.</li>
 </ul>
 <h3 id="immagini">Immagini</h3>
-<p>Il testo contenuto nelle immagini (screenshot, foto) <strong>non viene pseudonimizzato</strong>. Con l'impostazione predefinita, prima dell'invio compare la finestra «Inviare questa immagine?» con l'anteprima e l'avviso che i dati visibili arriveranno a Claude così come sono. Scegli «Annulla» (non parte nulla) o «Invia l'immagine». Il nome del file viene sostituito con un nome generico (es. <code>immagine-20261105183000.png</code>); il registro annota la scelta, senza l'immagine.</p>
-<p>Se nelle impostazioni scegli «Bloccate», le immagini non partono e compare un banner rosso. L'oscuramento automatico dei dati (OCR) è in arrivo. Con la protezione disattivata le immagini partono come qualsiasi file, senza conferma. Invia solo immagini senza dati personali.</p>
+<p>Con l'impostazione predefinita, <strong>oscuramento automatico</strong>, il testo delle immagini incollate, trascinate o allegate (PNG, JPG, WebP, GIF, BMP) viene letto <strong>sul tuo PC</strong> con il riconoscimento ottico dei caratteri (OCR, incluso nell'estensione: nulla esce dal PC); Rizzo-PII trova i dati personali e l'estensione li copre con un riquadro nero che riporta il segnaposto, lo stesso usato nel testo. Prima dell'invio compare la finestra «Inviare l'immagine oscurata?» con l'anteprima e il numero di dati coperti: scegli «Annulla» o «Invia l'immagine oscurata». Se il testo non viene riconosciuto o la lettura è incerta (scritte a mano, foto storte o sfocate) la finestra lo segnala: l'OCR può sbagliare, guarda sempre l'anteprima. L'immagine viene ricodificata (i metadati, come la posizione GPS, vengono tolti); HEIC e TIFF sono bloccati.</p>
+<p>Con «Conferma per ogni immagine» compare invece la finestra «Inviare questa immagine?» con l'avviso che i dati visibili arriveranno a Claude così come sono; con «Bloccate» le immagini non partono e compare un banner rosso. In ogni caso il nome del file diventa generico (es. <code>immagine-20261105183000.png</code>) e il registro annota l'operazione e i conteggi, mai l'immagine. Con la protezione disattivata le immagini partono come qualsiasi file, senza controlli.</p>
+<h3 id="pdf">PDF</h3>
+<p>Il PDF viene elaborato sul tuo PC, dentro l'estensione (motore MuPDF), e parte <strong>come PDF</strong>, con la stessa impaginazione. Ogni dato personale viene <strong>tolto davvero</strong> dal documento, non solo coperto da un rettangolo, e al suo posto viene scritto il segnaposto; vengono ripuliti anche metadati, annotazioni e commenti, campi dei moduli, segnalibri e allegati incorporati. Prima dell'invio l'estensione rilegge il file: se un dato è ancora leggibile, il PDF non parte.</p>
+<p>Le immagini contenute nel PDF seguono l'impostazione «Immagini nei PDF»: di default sono lette con l'OCR e i dati trovati vengono coperti, così anche i <strong>PDF scansionati</strong> vengono letti (fino a 30 pagine con immagini; oltre, un avviso lo segnala).</p>
+<ul>
+  <li>I PDF <strong>protetti</strong> da password o da restrizioni sono bloccati: togli la protezione (ad esempio stampandoli come nuovo PDF) e allegali di nuovo.</li>
+  <li>I valori <strong>troppo corti</strong> (sigle di una o due lettere) non vengono coperti, perché si cancellerebbero anche altre parole uguali: restano leggibili e un avviso lo dice.</li>
+  <li>Le righe con un dato sostituito sono riscritte in <strong>Helvetica</strong> e possono apparire un po' diverse dal resto.</li>
+  <li>Se il file è danneggiato o insolito e non può essere trattato come PDF, parte come file di testo pseudonimizzato (.txt), con un avviso.</li>
+</ul>
 <h3 id="download">File scaricati da Claude</h3>
 <ul>
   <li><strong>DOCX, XLSX, TXT, MD, CSV</strong>: al download i segnaposto tornano valori reali, formattazione compresa.</li>
-  <li><strong>PDF</strong>: i valori reali vengono ripristinati. Con l'app Rizzo-PII attuale il PDF scaricato è di <strong>solo testo</strong> (l'impaginazione non si conserva, compare un avviso); quando Rizzo-PII offrirà il ripristino dei PDF (proposta inviata al progetto), l'impaginazione verrà conservata senza aggiornare l'estensione. Per un documento impaginato chiedi a Claude un file Word.</li>
+  <li><strong>PDF</strong>: i valori reali vengono ripristinati sul tuo PC, dall'estensione, <strong>conservando l'impaginazione</strong> (le righe ripristinate sono riscritte in Helvetica). Solo se questo non riesce il PDF viene scaricato come testo semplice, con un avviso.</li>
 </ul>
 
 <h2 id="dati-locali">Dove restano i dati</h2>

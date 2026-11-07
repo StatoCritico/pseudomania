@@ -32,12 +32,20 @@
     sites: 'array', imagePolicy: 'string',
   };
 
-  // Immagini (screenshot, foto): il testo che contengono non viene pseudonimizzato.
+  // Immagini (screenshot, foto):
   //   'block'   bloccate (predefinito della Server edition)
-  //   'confirm' inviate dopo una conferma esplicita per ogni immagine (predefinito della Personal)
-  //   'ocr'     oscuramento automatico dei dati con OCR: NON ancora disponibile, trattato come 'block'
+  //   'confirm' inviate così come sono, dopo una conferma esplicita per ogni immagine
+  //   'ocr'     il testo viene letto sul PC (OCR locale) e i dati personali sono coperti da riquadri neri;
+  //             l'utente conferma l'anteprima oscurata (predefinito della Personal). Solo Personal edition:
+  //             in Server edition vale come 'block'.
   const IMAGE_POLICIES = ['block', 'confirm', 'ocr'];
   const ACTIVATION_MODES = ['off', 'on', 'ask'];
+  // Immagini nei PDF (solo Personal edition; in Server edition i PDF li tratta il server):
+  //   'ocr'    (predefinito) il testo delle immagini e delle pagine scansionate viene letto sul PC e i dati
+  //            trovati vengono coperti
+  //   'remove' tutte le immagini tolte dal PDF inviato
+  //   'keep'   immagini lasciate come sono (nelle impostazioni richiede una seconda conferma)
+  const PDF_IMAGE_POLICIES = ['ocr', 'remove', 'keep'];
 
   /** Tiene solo le chiavi note e con il tipo atteso (una policy malformata non deve rompere nulla). */
   function sanitizeManaged(managed) {
@@ -94,7 +102,8 @@
     const configured = isEnte ? Boolean(serverUrl && oidc.issuer && oidc.clientId) : true;
     const imagePolicy = isEnte
       ? managed.imagePolicy || 'block'
-      : IMAGE_POLICIES.includes(local.imagePolicy) ? local.imagePolicy : 'confirm';
+      : IMAGE_POLICIES.includes(local.imagePolicy) ? local.imagePolicy : 'ocr';
+    const pdfImagePolicy = isEnte ? null : PDF_IMAGE_POLICIES.includes(local.pdfImagePolicy) ? local.pdfImagePolicy : 'ocr';
     const activationMode = !isEnte && ACTIVATION_MODES.includes(local.activationMode) ? local.activationMode : 'off';
 
     return {
@@ -108,8 +117,9 @@
       allowDisable,
       enabled,
       imagePolicy,
-      // 'ocr' non è ancora disponibile: finché non lo è, vale come 'block'.
-      imagePolicyEffective: imagePolicy === 'ocr' ? 'block' : imagePolicy,
+      // L'OCR locale esiste solo nella Personal edition: in Server edition 'ocr' vale come 'block'.
+      imagePolicyEffective: imagePolicy === 'ocr' && isEnte ? 'block' : imagePolicy,
+      pdfImagePolicy,
       activationMode,
       sites: managed.sites && managed.sites.length ? managed.sites : ['claude.ai'],
       oidc,
@@ -137,7 +147,7 @@
     return rest;
   }
 
-  const api = { resolveConfig, sanitizeManaged, toPlain, DEFAULT_TAG_INSTRUCTION, DEFAULT_RIZZO_URL, MODE_DEFAULTS, IMAGE_POLICIES, ACTIVATION_MODES };
+  const api = { resolveConfig, sanitizeManaged, toPlain, DEFAULT_TAG_INSTRUCTION, DEFAULT_RIZZO_URL, MODE_DEFAULTS, IMAGE_POLICIES, PDF_IMAGE_POLICIES, ACTIVATION_MODES };
   PG.config = api;
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

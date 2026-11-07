@@ -64,6 +64,17 @@ accompagnata dal sorgente corrispondente: per l'immagine `api` è questo reposit
 Lo stesso vale per l'uso in rete (art. 13 AGPL): l'api espone `GET /v1/source`, da
 configurare con `SOURCE_URL`. La licenza AGPL di Pseudomania è compatibile con PyMuPDF.
 
+### MuPDF.js nell'estensione (Personal edition)
+
+L'estensione Chrome include **MuPDF.js 1.28.1** ([ArtifexSoftware/mupdf.js](https://github.com/ArtifexSoftware/mupdf.js),
+© Artifex Software, Inc.), la libreria MuPDF compilata in WebAssembly, in `extension/src/vendor/mupdf/`
+(`mupdf.js`, `mupdf-wasm.js`, `mupdf-wasm.wasm`), con licenza **AGPL-3.0-or-later** (testo in
+`extension/src/vendor/mupdf/LICENSE`; Artifex offre anche una licenza commerciale). Serve a
+pseudonimizzare i PDF nel browser e a ripristinare quelli scaricati, con la stessa logica di
+`pdf_export.py` (§1), portata in JavaScript. Chi redistribuisce l'estensione (zip, Chrome Web
+Store) distribuisce un'opera combinata AGPL-3.0: il sorgente corrispondente è questo repository.
+La voce è riportata anche in `extension/NOTICE`. pdf.js non è più incluso.
+
 ## 4. Dipendenze Python dell'api (`server/requirements.txt`)
 
 | Pacchetto | Licenza |

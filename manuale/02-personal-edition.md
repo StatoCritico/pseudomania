@@ -90,14 +90,15 @@ Senza alcuna policy aziendale l'estensione parte automaticamente in **Personal e
 
 4. Clic su **Salva** («Impostazioni salvate.»).
 
-Nella stessa pagina ci sono due gruppi di scelte. Si salvano **subito**, senza premere Salva
+Nella stessa pagina ci sono tre gruppi di scelte. Si salvano **subito**, senza premere Salva
 («Impostazione salvata.»):
 
 - **Attivazione nelle conversazioni**: «Disattivata di default» (predefinita), «Attiva di
   default» o «Attiva con richiesta». Vedi §2.6.
-- **Immagini (screenshot, foto)**: «Conferma per ogni immagine» (predefinita) o «Bloccate».
-  La terza voce, «Oscuramento automatico (in arrivo)», è visibile ma non ancora selezionabile.
-  Vedi §2.7.
+- **Immagini (screenshot, foto)**: «Oscuramento automatico» (predefinita), «Conferma per ogni
+  immagine» o «Bloccate». Vedi §2.7.
+- **Immagini nei PDF (firme, timbri, fotografie, pagine scansionate)**: «Leggi e copri i dati»
+  (predefinita, consigliata), «Togli le immagini» o «Lascia le immagini». Vedi §2.7.
 
 Non ci sono altre impostazioni obbligatorie. In fondo alla pagina, nella sezione
 «Informazioni», trovi versione, licenza e sito.
@@ -208,22 +209,74 @@ attiva. Consigli:
 |---|---|
 | **DOCX, XLSX** | pseudonimizzati **dentro l'estensione** (testo, intestazioni e piè di pagina, note, commenti, proprietà del documento, celle e valori delle formule). A Claude arriva il file con i segnaposto. Quando scarichi un DOCX o XLSX generato da Claude, i valori reali vengono ripristinati. |
 | **TXT, CSV, MD** | pseudonimizzati |
-| **PDF** | il testo viene estratto da Rizzo-PII e inviato a Claude come **file di testo pseudonimizzato (.txt)** al posto del PDF. Compare l'avviso: «Il PDF … è stato convertito in un file di testo pseudonimizzato (.txt): impaginazione, immagini e tabelle grafiche non vengono inviate a Claude.» I PDF **scaricati** da Claude vengono ripristinati: con l'impaginazione originale se la tua versione dell'app Rizzo-PII lo consente, altrimenti come PDF di solo testo (compare un avviso). |
-| **Immagini** (screenshot, foto) | il testo nell'immagine **non** viene pseudonimizzato. Secondo l'impostazione «Immagini»: **conferma per ogni immagine** (predefinita) o **bloccate**. Vedi sotto |
+| **PDF** | inviato a Claude **come PDF**, con l'impaginazione originale: i dati personali vengono **tolti** dal documento e sostituiti dai segnaposto; le immagini contenute (firme, timbri, fotografie, pagine scansionate) secondo l'impostazione «Immagini nei PDF». I PDF **scaricati** da Claude vengono ripristinati con l'impaginazione. Vedi «PDF» qui sotto |
+| **Immagini** (screenshot, foto: PNG, JPG, WebP, GIF, BMP) | secondo l'impostazione «Immagini»: **oscuramento automatico** (predefinito: il testo viene letto sul PC e i dati personali coperti con il segnaposto), **conferma per ogni immagine** (l'immagine parte così com'è) o **bloccate**. Vale per immagini incollate, trascinate o allegate. Vedi sotto |
 | Altri formati | **bloccati**: il file non viene allegato |
 
-**Immagini.** Con «Conferma per ogni immagine», prima dell'invio compare la finestra
-«Inviare questa immagine?» con l'anteprima e l'avviso: nomi, codici, indirizzi o altri dati
-visibili nell'immagine arriveranno a Claude così come sono. Scegli **Annulla** (non parte nulla)
-o **Invia l'immagine**. Il nome del file viene sostituito con un nome generico (es.
-`immagine-20261105183000.png`). Il registro locale annota la scelta, senza l'immagine.
+**Immagini.** Con l'**oscuramento automatico** (predefinito) l'estensione legge il testo
+dell'immagine **sul tuo PC** con il riconoscimento ottico dei caratteri (OCR, Tesseract incluso
+nell'estensione: nulla esce dal PC), Rizzo-PII trova i dati personali e l'estensione li copre con
+un riquadro nero che riporta il segnaposto (es. `[FULLNAME_1]`), lo stesso usato nel testo della
+conversazione. Prima dell'invio compare la finestra «Inviare l'immagine oscurata?» con
+l'**anteprima** e il numero di dati coperti: scegli **Annulla** (non parte nulla) o **Invia
+l'immagine oscurata**. Se nell'immagine non viene riconosciuto testo, o la lettura è incerta (foto
+storte, sfocate, scrittura a mano), la finestra lo segnala: guarda bene l'anteprima, perché l'OCR
+può non riconoscere tutto. L'immagine viene sempre ricodificata (i metadati, ad esempio la
+posizione GPS delle foto, vengono tolti). HEIC e TIFF vengono bloccati. La prima lettura dopo
+l'avvio di Chrome richiede qualche secondo in più.
 
-Con «Bloccate» l'immagine non viene allegata e compare un banner rosso. L'**oscuramento
-automatico** (lettura del testo con OCR e copertura dei dati personali) è **in arrivo**: per ora
-non si può scegliere.
+Con «**Conferma per ogni immagine**» compare invece la finestra «Inviare questa immagine?» con
+l'anteprima e l'avviso: nomi, codici, indirizzi o altri dati visibili nell'immagine arriveranno a
+Claude così come sono. Scegli **Annulla** o **Invia l'immagine**. Con «**Bloccate**» l'immagine non
+viene allegata e compare un banner rosso.
 
-> Invia solo immagini **senza dati personali**. Con la protezione **disattivata** le immagini
-> partono come qualsiasi file, senza finestra di conferma.
+In tutti i casi il nome del file viene sostituito con un nome generico (es.
+`immagine-20261105183000.png`) e il registro locale annota l'operazione e i conteggi, mai
+l'immagine né il testo.
+
+> Con la protezione **disattivata** le immagini partono come qualsiasi file, senza controlli.
+
+**PDF.** Il PDF allegato viene elaborato **sul tuo PC**, dentro l'estensione (motore MuPDF
+incluso), e parte verso Claude **come PDF**, con la stessa impaginazione:
+
+- Rizzo-PII trova i dati personali nel testo; ogni dato viene **tolto davvero** dal documento
+  (non solo coperto da un rettangolo: chi copia il testo dal PDF inviato non lo ritrova) e al suo
+  posto viene scritto il segnaposto;
+- vengono ripuliti anche i metadati (autore, titolo, programma), le annotazioni e i commenti, i
+  campi dei moduli, i segnalibri e gli allegati incorporati;
+- prima dell'invio l'estensione rilegge il PDF prodotto: se un dato personale è ancora leggibile
+  il file **non** parte e compare un avviso;
+- il nome del file viene pseudonimizzato come per gli altri formati.
+
+Per le **immagini nei PDF** (firme, timbri, fotografie, loghi e le pagine scansionate, che per il
+PDF sono immagini) vale l'impostazione «Immagini nei PDF»:
+
+| Scelta | Che cosa succede |
+|---|---|
+| **Leggi e copri i dati** (predefinita, consigliata) | il testo delle immagini viene letto sul PC con l'OCR e i dati personali trovati vengono cancellati dall'immagine e coperti dal segnaposto. Così anche i **PDF scansionati** vengono letti. Vale per le prime **30 pagine** con immagini: oltre, le immagini restano come sono e un avviso lo segnala |
+| **Togli le immagini** | tutte le immagini vengono tolte dal PDF inviato: Claude riceve solo il testo impaginato; le pagine scansionate arrivano vuote. Un avviso indica quante immagini sono state tolte |
+| **Lascia le immagini** | le immagini arrivano a Claude così come sono, **senza alcun controllo**. Scegliendola compare una seconda finestra di conferma (il pulsante evidenziato è «Annulla»); se annulli resta la scelta precedente. Ogni PDF con immagini inviato così mostra un avviso |
+
+**PDF scaricati da Claude.** Quando scarichi un PDF prodotto da Claude i segnaposto vengono
+sostituiti con i valori reali **sul tuo PC**, dall'estensione, conservando l'impaginazione: non
+serve una funzione particolare dell'app Rizzo-PII. Solo se questo non riesce l'estensione ripiega
+su un PDF di solo testo (compare un avviso).
+
+**Limiti dei PDF.**
+
+- Le righe in cui un dato è stato sostituito (o ripristinato) vengono riscritte con il carattere
+  **Helvetica**: possono apparire un po' diverse dal resto del documento e, se il segnaposto è più
+  lungo del dato, il testo viene rimpicciolito per stare nello spazio.
+- I valori **troppo corti** (ad esempio sigle di una o due lettere) non vengono coperti nel PDF,
+  perché coprirli cancellerebbe anche altre parole uguali: restano leggibili e un avviso lo dice.
+  Se sono dati da proteggere, non inviare il file.
+- I PDF **protetti** da password o da restrizioni vengono bloccati: togli la protezione (ad
+  esempio stampandoli come nuovo PDF) e allegali di nuovo.
+- L'OCR può **sbagliare** (scritte a mano, timbri, immagini sfocate o storte): qualche dato nelle
+  immagini può restare visibile. Per documenti delicati scansionati valuta «Togli le immagini».
+- Se il PDF non può essere trattato come PDF (file danneggiato o formato insolito), l'estensione
+  ripiega sul vecchio metodo: il testo parte come **file di testo pseudonimizzato (.txt)**, con un
+  avviso (impaginazione e immagini non vengono inviate).
 
 Consiglio: per documenti lunghi apri l'**anteprima** (Ctrl+Maiusc+Invio, §4.6) o il pannello di
 ispezione e controlla che cosa parte davvero.

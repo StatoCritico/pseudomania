@@ -134,6 +134,10 @@ test('Personal edition: flusso completo senza server', { timeout: 120000 }, asyn
     const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
     const uploads = () => h.apiRequests.filter((r) => r.path.endsWith('/upload'));
     const modal = 'pg-ui[data-pg-ui="modal"]';
+    // Dalla 0.9 il predefinito è l'oscuramento automatico (OCR, vedi ocr-personal.test.js): qui si
+    // prova l'impostazione «Conferma per ogni immagine».
+    await ext.evaluate(() => chrome.storage.local.set({ imagePolicy: 'confirm' }));
+    await waitFor(async () => (await h.state()).config.imagePolicyEffective === 'confirm', 5000);
     // 1) Annulla: nessun caricamento
     let before = uploads().length;
     await page.setInputFiles('#file', { name: 'Screenshot_Mario_Rossi.png', mimeType: 'image/png', buffer: png });
@@ -181,7 +185,7 @@ test('Personal edition: flusso completo senza server', { timeout: 120000 }, asyn
     assert.ok(!doc.includes('Verdi'));
   });
 
-  await t.test('PDF inviato come testo pseudonimizzato (.txt)', async () => {
+  await t.test('PDF non leggibile dal motore PDF: ripiego in testo pseudonimizzato (.txt) con Rizzo-PII', async () => {
     const pdf = Buffer.from('%PDF-1.4\n%TEXT: Contratto di Anna Gialli\n%%EOF');
     await page.setInputFiles('#file', { name: 'contratto.pdf', mimeType: 'application/pdf', buffer: pdf });
     await page.waitForFunction(() => [...document.querySelectorAll('.chip')].some((c) => c.textContent === 'contratto.txt'), null, { timeout: 10000 });

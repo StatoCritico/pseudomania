@@ -16,10 +16,9 @@ problema non è risolto. Per la Server edition i problemi del server sono tratta
 | Segnaposto non ripristinati in una chat vecchia, senza avviso | dizionario scaduto (30 giorni dall'ultimo uso) o eliminato | comportamento previsto; recupera i dati dai tuoi documenti |
 | «Invio bloccato» con riferimento all'art. 9 o 10 GDPR | filtro delle categorie particolari | riformula senza quei riferimenti; se è un errore usa **Segnala blocco errato** (§4.9) |
 | «Il file «…» non è stato allegato: …» | formato non gestito o file troppo grande | converti in DOCX/PDF/TXT o riduci il file |
-| **Immagine bloccata**: «Il file «…» non è stato allegato: le immagini sono bloccate…» (banner rosso) | il testo nelle immagini non viene pseudonimizzato. (Personal) hai scelto «Bloccate» nelle impostazioni; (Server edition) l'ente blocca le immagini (impostazione predefinita) | (Personal) se l'immagine non contiene dati personali, scegli «Conferma per ogni immagine» nelle impostazioni (§2.7); (Server edition) non si può cambiare: trascrivi il testo che serve senza dati personali o chiedi all'ente |
+| **Immagine bloccata**: «Il file «…» non è stato allegato: le immagini sono bloccate…» (banner rosso) | (Personal) hai scelto «Bloccate» nelle impostazioni; (Server edition) il testo nelle immagini non viene pseudonimizzato e l'ente blocca le immagini (impostazione predefinita) | (Personal) scegli «Oscuramento automatico» nelle impostazioni (§2.7); (Server edition) non si può cambiare: trascrivi il testo che serve senza dati personali o chiedi all'ente |
 | Finestra «Inviare questa immagine?» | le immagini sono consentite con conferma | controlla l'anteprima: se mostra dati personali scegli **Annulla** |
-| PDF arrivato a Claude come `.txt` | Personal edition | comportamento previsto (§2.7) |
-| File scaricato con i segnaposto e un avviso | formato non ripristinabile (es. PDF nella Personal) o errore del servizio | sostituisci a mano i valori o rigenera in DOCX/XLSX |
+| File scaricato con i segnaposto e un avviso | formato non ripristinabile o errore del servizio | sostituisci a mano i valori o rigenera in DOCX/XLSX |
 | Il contrassegno «dati protetti» apre nulla | Chrome ha rifiutato l'apertura del pannello laterale | (Personal) clic destro sul pulsante → **Apri pannello di ispezione**; (Server edition) clic sul pulsante → **Apri pannello di ispezione** |
 | Contrassegni spariti sui messaggi vecchi | i dati di ispezione restano solo nella sessione | comportamento previsto dopo la chiusura del browser |
 | Microfono/dettatura non funzionano su claude.ai | dettatura disattivata da Pseudomania | comportamento previsto |
@@ -40,6 +39,17 @@ problema non è risolto. Per la Server edition i problemi del server sono tratta
 | Badge **?** e banner «Attiva» / «Continua senza protezione» | hai scelto la modalità «Attiva con richiesta» | scegli una delle due voci; per non vedere più la domanda cambia modalità nelle impostazioni (§2.6) |
 | «Sono ammessi solo indirizzi locali» nelle impostazioni | indirizzo non locale | usa `http://127.0.0.1:<porta>` o `http://localhost:<porta>` |
 | Dizionario perso dopo un aggiornamento | l'estensione è stata rimossa e reinstallata | aggiorna sempre nella stessa cartella con **Aggiorna** (§2.9); i dati persi non si recuperano |
+| Finestra «Inviare l'immagine oscurata?» | oscuramento automatico delle immagini (predefinito) | controlla l'anteprima: se un dato è ancora visibile scegli **Annulla** |
+| Nella finestra: «non è stato riconosciuto alcun testo» o «testo letto con difficoltà» | immagine senza scritte, sfocata, storta, piccola o scritta a mano | guarda bene l'anteprima: i dati non riconosciuti **non** sono coperti; se ne vedi, **Annulla** |
+| «Lettura del testo… e oscuramento dei dati personali…» a lungo | prima lettura dopo l'avvio di Chrome | attendi: la prima volta può richiedere fino a un minuto |
+| Immagine HEIC o TIFF non allegata | formato non supportato dall'oscuramento | salvala come PNG o JPG e riprova |
+| PDF arrivato a Claude come `.txt` | il PDF non è stato trattato come PDF (file danneggiato o insolito): ripiego previsto | salvalo di nuovo come PDF e riallegalo (§2.7) |
+| PDF bloccato: «il PDF è protetto da password o da restrizioni…» | PDF protetto | togli la protezione (ad esempio stampandolo come nuovo PDF) e allegalo di nuovo |
+| PDF bloccato: «…nel PDF era ancora leggibile 1 dato personale…» | la verifica finale ha trovato un dato non tolto | salvalo di nuovo come PDF oppure copia il testo nel messaggio |
+| Avviso: «dato molto breve … non è stato coperto nel PDF» | valori troppo corti (sigle di una o due lettere) non si possono coprire senza cancellare altre parole | se sono dati da proteggere, non inviare il file |
+| Avviso sulle immagini del PDF (lette, tolte o lasciate) | effetto dell'impostazione «Immagini nei PDF»; oltre le 30 pagine con immagini l'OCR non legge | controlla l'impostazione (§2.4, §2.7); per scansioni delicate valuta «Togli le immagini» |
+| Nel PDF inviato o scaricato alcune righe hanno un carattere diverso | le righe con un dato sostituito o ripristinato vengono riscritte in Helvetica | comportamento previsto |
+| PDF scaricato da Claude «come testo semplice» | il ripristino con l'impaginazione non è riuscito | chiedi a Claude un file Word |
 | L'estensione dal pacchetto si disattiva all'avvio di Chrome | alcune versioni di Chrome avvisano per le estensioni in modalità sviluppatore **[DA VERIFICARE]** | riattivala in `chrome://extensions`; usa la versione del Web Store quando disponibile |
 
 ## 6.3 Server edition (utente e help desk)

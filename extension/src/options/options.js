@@ -4,6 +4,7 @@
 // Impostazioni e informazioni.
 //  - Personal edition: indirizzo di Rizzo-PII desktop (solo locale) e verifica del servizio, compreso
 //    il caso in cui Rizzo-PII risponde ma rifiuta le chiamate dell'estensione (CORS).
+//    Scelte su immagini, immagini nei PDF (con seconda conferma per «Lascia le immagini») e attivazione.
 //  - Server edition: tutto è gestito dalla policy; si mostrano il server e le informazioni.
 
 (function () {
@@ -109,13 +110,64 @@
       $('imgManaged').textContent = S.impImmaginiEnte(cfg.imagePolicy);
       return;
     }
-    // L'oscuramento automatico non è ancora disponibile: visibile ma non selezionabile.
-    radios($('imgOptions'), 'imagePolicy', S.impImmagini, cfg.imagePolicy === 'ocr' ? 'block' : cfg.imagePolicy, ['ocr'],
+    // Personal edition: tutte le scelte sono disponibili, compreso l'oscuramento automatico (OCR locale).
+    radios($('imgOptions'), 'imagePolicy', S.impImmagini, cfg.imagePolicy || 'ocr', [],
       (v) => saveChoice({ imagePolicy: v }));
     $('activation').hidden = false;
     $('actTitle').textContent = S.impAttivazioneTitolo;
     radios($('actOptions'), 'activationMode', S.impAttivazione, cfg.activationMode || 'off', [],
       (v) => saveChoice({ activationMode: v }));
+    showPdfImages(cfg);
+  }
+
+  // Seconda conferma per «Lascia le immagini»: finestra nella pagina, focus iniziale su «Annulla».
+  // Risolve true solo con un clic esplicito su «Sì, lascia le immagini»; Esc o «Annulla» → false.
+  function confirmKeep() {
+    const dlg = $('pdfKeepDlg');
+    $('pdfKeepTitle').textContent = S.impPdfKeepConfermaTitolo;
+    $('pdfKeepText').textContent = S.impPdfKeepConfermaTesto;
+    $('pdfKeepCancel').textContent = S.annulla;
+    $('pdfKeepOk').textContent = S.impPdfKeepConfermaOk;
+    return new Promise((resolve) => {
+      let ok = false;
+      const onOk = () => { ok = true; dlg.close(); };
+      const onCancel = () => dlg.close();
+      $('pdfKeepOk').addEventListener('click', onOk);
+      $('pdfKeepCancel').addEventListener('click', onCancel);
+      dlg.addEventListener('close', () => {
+        $('pdfKeepOk').removeEventListener('click', onOk);
+        $('pdfKeepCancel').removeEventListener('click', onCancel);
+        resolve(ok);
+      }, { once: true });
+      dlg.showModal();
+      $('pdfKeepCancel').focus();
+    });
+  }
+
+  // Immagini nei PDF (solo Personal edition): ocr | remove | keep.
+  function showPdfImages(cfg) {
+    const PDF = PG.config.PDF_IMAGE_POLICIES;
+    let current = PDF.includes(cfg.pdfImagePolicy) ? cfg.pdfImagePolicy : 'ocr';
+    $('pdfImages').hidden = false;
+    $('pdfImgTitle').textContent = S.impPdfImmaginiTitolo;
+    $('pdfImgHelp').textContent = S.impPdfImmaginiAiuto;
+    const box = $('pdfImgOptions');
+    const select = (v) => {
+      for (const inp of box.querySelectorAll('input[name="pdfImagePolicy"]')) inp.checked = inp.value === v;
+    };
+    radios(box, 'pdfImagePolicy', S.impPdfImmagini, current, [], async (v) => {
+      if (v === 'keep' && current !== 'keep') {
+        const ok = await confirmKeep();
+        if (!ok) {
+          select(current); // annullato: torna alla scelta precedente, nulla viene salvato
+          $('msg').className = '';
+          $('msg').textContent = '';
+          return;
+        }
+      }
+      current = v;
+      await saveChoice({ pdfImagePolicy: v });
+    });
   }
 
   async function init() {
@@ -124,9 +176,11 @@
       managed = await chrome.storage.managed.get(null);
     } catch (_) { /* nessuna policy */ }
     const st = (await chrome.storage.local.get('pgState')).pgState;
-    const local = await chrome.storage.local.get(['rizzoUrl', 'imagePolicy', 'activationMode']);
+    const local = await chrome.storage.local.get(['rizzoUrl', 'imagePolicy', 'pdfImagePolicy', 'activationMode']);
     const cfg = st && st.config ? st.config : PG.config.resolveConfig({ managed, local });
     const ent = cfg.mode === 'ente';
+    // Lo stato pubblicato può essere di un attimo indietro: per la Personal vale l'ultimo valore salvato.
+    if (!ent && PG.config.PDF_IMAGE_POLICIES.includes(local.pdfImagePolicy)) cfg.pdfImagePolicy = local.pdfImagePolicy;
     $('edition').textContent = ent ? S.modalitaEnte : S.modalitaPersonale;
     if (!ent) showLog();
     showChoices(cfg, ent);

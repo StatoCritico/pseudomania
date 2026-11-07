@@ -141,7 +141,7 @@
         },
         {
           "titolo": "Allegati gestiti nel browser",
-          "testo": "DOCX e XLSX elaborati nell'estensione; i PDF vengono inviati come testo pseudonimizzato, con avviso.",
+          "testo": "DOCX, XLSX e PDF elaborati nell'estensione: i PDF partono come PDF, impaginati; testo delle immagini oscurato con OCR sul PC.",
           "href": "approfondimenti/personal-edition.html#allegati"
         },
         {

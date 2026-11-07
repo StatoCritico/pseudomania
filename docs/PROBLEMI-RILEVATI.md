@@ -18,7 +18,7 @@ Gravità: **A** = blocca o rompe una funzione; **M** = rischio o lavoro manuale;
 | 14 | B | `.env.example` / README estensione | `OIDC_AUDIENCE=pseudogate` con client di esempio `pseudogate-extension`: con Keycloak serve un mapper di audience. | 401 se non configurato. | Citare il mapper nel README. | configurazione.md §B.1.a |
 | 15 | M | `deploy/` (immagine `rizzo-pii`) | Lo stack costruisce Rizzo-PII 1.5.0 (`RIZZO_MODEL_REVISION=v1.5.0`, commit `9057eef`); la Personal edition è stata provata con l'app 2.0. | Possibili differenze di rilevamento tra le edizioni. | Aggiornare build e modello alla 2.0 e ripetere il collaudo. | installazione-ente.md §7 |
 | 16 | M | `extension/manifest.json` | L'host del server non è in `host_permissions` (solo in `optional_host_permissions`, che nella Server edition non vengono richiesti all'utente). | Le chiamate al server possono fallire. | Aggiungere l'host prima di impacchettare l'estensione per l'ente (`extension/README.md` §2.2). | — |
-| 17 | B | Personal edition, PDF scaricati da Claude | L'app Rizzo-PII 2.0 non offre il ripristino dei PDF: l'estensione genera un PDF di solo testo. | Impaginazione persa nei PDF scaricati. | Proposta a Rizzo-PII di `POST /restore/pdf` (5/11/2026); l'estensione la usa già se presente. | personal-edition (sito) |
+| 17 | B | Personal edition, PDF scaricati da Claude | L'app Rizzo-PII 2.0 non offre il ripristino dei PDF: l'estensione genera un PDF di solo testo. | Impaginazione persa nei PDF scaricati. | Risolto nella 0.9.0: ripristino con impaginazione nell'estensione (MuPDF.js); `POST /restore/pdf` di Rizzo-PII (proposto il 5/11/2026) resta solo come ripiego. | personal-edition (sito) |
 
 ## Prova reale della Personal edition (4/11/2026)
 

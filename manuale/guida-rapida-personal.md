@@ -23,10 +23,13 @@ lang: it-IT
    sviluppatore** → **Carica estensione non pacchettizzata** → cartella `extension`.
 2. Fissa l'icona di Pseudomania (puzzle → puntina).
 3. **Clic destro** sul pulsante → **Impostazioni e informazioni** → **Verifica connessione** → «Rizzo-PII raggiungibile.» → **Salva**.
-4. Nella stessa pagina, se vuoi, cambia due scelte (si salvano subito):
+4. Nella stessa pagina, se vuoi, cambia tre scelte (si salvano subito):
    - **Attivazione nelle conversazioni**: «Disattivata di default» (predefinita), «Attiva di
      default» o «Attiva con richiesta»;
-   - **Immagini (screenshot, foto)**: «Conferma per ogni immagine» (predefinita) o «Bloccate».
+   - **Immagini (screenshot, foto)**: «Oscuramento automatico» (predefinita), «Conferma per ogni
+     immagine» o «Bloccate»;
+   - **Immagini nei PDF**: «Leggi e copri i dati» (predefinita), «Togli le immagini» o «Lascia le
+     immagini» (chiede una seconda conferma).
 
 ## 3. Controlla l'indicatore
 
@@ -51,10 +54,12 @@ vedi `[FULLNAME_1]` e `[EMAIL_1]`; nella risposta i valori reali tornano, **in v
 - **Anteprima**: **Ctrl+Maiusc+Invio** → «Anteprima di ciò che verrà inviato».
 - **Ispezione**: clic su «N dati protetti» sotto il messaggio → originale e testo inviato.
 - **File**: DOCX, XLSX, TXT, CSV, MD pseudonimizzati (anche il nome del file); i **PDF** partono come
-  file di testo pseudonimizzato (.txt).
-- **Immagini**: il testo nelle immagini **non** viene pseudonimizzato. Di partenza compare la
-  finestra «Inviare questa immagine?» con l'anteprima: **Annulla** o **Invia l'immagine** (il nome
-  del file diventa generico). Puoi bloccarle nelle impostazioni. L'oscuramento automatico è in arrivo.
+  PDF, con l'impaginazione, i dati tolti e i segnaposto al loro posto (protetti da password: bloccati);
+  i PDF scaricati da Claude vengono ripristinati.
+- **Immagini**: di partenza il testo viene letto sul PC (OCR) e i dati personali coperti; compare
+  «Inviare l'immagine oscurata?» con l'anteprima: **Annulla** o **Invia l'immagine oscurata**. L'OCR
+  può sbagliare: guarda sempre l'anteprima. Nelle impostazioni puoi scegliere una conferma per ogni
+  immagine (senza oscuramento) o bloccarle.
 - **Dati particolari** (salute, reati…): «Invio bloccato»; se è un errore, **Segnala blocco errato**.
 - Segnaposto **rossi** nella risposta = inventati da Claude: controlla quel punto.
 - Cambio PC o cancellazione dei dati del browser: il dizionario è perso, nessun recupero.
@@ -82,7 +87,7 @@ sono dati di clienti.
 - **App desktop o mobile** di Claude, altri browser, incognito per dati di clienti.
 - Dati sanitari, giudiziari, di minori, password, segreti non autorizzati.
 - Chiedere a Claude di modificare o «indovinare» i segnaposto.
-- Immagini (screenshot, foto) che mostrano dati personali.
+- Immagini (screenshot, foto) con dati personali inviate senza controllare l'anteprima oscurata.
 - Feedback (pollici) su chat con dati di clienti; memoria e connettori attivi.
 - Scrivere dati di clienti senza aver attivato la protezione, o spegnerla in chat che li contengono.
 

@@ -105,15 +105,16 @@ Documenti di prova con tutti i 24 tag di Rizzo-PII in `collaudo/prova-personal/`
 - **OK**: testi con tutti i tag; termini consentiti e omonimie; blocco dei dati sanitari e giudiziari; allegati
   dal pulsante +, per trascinamento e per incolla; DOCX scaricato con i valori reali; nessun fork di Rizzo-PII
   necessario (il servizio locale accetta le chiamate dell'estensione).
-- **Limite**: i PDF scaricati da Claude sono ripristinati come PDF di solo testo. Proposta a Rizzo-PII di
-  `POST /restore/pdf` (ripristino con impaginazione); l'estensione la usa già se l'app la offre. La Server
-  edition ripristina i PDF con l'impaginazione (riga per riga).
+- **Limite (superato nella 0.9.0)**: i PDF scaricati da Claude erano ripristinati come PDF di solo testo. Dalla
+  0.9.0 l'estensione ripristina i PDF con l'impaginazione da sola (MuPDF.js); `POST /restore/pdf` di Rizzo-PII
+  non è più necessario e resta solo come ripiego se l'app lo offre.
 - **Correzioni** (0.1.1-0.1.13): dettagli in `CHANGELOG.md` e in `docs/PROBLEMI-RILEVATI.md`.
 - **Test automatici** (4/11/2026): server 66 superati (4 saltati), custodi 12/12, estensione unit 50/50.
 
 ### 7.3 Da fare
 
-1. Pull request a Rizzo-PII per `POST /restore/pdf` (patch e testo pronti).
+1. (Facoltativo) Pull request a Rizzo-PII per `POST /restore/pdf`: non più necessaria per la Personal edition
+   dalla 0.9.0 (ripristino con impaginazione nell'estensione); l'estensione la userebbe solo come ripiego.
 2. Prove ancora da fare sulla Personal edition: Progetti di Claude, risposta lunga (documento 09), allegati CSV e
    MD; script `extension/dev/verifica-sito-reale/`.
 3. **Server edition**: ambiente di prova (nessuna VM disponibile: PC con WSL2 e Docker per la prova tecnica, VM

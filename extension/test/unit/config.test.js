@@ -105,19 +105,44 @@ test('manifest: campo key presente, ID calcolabile, nome Pseudomania e sito', ()
 test('immagini e modalità di attivazione: predefiniti per edizione, valori non validi ignorati', () => {
   const { resolveConfig } = require('../../src/shared/config.js');
   const p = resolveConfig({});
-  assert.equal(p.imagePolicy, 'confirm');
+  assert.equal(p.imagePolicy, 'ocr', 'Personal: oscuramento automatico predefinito');
+  assert.equal(p.imagePolicyEffective, 'ocr');
   assert.equal(p.activationMode, 'off');
   const p2 = resolveConfig({ local: { imagePolicy: 'ocr', activationMode: 'ask' } });
   assert.equal(p2.imagePolicy, 'ocr');
-  assert.equal(p2.imagePolicyEffective, 'block', 'OCR non ancora disponibile: vale come «bloccate»');
+  assert.equal(p2.imagePolicyEffective, 'ocr', 'Personal: OCR locale disponibile');
   assert.equal(p2.activationMode, 'ask');
   const p3 = resolveConfig({ local: { imagePolicy: 'qualsiasi', activationMode: 'x' } });
-  assert.equal(p3.imagePolicy, 'confirm');
+  assert.equal(p3.imagePolicy, 'ocr');
   assert.equal(p3.activationMode, 'off');
+  const pc = resolveConfig({ local: { imagePolicy: 'confirm' } });
+  assert.equal(pc.imagePolicy, 'confirm');
+  assert.equal(pc.imagePolicyEffective, 'confirm');
+  const pb = resolveConfig({ local: { imagePolicy: 'block' } });
+  assert.equal(pb.imagePolicyEffective, 'block');
+  const e4 = resolveConfig({ managed: { mode: 'ente', imagePolicy: 'ocr' }, local: { imagePolicy: 'ocr' } });
+  assert.equal(e4.imagePolicy, 'ocr');
+  assert.equal(e4.imagePolicyEffective, 'block', 'Server edition: OCR non disponibile, vale come «bloccate»');
+  const e5 = resolveConfig({ managed: { mode: 'ente' }, local: { imagePolicy: 'ocr' } });
+  assert.equal(e5.imagePolicyEffective, 'block');
   const e = resolveConfig({ managed: { mode: 'ente', serverUrl: 'https://s' }, local: { imagePolicy: 'confirm' } });
   assert.equal(e.imagePolicy, 'block', 'Server edition: decide solo la policy');
   const e2 = resolveConfig({ managed: { mode: 'ente', imagePolicy: 'confirm' } });
   assert.equal(e2.imagePolicyEffective, 'confirm');
   const e3 = resolveConfig({ managed: { mode: 'ente', imagePolicy: 'sbagliato' } });
   assert.equal(e3.imagePolicy, 'block');
+});
+
+test('immagini nei PDF: solo Personal, ocr|remove|keep, predefinito ocr', () => {
+  const { resolveConfig, PDF_IMAGE_POLICIES } = require('../../src/shared/config.js');
+  assert.deepEqual(PDF_IMAGE_POLICIES, ['ocr', 'remove', 'keep']);
+  assert.equal(resolveConfig({}).pdfImagePolicy, 'ocr');
+  assert.equal(resolveConfig({ local: { pdfImagePolicy: 'remove' } }).pdfImagePolicy, 'remove');
+  assert.equal(resolveConfig({ local: { pdfImagePolicy: 'keep' } }).pdfImagePolicy, 'keep');
+  assert.equal(resolveConfig({ local: { pdfImagePolicy: 'block' } }).pdfImagePolicy, 'ocr', 'valore non valido');
+  assert.equal(resolveConfig({ local: { pdfImagePolicy: 42 } }).pdfImagePolicy, 'ocr');
+  const e = resolveConfig({ managed: { mode: 'ente', serverUrl: 'https://s' }, local: { pdfImagePolicy: 'keep' } });
+  assert.equal(e.pdfImagePolicy, null, 'Server edition: i PDF li tratta il server');
+  const { toPlain } = require('../../src/shared/config.js');
+  assert.equal(toPlain(resolveConfig({ local: { pdfImagePolicy: 'remove' } })).pdfImagePolicy, 'remove');
 });

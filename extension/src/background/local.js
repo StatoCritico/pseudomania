@@ -150,6 +150,18 @@
     return reps.filter((r) => !seen.has(r.tag) && seen.add(r.tag)).map((r) => ({ tag: r.tag, type: r.type }));
   };
 
+  const PDF_MAX_OCR_PAGES = 30;
+  const PDF_POLICIES = ['ocr', 'remove', 'keep'];
+  /** Testo da PG.strings (funzione o stringa) con ripiego se manca. */
+  const str = (name, args, fallback) => {
+    const v = PG.strings && PG.strings[name];
+    if (typeof v === 'function') return v(...args);
+    return v || fallback;
+  };
+  const pdfSenzaTesto = (name) =>
+    (typeof PG.strings.pdfSenzaTesto === 'function' ? PG.strings.pdfSenzaTesto(name) : PG.strings.pdfSenzaTesto) ||
+    'Il PDF non contiene testo leggibile (forse è una scansione che non è stato possibile leggere): non è stato inviato.';
+
   async function sha256(text) {
     return b64(await crypto.subtle.digest('SHA-256', te.encode(text)));
   }
@@ -216,6 +228,108 @@
     return { name: PG.rizzo.applyReplacements(stem, reps) + ext, reps };
   }
 
+  /**
+   * Divide gli span rilevati sul testo complessivo del PDF (pagesToDoc) fra testo di pagina e OCR.
+   * - mapping {chiave: valore}: per ogni pezzo di span che cade nel testo di una pagina, il valore è la
+   *   stringa ESATTA del testo estratto (quella che pdf:redact cercherà nella pagina). Uno span a
+   *   cavallo fra pagine o fra testo e OCR produce più pezzi; se lo stesso tag ha più valori distinti,
+   *   i successivi usano come chiave il tag seguito da uno o più spazi (segnaposto identico a vista,
+   *   le chiavi di un oggetto devono essere uniche). `keyTag` riporta ogni chiave al suo tag.
+   * - ocrBoxes: riquadri (in punti, con `page`) delle sole parole OCR toccate dagli span; etichetta = tag
+   *   sul primo riquadro dello span, vuota se lo span ha già un pezzo nel testo di pagina prima dell'OCR.
+   */
+  function pdfTargets(doc, reps, pages) {
+    const mapping = {};
+    const keyTag = {};
+    const seen = {}; // tag -> Set(valori normalizzati)
+    const sizes = {};
+    for (const p of pages || []) if (p && typeof p.index === 'number') sizes[p.index] = { width: p.width, height: p.height };
+    const ocrBoxes = [];
+    for (const r of reps) {
+      let textBefore = false;
+      let firstOcrStart = Infinity;
+      for (const w of doc.ocrWords) if (w.start < r.end && w.end > r.start) firstOcrStart = Math.min(firstOcrStart, w.start);
+      for (const g of doc.regions) {
+        if (g.kind !== 'text') continue;
+        const a = Math.max(r.start, g.start);
+        const b = Math.min(r.end, g.end);
+        if (b <= a) continue;
+        let v = doc.text.slice(a, b);
+        const lead = v.length - v.replace(/^\s+/, '').length;
+        v = v.trim();
+        if (!v) continue;
+        if (a + lead < firstOcrStart) textBefore = true;
+        const n = PG.policy.normalize(v);
+        const set = (seen[r.tag] = seen[r.tag] || new Set());
+        if (set.has(n)) continue;
+        let key = r.tag;
+        while (Object.prototype.hasOwnProperty.call(mapping, key)) key += ' ';
+        set.add(n);
+        mapping[key] = v;
+        keyTag[key] = r.tag;
+      }
+      const boxes = PG.ocrMap.boxesForPages(doc.ocrWords, [{ start: r.start, end: r.end, tag: r.tag }], { pad: 2, sizes });
+      if (textBefore && boxes.length) boxes[0].label = '';
+      ocrBoxes.push(...boxes);
+    }
+    return { mapping, keyTag, ocrBoxes };
+  }
+
+  /**
+   * Ramo PDF di pseudonymizeFile (Personal). Restituisce {b64, reps, notice, log}, oppure null se
+   * il PDF va trattato con il ripiego in .txt. Lancia Blocked per i casi da bloccare.
+   */
+  async function pseudonymizePdf(cfg, scope, msg) {
+    const imagePolicy = PDF_POLICIES.includes(cfg.pdfImagePolicy) ? cfg.pdfImagePolicy : 'ocr';
+    const protetto = () => new Blocked(str('pdfProtetto', [], 'il PDF è protetto da password: togli la protezione e allegalo di nuovo.'), 'encrypted');
+    let prep;
+    try {
+      prep = await PG.ocrClient.pdfPrepare(msg.b64, { imagePolicy, maxOcrPages: PDF_MAX_OCR_PAGES });
+    } catch (e) {
+      if (e && e.code === 'encrypted') throw protetto();
+      console.warn('[Pseudomania] PDF non preparato, ripiego in .txt:', e && e.code);
+      return null;
+    }
+    const pages = Array.isArray(prep && prep.pages) ? prep.pages : [];
+    const doc = PG.ocrMap.pagesToDoc(pages);
+    if (!doc.text.trim()) throw new Blocked(pdfSenzaTesto(msg.name), 'unreadable');
+    checkSpecial(doc.text);
+    const reps = await replacementsFor(scope, await detect(cfg, doc.text));
+    const { mapping, keyTag, ocrBoxes } = pdfTargets(doc, reps, pages);
+    let red;
+    try {
+      red = await PG.ocrClient.pdfRedact(msg.b64, mapping, ocrBoxes, imagePolicy);
+    } catch (e) {
+      if (e && e.code === 'encrypted') throw protetto();
+      console.warn('[Pseudomania] redazione del PDF non riuscita, ripiego in .txt:', e && e.code);
+      return null;
+    }
+    const report = (red && red.report) || {};
+    const tagsOf = (keys) => [...new Set((Array.isArray(keys) ? keys : []).map((k) => keyTag[k] || String(k).trim()))];
+    const residual = tagsOf(report.residual);
+    if (residual.length) {
+      throw new Blocked(str('pdfResidui', [residual.length], `nel PDF restavano leggibili ${residual.length} dati personali: non è stato inviato.`), 'pdf_residual');
+    }
+    if (!red || typeof red.b64 !== 'string' || !red.b64) return null;
+    const skipped = tagsOf(report.skipped).length;
+    const images = pages.reduce((n, p) => n + (p && Array.isArray(p.images) ? p.images.length : 0), 0);
+    const imagesRemoved = Number(report.imagesRemoved) || 0;
+    const ocrPages = pages.filter((p) => p && Array.isArray(p.ocr)).length;
+    const truncated = Boolean(prep.truncated);
+    const parts = [];
+    if (skipped) parts.push(str('pdfValoriNonCoperti', [skipped], `Attenzione: ${skipped} dati molto brevi non sono stati coperti nel PDF e restano leggibili.`));
+    if (imagePolicy === 'keep' && images) parts.push(str('pdfImmaginiLasciate', [images], `Il PDF contiene ${images} immagini lasciate senza controlli.`));
+    if (imagePolicy === 'remove' && imagesRemoved) parts.push(str('pdfImmaginiTolte', [imagesRemoved], `${imagesRemoved} immagini sono state tolte dal PDF.`));
+    if (ocrPages) parts.push(str('pdfImmaginiOcr', [ocrPages, truncated], `Le immagini di ${ocrPages} pagine sono state lette con OCR: la lettura può contenere errori.`));
+    else if (truncated) parts.push(str('pdfImmaginiOcr', [0, true], 'Sono state lette con OCR solo le immagini delle prime pagine.'));
+    return {
+      b64: red.b64,
+      reps,
+      notice: parts.length ? parts.join(' ') : null,
+      log: { pages: Number(prep.pageCount) || pages.length, imagePolicy, images, imagesRemoved, ocrPages, skipped },
+    };
+  }
+
   async function pseudonymizeFile(cfg, msg) {
     const traceId = crypto.randomUUID();
     const scope = msg.scope;
@@ -231,6 +345,8 @@
     let mime = PG.textfile.MIME[fk.kind];
     let outName = msg.name;
     let notice = null;
+    let outB64 = null;
+    let pdfLog = null;
     try {
       if (fk.kind === 'txt' || fk.kind === 'md' || fk.kind === 'csv') {
         const dt = PG.textfile.decodeText(bytes);
@@ -252,16 +368,32 @@
           }));
         });
       } else {
-        // PDF: testo estratto da Rizzo-PII, inviato come .txt pseudonimizzato al posto del PDF.
-        const res = await rizzo(cfg).analyzeFile(msg.name, bytes, 'application/pdf');
-        checkSpecial(res.text);
-        const dets = PG.rizzo.clean(policy().allowlist.filter(res.text, res.detections));
-        const reps = await replacementsFor(scope, dets);
-        all.push(...reps);
-        out = te.encode(PG.rizzo.applyReplacements(res.text, reps));
-        mime = 'text/plain';
-        outName = msg.name.replace(/\.pdf$/i, '') + '.txt';
-        notice = PG.strings.pdfConvertito(msg.name);
+        // PDF (PDF-CONTRATTO.md, sezione B): resta un PDF, trattato con MuPDF.js nel documento offscreen.
+        // Se la preparazione o la redazione non riescono si ripiega sul .txt pseudonimizzato via Rizzo-PII.
+        let res = null;
+        if (PG.ocrClient && PG.ocrClient.pdfPrepare && PG.ocrMap && PG.ocrMap.pagesToDoc) {
+          res = await pseudonymizePdf(cfg, scope, msg);
+        }
+        if (res) {
+          all.push(...res.reps);
+          outB64 = res.b64;
+          mime = 'application/pdf';
+          notice = res.notice;
+          pdfLog = res.log;
+        } else {
+          const res2 = await rizzo(cfg).analyzeFile(msg.name, bytes, 'application/pdf');
+          const text = res2.text || '';
+          // Niente file vuoti: un PDF senza testo leggibile (scansione non letta) viene bloccato.
+          if (!text.trim()) throw new Blocked(pdfSenzaTesto(msg.name), 'unreadable');
+          checkSpecial(text);
+          const reps = await replacementsFor(scope, PG.rizzo.clean(policy().allowlist.filter(text, res2.detections)));
+          all.push(...reps);
+          out = te.encode(PG.rizzo.applyReplacements(text, reps));
+          mime = 'text/plain';
+          outName = msg.name.replace(/\.pdf$/i, '') + '.txt';
+          notice = str('pdfRipiegoTesto', [msg.name], null) || str('pdfConvertito', [msg.name], null);
+          pdfLog = { fallback: 'txt' };
+        }
       }
     } catch (e) {
       if (e instanceof Blocked) return blocked(e.message, e.category);
@@ -276,10 +408,75 @@
       return failure(e);
     }
     all.push(...nameRes.reps);
-    await log({ action: 'pseudonymize_file', kind: msg.kind, format: fk.kind, scopeType: scope.type, counts: counts(all), traceId });
+    const entry = { action: 'pseudonymize_file', kind: msg.kind, format: fk.kind, scopeType: scope.type, counts: counts(all), traceId };
+    if (pdfLog) entry.pdf = pdfLog;
+    await log(entry);
     return {
       ok: true,
-      data: { filename: nameRes.name, mime, contentB64: b64(out), entities: uniqueEntities(all), newEntries: [], blocked: false, blockReason: null, traceId, notice },
+      data: { filename: nameRes.name, mime, contentB64: outB64 != null ? outB64 : b64(out), entities: uniqueEntities(all), newEntries: [], blocked: false, blockReason: null, traceId, notice },
+    };
+  }
+
+  // --- Immagini: OCR locale + riquadri neri (Personal edition) ------------------------------------
+  const pad2 = (n) => String(n).padStart(2, '0');
+  function genericImageName(ext, d) {
+    d = d || new Date();
+    return `immagine-${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}${pad2(d.getHours())}${pad2(d.getMinutes())}${pad2(d.getSeconds())}${ext}`;
+  }
+
+  /**
+   * Legge il testo dell'immagine con OCR locale, rileva i dati personali e li copre con riquadri
+   * neri che riportano il segnaposto. Stessa forma di risposta di pseudonymizeFile, più `ocr`.
+   * Il nome del file in uscita è generico (immagine-AAAAMMGGhhmmss.ext) e non viene analizzato.
+   */
+  async function pseudonymizeImage(cfg, msg) {
+    const traceId = crypto.randomUUID();
+    const scope = msg.scope;
+    const blocked = async (reason, category) => {
+      await log({ action: 'pseudonymize_image', kind: msg.kind, scopeType: scope.type, blocked: true, category, traceId });
+      return { ok: true, data: { filename: msg.name, mime: '', contentB64: '', entities: [], newEntries: [], blocked: true, blockReason: reason, blockCategory: category, traceId, ocr: null } };
+    };
+    let img;
+    try {
+      img = await PG.ocrClient.image(msg.b64, msg.mime);
+    } catch (e) {
+      if (e && e.code === 'decode') {
+        return blocked(PG.strings.immagineNonLeggibile || 'L\'immagine non può essere letta (formato non supportato o file danneggiato): non è stata inviata.', 'unsupported_format');
+      }
+      return { ok: false, error: 'ocr', code: (e && e.code) || 'ocr', message: String(e && e.message) };
+    }
+    const { text, words } = PG.ocrMap.buildText(img.lines || []);
+    const q = PG.ocrMap.quality(words);
+    let reps;
+    try {
+      checkSpecial(text);
+      reps = text.trim() ? await replacementsFor(scope, await detect(cfg, text)) : [];
+    } catch (e) {
+      if (e instanceof Blocked) return blocked(e.message, e.category);
+      return failure(e);
+    }
+    const boxes = PG.ocrMap.boxesForSpans(words, reps.map((r) => ({ start: r.start, end: r.end, tag: r.tag })), { width: img.width, height: img.height });
+    const jpeg = /^image\/(jpeg|jpg|pjpeg)$/i.test(String(msg.mime || ''));
+    const outMime = jpeg ? 'image/jpeg' : 'image/png';
+    let red;
+    try {
+      // Sempre ri-codificata, anche senza riquadri: i metadati (EXIF, GPS…) vengono rimossi.
+      red = await PG.ocrClient.redact(msg.b64, msg.mime, boxes, outMime);
+    } catch (e) {
+      if (e && e.code === 'decode') {
+        return blocked(PG.strings.immagineNonLeggibile || 'L\'immagine non può essere letta (formato non supportato o file danneggiato): non è stata inviata.', 'unsupported_format');
+      }
+      return { ok: false, error: 'ocr', code: (e && e.code) || 'ocr', message: String(e && e.message) };
+    }
+    const mime = (red && red.mime) || outMime;
+    const filename = genericImageName(mime === 'image/jpeg' ? '.jpg' : '.png');
+    await log({ action: 'pseudonymize_image', kind: msg.kind, scopeType: scope.type, counts: counts(reps), ocr: { wordCount: q.wordCount, meanConf: q.meanConf }, traceId });
+    return {
+      ok: true,
+      data: {
+        filename, mime, contentB64: red.b64, entities: uniqueEntities(reps), newEntries: [], blocked: false, blockReason: null, blockCategory: null, traceId,
+        ocr: { wordCount: q.wordCount, meanConf: q.meanConf, lowConf: q.lowConf, noText: q.noText, covered: reps.length },
+      },
     };
   }
 
@@ -334,8 +531,19 @@
           return r.edits;
         }));
     } else if (fk.kind === 'pdf') {
-      // PDF: se Rizzo-PII offre /restore/pdf il ripristino conserva l'impaginazione; altrimenti
-      // Rizzo-PII ne estrae il testo e si genera un PDF di solo testo.
+      // PDF: ripristino locale con MuPDF.js (impaginazione conservata); se non riesce, /restore/pdf di
+      // Rizzo-PII; se manca anche quello, Rizzo-PII ne estrae il testo e si genera un PDF di solo testo.
+      if (PG.ocrClient && PG.ocrClient.pdfRestore) {
+        try {
+          const r = await PG.ocrClient.pdfRestore(msg.b64, entries);
+          if (r && typeof r.b64 === 'string' && r.b64) {
+            const unknown = (r.report && Array.isArray(r.report.unknown)) ? r.report.unknown : [];
+            return { ok: true, data: { filename: msg.name, mime: 'application/pdf', contentB64: r.b64, entities: [], unknownTags: [...new Set(unknown)], traceId: null } };
+          }
+        } catch (e) {
+          console.warn('[Pseudomania] ripristino locale del PDF non riuscito, si prova Rizzo-PII:', e && e.code);
+        }
+      }
       try {
         const same = await rizzo(cfg).restorePdf(msg.name, bytes, entries);
         if (same) {
@@ -419,5 +627,5 @@
     return { ok: state === 'ok', detector: state, keys: 'local', version: null, checked: Date.now() };
   }
 
-  PG.local = { pseudonymize, pseudonymizeFile, dictionary, reidentifyFile, rebind, deleteScope, event, cleanup, health, readLog, Blocked };
+  PG.local = { pseudonymize, pseudonymizeFile, pseudonymizeImage, dictionary, reidentifyFile, rebind, deleteScope, event, cleanup, health, readLog, Blocked };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

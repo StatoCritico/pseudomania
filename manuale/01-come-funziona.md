@@ -63,10 +63,10 @@ validare con il DPO.
 | Protetto (passa dall'estensione) | **Non** protetto |
 |---|---|
 | messaggi, modifiche e reinvii | **preferenze personali del profilo Claude** |
-| allegati DOCX, XLSX, TXT, CSV, MD; PDF (vedi §2.7 e §4.3) | **richieste di ricerca web** che Claude formula da sé |
+| allegati DOCX, XLSX, TXT, CSV, MD; PDF e, nella Personal edition, immagini (vedi §2.7 e §4.3) | **richieste di ricerca web** che Claude formula da sé |
 | istruzioni e file dei **progetti** | **connettori** (Google Drive, Gmail…) e **memoria** di Claude: vanno spenti |
 | testo lungo incollato che claude.ai trasforma in allegato | **app desktop e mobile** di Claude, altri browser, modalità in incognito |
-| download di file DOCX/XLSX/testo generati da Claude (ripristino) | **testo nelle immagini** (le immagini sono bloccate o inviate dopo una conferma, mai analizzate) |
+| download di file DOCX/XLSX/testo generati da Claude (ripristino; nella Personal edition anche PDF) | **testo nelle immagini** nella Server edition (bloccate o inviate dopo una conferma, mai analizzate); nella Personal edition l'oscuramento con OCR può non riconoscere tutto |
 | copia del testo delle risposte (appunti con i valori reali) | il **contesto** che identifica una persona anche senza nome |
 
 Limiti tecnici importanti (dettagli in `extension/README.md` §7):

@@ -13,6 +13,15 @@ const { createServer } = require('../../dev/mock-server/server.js');
 const { createRizzo } = require('../../dev/mock-rizzo/server.js');
 
 const EXT = path.join(__dirname, '..', '..');
+
+// Chromium di Playwright se installato, altrimenti Chrome di sistema (ambienti senza download).
+function executablePath() {
+  try {
+    const p = chromium.executablePath();
+    if (p && fs.existsSync(p)) return undefined;
+  } catch (_) { /* nessun Chromium di Playwright */ }
+  return fs.existsSync('/usr/bin/google-chrome') ? '/usr/bin/google-chrome' : undefined;
+}
 const FIXTURE = fs.readFileSync(path.join(EXT, 'dev', 'fixture', 'claude-like.html'), 'utf8');
 
 /**
@@ -41,6 +50,7 @@ async function startHarness(opts) {
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pg-e2e-'));
   const context = await chromium.launchPersistentContext(userDataDir, {
     headless: false,
+    executablePath: executablePath(),
     args: ['--headless=new', `--disable-extensions-except=${EXT}`, `--load-extension=${EXT}`],
     acceptDownloads: true,
   });

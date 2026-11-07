@@ -46,17 +46,21 @@ Trascina, incolla o scegli i file come sempre: l'estensione li intercetta prima 
 |---|---|---|
 | DOCX, XLSX | pseudonimizzati nell'estensione | pseudonimizzati dal server |
 | TXT, CSV, MD | pseudonimizzati | pseudonimizzati |
-| PDF | inviato come **file di testo pseudonimizzato (.txt)** con avviso (impaginazione e immagini non partono) | pseudonimizzato dal server |
-| Immagini (screenshot, foto) | **conferma per ogni immagine** (predefinita) o **bloccate**, secondo le tue impostazioni | **bloccate**, salvo diversa scelta dell'ente (conferma per ogni immagine) |
+| PDF | inviato **come PDF** con l'impaginazione: dati personali tolti e sostituiti dai segnaposto; immagini nel PDF secondo l'impostazione «Immagini nei PDF» (predefinita: lette con OCR e coperte) | pseudonimizzato dal server |
+| Immagini (screenshot, foto) | **oscuramento automatico** con OCR sul PC (predefinito), **conferma per ogni immagine** o **bloccate**, secondo le tue impostazioni | **bloccate**, salvo diversa scelta dell'ente (conferma per ogni immagine) |
 | Altri formati | **bloccati** | **bloccati** |
 
-**Immagini.** Il testo dentro le immagini **non** viene pseudonimizzato. Quando le immagini sono
-consentite con conferma, prima dell'invio compare la finestra «Inviare questa immagine?» con
-l'anteprima e l'avviso che i dati visibili arriveranno a Claude così come sono. Scegli **Annulla**
-(non parte nulla) o **Invia l'immagine**. Il nome del file diventa generico (es.
+**Immagini.** **(Personal)** Con l'oscuramento automatico (predefinito) il testo dell'immagine
+viene letto sul tuo PC (OCR) e i dati personali vengono coperti con un riquadro nero che riporta il
+segnaposto; prima dell'invio compare la finestra «Inviare l'immagine oscurata?» con l'anteprima:
+scegli **Annulla** o **Invia l'immagine oscurata**. L'OCR può non riconoscere tutto (scritte a mano,
+foto storte o sfocate): guarda sempre l'anteprima. **(Server edition)** Il testo dentro le immagini
+**non** viene pseudonimizzato. Quando le immagini sono consentite con conferma (in entrambe le
+edizioni), prima dell'invio compare la finestra «Inviare questa immagine?» con l'anteprima e
+l'avviso che i dati visibili arriveranno a Claude così come sono. Scegli **Annulla** (non parte
+nulla) o **Invia l'immagine**. Il nome del file diventa sempre generico (es.
 `immagine-20261105183000.png`). Quando sono bloccate compare un banner rosso e l'immagine non parte.
-L'oscuramento automatico dei dati nelle immagini è **in arrivo**, non ancora disponibile.
-**(Personal)** Con la protezione disattivata le immagini partono senza conferma.
+**(Personal)** Con la protezione disattivata le immagini partono senza controlli.
 
 Anche il **nome del file** può contenere dati personali: viene pseudonimizzato in entrambe le
 edizioni (per esempio `Lettera_Mario_Rossi.docx` parte come `Lettera_[FULLNAME_1].docx`).
@@ -92,8 +96,8 @@ pagina:
 - **Copiare**: selezionando e copiando il testo, o con i pulsanti «Copia» del sito, negli appunti
   arrivano i **valori reali**.
 - **Scaricare** un file DOCX, XLSX o di testo generato da Claude: i valori vengono ripristinati nel
-  file. Se non è possibile, il file viene scaricato con i segnaposto e un avviso. **(Personal)** I PDF
-  non vengono ripristinati.
+  file. Se non è possibile, il file viene scaricato con i segnaposto e un avviso. **(Personal)** Anche
+  i PDF vengono ripristinati, con l'impaginazione (§2.7).
 - **Artifact** mostrati in un riquadro separato: **non** vengono ripristinati. Pubblicare o condividere
   un artifact espone solo segnaposto.
 
@@ -224,8 +228,9 @@ non sono più ripristinabili. Cancella tu i progetti che non ti servono più.
 7. **Non aggirare l'estensione** (scrivere i dati in forma alterata per evitarne il riconoscimento,
    incollare tramite strumenti esterni, usare un altro profilo).
 8. **Non inviare feedback** (pollice su/giù) su chat con dati di terzi.
-9. **Non inviare immagini** (screenshot, foto) che mostrano dati personali: il testo nelle
-   immagini non viene pseudonimizzato.
+9. **Non inviare immagini** (screenshot, foto) che mostrano dati personali senza averle
+   controllate: nella Server edition il testo nelle immagini non viene pseudonimizzato; nella
+   Personal edition l'oscuramento automatico può non riconoscere tutto, quindi guarda l'anteprima.
 10. **(Personal)** Attiva la protezione **prima** di scrivere dati di terzi e non spegnerla in una
    conversazione che li contiene: riattivare non ripulisce ciò che è già partito.
 11. **Non fidarti ciecamente**: elimina o generalizza i dettagli che identificano senza nome (ruolo
@@ -261,12 +266,14 @@ bloccato per tutelare i dati. Riprova più tardi o contatta l'assistenza.
 
 **Ho cambiato PC e vedo segnaposto grigi.** Vedi §4.10.
 
-**Il PDF è arrivato a Claude come .txt.** È previsto nella Personal edition (§2.7).
+**Il PDF è arrivato a Claude come .txt.** **(Personal)** Di norma il PDF parte come PDF; il .txt è
+il ripiego per i file danneggiati o insoliti (§2.7): prova a salvarlo di nuovo come PDF.
 
-**Posso inviare screenshot e immagini?** Il testo nelle immagini non viene pseudonimizzato.
-**(Personal)** Di partenza ti viene chiesta una conferma per ogni immagine; puoi bloccarle del tutto
-dalle impostazioni (§2.7). **(Server edition)** Decide l'ente: di norma sono bloccate. Se sono
-consentite, invia solo immagini senza dati personali.
+**Posso inviare screenshot e immagini?** **(Personal)** Sì: di partenza il testo dell'immagine viene
+letto sul PC e i dati personali coperti; controlla l'anteprima prima di inviare. Nelle impostazioni
+puoi scegliere invece una conferma per ogni immagine (senza oscuramento) o bloccarle (§2.7).
+**(Server edition)** Il testo nelle immagini non viene pseudonimizzato. Decide l'ente: di norma sono
+bloccate. Se sono consentite, invia solo immagini senza dati personali.
 
 **L'amministratore può leggere le mie conversazioni?** **(Server edition)** No in via ordinaria: il server
 non conserva testi (solo un registro minimo con impronte e uno pseudonimo, e tracce pseudonimizzate

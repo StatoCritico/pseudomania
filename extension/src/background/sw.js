@@ -20,10 +20,12 @@ importScripts(
   '../shared/zip.js',
   '../shared/ooxml.js',
   '../shared/textfile.js',
+  '../shared/ocr-map.js',
   'idb.js',
   'auth.js',
   'api.js',
   'keys.js',
+  'ocr-client.js',
   'local.js'
 );
 
@@ -59,7 +61,7 @@ async function readManaged() {
 
 async function getConfig() {
   const { managed, dev } = await readManaged();
-  const local = await chrome.storage.local.get(['rizzoUrl', 'enabled', 'pgServerConfig', 'imagePolicy', 'activationMode']);
+  const local = await chrome.storage.local.get(['rizzoUrl', 'enabled', 'pgServerConfig', 'imagePolicy', 'pdfImagePolicy', 'activationMode']);
   const pre = PG.config.resolveConfig({ managed, local });
   const sc = local.pgServerConfig && local.pgServerConfig.url === pre.serverUrl ? local.pgServerConfig : null;
   const cfg = PG.config.resolveConfig({ managed, local, server: sc ? sc.data : null, serverTs: sc ? sc.ts : null });
@@ -420,6 +422,14 @@ const handlers = {
     return r;
   },
 
+  async 'pg:pseudonymizeImage'(msg, cfg) {
+    // OCR locale e oscuramento: solo Personal edition (in Server edition la policy «ocr» vale «block»).
+    if (!isPersonal(cfg)) return { ok: false, error: 'unsupported' };
+    const r = await PG.local.pseudonymizeImage(cfg, msg);
+    noteResult(r);
+    return r;
+  },
+
   async 'pg:dictionary'(msg, cfg) {
     return getDictionary(cfg, msg.scope, msg.force);
   },
@@ -573,6 +583,9 @@ const handlers = {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg || typeof msg.type !== 'string') return false;
+  // Messaggi destinati al documento offscreen dell'OCR (ocr:image, ocr:redact, ocr:pdf): li riceve
+  // anche il service worker, ma la risposta spetta all'offscreen.
+  if (msg.target === 'pg-offscreen') return false;
 
   // L'apertura del pannello laterale deve avvenire subito, nel contesto del gesto dell'utente.
   if (msg.type === 'pg:openInspection') {
@@ -639,7 +652,7 @@ chrome.alarms.onAlarm.addListener((a) => {
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'managed' || (area === 'local' && (changes.rizzoUrl || changes.pgDevManaged || changes.imagePolicy || changes.activationMode))) {
+  if (area === 'managed' || (area === 'local' && (changes.rizzoUrl || changes.pgDevManaged || changes.imagePolicy || changes.pdfImagePolicy || changes.activationMode))) {
     publishState({ serverConfig: true });
   }
 });

@@ -58,13 +58,33 @@
 
     // Banner di blocco
     bloccatoTitolo: 'Invio bloccato',
-    immaginiBloccatePersonal: 'Le immagini sono bloccate nelle impostazioni: il testo che contengono non può essere pseudonimizzato. Puoi consentirle con una conferma per ogni immagine dalle impostazioni di Pseudomania.',
+    immaginiBloccatePersonal: 'Le immagini sono bloccate nelle impostazioni di Pseudomania. Se vuoi inviarle, nelle impostazioni puoi scegliere l\'oscuramento automatico (i dati personali visibili vengono coperti prima dell\'invio) oppure una conferma per ogni immagine.',
     immaginiBloccateEnte: 'Le immagini sono bloccate dalla policy dell\'ente: il testo che contengono non può essere pseudonimizzato.',
     immagineTitolo: 'Inviare questa immagine?',
-    immagineTesto: 'Le immagini NON vengono pseudonimizzate: nomi, codici, indirizzi o altri dati visibili nell\'immagine arriveranno a Claude così come sono. Invia solo se l\'immagine non contiene dati personali.',
+    immagineTesto: 'Questa immagine NON verrà oscurata: nomi, codici, indirizzi o altri dati visibili nell\'immagine arriveranno a Claude così come sono. Invia solo se l\'immagine non contiene dati personali.',
     immagineAlt: 'Anteprima dell\'immagine da inviare',
     immagineNome: 'Il nome del file viene sostituito con un nome generico (es. immagine-20261105183000.png).',
     immagineInvia: 'Invia l\'immagine',
+    // Oscuramento automatico delle immagini (OCR locale, Personal edition)
+    ocrInCorso: (nome) => `Lettura del testo di «${nome}» e oscuramento dei dati personali… la prima volta può richiedere fino a un minuto`,
+    immagineOcrTitolo: 'Inviare l\'immagine oscurata?',
+    immagineOcrTesto: (n) =>
+      (n === 0
+        ? 'Nell\'immagine non sono stati trovati dati personali da coprire.'
+        : n === 1
+          ? 'Nell\'immagine è stato coperto 1 dato personale con un riquadro nero.'
+          : `Nell'immagine sono stati coperti ${n} dati personali con riquadri neri.`) +
+      ' Il testo è stato letto qui sul tuo computer: nulla è uscito dal PC. Controlla l\'anteprima: a Claude arriva esattamente questa immagine.',
+    immagineOcrNessunTesto:
+      'Attenzione: nell\'immagine non è stato riconosciuto alcun testo. Se contiene scritte (ad esempio scritte a mano, ' +
+      'molto piccole o inclinate), eventuali dati personali NON sono stati coperti.',
+    immagineOcrBassaQualita:
+      'Attenzione: il testo dell\'immagine è stato letto con difficoltà (immagine sfocata, piccola o poco contrastata). ' +
+      'Alcuni dati personali potrebbero non essere stati coperti: guarda bene l\'anteprima prima di inviare.',
+    immagineOcrAlt: 'Anteprima dell\'immagine con i dati personali oscurati',
+    immagineOcrInvia: 'Invia l\'immagine oscurata',
+    immagineNonLeggibile: 'non è stato possibile aprire l\'immagine (formato non supportato o file danneggiato). Salvala come PNG o JPG e riprova.',
+    immagineOcrNonDisponibile: 'l\'oscuramento automatico delle immagini non è disponibile in questo momento.',
     impAttivazioneTitolo: 'Attivazione nelle conversazioni',
     impAttivazione: {
       off: ['Disattivata di default', 'Ogni nuova conversazione parte senza protezione; la attivi con l\'icona o Alt+Maiusc+P. Le conversazioni attivate restano attive.'],
@@ -74,12 +94,29 @@
     impImmaginiTitolo: 'Immagini (screenshot, foto)',
     impImmagini: {
       block: ['Bloccate', 'Le immagini non vengono inviate.'],
-      confirm: ['Conferma per ogni immagine', 'Prima dell\'invio vedi l\'anteprima e confermi: il testo nell\'immagine NON viene pseudonimizzato.'],
-      ocr: ['Oscuramento automatico (in arrivo)', 'Il testo dell\'immagine viene letto e i dati personali coperti prima dell\'invio. Non ancora disponibile.'],
+      ocr: ['Oscuramento automatico', 'Il testo dell\'immagine viene letto qui sul tuo computer e i dati personali vengono coperti con riquadri neri; prima dell\'invio vedi l\'anteprima oscurata e confermi. La lettura automatica può sbagliare: controlla sempre l\'anteprima.'],
+      confirm: ['Conferma per ogni immagine', 'L\'immagine viene inviata così com\'è, dopo che hai visto l\'anteprima e confermato: i dati visibili NON vengono coperti.'],
     },
-    impImmaginiEnte: (p) => `Immagini: ${({ block: 'bloccate', confirm: 'conferma per ogni immagine', ocr: 'oscuramento automatico (non ancora disponibile: bloccate)' })[p] || p} (impostato dall'ente).`,
+    impImmaginiEnte: (p) => `Immagini: ${({ block: 'bloccate', confirm: 'conferma per ogni immagine', ocr: 'bloccate (l\'oscuramento automatico è disponibile solo nella Personal edition)' })[p] || p} (impostato dall'ente).`,
     impSalvatoBreve: 'Impostazione salvata.',
+    // Immagini nei PDF (solo Personal edition)
+    impPdfImmaginiTitolo: 'Immagini nei PDF (firme, timbri, fotografie, pagine scansionate)',
+    impPdfImmaginiAiuto:
+      'I PDF vengono inviati a Claude come PDF, con la loro impaginazione: i dati personali nel testo vengono tolti ' +
+      'e sostituiti dai segnaposto. Qui scegli cosa fare delle immagini contenute nel PDF.',
+    impPdfImmagini: {
+      ocr: ['Leggi e copri i dati (consigliato)', 'Il testo delle immagini e delle pagine scansionate viene letto qui sul tuo computer e i dati personali trovati vengono coperti. La lettura automatica può sbagliare (scritte a mano, timbri, immagini sfocate) e vale per le prime 30 pagine con immagini.'],
+      remove: ['Togli le immagini', 'Tutte le immagini vengono tolte dal PDF prima dell\'invio: Claude riceve solo il testo impaginato. Le pagine scansionate arrivano vuote.'],
+      keep: ['Lascia le immagini', 'Le immagini arrivano a Claude così come sono, senza alcun controllo. Sconsigliato: usalo solo se sei sicuro che le immagini non contengano dati personali.'],
+    },
+    impPdfKeepConfermaTitolo: 'Lasciare le immagini dei PDF senza controlli?',
+    impPdfKeepConfermaTesto:
+      'Con questa scelta le immagini contenute nei PDF arriveranno a Claude senza alcun controllo, compresi firme, ' +
+      'timbri, fotografie e pagine scansionate (che spesso contengono nomi, indirizzi e codici fiscali). Pseudomania ' +
+      'proteggerà solo il testo del PDF. Vale per tutti i PDF che allegherai da ora in poi.',
+    impPdfKeepConfermaOk: 'Sì, lascia le immagini',
     allegatoNonConsegnato: 'Il file è stato pseudonimizzato ma claude.ai non lo ha ricevuto: allegalo di nuovo trascinandolo nella casella di scrittura.',
+    // Ultimo ripiego del ripristino dei PDF scaricati (se il ripristino con impaginazione non riesce)
     pdfRipristinatoTesto: 'PDF scaricato con i dati reali, ma come testo semplice: l\'impaginazione originale non si conserva. Per un documento impaginato chiedi a Claude un file Word.',
     bloccatoRete: (r) => `Pseudomania ha fermato un invio a claude.ai: ${r}. Se un allegato non compare, rimuovilo e allegalo di nuovo; se il problema resta, scarica il registro dalle impostazioni.`,
     registroTitolo: 'Registro delle attività',
@@ -131,9 +168,46 @@
     anteprimaInviato: 'Testo inviato a Claude',
     anteprimaInvia: 'Invia',
 
+    // PDF (Personal edition). Il PDF parte come PDF, con la sua impaginazione: i dati personali vengono tolti
+    // davvero dal documento (non solo coperti) e sostituiti dai segnaposto. Il .txt resta solo come ripiego.
+    pdfProtetto:
+      'il PDF è protetto da password o da restrizioni e Pseudomania non può leggerlo. Togli la protezione ' +
+      '(ad esempio stampandolo come nuovo PDF) e allegalo di nuovo.',
+    pdfResidui: (n) =>
+      (n === 1
+        ? 'dopo la pseudonimizzazione nel PDF era ancora leggibile 1 dato personale'
+        : `dopo la pseudonimizzazione nel PDF erano ancora leggibili ${n} dati personali`) +
+      ': per sicurezza il file non è stato inviato. Prova a salvarlo di nuovo come PDF oppure copia il testo nel messaggio.',
+    pdfValoriNonCoperti: (n) =>
+      (n === 1
+        ? 'Attenzione: 1 dato molto breve (ad esempio una sigla di due lettere) non è stato coperto nel PDF e resta leggibile'
+        : `Attenzione: ${n} dati molto brevi (ad esempio sigle di due lettere) non sono stati coperti nel PDF e restano leggibili`) +
+      ': coprire valori così brevi rischierebbe di cancellare anche altre parole uguali. Se si tratta di dati da proteggere, non inviare il file.',
+    pdfImmaginiLasciate: (n) =>
+      (n === 1 ? 'Il PDF contiene 1 immagine che è stata lasciata' : `Il PDF contiene ${n} immagini che sono state lasciate`) +
+      ' così com\'è, senza controlli (come indicato nelle impostazioni): firme, timbri, fotografie e pagine scansionate arrivano a Claude in chiaro.',
+    pdfImmaginiTolte: (n) =>
+      (n === 1 ? '1 immagine è stata tolta' : `${n} immagini sono state tolte`) +
+      ' dal PDF prima dell\'invio (come indicato nelle impostazioni): Claude non vedrà firme, timbri, fotografie né il contenuto delle pagine scansionate.',
+    pdfImmaginiOcr: (pagine, troncato) =>
+      (pagine === 1 ? 'Le immagini di 1 pagina sono state lette' : `Le immagini di ${pagine} pagine sono state lette`) +
+      ' qui sul tuo computer con il riconoscimento automatico del testo e i dati personali trovati sono stati coperti. ' +
+      'La lettura automatica può sbagliare (scritte a mano, timbri, immagini sfocate): qualche dato potrebbe essere rimasto visibile.' +
+      (troncato ? ' Il documento è lungo: sono state lette solo le immagini delle prime 30 pagine; nelle altre le immagini sono state lasciate così come sono.' : ''),
+    pdfRipiegoTesto: (nome) =>
+      `Non è stato possibile pseudonimizzare il PDF «${nome}» mantenendo l'impaginazione: è stato inviato a Claude ` +
+      'come file di testo pseudonimizzato (.txt). Impaginazione, immagini e tabelle grafiche non vengono inviate.',
+    // Ripiego in .txt (vecchio percorso, usato solo se il PDF non può essere trattato come PDF)
+    pdfScansionatoOcr: (nome, pagine, troncato) =>
+      `Il PDF «${nome}» era scansionato e non è stato possibile conservarlo come PDF: ` +
+      (pagine === 1 ? '1 pagina è stata letta' : `${pagine} pagine sono state lette`) +
+      ' qui sul tuo computer con il riconoscimento automatico del testo e inviate a Claude come testo pseudonimizzato (.txt). ' +
+      'La lettura automatica può contenere errori (lettere scambiate, parole mancanti): alcuni dati personali potrebbero non essere stati riconosciuti.' +
+      (troncato ? ' Il documento è lungo: sono state lette solo le prime 30 pagine, le altre non sono state inviate.' : ''),
+    pdfSenzaTesto: 'nel PDF non è stato trovato testo da inviare (potrebbe essere una scansione illeggibile o un documento vuoto).',
     pdfConvertito: (nome) =>
-      `Il PDF «${nome}» è stato convertito in un file di testo pseudonimizzato (.txt): impaginazione, ` +
-      'immagini e tabelle grafiche non vengono inviate a Claude.',
+      `Il PDF «${nome}» non ha potuto essere trattato come PDF ed è stato inviato come file di testo pseudonimizzato (.txt): ` +
+      'impaginazione, immagini e tabelle grafiche non vengono inviate a Claude.',
     nonRipristinabile: 'Segnaposto non ripristinabile (chiave di un altro computer)',
     nonRipristinabiliAvviso: (n, progetto) =>
       (n === 1 ? '1 segnaposto non è ripristinabile' : `${n} segnaposto non sono ripristinabili`) +
