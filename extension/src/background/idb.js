@@ -55,7 +55,46 @@
     r.onerror = () => rej(r.error);
   });
 
+  /**
+   * Persistenza del dizionario (Personal edition).
+   *
+   * Cosa protegge davvero dallo sfratto: il permesso `unlimitedStorage` del manifest. Chromium esclude
+   * dallo sfratto per disco pieno le origini con archiviazione illimitata (SpecialStoragePolicy), e la
+   * quota passa da una frazione del disco a quasi tutto il disco libero (verificato con
+   * navigator.storage.estimate(): ~10 GB → ~31 GB sullo stesso disco).
+   *
+   * navigator.storage.persist() NON è disponibile nel service worker: per specifica è esposta solo a
+   * Window (nel service worker di un'estensione MV3 `typeof navigator.storage.persist` è 'undefined';
+   * persisted() invece c'è). In una pagina dell'estensione Chrome la concede solo con le sue euristiche
+   * (segnalibri, coinvolgimento, notifiche) e senza chiedere nulla all'utente: in prova restituisce
+   * false anche con unlimitedStorage. La si chiede comunque se disponibile (pagina dell'estensione, o
+   * futuri Chrome) perché non costa nulla; lo stato riportato distingue le due protezioni.
+   * @returns {Promise<{persisted:boolean, unlimited:boolean, protected:boolean, requested:boolean, quota:number|null, usage:number|null}>}
+   */
+  async function persistence(opts) {
+    const sm = typeof navigator !== 'undefined' && navigator.storage ? navigator.storage : null;
+    let persisted = false;
+    let requested = false;
+    let quota = null;
+    let usage = null;
+    try {
+      if (sm && typeof sm.persisted === 'function') persisted = await sm.persisted();
+      if (!persisted && sm && typeof sm.persist === 'function' && !(opts && opts.request === false)) {
+        requested = true;
+        persisted = await sm.persist();
+      }
+      if (sm && typeof sm.estimate === 'function') ({ quota = null, usage = null } = await sm.estimate());
+    } catch (_) { /* API non disponibile: si riporta false */ }
+    let unlimited = false;
+    try {
+      const m = root.chrome && root.chrome.runtime && root.chrome.runtime.getManifest ? root.chrome.runtime.getManifest() : null;
+      unlimited = Boolean(m && Array.isArray(m.permissions) && m.permissions.includes('unlimitedStorage'));
+    } catch (_) { /* fuori dall'estensione */ }
+    return { persisted: Boolean(persisted), unlimited, protected: Boolean(persisted) || unlimited, requested, quota, usage };
+  }
+
   PG.idb = {
+    persistence,
     get: (store, key) => run(store, 'readonly', (os) => req2p(os.get(key))),
     all: (store) => run(store, 'readonly', (os) => req2p(os.getAll())),
     put: (store, value) => run(store, 'readwrite', (os) => req2p(os.put(value))),

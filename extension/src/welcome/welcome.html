@@ -1,0 +1,71 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benvenuto in Pseudomania</title>
+  <link rel="icon" href="../../icons/icon32.png">
+  <link rel="stylesheet" href="../ui/common.css">
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+  <main>
+    <header class="head">
+      <img src="../../icons/icon48.png" alt="" width="48" height="48">
+      <div>
+        <h1 id="title"></h1>
+        <p id="edition" class="muted small"></p>
+      </div>
+    </header>
+
+    <p id="intro"></p>
+    <p id="local" class="muted"></p>
+
+    <p id="managed" class="card" hidden></p>
+
+    <section id="steps" aria-labelledby="stepsTitle">
+      <h2 id="stepsTitle"></h2>
+
+      <section class="card" aria-labelledby="s1Title">
+        <h3 id="s1Title"></h3>
+        <p id="s1Text"></p>
+        <div id="rizzoStatus" class="status" role="status" aria-live="polite" data-state="checking">
+          <span class="icon" aria-hidden="true"></span>
+          <span id="rizzoMsg"></span>
+        </div>
+        <div id="rizzoHelp" hidden>
+          <p id="rizzoHow"></p>
+          <ol id="rizzoSteps"></ol>
+          <p><a id="rizzoDownload" class="btn primary linkbtn" target="_blank" rel="noopener noreferrer"></a></p>
+        </div>
+        <p id="rizzoUrl" class="small muted"></p>
+        <div class="row"><button class="btn" type="button" id="btnCheck"></button></div>
+      </section>
+
+      <section class="card" aria-labelledby="s2Title">
+        <h3 id="s2Title"></h3>
+        <p id="s2Text"></p>
+      </section>
+
+      <section class="card" aria-labelledby="s3Title">
+        <h3 id="s3Title"></h3>
+        <p id="s3Text"></p>
+        <p class="shortcut"><kbd id="shortcut"></kbd></p>
+        <p id="s3Note" class="small muted"></p>
+      </section>
+    </section>
+
+    <section aria-labelledby="moreTitle">
+      <h2 id="moreTitle"></h2>
+      <div class="row">
+        <button class="btn" type="button" id="btnOptions"></button>
+        <a id="guide" class="btn linkbtn" target="_blank" rel="noopener noreferrer"></a>
+      </div>
+    </section>
+  </main>
+  <script src="../shared/strings.js"></script>
+  <script src="../shared/config.js"></script>
+  <script src="welcome.js"></script>
+</body>
+</html>

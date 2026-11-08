@@ -25,9 +25,12 @@
   let policyCache = null;
 
   class Blocked extends Error {
-    constructor(reason, category) {
+    constructor(reason, category, special) {
       super(reason);
       this.category = category;
+      // Solo i blocchi per categoria particolare (artt. 9-10 GDPR) possono essere superati
+      // dall'utente con una conferma esplicita (decisione dell'8/11/2026, solo Personal edition).
+      this.special = special || null;
     }
   }
 
@@ -35,13 +38,61 @@
   const unb64 = (s) => PG.keys.unb64(s);
   const scopeKey = (s) => `${s.type}:${s.id}`;
 
+  // --- Esclusione reciproca per scope -----------------------------------------------------------
+  // Ogni operazione che legge, modifica e riscrive il record pdict di uno scope (assign, dictionary
+  // che aggiorna lastUsed, rebind, deleteScope, cleanup) passa da una catena di promise per chiave di
+  // scope. Senza, due elaborazioni contemporanee sulla stessa conversazione (due schede, un messaggio
+  // mentre si carica un file) leggono lo stesso record, calcolano lo stesso contatore e assegnano lo
+  // stesso segnaposto (es. [FULLNAME_1]) a valori diversi: l'ultima scrittura vince e il ripristino
+  // mostra la persona sbagliata. Le transazioni IndexedDB non bastano: fra get e put ci sono
+  // operazioni asincrone (HMAC, cifratura). Il service worker è unico per l'estensione e local.js
+  // gira solo lì, quindi una coda in memoria è sufficiente (se il SW viene terminato, le code muoiono
+  // con lui insieme alle operazioni in corso).
+  // Più chiavi (rebind) vengono accodate insieme e in modo sincrono, in ordine: niente attese
+  // incrociate. NON richiamare withScopes per una chiave già tenuta dalla stessa operazione (stallo).
+  const scopeChains = new Map();
+  function withScopes(keys, fn) {
+    const ks = [...new Set(keys)].sort();
+    const prev = Promise.all(ks.map((k) => scopeChains.get(k) || Promise.resolve()));
+    const run = prev.then(() => fn());
+    const tail = run.then(() => {}, () => {});
+    for (const k of ks) scopeChains.set(k, tail);
+    tail.then(() => {
+      for (const k of ks) if (scopeChains.get(k) === tail) scopeChains.delete(k);
+    });
+    return run;
+  }
+
   function policy() {
     if (!policyCache) policyCache = PG.policy.fromBundled();
     return policyCache;
   }
 
+  // Tipi che l'utente ha scelto di NON mascherare (impostazione keepTypes, solo Personal edition).
+  // Doppio controllo: solo i tipi a basso rischio ammessi da config.js (ripiego: elenco fisso uguale).
+  const KEEPABLE_FALLBACK = ['DATE', 'TIME', 'AMOUNT', 'AGE', 'GENDER', 'ORG'];
+  function keepSet(cfg) {
+    const allowed = (PG.config && PG.config.KEEPABLE_TYPES) || KEEPABLE_FALLBACK;
+    const want = cfg && Array.isArray(cfg.keepTypes) ? cfg.keepTypes : [];
+    return new Set(want.map((t) => String(t).toUpperCase()).filter((t) => allowed.includes(t)));
+  }
+
+  /**
+   * Toglie le rilevazioni dei tipi da non mascherare. Va applicato PRIMA di clean(): se un'entità
+   * mantenuta (es. ORG «Studio Mario Rossi») si sovrappone a una da mascherare (FULLNAME «Mario Rossi»),
+   * quest'ultima deve sopravvivere. `stats.kept` conta le rilevazioni lasciate in chiaro (mai i valori).
+   */
+  function dropKept(cfg, dets, stats) {
+    const keep = keepSet(cfg);
+    if (!keep.size || !Array.isArray(dets)) return dets;
+    const out = dets.filter((d) => !keep.has(String(d.label).toUpperCase()));
+    if (stats) stats.kept = (stats.kept || 0) + (dets.length - out.length);
+    return out;
+  }
+
   function rizzo(cfg) {
-    return new PG.rizzo.RizzoClient(cfg.rizzoUrl);
+    const keep = [...keepSet(cfg)];
+    return new PG.rizzo.RizzoClient(cfg.rizzoUrl, keep.length ? { excludeTags: keep } : undefined);
   }
 
   async function localKeys() {
@@ -93,7 +144,11 @@
   }
 
   /** dets [{label, value}] → Map(valoreNormalizzato → {tag, type}). */
-  async function assign(scope, dets) {
+  function assign(scope, dets) {
+    return withScopes([scopeKey(scope)], () => assignLocked(scope, dets));
+  }
+
+  async function assignLocked(scope, dets) {
     const rec = await loadScope(scope, true);
     const out = new Map();
     const counters = {};
@@ -129,14 +184,41 @@
     });
   }
 
-  async function detect(cfg, text) {
-    const raw = await rizzo(cfg).analyzeText(text);
+  /** Rilevamento con Rizzo-PII: tipi mantenuti tolti (keepTypes), allowlist, sovrapposizioni. */
+  async function detect(cfg, text, stats) {
+    const raw = dropKept(cfg, await rizzo(cfg).analyzeText(text), stats);
     return PG.rizzo.clean(policy().allowlist.filter(text, raw));
   }
 
-  function checkSpecial(text) {
+  /**
+   * Categorie particolari (artt. 9-10 GDPR). Senza conferma: lancia Blocked (special = {label}).
+   * Con `ov.allow` (msg.allowSpecial, inviato dallo script di contenuto dopo la conferma
+   * esplicita dell'utente) non blocca e annota la categoria in `ov.category` per il registro.
+   */
+  function checkSpecial(text, ov) {
     const hit = policy().special.firstBlock(text);
-    if (hit) throw new Blocked(policy().special.reason(hit), hit.category);
+    if (!hit) return;
+    if (ov && ov.allow) {
+      if (!ov.category) ov.category = hit.category;
+      return;
+    }
+    throw new Blocked(policy().special.reason(hit, PG.strings && PG.strings.bloccoSpecialePersonal), hit.category, { label: hit.label });
+  }
+
+  /** Oggetto di controllo per checkSpecial a partire dalla richiesta. */
+  const overrideFor = (msg) => ({ allow: msg.allowSpecial === true, category: null });
+
+  /** Annota nel registro l'invio confermato di una categoria particolare (solo la categoria). */
+  function withOverride(entry, ov) {
+    if (ov && ov.category) entry.specialOverride = { category: ov.category };
+    return entry;
+  }
+
+  /** Campi della risposta per un blocco: canOverride solo per le categorie particolari. */
+  function blockFields(reason, category, special) {
+    const f = { blocked: true, blockReason: reason, blockCategory: category, canOverride: Boolean(special) };
+    if (special) f.blockLabel = special.label;
+    return f;
   }
 
   function failure(e) {
@@ -164,6 +246,12 @@
 
   async function sha256(text) {
     return b64(await crypto.subtle.digest('SHA-256', te.encode(text)));
+  }
+
+  /** Annota nel registro quante rilevazioni sono state lasciate in chiaro (keepTypes): solo il numero. */
+  function withKept(entry, stats) {
+    if (stats && stats.kept) entry.kept = stats.kept;
+    return entry;
   }
 
   function counts(reps) {
@@ -197,16 +285,19 @@
   async function pseudonymize(cfg, msg) {
     const traceId = crypto.randomUUID();
     const scope = msg.scope;
+    const ov = overrideFor(msg);
     const hit = policy().special.firstBlock(msg.text);
-    if (hit) {
+    if (hit && !ov.allow) {
       await log({ action: 'pseudonymize', kind: msg.kind, scopeType: scope.type, blocked: true, category: hit.category, traceId });
-      return { ok: true, data: { text: '', entities: [], newEntries: [], blocked: true, blockReason: policy().special.reason(hit), blockCategory: hit.category, traceId } };
+      return { ok: true, data: Object.assign({ text: '', entities: [], newEntries: [], traceId }, blockFields(policy().special.reason(hit, PG.strings && PG.strings.bloccoSpecialePersonal), hit.category, { label: hit.label })) };
     }
+    if (hit) ov.category = hit.category;
     try {
-      const dets = await detect(cfg, msg.text);
+      const stats = { kept: 0 };
+      const dets = await detect(cfg, msg.text, stats);
       const reps = await replacementsFor(scope, dets);
       const text = PG.rizzo.applyReplacements(msg.text, reps);
-      await log({ action: 'pseudonymize', kind: msg.kind, scopeType: scope.type, counts: counts(reps), sha256: await sha256(text), traceId });
+      await log(withOverride(withKept({ action: 'pseudonymize', kind: msg.kind, scopeType: scope.type, counts: counts(reps), sha256: await sha256(text), traceId }, stats), ov));
       return {
         ok: true,
         data: { text, entities: reps.map((r) => ({ tag: r.tag, type: r.type, start: r.start, end: r.end })), newEntries: [], blocked: false, blockReason: null, traceId },
@@ -216,13 +307,13 @@
     }
   }
 
-  async function pseudonymizeName(cfg, scope, filename) {
+  async function pseudonymizeName(cfg, scope, filename, stats) {
     const m = filename.match(/^(.*?)(\.[^.]*)?$/);
     const stem = m[1];
     const ext = m[2] || '';
     const readable = stem.replace(/_/g, ' ');
     if (!readable.trim()) return { name: filename, reps: [] };
-    const dets = await detect(cfg, readable);
+    const dets = await detect(cfg, readable, stats);
     if (!dets.length) return { name: filename, reps: [] };
     const reps = await replacementsFor(scope, dets.map((d) => Object.assign({}, d, { value: stem.slice(d.start, d.end).replace(/_/g, ' ') })));
     return { name: PG.rizzo.applyReplacements(stem, reps) + ext, reps };
@@ -279,7 +370,7 @@
    * Ramo PDF di pseudonymizeFile (Personal). Restituisce {b64, reps, notice, log}, oppure null se
    * il PDF va trattato con il ripiego in .txt. Lancia Blocked per i casi da bloccare.
    */
-  async function pseudonymizePdf(cfg, scope, msg) {
+  async function pseudonymizePdf(cfg, scope, msg, stats, ov) {
     const imagePolicy = PDF_POLICIES.includes(cfg.pdfImagePolicy) ? cfg.pdfImagePolicy : 'ocr';
     const protetto = () => new Blocked(str('pdfProtetto', [], 'il PDF è protetto da password: togli la protezione e allegalo di nuovo.'), 'encrypted');
     let prep;
@@ -293,8 +384,8 @@
     const pages = Array.isArray(prep && prep.pages) ? prep.pages : [];
     const doc = PG.ocrMap.pagesToDoc(pages);
     if (!doc.text.trim()) throw new Blocked(pdfSenzaTesto(msg.name), 'unreadable');
-    checkSpecial(doc.text);
-    const reps = await replacementsFor(scope, await detect(cfg, doc.text));
+    checkSpecial(doc.text, ov);
+    const reps = await replacementsFor(scope, await detect(cfg, doc.text, stats));
     const { mapping, keyTag, ocrBoxes } = pdfTargets(doc, reps, pages);
     let red;
     try {
@@ -336,12 +427,14 @@
     const traceId = crypto.randomUUID();
     const scope = msg.scope;
     const bytes = unb64(msg.b64);
-    const blocked = async (reason, category) => {
+    const ov = overrideFor(msg);
+    const blocked = async (reason, category, special) => {
       await log({ action: 'pseudonymize_file', kind: msg.kind, scopeType: scope.type, blocked: true, category, traceId });
-      return { ok: true, data: { filename: msg.name, mime: '', contentB64: '', entities: [], newEntries: [], blocked: true, blockReason: reason, blockCategory: category, traceId } };
+      return { ok: true, data: Object.assign({ filename: msg.name, mime: '', contentB64: '', entities: [], newEntries: [], traceId }, blockFields(reason, category, special)) };
     };
     const fk = await PG.textfile.detectKind(msg.name, bytes);
     if (!fk.kind) return blocked(fk.reason, 'unsupported_format');
+    const stats = { kept: 0 };
     const all = [];
     let out;
     let mime = PG.textfile.MIME[fk.kind];
@@ -352,14 +445,14 @@
     try {
       if (fk.kind === 'txt' || fk.kind === 'md' || fk.kind === 'csv') {
         const dt = PG.textfile.decodeText(bytes);
-        checkSpecial(dt.text);
-        const reps = await replacementsFor(scope, await detect(cfg, dt.text));
+        checkSpecial(dt.text, ov);
+        const reps = await replacementsFor(scope, await detect(cfg, dt.text, stats));
         all.push(...reps);
         out = PG.textfile.encodeText(dt, PG.rizzo.applyReplacements(dt.text, reps));
       } else if (fk.kind === 'docx' || fk.kind === 'xlsx') {
         out = await PG.ooxml.transformOffice(bytes, fk.kind, async (texts) => {
-          checkSpecial(texts.join('\n'));
-          const per = await PG.rizzo.detectUnits(texts, (big) => detect(cfg, big), policy().allowlist);
+          checkSpecial(texts.join('\n'), ov);
+          const per = await PG.rizzo.detectUnits(texts, (big) => detect(cfg, big, stats), policy().allowlist);
           const flat = per.flat();
           const reps = await replacementsFor(scope, flat);
           all.push(...reps);
@@ -374,7 +467,7 @@
         // Se la preparazione o la redazione non riescono si ripiega sul .txt pseudonimizzato via Rizzo-PII.
         let res = null;
         if (PG.ocrClient && PG.ocrClient.pdfPrepare && PG.ocrMap && PG.ocrMap.pagesToDoc) {
-          res = await pseudonymizePdf(cfg, scope, msg);
+          res = await pseudonymizePdf(cfg, scope, msg, stats, ov);
         }
         if (res) {
           all.push(...res.reps);
@@ -387,8 +480,8 @@
           const text = res2.text || '';
           // Niente file vuoti: un PDF senza testo leggibile (scansione non letta) viene bloccato.
           if (!text.trim()) throw new Blocked(pdfSenzaTesto(msg.name), 'unreadable');
-          checkSpecial(text);
-          const reps = await replacementsFor(scope, PG.rizzo.clean(policy().allowlist.filter(text, res2.detections)));
+          checkSpecial(text, ov);
+          const reps = await replacementsFor(scope, PG.rizzo.clean(policy().allowlist.filter(text, dropKept(cfg, res2.detections, stats))));
           all.push(...reps);
           out = te.encode(PG.rizzo.applyReplacements(text, reps));
           mime = 'text/plain';
@@ -398,19 +491,19 @@
         }
       }
     } catch (e) {
-      if (e instanceof Blocked) return blocked(e.message, e.category);
+      if (e instanceof Blocked) return blocked(e.message, e.category, e.special);
       if (e instanceof PG.zip.ZipError) return blocked('File Office non valido o danneggiato: ' + e.message, 'invalid_file');
       if (e && e.code === 'detector_rejected') return blocked('Il file non può essere analizzato: ' + e.message, 'unreadable');
       return failure(e);
     }
     let nameRes;
     try {
-      nameRes = await pseudonymizeName(cfg, scope, outName);
+      nameRes = await pseudonymizeName(cfg, scope, outName, stats);
     } catch (e) {
       return failure(e);
     }
     all.push(...nameRes.reps);
-    const entry = { action: 'pseudonymize_file', kind: msg.kind, format: fk.kind, scopeType: scope.type, counts: counts(all), traceId };
+    const entry = withOverride(withKept({ action: 'pseudonymize_file', kind: msg.kind, format: fk.kind, scopeType: scope.type, counts: counts(all), traceId }, stats), ov);
     if (pdfLog) entry.pdf = pdfLog;
     await log(entry);
     return {
@@ -434,9 +527,10 @@
   async function pseudonymizeImage(cfg, msg) {
     const traceId = crypto.randomUUID();
     const scope = msg.scope;
-    const blocked = async (reason, category) => {
+    const ov = overrideFor(msg);
+    const blocked = async (reason, category, special) => {
       await log({ action: 'pseudonymize_image', kind: msg.kind, scopeType: scope.type, blocked: true, category, traceId });
-      return { ok: true, data: { filename: msg.name, mime: '', contentB64: '', entities: [], newEntries: [], blocked: true, blockReason: reason, blockCategory: category, traceId, ocr: null } };
+      return { ok: true, data: Object.assign({ filename: msg.name, mime: '', contentB64: '', entities: [], newEntries: [], traceId, ocr: null }, blockFields(reason, category, special)) };
     };
     let img;
     try {
@@ -448,13 +542,14 @@
       return { ok: false, error: 'ocr', code: (e && e.code) || 'ocr', message: String(e && e.message) };
     }
     const { text, words } = PG.ocrMap.buildText(img.lines || []);
+    const stats = { kept: 0 };
     const q = PG.ocrMap.quality(words);
     let reps;
     try {
-      checkSpecial(text);
-      reps = text.trim() ? await replacementsFor(scope, await detect(cfg, text)) : [];
+      checkSpecial(text, ov);
+      reps = text.trim() ? await replacementsFor(scope, await detect(cfg, text, stats)) : [];
     } catch (e) {
-      if (e instanceof Blocked) return blocked(e.message, e.category);
+      if (e instanceof Blocked) return blocked(e.message, e.category, e.special);
       return failure(e);
     }
     const boxes = PG.ocrMap.boxesForSpans(words, reps.map((r) => ({ start: r.start, end: r.end, tag: r.tag })), { width: img.width, height: img.height });
@@ -472,7 +567,7 @@
     }
     const mime = (red && red.mime) || outMime;
     const filename = genericImageName(mime === 'image/jpeg' ? '.jpg' : '.png');
-    await log({ action: 'pseudonymize_image', kind: msg.kind, scopeType: scope.type, counts: counts(reps), ocr: { wordCount: q.wordCount, meanConf: q.meanConf }, traceId });
+    await log(withOverride(withKept({ action: 'pseudonymize_image', kind: msg.kind, scopeType: scope.type, counts: counts(reps), ocr: { wordCount: q.wordCount, meanConf: q.meanConf }, traceId }, stats), ov));
     return {
       ok: true,
       data: {
@@ -482,7 +577,11 @@
     };
   }
 
-  async function dictionary(scope) {
+  function dictionary(scope) {
+    return withScopes([scopeKey(scope)], () => dictionaryLocked(scope));
+  }
+
+  async function dictionaryLocked(scope) {
     const rec = await loadScope(scope, false);
     const entries = {};
     const unrecoverable = [];
@@ -571,7 +670,11 @@
     return { ok: true, data: { filename: msg.name, mime: msg.mime, contentB64: b64(out), entities: [], unknownTags: [...unknownTags], traceId: null } };
   }
 
-  async function rebind(msg) {
+  function rebind(msg) {
+    return withScopes([scopeKey(msg.from), scopeKey(msg.to)], () => rebindLocked(msg));
+  }
+
+  async function rebindLocked(msg) {
     const from = await loadScope(msg.from, false);
     if (!from) return { ok: true, status: 204, data: null };
     const to = await loadScope(msg.to, true);
@@ -597,7 +700,8 @@
   }
 
   async function deleteScope(msg) {
-    await PG.idb.del('pdict', scopeKey(msg.scope));
+    const key = scopeKey(msg.scope);
+    await withScopes([key], () => PG.idb.del('pdict', key));
     await log({ action: 'scope_delete', scopeType: msg.scope.type });
     return { ok: true };
   }
@@ -615,11 +719,17 @@
 
   async function cleanup() {
     const now = Date.now();
-    for (const rec of await PG.idb.all('pdict')) {
+    const stale = (rec) => {
       const pending = String(rec.id).startsWith('pending:');
-      if ((pending && now - rec.lastUsed > DAY) || (!pending && rec.type === 'conversation' && now - rec.lastUsed > 30 * DAY)) {
-        await PG.idb.del('pdict', rec.scopeKey);
-      }
+      return (pending && now - rec.lastUsed > DAY) || (!pending && rec.type === 'conversation' && now - rec.lastUsed > 30 * DAY);
+    };
+    for (const rec of await PG.idb.all('pdict')) {
+      if (!stale(rec)) continue;
+      // Si ricontrolla dentro la coda: un assign appena concluso può aver aggiornato lastUsed.
+      await withScopes([rec.scopeKey], async () => {
+        const cur = await PG.idb.get('pdict', rec.scopeKey);
+        if (cur && stale(cur)) await PG.idb.del('pdict', rec.scopeKey);
+      });
     }
     for (const r of await PG.idb.all('plog')) if (now - r.ts > 90 * DAY) await PG.idb.del('plog', r.id);
   }
@@ -629,5 +739,5 @@
     return { ok: state === 'ok', detector: state, keys: 'local', version: null, checked: Date.now() };
   }
 
-  PG.local = { pseudonymize, pseudonymizeFile, pseudonymizeImage, dictionary, reidentifyFile, rebind, deleteScope, event, cleanup, health, readLog, Blocked };
+  PG.local = { withScopes, pseudonymize, pseudonymizeFile, pseudonymizeImage, dictionary, reidentifyFile, rebind, deleteScope, event, cleanup, health, readLog, Blocked };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

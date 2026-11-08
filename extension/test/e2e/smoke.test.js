@@ -149,6 +149,10 @@ test('flusso completo (Server edition)', { timeout: 120000 }, async (t) => {
     assert.ok(ev);
     await page.waitForTimeout(500);
     assert.equal(completions(h).length, before);
+    // Server edition: nessuna possibilità di forzare (niente finestra di conferma)
+    assert.equal(await page.$('pg-ui[data-pg-ui="modal"]'), null, 'nessuna finestra di invio pseudonimizzato');
+    const log = await page.$eval('pg-ui[data-pg-ui="status"]', (e) => e.shadowRoot.textContent);
+    assert.match(log, /Invio bloccato/);
     const left = await page.$eval('.ProseMirror', (e) => e.innerText);
     assert.ok(left.includes('sieropositivo'), 'il testo resta nella casella');
     await page.evaluate(() => (document.querySelector('.ProseMirror').innerHTML = '<p><br></p>'));

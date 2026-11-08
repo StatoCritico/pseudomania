@@ -63,7 +63,8 @@ test('Personal edition: attivazione per conversazione', { timeout: 150000 }, asy
   await t.test('scorciatoia: spegnimento con avviso (la chat contiene dati protetti); OFF solo in uscita', async () => {
     const r = toggle(tabA, 'shortcut');
     await a.waitForSelector('pg-ui[data-pg-ui="modal"]', { state: 'attached', timeout: 5000 });
-    await a.keyboard.press('Enter'); // pulsante «Disattiva», che ha il focus
+    await a.keyboard.press('Tab'); // il focus parte da «Annulla»: Tab porta a «Disattiva»
+    await a.keyboard.press('Enter');
     assert.deepEqual((await r).data, { state: 'off' });
     await waitActivation(a, 'off');
     assert.equal(await badge(tabA), 'OFF');

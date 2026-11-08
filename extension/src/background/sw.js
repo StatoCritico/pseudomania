@@ -61,7 +61,7 @@ async function readManaged() {
 
 async function getConfig() {
   const { managed, dev } = await readManaged();
-  const local = await chrome.storage.local.get(['rizzoUrl', 'enabled', 'pgServerConfig', 'imagePolicy', 'pdfImagePolicy', 'activationMode']);
+  const local = await chrome.storage.local.get(['rizzoUrl', 'enabled', 'pgServerConfig', 'imagePolicy', 'pdfImagePolicy', 'activationMode', 'keepTypes']);
   const pre = PG.config.resolveConfig({ managed, local });
   const sc = local.pgServerConfig && local.pgServerConfig.url === pre.serverUrl ? local.pgServerConfig : null;
   const cfg = PG.config.resolveConfig({ managed, local, server: sc ? sc.data : null, serverTs: sc ? sc.ts : null });
@@ -169,10 +169,10 @@ async function applyTabBadge(tabId, state) {
   let color = '#2e7d32';
   if (state === 'off') {
     text = 'OFF';
-    color = '#ef6c00';
+    color = '#b85000';
   } else if (state === 'ask') {
     text = '?';
-    color = '#ef6c00';
+    color = '#b85000';
   } else if (bad) {
     text = '!';
     color = '#c62828';
@@ -229,7 +229,7 @@ async function updateIcon(cfg, auth) {
   let title = PG.strings.attiva;
   if (!cfg.enabled) {
     text = 'OFF';
-    color = '#ef6c00';
+    color = '#b85000';
     title = PG.strings.disattiva;
   } else if (!lastHealth.ok) {
     text = '!';
@@ -237,7 +237,7 @@ async function updateIcon(cfg, auth) {
     title = PG.strings.statoServizio(cfg.mode, lastHealth);
   } else if (auth && auth.needed) {
     text = '…';
-    color = '#ef6c00';
+    color = '#b85000';
     title = PG.strings.accessoNecessario;
   }
   await chrome.action.setBadgeText({ text });
@@ -320,17 +320,38 @@ async function getDictionary(cfg, scope, force) {
     if (r.status === 404) return { ok: true, data: { entries: {}, unrecoverable: [], expiresAt: null, confirmBy: null } };
     return r;
   }
-  // Valori noti in questa sessione ma non (ancora) caricati restano ripristinabili.
-  const local = cached ? cached.localOnly || {} : {};
-  const entries = Object.assign({}, local, r.data.entries);
-  const unrecoverable = (r.data.unrecoverable || []).filter((t) => !(t in entries));
-  const merged = { entries, unrecoverable, localOnly: local, expiresAt: r.data.expiresAt, confirmBy: r.data.confirmBy, fetchedAt: Date.now() };
-  await chrome.storage.session.set({ [k]: merged });
-  return { ok: true, data: merged };
+  // Valori noti in questa sessione ma non (ancora) caricati restano ripristinabili. Si rilegge la
+  // cache dentro la coda: un mergeDictionary concluso durante il download non va perso.
+  return withDictKey(k, async () => {
+    const cur = (await chrome.storage.session.get(k))[k];
+    const local = cur ? cur.localOnly || {} : {};
+    const entries = Object.assign({}, local, r.data.entries);
+    const unrecoverable = (r.data.unrecoverable || []).filter((t) => !(t in entries));
+    const merged = { entries, unrecoverable, localOnly: local, expiresAt: r.data.expiresAt, confirmBy: r.data.confirmBy, fetchedAt: Date.now() };
+    await chrome.storage.session.set({ [k]: merged });
+    return { ok: true, data: merged };
+  });
 }
 
-async function mergeDictionary(scope, values) {
+// Le scritture della cache decifrata di uno scope (leggi-modifica-scrivi su chrome.storage.session)
+// sono serializzate per chiave, come publishChain: due elaborazioni contemporanee sulla stessa
+// conversazione perderebbero altrimenti le voci l'una dell'altra. Il service worker è unico, quindi
+// basta una coda in memoria.
+const dictChains = new Map();
+function withDictKey(k, fn) {
+  const run = (dictChains.get(k) || Promise.resolve()).then(fn);
+  const tail = run.then(() => {}, () => {});
+  dictChains.set(k, tail);
+  tail.then(() => { if (dictChains.get(k) === tail) dictChains.delete(k); });
+  return run;
+}
+
+function mergeDictionary(scope, values) {
   const k = dictKey(scope);
+  return withDictKey(k, () => mergeDictionaryNow(k, values));
+}
+
+async function mergeDictionaryNow(k, values) {
   const cur = (await chrome.storage.session.get(k))[k] || { entries: {}, unrecoverable: [], localOnly: {}, expiresAt: null, confirmBy: null, fetchedAt: 0 };
   cur.localOnly = cur.localOnly || {};
   for (const [tag, v] of Object.entries(values)) {
@@ -383,7 +404,21 @@ async function moveRecords(from, to) {
 }
 
 // --- Messaggi -------------------------------------------------------------------------------------
+/**
+ * Categorie particolari: l'invio pseudonimizzato dopo conferma (allowSpecial) esiste solo nella
+ * Personal edition (decisione dell'8/11/2026). In Server edition il blocco resta senza forzatura:
+ * qualunque cosa risponda il server, canOverride è sempre false (e allowSpecial non viene inoltrato).
+ */
+function noOverrideOnServer(r, cfg) {
+  if (!isPersonal(cfg) && r && r.ok && r.data) r.data.canOverride = false;
+}
+
 const handlers = {
+  // Persistenza dell'archivio del dizionario (per le impostazioni; vedi PG.idb.persistence).
+  async 'pg:storageStatus'() {
+    return { ok: true, data: await PG.idb.persistence() };
+  },
+
   async 'pg:getState'() {
     const st = (await chrome.storage.local.get('pgState')).pgState;
     if (st && Date.now() - st.ts < 60000) return { ok: true, data: st };
@@ -393,6 +428,7 @@ const handlers = {
   async 'pg:pseudonymize'(msg, cfg) {
     const r = isPersonal(cfg) ? await PG.local.pseudonymize(cfg, msg) : await PG.api.pseudonymize(cfg, msg.scope, msg.kind, msg.text);
     noteResult(r);
+    noOverrideOnServer(r, cfg);
     if (r.ok && !r.data.blocked) {
       const values = {};
       for (const e of r.data.entities || []) {
@@ -412,6 +448,7 @@ const handlers = {
       ? await PG.local.pseudonymizeFile(cfg, msg)
       : await PG.api.pseudonymizeFile(cfg, msg.scope, msg.kind, { b64: msg.b64, mime: msg.mime, name: msg.name });
     noteResult(r);
+    noOverrideOnServer(r, cfg);
     if (r.ok && !r.data.blocked && r.data.newEntries && r.data.newEntries.length) {
       const values = {};
       for (const e of r.data.newEntries) values[e.tag] = e.value;
@@ -635,12 +672,36 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' }).catch(() => {});
   chrome.alarms.create('pg-health', { periodInMinutes: 1 });
   publishState({ serverConfig: true });
+  ensurePersistence();
+});
+
+// Personal edition: pagina di benvenuto alla prima installazione (non agli aggiornamenti).
+// In Server edition (policy dell'ente) non si apre nulla.
+chrome.runtime.onInstalled.addListener(async (details) => {
+  if (!details || details.reason !== 'install') return;
+  try {
+    if (!isPersonal(await getConfig())) return;
+    await chrome.tabs.create({ url: chrome.runtime.getURL('src/welcome/welcome.html') });
+  } catch (_) { /* nessuna scheda: non bloccante */ }
 });
 
 chrome.runtime.onStartup.addListener(() => {
   chrome.alarms.create('pg-health', { periodInMinutes: 1 });
   publishState({ serverConfig: true });
+  ensurePersistence();
 });
+
+// Dizionario al riparo dallo sfratto: la protezione vera è unlimitedStorage (manifest); persist()
+// nel service worker non esiste e viene chiesta solo se disponibile. Lo stato resta in
+// chrome.storage.local (pgStorage) e in pg:storageStatus per le impostazioni.
+function ensurePersistence() {
+  PG.idb.persistence()
+    .then((st) => {
+      if (!st.protected) console.warn('[Pseudomania] archivio del dizionario non protetto dallo sfratto');
+      return chrome.storage.local.set({ pgStorage: Object.assign({ ts: Date.now() }, st) });
+    })
+    .catch(() => {});
+}
 
 chrome.alarms.onAlarm.addListener((a) => {
   if (a.name !== 'pg-health') return;
@@ -652,7 +713,7 @@ chrome.alarms.onAlarm.addListener((a) => {
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'managed' || (area === 'local' && (changes.rizzoUrl || changes.pgDevManaged || changes.imagePolicy || changes.pdfImagePolicy || changes.activationMode))) {
+  if (area === 'managed' || (area === 'local' && (changes.rizzoUrl || changes.pgDevManaged || changes.imagePolicy || changes.pdfImagePolicy || changes.activationMode || changes.keepTypes))) {
     publishState({ serverConfig: true });
   }
 });

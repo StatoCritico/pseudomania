@@ -7,7 +7,8 @@
 //   1. chrome.storage.managed  (policy dell'ente: prevale sempre)
 //   2. GET /v1/config del server (Server edition: tagInstruction, allowlist, maxFileMB, chiave di custodia,
 //      rotazione; failClosed/allowDisable valgono SOLO dalla policy)
-//   3. chrome.storage.local    (Personal edition: indirizzo di Rizzo-PII, interruttore on/off)
+//   3. chrome.storage.local    (Personal edition: indirizzo di Rizzo-PII, scelte su immagini, tipi da
+//                               non mascherare `keepTypes`)
 //   4. valori predefiniti della modalità
 // Se managed.mode è assente: Personal edition (estensione autonoma con Rizzo-PII desktop).
 
@@ -46,6 +47,17 @@
   //   'remove' tutte le immagini tolte dal PDF inviato
   //   'keep'   immagini lasciate come sono (nelle impostazioni richiede una seconda conferma)
   const PDF_IMAGE_POLICIES = ['ocr', 'remove', 'keep'];
+  // Tipi di dato che l'utente della Personal edition può scegliere di NON mascherare (keepTypes): solo
+  // quelli a basso rischio di identificazione, utili per non peggiorare le risposte (date, importi, enti).
+  // Nomi, codici fiscali, IBAN, email, telefoni, indirizzi, documenti, targhe… restano sempre mascherati.
+  const KEEPABLE_TYPES = ['DATE', 'TIME', 'AMOUNT', 'AGE', 'GENDER', 'ORG'];
+
+  /** Solo i tipi ammessi, in maiuscolo, senza doppioni, nell'ordine di KEEPABLE_TYPES. */
+  function sanitizeKeepTypes(v) {
+    if (!Array.isArray(v)) return [];
+    const set = new Set(v.filter((x) => typeof x === 'string').map((x) => x.trim().toUpperCase()));
+    return KEEPABLE_TYPES.filter((t) => set.has(t));
+  }
 
   /** Tiene solo le chiavi note e con il tipo atteso (una policy malformata non deve rompere nulla). */
   function sanitizeManaged(managed) {
@@ -104,6 +116,8 @@
       ? managed.imagePolicy || 'block'
       : IMAGE_POLICIES.includes(local.imagePolicy) ? local.imagePolicy : 'ocr';
     const pdfImagePolicy = isEnte ? null : PDF_IMAGE_POLICIES.includes(local.pdfImagePolicy) ? local.pdfImagePolicy : 'ocr';
+    // Server edition: l'impostazione non esiste (decide il server dell'ente).
+    const keepTypes = isEnte ? null : sanitizeKeepTypes(local.keepTypes);
     const activationMode = !isEnte && ACTIVATION_MODES.includes(local.activationMode) ? local.activationMode : 'off';
 
     return {
@@ -120,6 +134,7 @@
       // L'OCR locale esiste solo nella Personal edition: in Server edition 'ocr' vale come 'block'.
       imagePolicyEffective: imagePolicy === 'ocr' && isEnte ? 'block' : imagePolicy,
       pdfImagePolicy,
+      keepTypes,
       activationMode,
       sites: managed.sites && managed.sites.length ? managed.sites : ['claude.ai'],
       oidc,
@@ -147,7 +162,7 @@
     return rest;
   }
 
-  const api = { resolveConfig, sanitizeManaged, toPlain, DEFAULT_TAG_INSTRUCTION, DEFAULT_RIZZO_URL, MODE_DEFAULTS, IMAGE_POLICIES, PDF_IMAGE_POLICIES, ACTIVATION_MODES };
+  const api = { resolveConfig, sanitizeManaged, toPlain, DEFAULT_TAG_INSTRUCTION, DEFAULT_RIZZO_URL, MODE_DEFAULTS, IMAGE_POLICIES, PDF_IMAGE_POLICIES, ACTIVATION_MODES, KEEPABLE_TYPES, sanitizeKeepTypes };
   PG.config = api;
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

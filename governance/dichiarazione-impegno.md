@@ -60,7 +60,10 @@ praticante · altro: ]` dello studio,
    unico, date e luoghi precisi, numeri di pratica o di procedimento, fatti noti);
 7. non inserire **dati sanitari, giudiziari o di altre categorie particolari** (artt. 9-10 GDPR) né dati
    di **minori**, anche se pseudonimizzati, salvo autorizzazione scritta del referente basata su una
-   valutazione documentata; non inserire password, chiavi di accesso o informazioni coperte da
+   valutazione documentata; quando Pseudomania blocca un contenuto per categorie particolari, usare
+   «Invia pseudonimizzato» solo se il regolamento dello studio lo consente o con l'autorizzazione
+   scritta del referente, sapendo che il contenuto (es. diagnosi, reato) arriva a Claude e che la
+   scelta resta nel registro; non inserire password, chiavi di accesso o informazioni coperte da
    segreto che il cliente non ha autorizzato a trattare in questo modo;
 8. non scrivere dati personali nelle **preferenze del profilo**, nella **memoria** o nelle **richieste di
    ricerca web** di Claude, che non passano da Pseudomania; non inviare feedback (pollici) su chat

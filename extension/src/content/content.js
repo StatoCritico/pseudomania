@@ -30,6 +30,8 @@
   let actState = 'off'; // 'on' | 'off' per la conversazione corrente (Personal edition)
   let actKey = null; // convKey a cui si riferisce actState
   let askBanner = null;
+  // Avviso con protezione spenta: conversazioni in cui l'utente ha scelto «Non chiedere più».
+  let noLeakWarn = {}; // convKey -> timestamp (solo identificativi)
   let domStarted = false;
   let dict = {};
   let records = [];
@@ -196,8 +198,9 @@
 
   // --- Scope e dizionario ----------------------------------------------------------------------
   async function loadStoredMaps() {
-    const r = await chrome.storage.local.get(['pgProjectMap', 'pgInstrSent', 'pgScopeAlias', 'pgActivation']);
+    const r = await chrome.storage.local.get(['pgProjectMap', 'pgInstrSent', 'pgScopeAlias', 'pgActivation', 'pgNoLeakWarn']);
     activation = new PG.activation.Activation(r.pgActivation);
+    noLeakWarn = r.pgNoLeakWarn || {};
     projectMap = r.pgProjectMap || {};
     instrSent = r.pgInstrSent || {};
     scopeAlias = r.pgScopeAlias || {};
@@ -326,6 +329,78 @@
     return { ok: true, data: { state: st } };
   }
 
+  // --- Avviso all'invio con la protezione spenta (solo Personal edition) ------------------------
+  // La protezione parte spenta in ogni nuova conversazione: se il testo della casella contiene dati
+  // evidenti (controllo locale di detector-lite: codici fiscali, IBAN, email, telefoni, partite IVA)
+  // l'invio si ferma e si chiede che cosa fare. Il controllo è sincrono, così si decide subito se
+  // fermare l'evento. Nel registro finisce solo un evento con i conteggi per tipo.
+  function saveNoLeakWarn() {
+    const ks = Object.keys(noLeakWarn);
+    if (ks.length > 2000) for (const k of ks.slice(0, ks.length - 2000)) delete noLeakWarn[k];
+    storageSet({ pgNoLeakWarn: noLeakWarn });
+  }
+
+  /** @returns {object|null} conteggi per tipo se l'invio in chiaro va fermato, altrimenti null */
+  function leakFindings() {
+    if (!cfg || !cfg.enabled || !isPersonal() || actState !== 'off') return null;
+    const key = convKey();
+    if (key && noLeakWarn[key]) return null;
+    const composer = adapter.findComposer(document);
+    if (!composer) return null;
+    const counts = PG.detectorLite.summarize(adapter.getComposerText(composer) || '');
+    return Object.keys(counts).length ? counts : null;
+  }
+
+  function askLeak(counts) {
+    const h = PG.ui.h;
+    return PG.ui.modal((dlg, done) => {
+      const cb = h('input', { type: 'checkbox' });
+      dlg.append(
+        h('h2', {}, S.avvisoOffTitolo),
+        h('p', {}, S.avvisoOffTesto),
+        h('ul', {}, Object.entries(counts).map(([t, n]) => h('li', {}, `${n} ${PG.detectorLite.LABELS[t] || t}`))),
+        h('p', { class: 'small' }, S.avvisoOffNota),
+        h('label', { class: 'small', style: 'display:flex;gap:6px;align-items:center;margin-top:8px' }, cb, S.avvisoOffNonChiedere),
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn', type: 'button', 'data-pg-cancel': '', onclick: () => done(null) }, S.annulla),
+          h('button', { class: 'btn', type: 'button', 'data-pg-choice': 'clear', onclick: () => done({ choice: 'clear', dontAsk: cb.checked }) }, S.avvisoOffInviaInChiaro),
+          h('button', { class: 'btn primary', type: 'button', 'data-pg-choice': 'protect', onclick: () => done({ choice: 'protect', dontAsk: cb.checked }) }, S.avvisoOffAttivaInvia))
+      );
+    });
+  }
+
+  async function handleLeakWarning(counts, trigger) {
+    if (busy) return;
+    busy = true;
+    let r;
+    try {
+      r = await askLeak(counts);
+    } finally {
+      busy = false;
+    }
+    const choice = (r && r.choice) || 'cancel';
+    event('unprotected_send_warning', { counts, choice, trigger, dontAsk: Boolean(r && r.dontAsk) });
+    if (choice === 'cancel') return;
+    const key = convKey();
+    if (r.dontAsk && key) {
+      noLeakWarn[key] = Date.now();
+      saveNoLeakWarn();
+    }
+    if (choice === 'protect') {
+      // Stesso percorso del pulsante e della scorciatoia, poi invio pseudonimizzato.
+      const st = await chooseState('on', 'send_warning');
+      if (st !== 'on' || !protectionActive()) return;
+      PG.ui.toast(S.toastAttivata, 3000);
+      await handleComposerSend({});
+      return;
+    }
+    // Invio in chiaro, scelto esplicitamente.
+    const composer = adapter.findComposer(document);
+    if (!composer) return;
+    tracker.markUsed();
+    await triggerSend(composer);
+  }
+
   let lastHref = null;
   let lastInfoKey = null;
   async function checkLocation() {
@@ -344,6 +419,11 @@
       activation.move(res.moveConvKey.from, res.moveConvKey.to);
       if (actKey === res.moveConvKey.from) actKey = res.moveConvKey.to;
       saveActivation();
+      if (noLeakWarn[res.moveConvKey.from]) {
+        noLeakWarn[res.moveConvKey.to] = noLeakWarn[res.moveConvKey.from];
+        delete noLeakWarn[res.moveConvKey.from];
+        saveNoLeakWarn();
+      }
       if (instrSent[res.moveConvKey.from]) {
         instrSent[res.moveConvKey.to] = instrSent[res.moveConvKey.from];
         delete instrSent[res.moveConvKey.from];
@@ -448,15 +528,23 @@
       event('page_unrecognized', { site: adapter.id, during: kind });
       return { action: 'abort' };
     }
-    const wait = PG.ui.busy(S.inElaborazione);
-    let r;
-    try {
-      r = await bg('pg:pseudonymize', { scope: sc, kind, text: original });
-    } finally {
-      wait.done();
-    }
+    const run = async (allowSpecial) => {
+      const wait = PG.ui.busy(S.inElaborazione);
+      try {
+        return await bg('pg:pseudonymize', Object.assign({ scope: sc, kind, text: original }, allowSpecial ? { allowSpecial: true } : {}));
+      } finally {
+        wait.done();
+      }
+    };
+    let r = await run(false);
     if (!r.ok) return handleFailure(r.error, original);
-    const d = r.data;
+    let d = r.data;
+    if (d.blocked && (await confirmSpecial(d, { kind }))) {
+      // Conferma valida per questo solo invio: nuova richiesta con allowSpecial.
+      r = await run(true);
+      if (!r.ok) return handleFailure(r.error, original);
+      d = r.data;
+    }
     if (d.blocked) {
       showBlocked(d.blockReason, { kind, category: d.blockCategory, traceId: d.traceId });
       event('blocked', { kind }, d.traceId);
@@ -466,6 +554,19 @@
     const withInstruction = Boolean(opts.allowInstruction) && !instructionAlreadySent();
     const finalText = (withInstruction ? cfg.tagInstruction + '\n\n' : '') + d.text;
     return { action: 'send', finalText, sentText: d.text, entities: d.entities || [], traceId: d.traceId, withInstruction };
+  }
+
+  /**
+   * Categoria particolare con canOverride (solo Personal edition, decisione dell'8/11/2026): finestra
+   * di conferma esplicita. true = l'utente ha confermato l'invio pseudonimizzato di QUESTO solo
+   * contenuto (la richiesta va ripetuta con allowSpecial); false = annullato, nulla parte e il
+   * chiamante mostra il blocco come prima (con «Segnala blocco errato»).
+   */
+  async function confirmSpecial(d, info) {
+    if (!d || d.canOverride !== true || !isPersonal()) return false;
+    const ok = await PG.ui.confirmSpecial({ label: d.blockLabel || d.blockCategory || '', fileName: (info && info.fileName) || null });
+    event(ok ? 'special_override_confirmed' : 'special_override_cancelled', { kind: info.kind, category: d.blockCategory || null }, d.traceId);
+    return ok;
   }
 
   /** Blocco per categorie particolari: banner con «Segnala blocco errato» (evento senza testo). */
@@ -707,13 +808,20 @@
     const buf = await f.arrayBuffer();
     // Il primo avvio di Tesseract (caricamento del modello) può durare 30-60 s: l'indicatore mostra i secondi.
     const wait = PG.ui.busy(S.ocrInCorso(f.name));
+    const req = { scope: scope(), kind, name: f.name, mime: f.type || 'image/png', b64: b64FromBuffer(buf) };
     let r;
     try {
-      r = await bg('pg:pseudonymizeImage', {
-        scope: scope(), kind, name: f.name, mime: f.type || 'image/png', b64: b64FromBuffer(buf),
-      });
+      r = await bg('pg:pseudonymizeImage', req);
     } finally {
       wait.done();
+    }
+    if (r.ok && r.data && r.data.blocked && (await confirmSpecial(r.data, { kind, fileName: f.name }))) {
+      const wait2 = PG.ui.busy(S.ocrInCorso(f.name));
+      try {
+        r = await bg('pg:pseudonymizeImage', Object.assign({}, req, { allowSpecial: true }));
+      } finally {
+        wait2.done();
+      }
     }
     if (!r.ok) {
       if (r.error === 'unsupported') {
@@ -767,13 +875,20 @@
       }
       const buf = await f.arrayBuffer();
       const wait = PG.ui.busy(S.fileInElaborazione(f.name, files.indexOf(f) + 1, files.length));
+      const req = { scope: scope(), kind, name: f.name, mime: f.type || 'application/octet-stream', b64: b64FromBuffer(buf) };
       let r;
       try {
-        r = await bg('pg:pseudonymizeFile', {
-          scope: scope(), kind, name: f.name, mime: f.type || 'application/octet-stream', b64: b64FromBuffer(buf),
-        });
+        r = await bg('pg:pseudonymizeFile', req);
       } finally {
         wait.done();
+      }
+      if (r.ok && r.data && r.data.blocked && (await confirmSpecial(r.data, { kind, fileName: f.name }))) {
+        const wait2 = PG.ui.busy(S.fileInElaborazione(f.name, files.indexOf(f) + 1, files.length));
+        try {
+          r = await bg('pg:pseudonymizeFile', Object.assign({}, req, { allowSpecial: true }));
+        } finally {
+          wait2.done();
+        }
       }
       if (!r.ok) {
         if (r.error === 'too_large') {
@@ -891,8 +1006,18 @@
     (e) => {
       if (e.key !== 'Enter' || e.isComposing || bypassEvents.has(e) || bypassActive(e)) return;
       if (!protectionActive()) {
-        // Invio in chiaro da una nuova chat: lo stato «disattivato» deve seguire la conversazione.
-        if (cfg && adapter.isComposer(e.target)) tracker.markUsed();
+        if (cfg && adapter.isComposer(e.target)) {
+          // Maiusc+Invio = a capo; Ctrl/Cmd+Maiusc+Invio resta un invio.
+          const counts = e.shiftKey && !(e.ctrlKey || e.metaKey) ? null : leakFindings();
+          if (counts) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            handleLeakWarning(counts, 'enter');
+            return;
+          }
+          // Invio in chiaro da una nuova chat: lo stato «disattivato» deve seguire la conversazione.
+          tracker.markUsed();
+        }
         return;
       }
       const t = e.target;
@@ -915,7 +1040,16 @@
     if (bypassActive(e) || bypassEvents.has(e)) return;
     const t = e.target;
     if (!protectionActive()) {
-      if (cfg && e.type === 'click' && adapter.isSendButton(t)) tracker.markUsed();
+      if (cfg && e.type === 'click' && adapter.isSendButton(t)) {
+        const counts = leakFindings();
+        if (counts) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          handleLeakWarning(counts, 'click');
+          return;
+        }
+        tracker.markUsed();
+      }
       return;
     }
     if (adapter.isMicButton(t)) {
@@ -1040,10 +1174,14 @@
       // Il campo «content» è il testo già estratto da claude.ai (anche da un DOCX o PDF): va
       // trattato come testo, qualunque sia l'estensione del nome del file.
       const name = (p.fileName || 'testo').replace(/\.[a-z0-9]{1,5}$/i, '') + '.txt';
-      const r = await bg('pg:pseudonymizeFile', {
+      const req = {
         scope: sc, kind: 'project_knowledge', name, mime: 'text/plain',
         b64: b64FromBuffer(new TextEncoder().encode(p.text).buffer),
-      });
+      };
+      let r = await bg('pg:pseudonymizeFile', req);
+      if (r.ok && r.data && r.data.blocked && (await confirmSpecial(r.data, { kind: 'project_knowledge', fileName: p.fileName || null }))) {
+        r = await bg('pg:pseudonymizeFile', Object.assign({}, req, { allowSpecial: true }));
+      }
       if (!r.ok) {
         const fb = await handleFailure(r.error, p.text);
         return fb.action === 'sendOriginal' ? { passthrough: true } : { blocked: true, reason: r.error };
@@ -1208,6 +1346,7 @@
 
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'local' && changes.pgState) applyState(changes.pgState.newValue);
+    if (area === 'local' && changes.pgNoLeakWarn) noLeakWarn = changes.pgNoLeakWarn.newValue || {};
     // Scelta fatta in un'altra scheda sulla stessa conversazione.
     if (area === 'local' && changes.pgActivation && changes.pgActivation.newValue) {
       activation = new PG.activation.Activation(changes.pgActivation.newValue);

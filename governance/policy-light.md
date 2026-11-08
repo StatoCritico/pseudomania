@@ -32,7 +32,12 @@ trattamenti che ne derivano (o li svolge per conto del proprio cliente, se respo
 ## 3. Cosa non faccio mai
 
 1. Non inserisco **dati sanitari, giudiziari o altre categorie particolari** (artt. 9-10 GDPR), né dati
-   di minori, anche se pseudonimizzati, salvo una valutazione specifica documentata.
+   di minori, anche se pseudonimizzati, salvo una valutazione specifica documentata. Pseudomania
+   **blocca di default** i testi e i file con categorie particolari; l'invio pseudonimizzato dopo la
+   conferma («Ho verificato che l'invio è consentito» → «Invia pseudonimizzato») lo uso **solo se il
+   regolamento dello studio lo consente** per quel tipo di pratica o con l'**autorizzazione del
+   referente** (§6). Il contenuto (diagnosi, reato…) arriva comunque a Claude e la scelta resta nel
+   registro.
 2. Non scrivo dati personali nelle **preferenze del profilo** di Claude né nelle **richieste di ricerca
    web**: non passano da Pseudomania.
 3. Non chiedo a Claude di modificare, spiegare o ricostruire i segnaposto (es. `[FULLNAME_1]`).
@@ -99,8 +104,9 @@ cambiano il servizio di IA o le sue condizioni.
   di nuovo quando le regole cambiano.
 - Strumenti autorizzati: `[account dello studio, piano Claude, computer su cui sono installati Chrome,
   Pseudomania e Rizzo-PII]`. Niente account personali né altri servizi di IA per dati di clienti.
-- Le autorizzazioni caso per caso (categorie particolari, immagini senza oscuramento) le dà il
-  referente **per iscritto** e le annota `[dove: ]`.
+- Le autorizzazioni caso per caso (categorie particolari, compreso l'invio pseudonimizzato dopo il
+  blocco di Pseudomania; immagini senza oscuramento) le dà il referente **per iscritto** e le annota
+  `[dove: ]`. In alternativa il regolamento indica i tipi di pratica per cui l'invio è consentito.
 - Le segnalazioni di incidente arrivano al referente entro `[24 ore]`; il referente valuta la
   notifica (art. 33 GDPR) con il titolare.
 - Per i dipendenti: informativa al personale sull'uso degli strumenti e sulle verifiche possibili

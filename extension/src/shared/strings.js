@@ -115,6 +115,22 @@
       'timbri, fotografie e pagine scansionate (che spesso contengono nomi, indirizzi e codici fiscali). Pseudomania ' +
       'proteggerà solo il testo del PDF. Vale per tutti i PDF che allegherai da ora in poi.',
     impPdfKeepConfermaOk: 'Sì, lascia le immagini',
+    // Dati da non mascherare (solo Personal edition): solo tipi a basso rischio
+    impKeepTitolo: 'Dati da non mascherare',
+    impKeepAiuto:
+      'Di norma Pseudomania sostituisce con i segnaposto tutti i dati che riconosce. Per alcuni tipi a basso rischio ' +
+      'puoi scegliere di lasciarli leggibili, così Claude può ragionare su scadenze, importi ed enti. Nomi, codici ' +
+      'fiscali, IBAN, email, telefoni, indirizzi, documenti e targhe vengono sempre mascherati. Vale per testi, file e immagini.',
+    impKeep: {
+      DATE: ['Date', 'Es. 12/03/2024, 3 marzo 2024.'],
+      TIME: ['Orari', 'Es. 9:30, ore 15.'],
+      AMOUNT: ['Importi', 'Es. € 1.250,00, 300 euro.'],
+      AGE: ['Età', 'Es. 45 anni.'],
+      GENDER: ['Genere', 'Es. maschio, femmina.'],
+      ORG: ['Organizzazioni (enti, società, tribunali)',
+        'Es. Tribunale di Milano, INPS, Rossi S.r.l. Attenzione: i nomi di ditte individuali o di studi professionali ' +
+        'che contengono il nome di una persona (es. «Studio legale Mario Rossi») possono restare leggibili.'],
+    },
     allegatoNonConsegnato: 'Il file è stato pseudonimizzato ma claude.ai non lo ha ricevuto: allegalo di nuovo trascinandolo nella casella di scrittura.',
     // Ultimo ripiego del ripristino dei PDF scaricati (se il ripristino con impaginazione non riesce)
     pdfRipristinatoTesto: 'PDF scaricato con i dati reali, ma come testo semplice: l\'impaginazione originale non si conserva. Per un documento impaginato chiedi a Claude un file Word.',
@@ -147,6 +163,17 @@
     chiudi: 'Chiudi',
     segnalaBloccoErrato: 'Segnala blocco errato',
     bloccoSegnalato: 'Segnalazione inviata. Grazie.',
+    // Categorie particolari: invio pseudonimizzato dopo conferma (solo Personal edition, dall'8/11/2026)
+    specialeTitolo: 'Categorie particolari di dati: invio bloccato',
+    specialeTrovata: (label, file) => `${file ? `Il file «${file}» sembra contenere` : 'Il contenuto sembra includere'} ${label} (artt. 9-10 GDPR).`,
+    specialeTesto:
+      'Se lo invii, i dati identificativi (nomi, codici, indirizzi, recapiti) saranno sostituiti dai segnaposto, ' +
+      'ma il contenuto (per esempio una diagnosi, un reato, l\'appartenenza a un sindacato) arriverà a Claude così com\'è.',
+    specialeContesto:
+      'Il contesto può comunque rendere riconoscibile la persona. Procedi solo se il regolamento dello studio lo consente; ' +
+      'la scelta resta nel registro locale (solo la categoria, mai il testo).',
+    specialeCasella: 'Ho verificato che l\'invio è consentito',
+    specialeInvia: 'Invia pseudonimizzato',
     pannelloUltimoBlocco: (cat, quando) => `Ultimo invio bloccato${cat ? ` (categoria «${cat}»)` : ''} alle ${quando}.`,
 
     // Conferma quando il servizio non risponde (failClosed=false, es. Personal edition)
@@ -186,6 +213,9 @@
     pdfImmaginiLasciate: (n) =>
       (n === 1 ? 'Il PDF contiene 1 immagine che è stata lasciata' : `Il PDF contiene ${n} immagini che sono state lasciate`) +
       ' così com\'è, senza controlli (come indicato nelle impostazioni): firme, timbri, fotografie e pagine scansionate arrivano a Claude in chiaro.',
+    // Personal edition: le regole incluse parlano dell'ente; qui il blocco si può superare con conferma.
+    bloccoSpecialePersonal:
+      'Il contenuto sembra includere {label} (art. {article} GDPR), ad esempio «{term}». Di regola questi dati non vanno inviati a un servizio di IA esterno: rimuovi o generalizza questi riferimenti. Se il regolamento del tuo studio lo consente, puoi inviarlo pseudonimizzato dopo una conferma esplicita.',
     pdfFirmaRimossa:
       'Il PDF era firmato digitalmente: la firma (con il certificato del firmatario, che contiene nome e codice fiscale) è stata tolta prima dell\'invio. Il PDF inviato a Claude non è firmato; l\'originale firmato resta sul tuo computer.',
     pdfImmaginiTolte: (n) =>
@@ -316,6 +346,61 @@
       'Pseudomania è software libero distribuito con licenza GNU AGPL-3.0 o successiva; include codice di ' +
       'Privacy Guardrail (DFKI) con licenza Apache-2.0.',
     impostazioniInfo: 'Impostazioni e informazioni',
+
+    // Avviso all'invio con la protezione spenta (Personal edition)
+    avvisoOffTitolo: 'La protezione è spenta in questa conversazione',
+    avvisoOffTesto: 'Il messaggio sembra contenere dati personali che partirebbero in chiaro verso Claude:',
+    avvisoOffNota: 'Controllo rapido sul tuo PC: riconosce solo dati evidenti (codici fiscali, IBAN, email, telefoni, partite IVA). Nomi e indirizzi non vengono cercati.',
+    avvisoOffNonChiedere: 'Non chiedere più in questa conversazione',
+    avvisoOffAttivaInvia: 'Attiva la protezione e invia',
+    avvisoOffInviaInChiaro: 'Invia senza protezione',
+
+    // Pagina di benvenuto (Personal edition, prima installazione)
+    guidaPersonal: 'https://pseudomania.statocritico.it/approfondimenti/personal-edition.html',
+    rizzoReleases: 'https://github.com/Rizzo-AI-Academy/rizzo-pii/releases',
+    benvenutoTitolo: 'Benvenuto in Pseudomania',
+    benvenutoIntro:
+      'Pseudomania protegge i dati personali che scrivi a Claude su claude.ai. Prima dell\'invio sostituisce ' +
+      'nomi, codici fiscali, IBAN, email e altri dati con segnaposto come [FULLNAME_1]; quando arriva la ' +
+      'risposta, sul tuo schermo rimette i valori veri. Claude non vede i dati reali.',
+    benvenutoLocale:
+      'Tutto avviene sul tuo PC: il riconoscimento dei dati lo fa l\'app gratuita Rizzo-PII, installata ' +
+      'sul computer. Nessun server esterno riceve i tuoi testi.',
+    benvenutoPassi: 'Tre passi per iniziare',
+    benvenutoP1Titolo: '1. Controlla che Rizzo-PII sia acceso',
+    benvenutoP1Testo: 'Pseudomania ha bisogno dell\'app desktop Rizzo-PII avviata sul computer.',
+    benvenutoVerifica: 'Verifica di nuovo',
+    benvenutoVerificaInCorso: 'Verifica in corso…',
+    benvenutoRizzoOk: 'Rizzo-PII risponde: tutto pronto.',
+    benvenutoRizzoLoading: 'Rizzo-PII si sta avviando (caricamento del modello). Attendi qualche secondo: la verifica si ripete da sola.',
+    benvenutoRizzoCors:
+      'Rizzo-PII risponde ma rifiuta le chiamate dell\'estensione. Serve la versione di Rizzo-PII per ' +
+      'Pseudomania: scaricala dalla pagina indicata qui sotto.',
+    benvenutoRizzoDown: 'Rizzo-PII non risponde.',
+    benvenutoRizzoComeFare: 'Come fare:',
+    benvenutoRizzoPassi: [
+      'Se non hai ancora Rizzo-PII, scaricalo e installalo dalla pagina delle versioni (link qui sotto).',
+      'Avvia l\'app Rizzo-PII e lasciala aperta mentre usi Claude.',
+      'Torna su questa pagina: la verifica si ripete da sola ogni pochi secondi.',
+    ],
+    benvenutoRizzoScarica: 'Scarica Rizzo-PII',
+    benvenutoRizzoIndirizzo: (u) => `Indirizzo controllato: ${u} (modificabile nelle impostazioni).`,
+    benvenutoP2Titolo: '2. Fissa l\'icona nella barra di Chrome',
+    benvenutoP2Testo:
+      'In alto a destra clicca l\'icona a forma di pezzo di puzzle (Estensioni), poi la puntina accanto a ' +
+      '«Pseudomania». Così vedi sempre lo stato della conversazione: ON protetta, OFF non protetta.',
+    benvenutoP3Titolo: '3. Accendi la protezione quando serve',
+    benvenutoP3Testo:
+      'In ogni nuova conversazione la protezione parte spenta. Prima di scrivere dati di clienti o ' +
+      'colleghi, clicca l\'icona di Pseudomania oppure premi la scorciatoia:',
+    benvenutoP3Nota:
+      'Se dimentichi di accenderla e il messaggio contiene dati evidenti (codici fiscali, IBAN, email, ' +
+      'telefoni), Pseudomania ti avvisa prima dell\'invio.',
+    benvenutoScorciatoiaNessuna: 'nessuna scorciatoia assegnata: impostala in chrome://extensions/shortcuts',
+    benvenutoAltro: 'Per saperne di più',
+    benvenutoImpostazioni: 'Apri le impostazioni',
+    benvenutoGuida: 'Leggi la guida della Personal edition',
+    benvenutoEnte: 'Questa installazione è gestita dal tuo ente: la protezione è sempre attiva e non serve nessuna configurazione.',
   };
 
   function abbreviaId(id) {

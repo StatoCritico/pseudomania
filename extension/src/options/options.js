@@ -4,7 +4,8 @@
 // Impostazioni e informazioni.
 //  - Personal edition: indirizzo di Rizzo-PII desktop (solo locale) e verifica del servizio, compreso
 //    il caso in cui Rizzo-PII risponde ma rifiuta le chiamate dell'estensione (CORS).
-//    Scelte su immagini, immagini nei PDF (con seconda conferma per «Lascia le immagini») e attivazione.
+//    Scelte su immagini, immagini nei PDF (con seconda conferma per «Lascia le immagini»), attivazione e
+//    dati a basso rischio da non mascherare (keepTypes).
 //  - Server edition: tutto è gestito dalla policy; si mostrano il server e le informazioni.
 
 (function () {
@@ -118,6 +119,43 @@
     radios($('actOptions'), 'activationMode', S.impAttivazione, cfg.activationMode || 'off', [],
       (v) => saveChoice({ activationMode: v }));
     showPdfImages(cfg);
+    showKeepTypes(cfg);
+  }
+
+  // Dati da non mascherare (solo Personal edition): caselle per i soli tipi a basso rischio
+  // (PG.config.KEEPABLE_TYPES); salvate subito come array keepTypes in chrome.storage.local.
+  function showKeepTypes(cfg) {
+    const types = PG.config.KEEPABLE_TYPES;
+    const current = new Set(PG.config.sanitizeKeepTypes(cfg.keepTypes));
+    $('keepTypes').hidden = false;
+    $('keepTitle').textContent = S.impKeepTitolo;
+    $('keepHelp').textContent = S.impKeepAiuto;
+    const box = $('keepOptions');
+    box.textContent = '';
+    for (const type of types) {
+      const [title, help] = S.impKeep[type] || [type, ''];
+      const lab = document.createElement('label');
+      const inp = document.createElement('input');
+      inp.type = 'checkbox';
+      inp.name = 'keepTypes';
+      inp.value = type;
+      inp.checked = current.has(type);
+      inp.addEventListener('change', () => {
+        const sel = [...box.querySelectorAll('input[name="keepTypes"]:checked')].map((i) => i.value);
+        saveChoice({ keepTypes: PG.config.sanitizeKeepTypes(sel) });
+      });
+      const txt = document.createElement('span');
+      const t = document.createElement('span');
+      t.className = 'ttl';
+      t.textContent = title;
+      const hp = document.createElement('span');
+      hp.className = 'help';
+      hp.style.display = 'block';
+      hp.textContent = help;
+      txt.append(t, hp);
+      lab.append(inp, txt);
+      box.append(lab);
+    }
   }
 
   // Seconda conferma per «Lascia le immagini»: finestra nella pagina, focus iniziale su «Annulla».
@@ -176,11 +214,12 @@
       managed = await chrome.storage.managed.get(null);
     } catch (_) { /* nessuna policy */ }
     const st = (await chrome.storage.local.get('pgState')).pgState;
-    const local = await chrome.storage.local.get(['rizzoUrl', 'imagePolicy', 'pdfImagePolicy', 'activationMode']);
+    const local = await chrome.storage.local.get(['rizzoUrl', 'imagePolicy', 'pdfImagePolicy', 'activationMode', 'keepTypes']);
     const cfg = st && st.config ? st.config : PG.config.resolveConfig({ managed, local });
     const ent = cfg.mode === 'ente';
     // Lo stato pubblicato può essere di un attimo indietro: per la Personal vale l'ultimo valore salvato.
     if (!ent && PG.config.PDF_IMAGE_POLICIES.includes(local.pdfImagePolicy)) cfg.pdfImagePolicy = local.pdfImagePolicy;
+    if (!ent && Array.isArray(local.keepTypes)) cfg.keepTypes = PG.config.sanitizeKeepTypes(local.keepTypes);
     $('edition').textContent = ent ? S.modalitaEnte : S.modalitaPersonale;
     if (!ent) showLog();
     showChoices(cfg, ent);

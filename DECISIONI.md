@@ -142,3 +142,32 @@ Nuova impostazione **«Attivazione nelle conversazioni»** (chiave locale `activ
   - «Attivazione nelle conversazioni» (solo Personal edition);
   - «Immagini (screenshot, foto)»: modificabile nella Personal edition; nella Server edition in sola lettura, con la frase «(impostato dall'ente)».
 - Le scelte si salvano subito.
+
+## Categorie particolari: invio pseudonimizzato dopo conferma (aggiornamento 8/11/2026, solo Personal edition)
+
+Modifica la regola precedente («categorie particolari bloccate senza possibilità di forzare», vedi
+`extension/README.md`, «Blocco») **per la sola Personal edition**.
+
+- I testi e i file che contengono **categorie particolari** (artt. 9-10 GDPR: salute, disabilità, dati
+  giudiziari, appartenenza sindacale, opinioni politiche, convinzioni religiose, origine etnica, vita
+  sessuale, dati genetici o biometrici) **restano bloccati di default**.
+- L'utente può inviarli **pseudonimizzati** dopo una **conferma esplicita**: finestra «Categorie
+  particolari di dati: invio bloccato» con la categoria trovata e l'avviso che i dati identificativi
+  (nomi, codici, indirizzi) saranno sostituiti dai segnaposto ma il contenuto (es. diagnosi, reato)
+  arriverà a Claude, che il contesto può rendere riconoscibile la persona, che va fatto solo se il
+  regolamento dello studio lo consente e che la scelta resta nel registro. Il pulsante «Invia
+  pseudonimizzato» si abilita solo spuntando «Ho verificato che l'invio è consentito»; il focus
+  iniziale è su «Annulla» (un Invio di troppo non invia nulla). **Annulla** = nulla parte, resta il
+  blocco con «Segnala blocco errato».
+- La conferma vale per **quel solo invio o quel solo file**. Vale per i messaggi, la modifica e
+  reinvio, le istruzioni e i documenti di progetto, i file (TXT, CSV, Markdown, DOCX, XLSX, PDF) e le
+  immagini lette con OCR.
+- Meccanismo: alla prima elaborazione `local.js` risponde `blocked: true` con `canOverride: true`
+  (solo per le categorie particolari; non per formati non supportati, PDF protetti o con dati ancora
+  leggibili, PDF senza testo); dopo la conferma lo script di contenuto ripete la richiesta con
+  `allowSpecial: true`. Il registro locale annota `specialOverride: { category }` (mai testo) e gli
+  eventi `special_override_confirmed` / `special_override_cancelled`.
+- **Server edition: invariata.** Il blocco resta senza possibilità di forzare; `canOverride` è sempre
+  `false` e `allowSpecial` non viene inoltrato al server.
+- Governance: la policy light e la dichiarazione di impegno dicono che l'invio è possibile solo se il
+  regolamento dello studio lo consente o con l'autorizzazione del referente.

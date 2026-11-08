@@ -197,6 +197,9 @@ test('Personal edition: flusso completo senza server', { timeout: 120000 }, asyn
     const before = completions(h).length;
     await page.evaluate(() => (document.getElementById('chips').textContent = ''));
     await typeAndSend(page, 'Il collega è in malattia da lunedì');
+    // Dall'8/11/2026 (Personal) si apre la conferma per l'invio pseudonimizzato: Esc = resta bloccato.
+    await page.waitForSelector('pg-ui[data-pg-ui="modal"]', { state: 'attached', timeout: 8000 });
+    await page.keyboard.press('Escape');
     await page.waitForTimeout(800);
     assert.equal(completions(h).length, before);
     const log = (await msg({ type: 'pg:localLog' })).data;
@@ -219,6 +222,15 @@ test('Personal edition: flusso completo senza server', { timeout: 120000 }, asyn
     await page.waitForTimeout(300);
     const before = completions(h).length;
     await typeAndSend(page, 'Scrivo a paola.neri@ente.it');
+    await page.waitForSelector('pg-ui[data-pg-ui="modal"]', { state: 'attached', timeout: 8000 });
+    // Invio subito (gesto naturale di chi scrive): il focus è su «Annulla», nulla parte in chiaro.
+    await page.keyboard.press('Enter');
+    await page.waitForSelector('pg-ui[data-pg-ui="modal"]', { state: 'detached', timeout: 5000 });
+    await page.waitForTimeout(300);
+    assert.equal(completions(h).length, before, 'Invio sulla conferma = Annulla');
+    // Esc annulla allo stesso modo
+    await page.click('.ProseMirror');
+    await page.keyboard.press('Enter');
     await page.waitForSelector('pg-ui[data-pg-ui="modal"]', { state: 'attached', timeout: 8000 });
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);

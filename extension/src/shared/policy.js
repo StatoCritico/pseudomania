@@ -117,9 +117,10 @@
       return this.scan(text).find((m) => m.action === 'block') || null;
     }
 
-    reason(m) {
+    /** Messaggio di blocco; `template` (facoltativo) sostituisce quello delle regole (Personal edition). */
+    reason(m, template) {
       const term = m.term.length <= 60 ? m.term : m.term.slice(0, 57) + '...';
-      return this.message.replace(/\{label\}/g, m.label).replace(/\{article\}/g, m.article).replace(/\{term\}/g, term);
+      return (template || this.message).replace(/\{label\}/g, m.label).replace(/\{article\}/g, m.article).replace(/\{term\}/g, term);
     }
   }
 

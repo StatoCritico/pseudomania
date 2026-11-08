@@ -2,7 +2,7 @@
    Copyright (C) 2026 gli autori di Pseudomania */
 :root {
   --bg: #ffffff; --fg: #1f1f1f; --muted: #666; --border: #ddd; --panel: #f6f6f6;
-  --ok: #2e7d32; --ko: #c62828; --warn: #ef6c00; --orig: #ffe0b2; --tag: #c8e6c9;
+  --ok: #2e7d32; --ko: #c62828; --warn: #b85000; --orig: #ffe0b2; --tag: #c8e6c9;
 }
 @media (prefers-color-scheme: dark) {
   :root { --bg: #1e1e1e; --fg: #eee; --muted: #aaa; --border: #444; --panel: #2a2a2a;

@@ -420,6 +420,9 @@ risposta in streaming    ◀── restore.js (MutationObserver, dizionario da /
   è bloccata. Copre anche ciò che lo strato DOM non vede (es. testo lungo incollato che claude.ai
   trasforma in allegato `extracted_content`).
 - **Blocco** (`blocked=true`): banner rosso con `blockReason`, nessuna possibilità di forzare.
+  Eccezione (Personal edition, dall'8/11/2026): per le categorie particolari la risposta porta
+  `canOverride: true` e compare la finestra di conferma; dopo la conferma la richiesta viene ripetuta
+  con `allowSpecial: true` e il contenuto parte pseudonimizzato (registro: `specialOverride`).
 - **Ripristino** (`src/content/restore.js`): modifica solo il testo dei nodi esistenti, anche durante
   lo streaming e con segnaposto spezzati fra più nodi; evidenzia i valori ripristinati (verde) e i
   segnaposto sconosciuti (rosso, con evento `response_received.unknownTags`). Non tocca campi

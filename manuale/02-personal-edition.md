@@ -188,6 +188,28 @@ IBAN, telefoni, partite IVA) e due pulsanti: **Annulla** e **Invia senza protezi
 controllo di base **non maschera nulla** e non è una garanzia: se il messaggio contiene dati di
 clienti, scegli **Annulla** e riavvia Rizzo-PII.
 
+### Categorie particolari di dati (salute, reati, sindacato…)
+
+Se un messaggio o un file contiene termini che indicano **categorie particolari** (artt. 9-10 GDPR:
+salute, disabilità, condanne e reati, appartenenza sindacale, opinioni politiche, convinzioni
+religiose, origine etnica, vita sessuale, dati genetici o biometrici) l'invio è **bloccato di
+default** e compare la finestra **«Categorie particolari di dati: invio bloccato»** con la categoria
+trovata.
+
+- La scelta più prudente è **Annulla** (è il pulsante selezionato all'apertura: premere Invio non
+  invia nulla) e riformulare senza quei riferimenti. Resta il messaggio di blocco con
+  **Segnala blocco errato** per i falsi positivi.
+- Se il **regolamento dello studio lo consente** (o il referente lo ha autorizzato) puoi spuntare
+  **«Ho verificato che l'invio è consentito»** e scegliere **Invia pseudonimizzato**: nomi, codici,
+  indirizzi e recapiti diventano segnaposto, ma il **contenuto** (per esempio una diagnosi o un
+  reato) arriva a Claude, e il contesto può rendere riconoscibile la persona.
+- La conferma vale per **quel solo invio o quel solo file** (TXT, CSV, Markdown, DOCX, XLSX, PDF,
+  immagini lette con OCR): il successivo chiede di nuovo.
+- La scelta resta nel **registro locale** (solo la categoria, mai il testo).
+
+Le regole che riconoscono queste categorie sono incluse nell'estensione e sono una bozza. Nella
+Server edition il blocco resta senza possibilità di inviare.
+
 ### Impostazioni di Claude consigliate (piani Free, Pro, Max)
 
 I piani consumer seguono condizioni diverse da quelle commerciali (Team, Enterprise): in

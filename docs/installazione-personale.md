@@ -80,6 +80,13 @@ Senza policy dell'ente l'estensione parte automaticamente in **Personal edition*
 
 ## 4. Verificare il collegamento
 
+Alla prima installazione si apre da sola la **pagina di benvenuto** di Pseudomania: spiega in
+breve che cosa fa l'estensione, controlla subito se Rizzo-PII risponde (spunta verde «Rizzo-PII
+risponde: tutto pronto», oppure croce rossa con le istruzioni e il link per scaricarlo; la verifica
+si ripete da sola ogni pochi secondi), ricorda di fissare l'icona nella barra di Chrome e mostra la
+scorciatoia Alt+Maiusc+P. Non si apre agli aggiornamenti né nella Server edition. Per verificare
+il collegamento in un secondo momento:
+
 1. Clic sul pulsante di Pseudomania da una scheda che non è claude.ai → si aprono le impostazioni.
    (In alternativa: clic destro sul pulsante → «Impostazioni e informazioni».)
 2. **Indirizzo di Rizzo-PII desktop**: `http://127.0.0.1:5005` (predefinito; sono ammessi solo
@@ -134,6 +141,19 @@ La protezione si accende e si spegne **per singola conversazione** (o pagina di 
   dopo il riavvio di Chrome). Ogni altra conversazione (nuova, mai vista o spenta) parte disattivata.
 - **La disattivazione riguarda solo l'uscita.** Il ripristino dei segnaposto nelle risposte, negli
   appunti e nei download resta **sempre attivo**, anche con OFF.
+- **Avviso se dimentichi di accenderla.** Con la protezione spenta, all'invio (Invio o clic sul
+  pulsante di invio) Pseudomania fa un controllo rapido sul tuo PC del testo nella casella. Se
+  trova dati evidenti (codici fiscali, IBAN, email, numeri di telefono, partite IVA) il messaggio
+  **non parte** e compare una finestra con tre scelte:
+  - **Attiva la protezione e invia** (scelta proposta, basta premere Invio): accende la protezione
+    nella conversazione, come il pulsante o Alt+Maiusc+P, e invia il messaggio pseudonimizzato;
+  - **Invia senza protezione**: il messaggio parte in chiaro, la protezione resta spenta;
+  - **Annulla** (o Esc): non parte nulla, il testo resta nella casella.
+
+  La casella **«Non chiedere più in questa conversazione»** spegne l'avviso solo per quella
+  conversazione. Se il controllo non trova nulla il messaggio parte subito, senza domande. Nomi e
+  indirizzi non vengono cercati da questo controllo: per proteggerli serve accendere la protezione.
+  Il registro locale annota solo la scelta e quanti dati di ogni tipo sono stati trovati, senza testi.
 - Al **primo spegnimento** in una conversazione che contiene già dati protetti compare un avviso:
   ciò che invierai andrà in chiaro, e riattivare la protezione non ripulisce quanto già inviato.
 - Ogni cambio di stato (da pulsante o scorciatoia) viene annotato nel registro locale
@@ -152,9 +172,16 @@ La protezione si accende e si spegne **per singola conversazione** (o pagina di 
   pseudonimizzazione, mostrando l'esito di un controllo locale di base (email, codici fiscali,
   IBAN, telefoni, partite IVA). Il controllo non maschera nulla: se vedi l'avviso con dati di
   clienti, **non inviare** e riavvia Rizzo-PII.
-- **Dati particolari** (salute, reati, opinioni politiche… artt. 9-10 GDPR): l'invio viene
-  bloccato con un messaggio; riformula senza quei riferimenti. Le regole sono incluse
-  nell'estensione e sono una bozza: segnala i falsi positivi dal pannello.
+- **Dati particolari** (salute, reati, opinioni politiche… artt. 9-10 GDPR): l'invio è
+  **bloccato di default** e compare la finestra «Categorie particolari di dati: invio bloccato».
+  La soluzione preferibile resta riformulare senza quei riferimenti. Se il regolamento dello
+  studio lo consente (o il referente lo ha autorizzato) puoi spuntare «Ho verificato che l'invio è
+  consentito» e scegliere **Invia pseudonimizzato**: nomi, codici, indirizzi e recapiti diventano
+  segnaposto, ma il contenuto (per esempio la diagnosi o il reato) arriva a Claude e il contesto può
+  rendere riconoscibile la persona. **Annulla** (il pulsante selezionato all'apertura) non invia
+  nulla. La conferma vale per quel solo messaggio o file (anche DOCX, XLSX, PDF e immagini) e resta
+  nel registro locale (solo la categoria, mai il testo). Le regole sono incluse nell'estensione e
+  sono una bozza: segnala i falsi positivi con «Segnala blocco errato».
 - **Allowlist:** termini pubblici (enti, istituzioni) non vengono mascherati.
 
 ## 6. File: DOCX, XLSX, PDF, immagini

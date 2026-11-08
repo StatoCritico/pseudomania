@@ -1,5 +1,15 @@
 # Registro delle modifiche
 
+## 0.9.2 – 8/11/2026 (Personal edition: chiusura della serie 0.9)
+
+- **Finestre di conferma sicure:** in tutte le finestre con un'azione rischiosa (invio senza protezione, disattivazione, invio di immagini) il cursore parte su «Annulla»: premere Invio non manda più il testo in chiaro. Esc annulla sempre; finestre accessibili (ruolo, titolo e descrizione annunciati, Tab che resta nella finestra, focus restituito alla chiusura); arancione più scuro per un contrasto sufficiente.
+- **Avviso con la protezione spenta:** se il messaggio contiene dati personali riconoscibili (codici fiscali, IBAN, email, telefoni…) compare una finestra con «Attiva la protezione e invia» (scelta proposta), «Invia senza protezione» e «Annulla»; si può non chiedere più nella stessa conversazione. Predefinito invariato: protezione disattivata nelle nuove conversazioni.
+- **Dati da non mascherare:** nuovo gruppo nelle impostazioni per lasciare in chiaro date, orari, importi, età, genere e organizzazioni (predefinito: tutto mascherato). Nomi, codici, IBAN, email, telefoni, indirizzi, documenti e targhe restano sempre mascherati. Vale per testi, file, PDF e immagini.
+- **Categorie particolari (artt. 9-10 GDPR):** bloccate di default; nella Personal edition si possono inviare **pseudonimizzate** dopo una conferma esplicita con casella «Ho verificato che l'invio è consentito», annotata nel registro (senza testo). Server edition invariata (nessuna forzatura). Decisione in DECISIONI.md; regolamento light e dichiarazione di impegno aggiornati.
+- **Dizionario più sicuro:** permesso `unlimitedStorage` (Chrome non lo cancella quando il disco è pieno) ed elaborazioni della stessa conversazione messe in fila (prima due invii contemporanei potevano ricevere lo stesso segnaposto per persone diverse).
+- **Pagina di benvenuto** alla prima installazione: verifica passo per passo che l'app Rizzo-PII risponda, scorciatoia, impostazioni e guida.
+- Test: 110 unitari, 25 DOM, 101 end-to-end.
+
 ## 0.9.1 – 8/11/2026 (correzione di sicurezza)
 
 - **PDF firmati digitalmente** (Personal e Server edition): la firma viene ora tolta prima dell'invio, insieme al certificato del firmatario, al riquadro visibile con il nome, a `/SigFlags`, `/Perms` e `/DSS`. Fino alla 0.9.0 (Personal) e alla 0.1.14 (Server) il certificato, che contiene in chiaro nome e codice fiscale del firmatario, poteva arrivare a Claude dentro il PDF quando la firma era invisibile; con la firma visibile il PDF veniva invece bloccato («alcuni dati non oscurati»). Il PDF inviato non è più firmato e un avviso lo segnala; controllo finale: se resta traccia di una firma il file non parte.

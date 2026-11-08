@@ -14,10 +14,10 @@
     :host { all: initial; }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
     .bar { height: 4px; border-radius: 2px; margin: 0 8px 4px; }
-    .bar.on { background: #2e7d32; } .bar.off { background: #ef6c00; } .bar.warn { background: #ef6c00; }
+    .bar.on { background: #2e7d32; } .bar.off { background: #b85000; } .bar.warn { background: #b85000; }
     .label { font-size: 11px; margin: 0 10px 2px; color: #555; display: flex; align-items: center; gap: 6px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-    .dot.on { background: #2e7d32; } .dot.off { background: #ef6c00; } .dot.warn { background: #ef6c00; }
+    .dot.on { background: #2e7d32; } .dot.off { background: #b85000; } .dot.warn { background: #b85000; }
     .banner { margin: 4px 8px 6px; padding: 10px 12px; border-radius: 8px; font-size: 13px; line-height: 1.4;
               display: flex; gap: 10px; align-items: flex-start; }
     .banner.error { background: #fdecea; color: #611a15; border: 1px solid #f5c2bd; }
@@ -44,10 +44,11 @@
     button.btn { border-radius: 8px; padding: 8px 14px; font-size: 14px; cursor: pointer; border: 1px solid #bbb; background: #fff; color: #222; }
     button.btn.primary { background: #2e7d32; border-color: #2e7d32; color: #fff; }
     button.btn.danger { background: #c62828; border-color: #c62828; color: #fff; }
+    button.btn:focus-visible { outline: 3px solid #1f5f8b; outline-offset: 2px; }
     .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 10px;
              background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; cursor: pointer; margin-top: 4px; }
     .badge:hover { background: #c8e6c9; }
-    .warnbox { background: #fff4e5; color: #663c00; border: 1px solid #ffb74d; border-left: 5px solid #ef6c00;
+    .warnbox { background: #fff4e5; color: #663c00; border: 1px solid #ffb74d; border-left: 5px solid #b85000;
                border-radius: 8px; padding: 10px 12px; margin: 8px 0; font-size: 14px; line-height: 1.4; font-weight: 600; }
     .small { font-size: 12px; color: #555; }
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: #fff;
@@ -157,27 +158,87 @@
     }
   }
 
-  function modal(build) {
+  let modalSeq = 0;
+  const FOCUSABLE = 'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  /**
+   * Finestra modale accessibile (shadow root chiusa).
+   * - Focus iniziale: se la finestra ha un'azione rischiosa (pulsante `.danger` oppure opts.risky)
+   *   va su «Annulla» (`[data-pg-cancel]`), così un Invio di troppo non invia/non disattiva nulla;
+   *   altrimenti al pulsante `.primary`.
+   * - Esc = Annulla; Tab/Maiusc+Tab restano dentro la finestra; alla chiusura il focus torna
+   *   all'elemento che lo aveva prima.
+   * - role="alertdialog" per le finestre rischiose, "dialog" per le altre; aria-modal,
+   *   aria-labelledby (titolo h2) e aria-describedby (testi descrittivi).
+   */
+  function modal(build, opts) {
+    opts = opts || {};
     return new Promise((resolve) => {
       const { el, shadow } = host('modal');
+      const prev = document.activeElement;
+      let closed = false;
       const done = (v) => {
+        if (closed) return;
+        closed = true;
         el.remove();
         document.removeEventListener('keydown', onKey, true);
+        document.removeEventListener('focusin', onFocusIn, true);
+        try {
+          if (prev && prev.isConnected && typeof prev.focus === 'function' && prev !== document.body) prev.focus();
+        } catch (_) { /* ignora */ }
         resolve(v);
       };
+      const focusables = () => [...dlg.querySelectorAll(FOCUSABLE)].filter((e) => e.getClientRects().length);
       const onKey = (e) => {
+        if (closed) return;
         if (e.key === 'Escape') {
+          e.preventDefault();
           e.stopPropagation();
           done(false);
+        } else if (e.key === 'Tab') {
+          // Trappola del focus: gestione manuale, ciclica.
+          e.preventDefault();
+          e.stopPropagation();
+          const list = focusables();
+          if (!list.length) return;
+          const i = list.indexOf(shadow.activeElement);
+          const next = i < 0 ? (e.shiftKey ? list.length - 1 : 0) : (i + (e.shiftKey ? -1 : 1) + list.length) % list.length;
+          list[next].focus();
         }
       };
-      const dlg = h('div', { class: 'dialog', role: 'dialog', 'aria-modal': 'true' });
+      // Se il focus finisce fuori dalla finestra (clic sulla pagina, script del sito) lo si riporta dentro.
+      const onFocusIn = (e) => {
+        if (closed || e.target === el) return;
+        const list = focusables();
+        if (list.length) list[0].focus();
+      };
+      const id = 'pg-dlg-' + ++modalSeq;
+      const dlg = h('div', { class: 'dialog', role: 'dialog', 'aria-modal': 'true', tabindex: '-1' });
       build(dlg, done);
+      const risky = !!opts.risky || !!dlg.querySelector('button.danger');
+      dlg.setAttribute('role', risky ? 'alertdialog' : 'dialog');
+      const title = dlg.querySelector('h2');
+      if (title) {
+        title.id = id + '-t';
+        dlg.setAttribute('aria-labelledby', title.id);
+      }
+      const desc = [...dlg.children].filter((c) => (c.tagName === 'P' && !c.classList.contains('small')) || c.classList.contains('warnbox'));
+      if (desc.length) {
+        desc.forEach((d, i) => { d.id = `${id}-d${i}`; });
+        dlg.setAttribute('aria-describedby', desc.map((d) => d.id).join(' '));
+      }
+      // Il pulsante di annullamento è riconoscibile anche se chi costruisce la finestra non lo marca.
+      let cancel = dlg.querySelector('[data-pg-cancel]');
+      if (!cancel) {
+        cancel = [...dlg.querySelectorAll('.actions button')].find((b) => !b.classList.contains('primary') && !b.classList.contains('danger'));
+        if (cancel) cancel.setAttribute('data-pg-cancel', '');
+      }
       shadow.append(h('div', { class: 'overlay' }, dlg));
       document.documentElement.append(el);
       document.addEventListener('keydown', onKey, true);
-      const btn = dlg.querySelector('button.primary') || dlg.querySelector('button.danger') || dlg.querySelector('button');
-      if (btn) btn.focus();
+      document.addEventListener('focusin', onFocusIn, true);
+      const first = risky ? cancel : (dlg.querySelector('button.primary') || cancel);
+      (first || focusables()[0] || dlg).focus();
     });
   }
 
@@ -195,8 +256,8 @@
             h('ul', {}, items.map(([t, n]) => h('li', {}, `${n} ${PG.detectorLite.LABELS[t] || t}`))))
           : h('p', {}, S.confermaNessuno),
         h('div', { class: 'actions' },
-          h('button', { class: 'btn', onclick: () => done(false) }, S.annulla),
-          h('button', { class: 'btn danger', onclick: () => done(true) }, S.confermaInvia))
+          h('button', { class: 'btn', type: 'button', 'data-pg-cancel': '', onclick: () => done(false) }, S.annulla),
+          h('button', { class: 'btn danger', type: 'button', onclick: () => done(true) }, S.confermaInvia))
       );
     });
   }
@@ -215,14 +276,9 @@
         h('img', { src: url, alt: S.immagineAlt, style: 'max-width:100%;max-height:50vh;display:block;margin:8px auto;border:1px solid #ccc;border-radius:6px' }),
         h('p', { class: 'small' }, S.immagineNome),
         h('div', { class: 'actions' },
-          h('button', { class: 'btn', 'data-pg-cancel': '', onclick: () => end(false) }, S.annulla),
-          h('button', { class: 'btn danger', onclick: () => end(true) }, S.immagineInvia))
+          h('button', { class: 'btn', type: 'button', 'data-pg-cancel': '', onclick: () => end(false) }, S.annulla),
+          h('button', { class: 'btn danger', type: 'button', onclick: () => end(true) }, S.immagineInvia))
       );
-      // Il tasto Invio non deve inviare l'immagine per errore: il focus va su «Annulla».
-      setTimeout(() => {
-        const c = dlg.querySelector('[data-pg-cancel]');
-        if (c) c.focus();
-      }, 0);
     });
   }
 
@@ -246,18 +302,40 @@
         h('img', { src: url, alt: S.immagineOcrAlt, style: 'max-width:100%;max-height:50vh;display:block;margin:8px auto;border:1px solid #ccc;border-radius:6px' }),
         h('p', { class: 'small' }, S.immagineNome),
         h('div', { class: 'actions' },
-          h('button', { class: 'btn', 'data-pg-cancel': '', onclick: () => done(false) }, S.annulla),
-          h('button', { class: 'btn primary', onclick: () => done(true) }, S.immagineOcrInvia))
+          h('button', { class: 'btn', type: 'button', 'data-pg-cancel': '', onclick: () => done(false) }, S.annulla),
+          h('button', { class: 'btn primary', type: 'button', onclick: () => done(true) }, S.immagineOcrInvia))
       );
-      // Il tasto Invio non deve inviare l'immagine per errore: il focus va su «Annulla».
-      setTimeout(() => {
-        const c = dlg.querySelector('[data-pg-cancel]');
-        if (c) c.focus();
-      }, 0);
-    }).then((v) => {
+    }, { risky: true }).then((v) => {
       URL.revokeObjectURL(url);
       return v;
     });
+  }
+
+  /**
+   * Categoria particolare (artt. 9-10 GDPR), solo Personal edition: invio pseudonimizzato dopo una
+   * conferma esplicita. Finestra rischiosa (focus su «Annulla»); «Invia pseudonimizzato» resta
+   * disabilitato finché non si spunta «Ho verificato che l'invio è consentito».
+   * @param {{label: string, fileName?: string|null}} p
+   * @returns {Promise<boolean>}
+   */
+  function confirmSpecial(p) {
+    p = p || {};
+    return modal((dlg, done) => {
+      const send = h('button', { class: 'btn danger', type: 'button', disabled: '', 'data-pg-special-send': '' }, S.specialeInvia);
+      const box = h('input', { type: 'checkbox', 'data-pg-special-check': '' });
+      box.addEventListener('change', () => { send.disabled = !box.checked; });
+      send.addEventListener('click', () => { if (box.checked) done(true); });
+      dlg.append(
+        h('h2', {}, S.specialeTitolo),
+        h('div', { class: 'warnbox' }, S.specialeTrovata(p.label || '', p.fileName || null)),
+        h('p', {}, S.specialeTesto),
+        h('p', {}, S.specialeContesto),
+        h('label', { style: 'display:flex;gap:8px;align-items:center;margin-top:10px;font-weight:600;cursor:pointer' }, box, S.specialeCasella),
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn', type: 'button', 'data-pg-cancel': '', onclick: () => done(false) }, S.annulla),
+          send)
+      );
+    }, { risky: true });
   }
 
   /** Primo spegnimento in una conversazione che contiene già dati protetti. */
@@ -267,8 +345,8 @@
         h('h2', {}, S.offTitolo),
         h('p', {}, S.offTesto),
         h('div', { class: 'actions' },
-          h('button', { class: 'btn', onclick: () => done(false) }, S.annulla),
-          h('button', { class: 'btn danger', onclick: () => done(true) }, S.offConferma))
+          h('button', { class: 'btn', type: 'button', 'data-pg-cancel': '', onclick: () => done(false) }, S.annulla),
+          h('button', { class: 'btn danger', type: 'button', onclick: () => done(true) }, S.offConferma))
       );
     });
   }
@@ -283,8 +361,8 @@
           h('div', { class: 'col' }, h('h3', {}, S.anteprimaOriginale), h('div', { class: 'txt' }, highlighted(original, origRanges, 'o'))),
           h('div', { class: 'col' }, h('h3', {}, S.anteprimaInviato), h('div', { class: 'txt' }, highlighted(sent, tagRanges(sent), 't')))),
         h('div', { class: 'actions' },
-          h('button', { class: 'btn', onclick: () => done(false) }, S.annulla),
-          h('button', { class: 'btn primary', onclick: () => done(true) }, S.anteprimaInvia))
+          h('button', { class: 'btn', type: 'button', 'data-pg-cancel': '', onclick: () => done(false) }, S.annulla),
+          h('button', { class: 'btn primary', type: 'button', onclick: () => done(true) }, S.anteprimaInvia))
       );
     });
   }
@@ -368,5 +446,5 @@
     };
   }
 
-  PG.ui = { StatusArea, confirmUnprotected, confirmOff, confirmImage, confirmImageOcr, preview, badge, toast, busy, highlighted, tagRanges, h };
+  PG.ui = { StatusArea, confirmUnprotected, confirmOff, confirmSpecial, confirmImage, confirmImageOcr, preview, badge, toast, busy, highlighted, tagRanges, h, modal };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
