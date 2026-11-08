@@ -4,6 +4,11 @@ subtitle: "Per chi usa Claude nella propria organizzazione · bozza 0.1"
 lang: it-IT
 ---
 
+> **Sperimentale – non verificata.** La Server edition non è ancora stata collaudata in un ambiente
+> reale: per il momento **se ne sconsiglia il download e l'installazione**. Chi la scarica lo fa a
+> proprio rischio, solo per prove e mai con dati reali.
+
+
 > Pseudomania **riduce**, non elimina, il rischio di inviare dati personali a Claude: può non
 > riconoscere alcuni dati e il contesto. Resta valido il **regolamento d'uso** della tua
 > organizzazione e la responsabilità di verificare ciò che invii e ciò che usi.

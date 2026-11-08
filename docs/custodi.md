@@ -1,5 +1,9 @@
 # Pseudomania Server edition – procedure dei custodi
 
+> **Sperimentale – non verificata.** La Server edition non è ancora stata collaudata in un ambiente
+> reale: per il momento **se ne sconsiglia il download e l'installazione**. Chi la scarica lo fa a
+> proprio rischio, solo per prove e mai con dati reali.
+
 Per i custodi, il DPO e gli amministratori di sistema. Descrive la **chiave di custodia** e le
 operazioni che richiedono i custodi: generazione, verifica, recupero dopo un cambio PC,
 richieste dell'autorità giudiziaria, cancellazione crittografica, accesso ai contenuti tramite

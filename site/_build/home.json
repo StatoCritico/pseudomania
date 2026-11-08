@@ -154,8 +154,8 @@
     {
       "id": "server",
       "eyebrow": "Per gli enti",
-      "titolo": "Server edition",
-      "intro": "Per le organizzazioni che vogliono usare Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità. Attenzione: la pseudonimizzazione è un trattamento, e i dati dell'osservabilità richiedono regole di accesso e accordi sindacali o autorizzazione dell'Ispettorato.",
+      "titolo": "Server edition (sperimentale)",
+      "intro": "Sperimentale e non ancora verificata in un ambiente reale: per il momento se ne sconsiglia il download, che resta a proprio rischio. Per le organizzazioni che vogliono usare Claude Team: server nella rete interna, estensione gestita da policy, chiavi con custodi e osservabilità. Attenzione: la pseudonimizzazione è un trattamento, e i dati dell'osservabilità richiedono regole di accesso e accordi sindacali o autorizzazione dell'Ispettorato.",
       "alt": true,
       "schede": [
         {

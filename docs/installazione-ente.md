@@ -1,5 +1,9 @@
 # Pseudomania Server edition – installazione
 
+> **Sperimentale – non verificata.** La Server edition non è ancora stata collaudata in un ambiente
+> reale: per il momento **se ne sconsiglia il download e l'installazione**. Chi la scarica lo fa a
+> proprio rischio, solo per prove e mai con dati reali.
+
 Guida per gli amministratori di sistema. Parte da una VM Linux appena installata e arriva al
 servizio in esercizio, con backup, cancellazioni e controlli. Gli identificatori tecnici
 (servizi, database, cartelle, immagini) restano `pseudogate`; i testi visibili dicono

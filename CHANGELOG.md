@@ -3,6 +3,7 @@
 ## 0.9.1 – 8/11/2026 (correzione di sicurezza)
 
 - **PDF firmati digitalmente** (Personal e Server edition): la firma viene ora tolta prima dell'invio, insieme al certificato del firmatario, al riquadro visibile con il nome, a `/SigFlags`, `/Perms` e `/DSS`. Fino alla 0.9.0 (Personal) e alla 0.1.14 (Server) il certificato, che contiene in chiaro nome e codice fiscale del firmatario, poteva arrivare a Claude dentro il PDF quando la firma era invisibile; con la firma visibile il PDF veniva invece bloccato («alcuni dati non oscurati»). Il PDF inviato non è più firmato e un avviso lo segnala; controllo finale: se resta traccia di una firma il file non parte.
+- Server edition indicata ovunque come **sperimentale e non verificata**: download e installazione sconsigliati per il momento, a proprio rischio (sito, note di release, README, guide in `docs/`, manuale).
 - Nuovi test con un PDF firmato di prova (firma finta con la stessa struttura di una firma qualificata) nell'estensione e nel server.
 
 ## 0.9.0 – 7/11/2026 (versione di prova)

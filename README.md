@@ -16,7 +16,7 @@ Sito: **<https://pseudomania.statocritico.it>**
 
 ## Due edizioni
 
-| | Personal edition | Server edition |
+| | Personal edition | Server edition (**sperimentale, non verificata**) |
 |---|---|---|
 | Per chi | Singolo professionista | Ente pubblico (Claude Team) |
 | Cosa installare | Estensione Chrome + app desktop di [Rizzo-PII](https://github.com/Rizzo-AI-Academy/rizzo-pii) | Estensione installata d'ufficio + server interno (docker-compose) |
@@ -45,7 +45,8 @@ tecnico tra i componenti), [`RIEPILOGO.md`](RIEPILOGO.md) (stato del progetto).
 ## Per iniziare
 
 - Personal edition: [`docs/installazione-personale.md`](docs/installazione-personale.md)
-- Server edition: [`docs/installazione-ente.md`](docs/installazione-ente.md) e
+- Server edition (**sperimentale, non verificata: download sconsigliato per il momento, a proprio
+  rischio**): [`docs/installazione-ente.md`](docs/installazione-ente.md) e
   [`docs/configurazione.md`](docs/configurazione.md)
 - Test dell'estensione: `cd extension && npm install && npm run test:all`
 - Test del server: `cd server && pip install -r requirements-dev.txt && pytest`

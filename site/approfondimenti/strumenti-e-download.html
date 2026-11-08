@@ -188,7 +188,8 @@
     <p><a href="personal-edition.html#installazione">Guida completa della Personal edition</a></p>
   </article>
   <article class="card">
-    <h3>Server edition</h3>
+    <h3>Server edition <span class="badge badge-soon">Sperimentale</span></h3>
+    <p><strong>Non verificata:</strong> download sconsigliato per il momento, a proprio rischio.</p>
     <ol>
       <li>Prepara una VM Linux nella rete interna e scarica il <a href="#server">codice del server</a>.</li>
       <li>Avvia lo stack Docker Compose e genera la chiave di custodia con lo strumento dei custodi.</li>
@@ -219,12 +220,13 @@
 
 <h2 id="server">Server (Server edition)</h2>
 <p>Codice dell'API, file Docker Compose, configurazione di Caddy, OpenBao e PostgreSQL, script di backup, estensione da distribuire. Si scarica con il codice sorgente o dalla release.</p>
-<p><a class="btn btn-outline" href="https://github.com/StatoCritico/pseudomania/releases/latest">Scarica il server<span class="visually-hidden"> (pagina dell'ultima release)</span></a></p>
+<p class="note"><strong>Sperimentale – non verificata.</strong> La Server edition non è ancora stata collaudata in un ambiente reale: per il momento <strong>se ne sconsiglia il download e l'installazione</strong>. Chi la scarica lo fa a proprio rischio, solo per prove e mai con dati reali.</p>
+<p><a class="btn btn-outline" href="https://github.com/StatoCritico/pseudomania/releases/latest">Scarica il server (sperimentale, a proprio rischio)<span class="visually-hidden"> (pagina dell'ultima release)</span></a></p>
 
 <h2 id="documentazione">Documentazione</h2>
 <ul>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/README.md">Indice della documentazione</a></li>
-  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md">Installazione della Server edition</a></li>
+  <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md">Installazione della Server edition</a> <span class="badge badge-soon">Sperimentale</span> – download sconsigliato per il momento</li>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/configurazione.md">Configurazione di Claude Team, identity provider e Chrome</a></li>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-personale.md">Installazione della Personal edition</a></li>
   <li><a href="https://github.com/StatoCritico/pseudomania/blob/main/docs/verifica-pilota.md">Verifica prima del go-live</a></li>

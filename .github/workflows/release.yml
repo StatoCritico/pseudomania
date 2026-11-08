@@ -53,8 +53,8 @@ jobs:
 
           Guida completa: https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-personale.md
 
-          ### Server edition
-          Server e configurazione sono nel codice sorgente (zip qui sotto): vedi https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md
+          ### Server edition – sperimentale, non verificata
+          **Non ancora collaudata in un ambiente reale: per il momento se ne sconsiglia il download e l'installazione.** Chi la scarica lo fa a proprio rischio, solo per prove e mai con dati reali. Server e configurazione sono nel codice sorgente (zip qui sotto): vedi https://github.com/StatoCritico/pseudomania/blob/main/docs/installazione-ente.md
 
           Modifiche: [CHANGELOG.md](https://github.com/StatoCritico/pseudomania/blob/main/CHANGELOG.md)
           NOTE

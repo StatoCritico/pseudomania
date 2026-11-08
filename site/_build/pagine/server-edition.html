@@ -1,8 +1,9 @@
 <!--meta
 description: Pseudomania Server edition per gli enti: server su VM interna, estensione gestita da policy di Chrome, SSO, cifratura lato client con custodi, Langfuse, conservazione documentata.
-lead: La Server edition è pensata per le amministrazioni che hanno adottato Claude Team: un server nella rete interna, l'estensione installata e configurata dalle policy di Chrome, chiavi con custodi e un'osservabilità minima, documentata.
+lead: Sperimentale, non verificata: download sconsigliato per il momento. La Server edition è pensata per le amministrazioni che hanno adottato Claude Team: un server nella rete interna, l'estensione installata e configurata dalle policy di Chrome, chiavi con custodi e un'osservabilità minima, documentata.
 summary: Architettura e servizi, requisiti, installazione, estensione gestita, SSO, chiavi e custodi, Langfuse, conservazione e verifica prima del go-live.
 -->
+<p class="note"><strong>Sperimentale – non verificata.</strong> La Server edition non è ancora stata collaudata in un ambiente reale: per il momento <strong>se ne sconsiglia il download e l'installazione</strong>. Chi la scarica lo fa a proprio rischio, solo per prove e mai con dati reali.</p>
 <h2 id="architettura">Architettura</h2>
 <p>Lo stack gira con Docker Compose su una VM della rete interna. Solo il reverse proxy è esposto; Rizzo-PII non ha accesso a Internet.</p>
 <div class="table-wrap">
@@ -32,6 +33,7 @@ summary: Architettura e servizi, requisiti, installazione, estensione gestita, S
 </ul>
 
 <h2 id="installazione">Installazione</h2>
+<p class="note"><strong>Sperimentale – non verificata.</strong> La Server edition non è ancora stata collaudata in un ambiente reale: per il momento <strong>se ne sconsiglia il download e l'installazione</strong>. Chi la scarica lo fa a proprio rischio, solo per prove e mai con dati reali.</p>
 <ol>
   <li>Prepara la VM, DNS e certificati; scarica il codice e costruisci le immagini (anche offline).</li>
   <li>Genera la coppia di custodia offline con <code>tools/custodi/</code> e distribuisci le quote ai custodi; pubblica la chiave pubblica nella configurazione.</li>

@@ -1,5 +1,9 @@
 # Pseudomania Server edition – configurazione fuori dalla VM
 
+> **Sperimentale – non verificata.** La Server edition non è ancora stata collaudata in un ambiente
+> reale: per il momento **se ne sconsiglia il download e l'installazione**. Chi la scarica lo fa a
+> proprio rischio, solo per prove e mai con dati reali.
+
 Tutto ciò che va impostato **fuori** dal server di Pseudomania perché il pilota sia protetto:
 console di Claude Team, identity provider, policy di Chrome, blocco delle app di Claude su PC
 e telefoni, proxy aziendale. Ogni sezione è una lista numerata da spuntare.

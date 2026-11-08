@@ -1,5 +1,9 @@
 # 3. Server edition
 
+> **Sperimentale – non verificata.** La Server edition non è ancora stata collaudata in un ambiente
+> reale: per il momento **se ne sconsiglia il download e l'installazione**. Chi la scarica lo fa a
+> proprio rischio, solo per prove e mai con dati reali.
+
 Per **enti pubblici e imprese** che danno ai dipendenti account **Claude Team** e vogliono
 ridurre il rischio che dati personali arrivino al fornitore. La Server edition **non è solo
 software**: funziona solo insieme a impostazioni della console di Claude, policy di Chrome, accesso

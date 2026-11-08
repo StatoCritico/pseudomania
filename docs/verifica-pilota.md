@@ -1,5 +1,9 @@
 # Pseudomania Server edition – verifica prima dell'avvio del pilota
 
+> **Sperimentale – non verificata.** La Server edition non è ancora stata collaudata in un ambiente
+> reale: per il momento **se ne sconsiglia il download e l'installazione**. Chi la scarica lo fa a
+> proprio rischio, solo per prove e mai con dati reali.
+
 Lista di controllo da completare **prima** di aprire il servizio ai 6 utenti del pilota.
 Per ogni prova: come eseguirla, risultato atteso, esito. Usare **solo dati di prova**
 (persone inventate, codici fiscali di esempio), mai dati reali.
