@@ -11,6 +11,7 @@
 - Librerie incluse nell'estensione: tesseract.js 6.0.1, tesseract.js-core 6.1.2, modello italiano `ita` (tessdata_best_int), MuPDF.js 1.28.1 (© Artifex Software, AGPL-3.0-or-later; pdf.js tolto); script `extension/scripts/vendor-ocr.sh` per riscaricarle con impronte verificate.
 - Nuovi test: libreria dei riquadri, OCR e motore PDF nel documento offscreen, flusso completo con immagini caricate/incollate/trascinate, JPEG, PDF di testo, PDF con immagini (tre scelte), PDF scansionati e ripristino dei PDF scaricati; impostazione «Immagini nei PDF» con la seconda conferma.
 - Numerazione: dopo la 0.1.14 si passa alla 0.9.0, ultima serie prima della 1.0.
+- Governance: nuova **dichiarazione di impegno** (`governance/dichiarazione-impegno.md` e .docx) da far firmare a soci, associati, dipendenti, collaboratori e praticanti dello studio; **regolamento light** aggiornato (immagini e PDF con OCR, impostazioni di Pseudomania, regole per gli studi con più persone); collegamenti nel manuale, nella guida di installazione e nel sito.
 
 ## 0.1.14 – 5/11/2026 (versione di prova)
 

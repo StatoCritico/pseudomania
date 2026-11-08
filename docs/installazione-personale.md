@@ -14,7 +14,8 @@ restano nel browser, cifrati.
 > La Personal edition è **volontaria**: la protezione parte disattivata e la attivi tu in ogni
 > conversazione che ne ha bisogno. Non protegge altri browser né le app di Claude. La
 > responsabilità dei trattamenti resta interamente tua, come titolare o responsabile. Una traccia di regole d'uso è in
-> [`governance/policy-light.md`](../governance/policy-light.md).
+> [`governance/policy-light.md`](../governance/policy-light.md); negli studi con più persone, ognuno firma la
+> [dichiarazione di impegno](../governance/dichiarazione-impegno.md).
 
 ## Indice
 

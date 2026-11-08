@@ -6,7 +6,7 @@ Questo capitolo guida alla stesura in due versioni:
 
 | Modello | Per chi | Base | Documenti |
 |---|---|---|---|
-| **Light** | professionista, studio, piccola organizzazione con la **Personal edition** | `governance/policy-light.md` | una pagina di regole firmata, più alcune verifiche |
+| **Light** | professionista, studio, piccola organizzazione con la **Personal edition** | `governance/policy-light.md`, `governance/dichiarazione-impegno.md` | una pagina di regole firmata, più alcune verifiche; negli studi con più persone, una dichiarazione di impegno firmata da ciascuno |
 | **Strutturato** | **ente pubblico** (o impresa) con l'**Server edition** | `governance/policy-uso-ia.md`, `governance/dpia.md`, `governance/checklist-adempimenti.md` | regolamento, informativa, DPIA, accordo sindacale, procedura dei custodi, procedura di cancellazione, durate |
 
 > **Modelli, non consulenza legale.** I testi sono bozze da adattare con il proprio DPO o consulente.
@@ -37,6 +37,13 @@ Questo capitolo guida alla stesura in due versioni:
 5. **Valuta** se serve una DPIA (art. 35 GDPR): di regola sì se tratti su larga scala dati delicati
    o categorie particolari (che comunque non dovrebbero entrare in Claude).
 6. **Firma e data** il documento; rileggilo almeno una volta l'anno.
+7. **Se nello studio lavorano altre persone** (soci, associati, dipendenti, collaboratori,
+   praticanti): indica un referente, consegna a ciascuno le regole e fagli firmare la
+   **dichiarazione di impegno** (`governance/dichiarazione-impegno.md`, anche in Word). La
+   dichiarazione elenca strumenti e impostazioni autorizzati (es. immagini con oscuramento
+   automatico, immagini nei PDF lette e coperte), cosa controllare prima di inviare, come segnalare
+   un incidente e vale come autorizzazione al trattamento (art. 29 GDPR). Conserva le copie firmate e
+   rinnovale quando cambiano le regole.
 
 ### Checklist light
 
