@@ -317,6 +317,8 @@
     const ocrPages = pages.filter((p) => p && Array.isArray(p.ocr)).length;
     const truncated = Boolean(prep.truncated);
     const parts = [];
+    const signatures = Number(report.signatures) || 0;
+    if (signatures) parts.push(str('pdfFirmaRimossa', [], 'Il PDF era firmato digitalmente: la firma, con il certificato del firmatario, è stata tolta. Il PDF inviato a Claude non è firmato.'));
     if (skipped) parts.push(str('pdfValoriNonCoperti', [skipped], `Attenzione: ${skipped} dati molto brevi non sono stati coperti nel PDF e restano leggibili.`));
     if (imagePolicy === 'keep' && images) parts.push(str('pdfImmaginiLasciate', [images], `Il PDF contiene ${images} immagini lasciate senza controlli.`));
     if (imagePolicy === 'remove' && imagesRemoved) parts.push(str('pdfImmaginiTolte', [imagesRemoved], `${imagesRemoved} immagini sono state tolte dal PDF.`));
@@ -326,7 +328,7 @@
       b64: red.b64,
       reps,
       notice: parts.length ? parts.join(' ') : null,
-      log: { pages: Number(prep.pageCount) || pages.length, imagePolicy, images, imagesRemoved, ocrPages, skipped },
+      log: { pages: Number(prep.pageCount) || pages.length, imagePolicy, images, imagesRemoved, ocrPages, skipped, signatures },
     };
   }
 

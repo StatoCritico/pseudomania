@@ -96,9 +96,46 @@ def protetto():
     doc.save(out("protetto.pdf"), encryption=fitz.PDF_ENCRYPT_AES_256, user_pw="segreta", owner_pw="padrone")
 
 
+def firmato():
+    """PDF firmato come quelli di firma digitale qualificata (PAdES/CAdES): pagina scansionata (solo
+    immagine), riquadro visibile della firma con il nome, dizionario /Sig con nome e un finto
+    «certificato» che contiene nome e codice fiscale in chiaro (come il CMS reale), /Perms e /DSS.
+    La firma non è crittograficamente valida: serve solo a riprodurre la struttura."""
+    doc = fitz.open()
+    p = doc.new_page(width=595, height=842)
+    scan = png_text(["Atto di sottomissione n. 1", "Impresa Elettrica Verdi srl",
+                               "Il direttore dei lavori Luca Neri", "Torino, 6 novembre 2026"], (1100, 360), 40)
+    p.insert_image(fitz.Rect(40, 60, 555, 230), stream=scan)
+    # riquadro visibile della firma (aspetto con il nome del firmatario)
+    ap = doc.get_new_xref()
+    font = doc.get_new_xref()
+    doc.update_object(font, "<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>")
+    stream = b"BT /F1 8 Tf 2 70 Td (LUCA) Tj 0 -10 Td (NERI) Tj 0 -10 Td (06.11.2026 11:51:09) Tj ET"
+    doc.update_object(ap, "<</Type/XObject/Subtype/Form/BBox[0 0 90 90]/Resources<</Font<</F1 %d 0 R>>>>>>" % font)
+    doc.update_stream(ap, stream)
+    cert = (b"\x30\x82Actalis finta CA\x31Neri\x31Luca\x31TINIT-NRELCU80A01L219X\x31Luca Neri\x31"
+            b"WSREF-123\x30" + bytes(range(256)))
+    sig = doc.get_new_xref()
+    doc.update_object(sig, "<</Type/Sig/Filter/Adobe.PPKLite/SubFilter/ETSI.CAdES.detached/Name(Luca Neri)"
+                           "/Location(Torino)/Reason(Firma del direttore dei lavori)/M(D:20261106115109+01'00')"
+                           "/ByteRange[0 100 200 100]/Contents<%s>>>" % (cert.hex().upper() + "00" * 64))
+    widget = doc.get_new_xref()
+    doc.update_object(widget, "<</Type/Annot/Subtype/Widget/FT/Sig/F 132/T(Signature1)/V %d 0 R"
+                              "/P %d 0 R/Rect[400 60 490 150]/AP<</N %d 0 R>>>>" % (sig, p.xref, ap))
+    doc.xref_set_key(p.xref, "Annots", "[%d 0 R]" % widget)
+    dss = doc.get_new_xref()
+    doc.update_object(dss, "<</Certs[]/OCSPs[]/CRLs[]>>")
+    cat = doc.pdf_catalog()
+    doc.xref_set_key(cat, "AcroForm", "<</Fields[%d 0 R]/SigFlags 3>>" % widget)
+    doc.xref_set_key(cat, "Perms", "<</DocMDP %d 0 R>>" % sig)
+    doc.xref_set_key(cat, "DSS", "%d 0 R" % dss)
+    doc.save(out("firmato.pdf"), deflate=True)
+
+
 if __name__ == "__main__":
     testo()
     immagini()
     ripristino()
     protetto()
+    firmato()
     print("ok")

@@ -650,6 +650,106 @@ export function createPdfEngine(deps) {
     return removed;
   }
 
+  /**
+   * Firme digitali (non presenti nel Python, che non le trattava). Un PDF firmato contiene nel
+   * dizionario /Sig il certificato del firmatario (nome, codice fiscale in chiaro nel CMS di /Contents),
+   * il nome (/Name), il luogo e il motivo; spesso anche un riquadro visibile con il nome. Qualsiasi
+   * modifica del PDF invalida comunque la firma: si tolgono i campi firma (widget e /Fields), /SigFlags,
+   * /Perms e /DSS (archivio di certificati, OCSP e CRL delle firme PAdES); gli oggetti /Sig rimasti
+   * senza riferimenti spariscono al salvataggio (garbage). Restituisce il numero di firme tolte.
+   */
+  function isSigField(obj) {
+    try {
+      const o = obj.resolve();
+      const ft = o.getInheritable('FT');
+      return Boolean(ft && !ft.isNull() && ft.asName() === 'Sig');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function stripFieldArray(arr) {
+    let removed = 0;
+    if (!arr || arr.isNull() || !arr.isArray()) return 0;
+    for (let j = arr.length - 1; j >= 0; j--) {
+      const f = arr.get(j);
+      if (isSigField(f)) {
+        arr.delete(j);
+        removed += 1;
+        continue;
+      }
+      try {
+        removed += stripFieldArray(f.resolve().get('Kids'));
+      } catch (_) { /* campo senza figli */ }
+    }
+    return removed;
+  }
+
+  function stripSignatures(doc) {
+    let removed = 0;
+    const n = doc.countPages();
+    for (let i = 0; i < n; i++) {
+      try {
+        const page = doc.loadPage(i);
+        const annots = page.getObject().get('Annots');
+        if (annots && !annots.isNull() && annots.resolve().isArray()) {
+          const arr = annots.resolve();
+          for (let j = arr.length - 1; j >= 0; j--) {
+            const a = arr.get(j).resolve();
+            const sub = a.get('Subtype');
+            if (sub && !sub.isNull() && sub.asName() === 'Widget' && isSigField(a)) {
+              arr.delete(j);
+              removed += 1;
+            }
+          }
+        }
+        page.destroy();
+      } catch (_) {
+        continue;
+      }
+    }
+    const root = doc.getTrailer().get('Root');
+    try {
+      const af = root.get('AcroForm');
+      if (af && !af.isNull()) {
+        const form = af.resolve();
+        removed += stripFieldArray(form.get('Fields'));
+        form.delete('SigFlags');
+      }
+    } catch (_) { /* nessun modulo */ }
+    for (const key of ['Perms', 'DSS']) {
+      try {
+        const v = root.get(key);
+        if (v && !v.isNull()) {
+          root.delete(key);
+          removed += 1;
+        }
+      } catch (_) { /* assente */ }
+    }
+    return removed;
+  }
+
+  /** Conta ciò che resta di firme digitali (campi /Sig, /Perms, /DSS): deve essere 0 prima dell'invio. */
+  function countSignatures(doc) {
+    let left = 0;
+    const n = doc.countPages();
+    for (let i = 0; i < n; i++) {
+      const page = doc.loadPage(i);
+      try {
+        const annots = page.getObject().get('Annots');
+        if (annots && !annots.isNull()) annots.resolve().forEach((a) => { if (isSigField(a)) left += 1; });
+      } finally {
+        page.destroy();
+      }
+    }
+    const root = doc.getTrailer().get('Root');
+    for (const key of ['Perms', 'DSS']) {
+      const v = root.get(key);
+      if (v && !v.isNull()) left += 1;
+    }
+    return left;
+  }
+
   /** pdf_text.collect_readable_text: pagine + annotazioni + campi modulo + segnalibri. */
   function readableText(doc) {
     const parts = [];
@@ -863,6 +963,9 @@ export function createPdfEngine(deps) {
     let imagesRemoved = 0;
     let out;
     try {
+      // Firme digitali tolte prima di tutto: contengono il certificato del firmatario e spesso un
+      // riquadro visibile con il nome, che la redazione del content stream non raggiunge.
+      const nSig = stripSignatures(doc);
       const n = doc.countPages();
       for (let i = 0; i < n; i++) {
         const page = doc.loadPage(i);
@@ -938,6 +1041,13 @@ export function createPdfEngine(deps) {
       out = saveB64(doc);
       const checked = items.filter(([key]) => Object.prototype.hasOwnProperty.call(byPh, key));
       const residual = verifyResiduals(mupdf, out, checked);
+      // Verifica sul file salvato: nessuna firma digitale deve sopravvivere (altrimenti: bloccato).
+      const check = openPdf(mupdf, out);
+      try {
+        if (countSignatures(check) > 0) residual.push('[FIRMA_DIGITALE]');
+      } finally {
+        check.destroy();
+      }
       return {
         b64: out,
         report: {
@@ -952,6 +1062,7 @@ export function createPdfEngine(deps) {
           widgets: nWidgets,
           toc: nToc,
           embedded: nEmb,
+          signatures: nSig,
         },
       };
     } finally {

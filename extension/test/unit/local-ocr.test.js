@@ -269,7 +269,7 @@ test('PDF con dati: mapping col valore esatto, riquadri OCR, PDF in uscita con n
   const log = plain(await env.readLog());
   assert.equal(log.length, 1);
   assert.equal(log[0].format, 'pdf');
-  assert.deepEqual(log[0].pdf, { pages: 2, imagePolicy: 'ocr', images: 1, imagesRemoved: 0, ocrPages: 1, skipped: 0 });
+  assert.deepEqual(log[0].pdf, { pages: 2, imagePolicy: 'ocr', images: 1, imagesRemoved: 0, ocrPages: 1, skipped: 0, signatures: 0 });
   assert.doesNotMatch(JSON.stringify(log), /Mario|Rossi|Anna|Bianchi|Lettera|Firma/);
 });
 

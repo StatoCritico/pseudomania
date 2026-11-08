@@ -118,6 +118,20 @@ test('Personal edition: PDF con MuPDF.js', { timeout: 300000 }, async (t) => {
     await waitFor(async () => (await h.state()).config.pdfImagePolicy === 'ocr', 5000);
   });
 
+  await t.test('PDF firmato digitalmente: parte senza firma, certificato e riquadro con il nome, con avviso', async () => {
+    const FIRMATO = fs.readFileSync(path.join(FIX, 'firmato.pdf'));
+    const f = await upload('atto_firmato.pdf', FIRMATO);
+    const s = f.data.toString('latin1');
+    for (const v of ['/ByteRange', 'Luca Neri', 'NRELCU80A01L219X', '/SubFilter']) assert.ok(!s.includes(v), 'resta nel PDF: ' + v);
+    const d = await describe(f.data);
+    assert.ok(!d.err, d.err);
+    assert.ok(!/LUCA|NERI/.test(d.text), d.text);
+    await page.waitForFunction(() => [...document.querySelectorAll('pg-ui')].some((e) => /firmato digitalmente/.test((e.shadowRoot || e).textContent || '')), null, { timeout: 5000 });
+    const log = (await msg({ type: 'pg:localLog' })).data;
+    const e = log.filter((x) => x.action === 'pseudonymize_file' && x.format === 'pdf').pop();
+    assert.ok(e && e.pdf && e.pdf.signatures >= 1, JSON.stringify(e));
+  });
+
   await t.test('ripristino del PDF scaricato con l\'impaginazione (senza /restore/pdf di Rizzo-PII)', async () => {
     const scope = { type: 'conversation', id: 'prova-pdf-ripristino' };
     const p = await msg({ type: 'pg:pseudonymizeFile', scope, kind: 'attachment', name: 'pratica.pdf', mime: 'application/pdf', b64: TESTO.toString('base64') });

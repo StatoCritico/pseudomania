@@ -186,6 +186,8 @@
     pdfImmaginiLasciate: (n) =>
       (n === 1 ? 'Il PDF contiene 1 immagine che è stata lasciata' : `Il PDF contiene ${n} immagini che sono state lasciate`) +
       ' così com\'è, senza controlli (come indicato nelle impostazioni): firme, timbri, fotografie e pagine scansionate arrivano a Claude in chiaro.',
+    pdfFirmaRimossa:
+      'Il PDF era firmato digitalmente: la firma (con il certificato del firmatario, che contiene nome e codice fiscale) è stata tolta prima dell\'invio. Il PDF inviato a Claude non è firmato; l\'originale firmato resta sul tuo computer.',
     pdfImmaginiTolte: (n) =>
       (n === 1 ? '1 immagine è stata tolta' : `${n} immagini sono state tolte`) +
       ' dal PDF prima dell\'invio (come indicato nelle impostazioni): Claude non vedrà firme, timbri, fotografie né il contenuto delle pagine scansionate.',

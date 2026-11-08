@@ -272,6 +272,11 @@ su un PDF di solo testo (compare un avviso).
   Se sono dati da proteggere, non inviare il file.
 - I PDF **protetti** da password o da restrizioni vengono bloccati: togli la protezione (ad
   esempio stampandoli come nuovo PDF) e allegali di nuovo.
+- I PDF **firmati digitalmente** (firma qualificata PAdES o CAdES, firma grafica): la firma viene
+  **tolta** prima dell'invio, perché contiene il certificato del firmatario con nome e codice
+  fiscale, e spesso un riquadro visibile con il nome. Il PDF inviato a Claude non è firmato (la
+  firma non sarebbe comunque più valida dopo la pseudonimizzazione); l'originale firmato resta sul
+  tuo computer. Un avviso lo segnala.
 - L'OCR può **sbagliare** (scritte a mano, timbri, immagini sfocate o storte): qualche dato nelle
   immagini può restare visibile. Per documenti delicati scansionati valuta «Togli le immagini».
 - Se il PDF non può essere trattato come PDF (file danneggiato o formato insolito), l'estensione

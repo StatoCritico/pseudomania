@@ -382,6 +382,7 @@ def create_app(settings: Settings | None = None, **overrides) -> FastAPI:
             return blocked(fk.reason, "unsupported_format")
 
         all_reps = []
+        pdf_notice = None
 
         def check_special(text: str):
             hit = svc.special.first_block(text)
@@ -407,6 +408,12 @@ def create_app(settings: Settings | None = None, **overrides) -> FastAPI:
                 if not pdf_files.HAVE_PYMUPDF:
                     return blocked("Il supporto PDF non è installato su questo server.",
                                    "unsupported_format")
+                # Firme digitali tolte prima del rilevamento: il certificato e il riquadro visibile
+                # contengono nome e codice fiscale del firmatario (vedi pdf_files.strip_signatures).
+                data, n_sig = pdf_files.strip_signatures(data)
+                if n_sig:
+                    pdf_notice = ("Il PDF era firmato digitalmente: la firma (con il certificato del "
+                                  "firmatario) è stata tolta prima dell'invio; il PDF inviato non è firmato.")
                 res = svc.detector.analyze_file(filename, data, MIME["pdf"])
                 check_special(res.text)
                 dets = svc.pz.detect_from(res.text, res.detections)
@@ -439,7 +446,8 @@ def create_app(settings: Settings | None = None, **overrides) -> FastAPI:
         return {"filename": new_name, "mime": MIME[fk.kind],
                 "contentB64": base64.b64encode(out).decode("ascii"),
                 "entities": unique_entities(all_reps), "newEntries": new_entries(all_reps),
-                "blocked": False, "blockReason": None, "traceId": trace_id}
+                "blocked": False, "blockReason": None, "traceId": trace_id,
+                "notice": pdf_notice}
 
     def _pseudonymize_name(owner: str, scope: Scope, filename: str):
         stem, ext = os.path.splitext(os.path.basename(filename))

@@ -1,5 +1,10 @@
 # Registro delle modifiche
 
+## 0.9.1 – 8/11/2026 (correzione di sicurezza)
+
+- **PDF firmati digitalmente** (Personal e Server edition): la firma viene ora tolta prima dell'invio, insieme al certificato del firmatario, al riquadro visibile con il nome, a `/SigFlags`, `/Perms` e `/DSS`. Fino alla 0.9.0 (Personal) e alla 0.1.14 (Server) il certificato, che contiene in chiaro nome e codice fiscale del firmatario, poteva arrivare a Claude dentro il PDF quando la firma era invisibile; con la firma visibile il PDF veniva invece bloccato («alcuni dati non oscurati»). Il PDF inviato non è più firmato e un avviso lo segnala; controllo finale: se resta traccia di una firma il file non parte.
+- Nuovi test con un PDF firmato di prova (firma finta con la stessa struttura di una firma qualificata) nell'estensione e nel server.
+
 ## 0.9.0 – 7/11/2026 (versione di prova)
 
 - Personal edition: **oscuramento automatico delle immagini con OCR**. Il testo delle immagini incollate, trascinate o allegate (PNG, JPG, WebP, GIF, BMP) viene letto sul PC con Tesseract.js (nulla esce dal PC), i dati personali rilevati da Rizzo-PII vengono coperti con un riquadro nero che riporta il segnaposto e l'utente conferma dopo aver visto l'anteprima oscurata. L'immagine è sempre ricodificata (metadati EXIF rimossi) con nome generico. Nuova scelta predefinita della Personal edition; «Conferma per ogni immagine» e «Bloccate» restano disponibili.

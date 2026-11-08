@@ -279,6 +279,25 @@ test('motore PDF del documento offscreen (MuPDF.js + Tesseract.js)', { timeout: 
     assert.ok(head && name && name.origin[0] > head.origin[0], JSON.stringify(lines));
   });
 
+  await t.test('PDF firmato digitalmente: firma, certificato, /Perms e /DSS tolti; riquadro con il nome sparito', async () => {
+    const orig = Buffer.from(b64('firmato.pdf'), 'base64').toString('latin1');
+    assert.ok(orig.includes('/ByteRange') && orig.includes('/DSS'), 'la prova contiene una firma');
+    const r = await timed('redactFirmato', { type: 'pdf:redact', b64: b64('firmato.pdf'), mapping: { '[FULLNAME_1]': 'Luca Neri', '[FULLNAME_1] ': 'LUCA\nNERI' }, ocrBoxes: [], imagePolicy: 'ocr' });
+    assert.equal(r.ok, true, JSON.stringify(r));
+    assert.ok(r.data.report.signatures >= 1, JSON.stringify(r.data.report));
+    assert.deepEqual(r.data.report.residual, [], 'nessun residuo: ' + JSON.stringify(r.data.report));
+    const raw = Buffer.from(r.data.b64, 'base64');
+    // il file è compresso: si controlla anche la versione decompressa con PyMuPDF
+    const out = inspect(r.data.b64, 'firmato-out.pdf');
+    assert.deepEqual(out.pages[0].widgets, [], 'campo firma tolto');
+    assert.ok(!/LUCA|NERI/.test(out.pages[0].text), 'riquadro con il nome sparito: ' + out.pages[0].text);
+    const plain = execFileSync('python3', ['-I', '-c', 'import sys,pymupdf;d=pymupdf.open(sys.argv[1]);print("".join(d.xref_object(x)+("" if "/Image" in d.xref_object(x) else (d.xref_stream(x) or b"").decode("latin1")) if d.xref_is_stream(x) else d.xref_object(x) for x in range(1,d.xref_length())))', path.join(TMP, 'firmato-out.pdf')], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    for (const s of ['/Sig', '/ByteRange', '/DSS', '/Perms', '/SigFlags', 'Luca Neri', 'NRELCU80A01L219X', '4C756361204E657269']) {
+      assert.ok(!plain.includes(s) && !raw.toString('latin1').includes(s), 'resta nel PDF: ' + s);
+    }
+    assert.equal(out.pages[0].images.length, 1, 'la pagina scansionata resta');
+  });
+
   await t.test('errori: PDF protetto → encrypted, non PDF → pdf', async () => {
     for (const type of ['pdf:prepare', 'pdf:redact', 'pdf:restore']) {
       const enc = await call({ type, b64: b64('protetto.pdf'), mapping: { '[A_1]': 'Mario' } });
