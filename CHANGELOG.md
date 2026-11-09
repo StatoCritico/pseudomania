@@ -1,5 +1,9 @@
 # Registro delle modifiche
 
+## 0.9.3 – 9/11/2026
+
+- Tolto l'errore «failed to load ./ita.special-words» che Chrome mostrava nella pagina delle estensioni al primo uso dell'OCR: Tesseract cercava un file facoltativo di parole speciali che il modello italiano non include. Nessun effetto sul riconoscimento.
+
 ## 0.9.2 – 8/11/2026 (Personal edition: chiusura della serie 0.9)
 
 - **Finestre di conferma sicure:** in tutte le finestre con un'azione rischiosa (invio senza protezione, disattivazione, invio di immagini) il cursore parte su «Annulla»: premere Invio non manda più il testo in chiaro. Esc annulla sempre; finestre accessibili (ruolo, titolo e descrizione annunciati, Tab che resta nella finestra, focus restituito alla chiusura); arancione più scuro per un contrasto sufficiente.

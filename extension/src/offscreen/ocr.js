@@ -80,6 +80,11 @@ function getWorker() {
       workerBlobURL: false,
       gzip: true,
       cacheMethod: 'none',
+    }, {
+      // Il modello «ita» chiede il file facoltativo ita.special-words (user_words_suffix), che non
+      // esiste: Tesseract scriverebbe in console «failed to load ./ita.special-words», mostrato da
+      // Chrome come errore dell'estensione. Senza effetti sul riconoscimento.
+      user_words_suffix: '',
     }).catch((e) => {
       workerPromise = null;
       throw e;
